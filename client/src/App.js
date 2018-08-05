@@ -30,7 +30,7 @@ class App extends Component {
       <div className="app">
         <header className="app__header">
           <h1 className="app__header__title">
-            Sune
+            szune
           </h1>
         </header>
         <p className="app__intro">
