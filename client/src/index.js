@@ -2,7 +2,9 @@
 // External dependencies//
 //////////////////////////
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router'
 import ReactDOM from 'react-dom';
 
 //////////////////////////
@@ -10,8 +12,23 @@ import ReactDOM from 'react-dom';
 //////////////////////////
 
 import './index.css';
-import App from './App/App';
+import Routes from './routes';
+import configureStore from './store/configureStore';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const { store, history } = configureStore();
+
+class Root extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <ConnectedRouter history={history}>
+                    <Routes />
+                </ConnectedRouter>
+            </Provider>
+        );
+    }
+}
+
+ReactDOM.render(<Root />, document.getElementById('root'));
 registerServiceWorker();

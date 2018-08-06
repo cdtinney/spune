@@ -1,0 +1,14 @@
+.login__link {
+    padding: 5px 10px;
+    color: #000000;
+    background-color: #84bd00;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.22);
+}
+
+.login__link:hover {
+    color: #ffffff;
+    border-color: #828282;    
+}

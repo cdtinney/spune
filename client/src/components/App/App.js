@@ -11,30 +11,10 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  state = {
-    response: '',
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({
-        response: res.express,
-      }))
-      .catch(console.error);
-  }
-
-  callApi = async () => {
-    const response = await fetch('/api/hello');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw new Error(body.message);
-    }
-    
-    return body;
-  }
-
   render() {
+    // Children components are injected via react-router.
+    const { children } = this.props;
+
     return (
       <div className="app">
         <header className="app__header">
@@ -42,9 +22,9 @@ class App extends Component {
             szune
           </h1>
         </header>
-        <p className="app__intro">
-          {this.state.response}
-        </p>
+        <div className="app__content">
+          { children }
+        </div>
       </div>
     );
   }

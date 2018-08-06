@@ -13,7 +13,9 @@
   "author": "Colin Tinney",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "cookie-parser": "1.4.3",
+    "express": "^4.16.3",
+    "spotify-web-api-node": "3.1.1"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
