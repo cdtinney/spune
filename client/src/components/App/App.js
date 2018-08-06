@@ -1,4 +1,13 @@
+//////////////////////////
+// External dependencies//
+//////////////////////////
+
 import React, { Component } from 'react';
+
+//////////////////////////
+// Internal dependencies//
+//////////////////////////
+
 import './App.css';
 
 class App extends Component {
