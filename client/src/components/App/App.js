@@ -17,11 +17,6 @@ class App extends Component {
 
     return (
       <div className="app">
-        <header className="app__header">
-          <h1 className="app__header__title">
-            szune
-          </h1>
-        </header>
         <div className="app__content">
           { children }
         </div>

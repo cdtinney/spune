@@ -14,7 +14,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Routes from './routes';
 import configureStore from './store/configureStore';
-import registerServiceWorker from './registerServiceWorker';
 
 const { store, history } = configureStore();
 
@@ -31,4 +30,3 @@ class Root extends Component {
 }
 
 ReactDOM.render(<Root />, document.getElementById('root'));
-registerServiceWorker();

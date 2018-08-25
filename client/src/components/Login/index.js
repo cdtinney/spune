@@ -3,24 +3,21 @@
 ///////////////////////////
 
 import React, { Component } from 'react';
-
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
-
-import './index.css';
+import Button from '@material-ui/core/Button';
 
 /**
  * Provides a button for logging in/connecting to
  * the user's Spotify account.
  */
 export default class Login extends Component {
+  // TODO Redirect if already logged in (i.e. access token already
+  // stored).
   render() {
     return (
       <div className="login">
-        <a href="/api/login" className="login__link">
+        <Button variant="contained" href="/api/login">
           Connect to Spotify
-        </a>
+        </Button>
       </div>
     );
   }

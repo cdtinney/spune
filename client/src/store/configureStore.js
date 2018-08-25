@@ -6,6 +6,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { createHashHistory } from 'history'
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 //////////////////////////
@@ -23,13 +24,15 @@ export default function configureStore() {
   // Dispatch history actions.
   const reduxRouterMiddleware = routerMiddleware(history);
 
-  const createStoreWithMiddleware = applyMiddleware(
-    thunk,
-    reduxRouterMiddleware,
-  )(createStore);
+  const store = createStore(rootReducer, composeWithDevTools(
+    applyMiddleware(
+      thunk,
+      reduxRouterMiddleware,
+    ),
+  ));
 
   return {
-    store: createStoreWithMiddleware(rootReducer),
+    store,
     history,
   };
 }

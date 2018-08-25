@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== 'production') {
+    // Load .env file for variables in dev environments only.
+    // The file must be in the root directory.
+    require('dotenv').load();
+}
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -15,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
     // point.
     app.get('*', function(req, res) {
         res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-    });
+    });   
 }
 
 // Parse cookies BEFORE routing.
