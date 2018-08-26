@@ -8,9 +8,12 @@ const generateCookie = require('../modules/generateCookie.js');
 
 const router = new express.Router();
 
-const CLIENT_ID = process.env.SPOT_CLIENT_ID;
-const CLIENT_SECRET = process.env.SPOT_CLIENT_SECRET;
-const SPOT_REDIRECT_URI = process.env.redirect_uri || 'http://localhost:5000/callback';
+// Unpack environemnt variables needed for auth.
+const {
+    SPOT_CLIENT_ID: CLIENT_ID,
+    SPOT_CLIENT_SECRET: CLIENT_SECRET,
+    SPOT_REDIRECT_URI: REDIRECT_URI,
+} = process.env;
 const SPOT_SCOPES = [ 'user-read-private', 'user-read-email' ];
 
 const SPOT_AUTH_STATE_KEY = 'spotify_auth_state';
@@ -19,7 +22,7 @@ const SPOT_AUTH_STATE_KEY = 'spotify_auth_state';
 const spotifyApi = new Spotify({
   clientId: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
-  redirectUri: SPOT_REDIRECT_URI,
+  redirectUri: REDIRECT_URI,
 });
 
 const CLIENT_HOST = process.env.CLIENT_HOST || '';

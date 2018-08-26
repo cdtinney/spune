@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
 
-// Add routes.
+// Add Spotify authorization routes.
 app.use('', spotifyRoutes);
 
 // Start listening for requests.
