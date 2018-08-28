@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     // Children components are injected via react-router.
     const { children } = this.props;
-
+    
     return (
       <div className="app">
         <div className="app__content">

@@ -18,15 +18,15 @@ import configureStore from './store/configureStore';
 const { store, history } = configureStore();
 
 class Root extends Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <Routes />
-                </ConnectedRouter>
-            </Provider>
-        );
-    }
+  render() {
+    return (
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Routes />
+        </ConnectedRouter>
+      </Provider>
+    );
+  }
 }
 
 ReactDOM.render(<Root />, document.getElementById('root'));

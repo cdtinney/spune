@@ -10,8 +10,6 @@ import Button from '@material-ui/core/Button';
  * the user's Spotify account.
  */
 export default class Login extends Component {
-  // TODO Redirect if already logged in (i.e. access token already
-  // stored).
   render() {
     return (
       <div className="login">
