@@ -4,38 +4,40 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Getting Started](#getting-started)
-    - [Requirements](#requirements)
-    - [Configuration](#configuration)
-    - [Installation](#installation)
-    - [Usage](#usage)
 - [Developing](#developing)
+    - [Requirements](#requirements)
     - [Installing](#installing)
     - [Running](#running)
     - [Testing](#testing)
-    - [Debugging](#debugging)
     - [Building](#building)
     - [Deploying](#deploying)
-
-## Getting Started
-
-### Requirements
-
-### Configuration
-
-### Installation
-
-### Usage
+    - [Debugging](#debugging)
+- [Thanks to..](#thanks-to)
 
 ## Developing
 
+### Requirements
+
+* [Node.js/npm](https://nodejs.org/en/)
+* [Git](https://git-scm.com/) (duh)
+* (optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
 ### Installing
 
-To install dependencies:
+Clone the repository (and navigate into it):
+
+```
+git clone git@github.com:cdtinney/spune.git
+cd spune
+```
+
+Install dependencies:
 
 ```
 npm install
 ```
+
+All done!
 
 ### Running
 
@@ -71,8 +73,6 @@ To run client tests (in watch mode):
 npm run client-test
 ```
 
-### Debugging
-
 ### Building
 
 To build the client:
@@ -82,6 +82,8 @@ npm run client-build
 ```
 
 ### Deploying
+
+### Debugging
 
 #### Environment Variables
 
