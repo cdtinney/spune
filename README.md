@@ -1,4 +1,4 @@
-# szune
+# spune
 > Web-based Spotify display for your living room TV.
 
 ## Table of Contents
