@@ -42,8 +42,8 @@ npm install
 
 ### Creating Spotify Client ID
 
-* Login to the Spotify developer dashboard [here](https://developer.spotify.com/dashboard/applications).
-* Create a new Client ID (and keep the page open).
+* Login to the Spotify developer dashboard [here](https://developer.spotify.com/dashboard/applications)
+* Create a new Client ID (and keep the page open)
 
 ### Setting Environment Variables
 
@@ -102,22 +102,17 @@ npm run client-build
 
 This project was made to be deployed to Heroku, with a single dyno serving both the static React front-end and API requests.
 
-#### Instructions
-
 To deploy via Heroku and GitHub:
 
-* Create a new project on Heroku
-* Connect to the GitHub repository
+1. Create a new project on Heroku
+2. Connect the project to the GitHub repository
+3. Set environment variables:
 
-#### Environment Variables
-
-
-
-```
-heroku config:set SPOT_REDIRECT_URI=https://<PROJECT_NAME>.herokuapp.com/api/callback -a <PROJECT_NAME>
-heroku config:set SPOT_CLIENT_ID=<INSERT_CLIENT_ID> -a <PROJECT_NAME>
-heroku config:set SPOT_CLIENT_SECRET=<INSERT_CLIENT_SECRET> -a <PROJECT_NAME>
-```
+    ```
+    heroku config:set SPOT_REDIRECT_URI=https://<PROJECT_NAME>.herokuapp.com/api/callback -a <PROJECT_NAME>
+    heroku config:set SPOT_CLIENT_ID=<INSERT_CLIENT_ID> -a <PROJECT_NAME>
+    heroku config:set SPOT_CLIENT_SECRET=<INSERT_CLIENT_SECRET> -a <PROJECT_NAME>
+    ```
 
 ### Debugging
 
