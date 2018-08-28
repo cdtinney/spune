@@ -4,6 +4,8 @@
   "description": "",
   "scripts": {
     "client": "cd client && npm run start",
+    "client-build": "cd client && npm run build",
+    "client-test": "cd client && npm run test",
     "server": "nodemon server/app.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "start": "node server/app.js",

@@ -31,13 +31,55 @@
 
 ### Installing
 
+To install dependencies:
+
+```
+npm install
+```
+
 ### Running
 
+To run both client and server:
+
+```
+npm run dev
+```
+
+To run client only:
+
+```
+npm run client
+```
+
+To run server only (watch mode):
+
+```
+npm run server
+```
+
+To run server only (non-watch mode):
+
+```
+npm run start
+```
+
 ### Testing
+
+To run client tests (in watch mode):
+
+```
+npm run client-test
+```
 
 ### Debugging
 
 ### Building
+
+To build the client:
+
+```
+npm run client-build
+```
 
 ### Deploying
 
