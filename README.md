@@ -7,6 +7,8 @@
 - [Developing](#developing)
     - [Requirements](#requirements)
     - [Installing](#installing)
+    - [Creating Spotify Client ID](#creating-spotify-client-id)
+    - [Setting Environment Variables](#setting-environment-variables)
     - [Running](#running)
     - [Testing](#testing)
     - [Building](#building)
@@ -20,6 +22,7 @@
 
 * [Node.js/npm](https://nodejs.org/en/)
 * [Git](https://git-scm.com/) (duh)
+* [Spotify application](https://developer.spotify.com/dashboard/login)
 * (optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 ### Installing
@@ -37,7 +40,21 @@ Install dependencies:
 npm install
 ```
 
-All done!
+### Creating Spotify Client ID
+
+* Login to the Spotify developer dashboard [here](https://developer.spotify.com/dashboard/applications).
+* Create a new Client ID (and keep the page open).
+
+### Setting Environment Variables
+
+Create an `.env` file in the root directory, and set these variables:
+
+```
+CLIENT_HOST = http://localhost:3000 # Local Webpack dev server host
+SPOT_REDIRECT_URI = http://localhost:5000/api/callback # Local Node.js server host
+SPOT_CLIENT_ID = <CLIENT_ID>
+SPOT_CLIENT_SECRET = <CLIENT_SECRET>
+```
 
 ### Running
 
@@ -83,15 +100,28 @@ npm run client-build
 
 ### Deploying
 
-### Debugging
+This project was made to be deployed to Heroku, with a single dyno serving both the static React front-end and API requests.
+
+#### Instructions
+
+To deploy via Heroku and GitHub:
+
+* Create a new project on Heroku
+* Connect to the GitHub repository
 
 #### Environment Variables
 
+
+
 ```
-heroku config:set SPOT_REDIRECT_URI=https://spune-vis.herokuapp.com/api/callback -a szune
-heroku config:set SPOT_CLIENT_ID=INSERT_CLIENT_ID -a szune
-heroku config:set SPOT_CLIENT_SECRET=INSERT_CLIENT_SECRET -a szune
+heroku config:set SPOT_REDIRECT_URI=https://<PROJECT_NAME>.herokuapp.com/api/callback -a <PROJECT_NAME>
+heroku config:set SPOT_CLIENT_ID=<INSERT_CLIENT_ID> -a <PROJECT_NAME>
+heroku config:set SPOT_CLIENT_SECRET=<INSERT_CLIENT_SECRET> -a <PROJECT_NAME>
 ```
+
+### Debugging
+
+TODO
 
 ## Thanks to..
 
