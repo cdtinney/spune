@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Avatar from '@material-ui/core/Avatar';
 import PropTypes from 'prop-types';
 
 //////////////////////////
@@ -48,7 +49,12 @@ export default class User extends Component {
       <div className="user">
         <h2>{`Logged in as ${displayName || '... nobody?'}`}</h2>
         <div className="user__content">
-          <img src={avatarImageUrl} alt="profile" />
+          {avatarImageUrl &&
+            <Avatar
+              alt="profile"
+              src={avatarImageUrl}
+            />
+          }
         </div>
       </div>
     );
