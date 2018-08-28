@@ -11,7 +11,7 @@ import { Switch, Route } from 'react-router';
 
 import App from '../components/App/App';
 import Login from '../components/Login';
-import User from '../components/User';
+import User from '../components/User/container';
 import Error from '../components/Error';
 
 export default function Routes() {
