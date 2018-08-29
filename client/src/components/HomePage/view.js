@@ -3,7 +3,6 @@
 ///////////////////////////
 
 import React, { Component } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -42,6 +41,8 @@ export class HomePage extends Component {
     nowPlaying: PropTypes.shape({
       artistName: PropTypes.string,
       songTitle: PropTypes.string,
+      albumName: PropTypes.string,
+      albumImageUrl: PropTypes.string,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
   };
@@ -68,6 +69,8 @@ export class HomePage extends Component {
       nowPlaying: {
         artistName,
         songTitle,
+        albumName,
+        albumImageUrl,
       },
     } = this.props;
     
@@ -83,6 +86,8 @@ export class HomePage extends Component {
             <SongCard
               artistName={artistName}
               songTitle={songTitle}
+              albumName={albumName}
+              albumImageUrl={albumImageUrl}
             />
           }
         </div>

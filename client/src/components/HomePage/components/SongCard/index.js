@@ -33,8 +33,8 @@ export function SongCard(props) {
   const {
     artistName,
     songTitle,
-    albumImage,
-    albumTitle,
+    albumName,
+    albumImageUrl,
     classes,
   } = props;
 
@@ -54,8 +54,8 @@ export function SongCard(props) {
       </div>
       <CardMedia
         className={classes.cover}
-        image={albumImage}
-        title={albumTitle}
+        image={albumImageUrl}
+        title={albumName}
       />
     </Card>
   );
@@ -64,8 +64,8 @@ export function SongCard(props) {
 SongCard.ropTypes = {
   artistName: PropTypes.string.isRequired,
   songTitle: PropTypes.string.isRequired,
-  albumImage: PropTypes.string,
-  albumTitle: PropTypes.string,
+  albumName: PropTypes.string,
+  albumImageUrl: PropTypes.string,
 };
 
 export default withStyles(styles)(SongCard);

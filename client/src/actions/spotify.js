@@ -76,6 +76,10 @@ export function getNowPlaying() {
         item: {
           name: songTitle,
           artists,
+          album: {
+            name: albumName,
+            images: albumImages,
+          },
         },
       } = data;
 
@@ -84,7 +88,10 @@ export function getNowPlaying() {
         payload: {
           info: {
             artistName: artists.map(artist => artist.name).join(', '),
-            songTitle,            
+            songTitle,
+            albumName,
+            // Use the largest album image (first in array).
+            albumImageUrl: albumImages[0].url,
           },
         },
       });

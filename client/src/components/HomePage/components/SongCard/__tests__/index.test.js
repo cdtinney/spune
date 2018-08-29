@@ -8,8 +8,8 @@ it('renders without crashing', () => {
     <SongCard
       artistName="foo"
       songTitle="bar"
-      albumImage="baz"
-      albumTitle="cat"
+      albumName="cat"
+      albumImageUrl="baz"
       />,
     div);
   ReactDOM.unmountComponentAtNode(div);

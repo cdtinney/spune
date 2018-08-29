@@ -29,6 +29,8 @@ function mapStateToProps(state) {
       info: {
         artistName,
         songTitle,
+        albumName,
+        albumImageUrl,
       },
     },
   } = state;
@@ -46,6 +48,8 @@ function mapStateToProps(state) {
     nowPlaying: {
       artistName,
       songTitle,
+      albumName,
+      albumImageUrl,
     },
   };
 }
