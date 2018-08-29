@@ -39,6 +39,7 @@ export function getMyInfo() {
     
     spotifyApi.getMe().then((data) => {      
       const {
+        id,
         display_name: displayName,
         images,
       } = data;
@@ -47,6 +48,7 @@ export function getMyInfo() {
         type: FETCH_USER_INFO_SUCCESS,
         payload: {
           info: {
+            id,
             displayName,
             avatarImageUrl: images[0] ? images[0].url : '',
           },

@@ -68,7 +68,7 @@ export class HomePage extends Component {
         <div className={classes.content}>
           { loading ?
             <CircularProgress /> :
-            <h2>{`Logged in as ${userName || '... nobody?'}`}</h2>
+            <h2>{`Logged in as ${userName}`}</h2>
           }
         </div>
       </div>

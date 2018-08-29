@@ -20,6 +20,7 @@ function mapStateToProps(state) {
         lastUpdated,
       },
       info: {
+        id,
         displayName,
         avatarImageUrl,
       },
@@ -28,7 +29,11 @@ function mapStateToProps(state) {
 
   return {
     loading: loading || lastUpdated === null,
-    userName: displayName,
+    // There is an open bug with the API where some users don't have
+    // the `display_name` property set. Fallback to ID.
+    // 
+    // More info: https://github.com/spotify/web-api/issues/371
+    userName: displayName || id,
     userImageUrl: avatarImageUrl,
   };
 }
