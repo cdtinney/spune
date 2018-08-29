@@ -11,7 +11,7 @@ import { Switch, Route } from 'react-router';
 
 import App from '../App';
 import Login from '../components/Login';
-import User from '../components/User/container';
+import HomePage from '../components/HomePage/container';
 import Error from '../components/Error';
 
 export default function Routes() {
@@ -19,7 +19,7 @@ export default function Routes() {
     <App>
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/user/:accessToken/:refreshToken" component={User} />
+        <Route path="/home/:accessToken/:refreshToken" component={HomePage} />
         <Route path="/error/:errorMsg" component={Error} />
       </Switch>
     </App>

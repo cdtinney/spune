@@ -8,10 +8,9 @@ import { connect } from 'react-redux';
 // Internal dependencies//
 //////////////////////////
 
-// TODO Add shared folders to resolve paths after ejecting
 import * as spotifyActions from '../../actions/spotify';
 
-import User from './view';
+import HomePage from './view';
 
 function mapStateToProps(state) {
   const {
@@ -29,8 +28,8 @@ function mapStateToProps(state) {
 
   return {
     loading: loading || lastUpdated === null,
-    displayName,
-    avatarImageUrl,
+    userName: displayName,
+    userImageUrl: avatarImageUrl,
   };
 }
 
@@ -56,4 +55,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(User);
+)(HomePage);

@@ -70,7 +70,7 @@ router.get('/callback', (req, res) => {
 
         // Pass the token to the client in order to make requests from
         // the client itself.
-        res.redirect(`${CLIENT_HOST}/#/user/${access_token}/${refresh_token}`);
+        res.redirect(`${CLIENT_HOST}/#/home/${access_token}/${refresh_token}`);
     }).catch(err => res.redirect(`${CLIENT_HOST}/#/error/invalid token`));
 });
 
