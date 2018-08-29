@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 //////////////////////////
 
 import TopAppBar from '../TopAppBar';
+import SongCard from './components/SongCard';
 
 const styles = {
   root: {
@@ -21,6 +22,7 @@ const styles = {
   },
   content: {
     display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -32,10 +34,16 @@ const styles = {
  */
 export class HomePage extends Component {
   static propTypes = {
-    loadUser: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
-    userName: PropTypes.string,
-    userImageUrl: PropTypes.string,
+    user: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
+      userName: PropTypes.string,
+      userImageUrl: PropTypes.string,
+    }).isRequired,
+    nowPlaying: PropTypes.shape({
+      artistName: PropTypes.string,
+      songTitle: PropTypes.string,
+    }).isRequired,
+    onLoad: PropTypes.func.isRequired,
   };
 
   //////////////////////
@@ -43,7 +51,7 @@ export class HomePage extends Component {
   //////////////////////
 
   componentDidMount() {
-    this.props.loadUser();
+    this.props.onLoad();
   }
 
   ////////////////////
@@ -53,9 +61,14 @@ export class HomePage extends Component {
   render() {
     const {
       classes,
-      loading,
-      userName,
-      userImageUrl,
+      user: {
+        userName,
+        userImageUrl,
+      },
+      nowPlaying: {
+        artistName,
+        songTitle,
+      },
     } = this.props;
     
     return (
@@ -66,9 +79,11 @@ export class HomePage extends Component {
           userImageUrl={userImageUrl}
         />
         <div className={classes.content}>
-          { loading ?
-            <CircularProgress /> :
-            <h2>{`Logged in as ${userName}`}</h2>
+          { artistName && songTitle &&
+            <SongCard
+              artistName={artistName}
+              songTitle={songTitle}
+            />
           }
         </div>
       </div>

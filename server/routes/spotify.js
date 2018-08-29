@@ -14,7 +14,13 @@ const {
     SPOT_CLIENT_SECRET: CLIENT_SECRET,
     SPOT_REDIRECT_URI: REDIRECT_URI,
 } = process.env;
-const SPOT_SCOPES = [ 'user-read-private', 'user-read-email' ];
+// Permission scopes.
+const SPOT_SCOPES = [
+    'user-read-private',
+    'user-read-email',
+    // Required for getting user's current playback info.
+    'user-read-playback-state',
+];
 
 const SPOT_AUTH_STATE_KEY = 'spotify_auth_state';
 

@@ -16,8 +16,8 @@ function mapStateToProps(state) {
   const {
     user: {
       request: {
-        loading,
-        lastUpdated,
+        loading: userLoading,
+        lastUpdated: userLastUpdated,
       },
       info: {
         id,
@@ -25,22 +25,34 @@ function mapStateToProps(state) {
         avatarImageUrl,
       },
     },
+    nowPlaying: {
+      info: {
+        artistName,
+        songTitle,
+      },
+    },
   } = state;
 
   return {
-    loading: loading || lastUpdated === null,
-    // There is an open bug with the API where some users don't have
-    // the `display_name` property set. Fallback to ID.
-    // 
-    // More info: https://github.com/spotify/web-api/issues/371
-    userName: displayName || id,
-    userImageUrl: avatarImageUrl,
+    user: {
+      loading: userLoading || userLastUpdated === null || false,
+      // There is an open bug with the API where some users don't have
+      // the `display_name` property set. Fallback to ID.
+      // 
+      // More info: https://github.com/spotify/web-api/issues/371
+      userName: displayName || id,
+      userImageUrl: avatarImageUrl,
+    },
+    nowPlaying: {
+      artistName,
+      songTitle,
+    },
   };
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
   return {
-    loadUser() {
+    onLoad() {
       // Props injected by react-router.
       const {
         match: {
@@ -53,6 +65,7 @@ function mapDispatchToProps(dispatch, ownProps) {
 
       dispatch(spotifyActions.setTokens({ accessToken, refreshToken }));
       dispatch(spotifyActions.getMyInfo());
+      dispatch(spotifyActions.getNowPlaying());
     },
   };
 }

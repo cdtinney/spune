@@ -13,9 +13,9 @@ export default class Error extends Component {
     const {
       match: {
         params: {
-          errorMsg,
-        },
-      },
+          errorMsg = "Unknown error",
+        } = {},
+      } = {},
     } = this.props;
     
     return (
