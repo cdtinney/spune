@@ -4,6 +4,7 @@ import {
   FETCH_USER_INFO_SUCCESS,
   FETCH_NOW_PLAYING_REQUEST,
   FETCH_NOW_PLAYING_SUCCESS,
+  CLEAR_RELATED_ALBUMS,
   ADD_RELATED_ALBUMS,
 } from '../actions/spotify';
 
@@ -126,6 +127,16 @@ export default function reducer(state = initialState, action) {
           info: {
             ...info,
           },
+        },
+      };
+    }
+
+    case CLEAR_RELATED_ALBUMS: {
+      return {
+        ...state,
+        nowPlaying: {
+          ...state.nowPlaying,
+          relatedAlbums: [],
         },
       };
     }

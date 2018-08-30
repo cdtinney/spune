@@ -32,6 +32,7 @@ function mapStateToProps(state) {
         albumName,
         albumImageUrl,
       },
+      relatedAlbums,
     },
   } = state;
 
@@ -50,6 +51,10 @@ function mapStateToProps(state) {
       songArtistName: (songArtists || []).map(artist => artist.name).join(', '),
       albumName,
       albumImageUrl,
+      relatedAlbums: relatedAlbums.map(album => ({
+        title: album.name,
+        imageUrl: album.images[0].url,
+      })),
     },
   };
 }

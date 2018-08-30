@@ -11,8 +11,9 @@ import { withStyles } from '@material-ui/core/styles';
 //////////////////////////
 
 import TopAppBar from '../TopAppBar';
-import SongCard from './components/SongCard';
 import NowPlayingPoller from './components/NowPlayingPoller';
+import SongCard from './components/SongCard';
+import AlbumGrid from './components/AlbumGrid';
 
 const styles = {
   root: {
@@ -21,6 +22,7 @@ const styles = {
     flexGrow: 1,
   },
   content: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
@@ -44,6 +46,10 @@ export class HomePage extends Component {
       songArtistName: PropTypes.string,
       albumName: PropTypes.string,
       albumImageUrl: PropTypes.string,
+      relatedAlbums: PropTypes.arrayOf(PropTypes.shape({        
+        title: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+      })).isRequired,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
   };
@@ -72,6 +78,7 @@ export class HomePage extends Component {
         songArtistName,
         albumName,
         albumImageUrl,
+        relatedAlbums,
       },
     } = this.props;
     
@@ -83,16 +90,19 @@ export class HomePage extends Component {
           userName={userName}
           userImageUrl={userImageUrl}
         />
-        <div className={classes.content}>
-          { songArtistName && songTitle &&
+        { songArtistName && songTitle &&
+          <div className={classes.content}>
             <SongCard
               artistName={songArtistName}
               songTitle={songTitle}
               albumName={albumName}
               albumImageUrl={albumImageUrl}
             />
-          }
-        </div>
+            <AlbumGrid
+              albums={relatedAlbums}
+            />
+          </div>
+        }
       </div>
     );
   }
