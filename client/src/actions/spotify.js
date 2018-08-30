@@ -68,7 +68,20 @@ export function getMyInfo() {
 }
 
 export function getNowPlaying() {
-  return function getNowPlayingThunk(dispatch) {
+  return function getNowPlayingThunk(dispatch, getState) {
+    const {
+      nowPlaying: {
+        request: {
+          loading,
+        },
+      },
+    } = getState();
+
+    // Ignore if already fetching.
+    if (loading) {
+      return;
+    }
+
     dispatch({ type: FETCH_NOW_PLAYING_REQUEST });
     
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
