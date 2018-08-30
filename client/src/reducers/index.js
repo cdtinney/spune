@@ -4,6 +4,7 @@ import {
   FETCH_USER_INFO_SUCCESS,
   FETCH_NOW_PLAYING_REQUEST,
   FETCH_NOW_PLAYING_SUCCESS,
+  ADD_RELATED_ALBUMS,
 } from '../actions/spotify';
 
 const initialState = {
@@ -27,9 +28,16 @@ const initialState = {
       lastUpdated: null,
     },
     info: {
-      artistName: null,
+      songId: null,
       songTitle: null,
-    },    
+      songArtists: null,
+      artistName: null,
+      albumId: null,
+      albumName: null,
+      albumImageUrL: null,
+      albumArtists: null,
+    },
+    relatedAlbums: [],
   },
 };
 
@@ -118,6 +126,22 @@ export default function reducer(state = initialState, action) {
           info: {
             ...info,
           },
+        },
+      };
+    }
+
+    case ADD_RELATED_ALBUMS: {
+      const {
+        payload: {
+          albums,
+        },
+      } = action;
+
+      return {
+        ...state,
+        nowPlaying: {
+          ...state.nowPlaying,
+          relatedAlbums: state.nowPlaying.relatedAlbums.concat(albums),
         },
       };
     }

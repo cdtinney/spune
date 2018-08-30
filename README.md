@@ -124,4 +124,3 @@ Resources used:
 
 * [Deploying a React app alongside a server to Heroku](https://www.fullstackreact.com/articles/deploying-a-react-app-with-a-server/)
 * [Spotify Auth With React + React-Router](https://github.com/kauffecup/spotify-react-router-auth)
- 

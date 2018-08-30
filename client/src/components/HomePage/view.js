@@ -41,6 +41,7 @@ export class HomePage extends Component {
     }).isRequired,
     nowPlaying: PropTypes.shape({
       songTitle: PropTypes.string,
+      songArtistName: PropTypes.string,
       albumName: PropTypes.string,
       albumImageUrl: PropTypes.string,
     }).isRequired,
@@ -67,8 +68,8 @@ export class HomePage extends Component {
         userImageUrl,
       },
       nowPlaying: {
-        artistName,
         songTitle,
+        songArtistName,
         albumName,
         albumImageUrl,
       },
@@ -83,9 +84,9 @@ export class HomePage extends Component {
           userImageUrl={userImageUrl}
         />
         <div className={classes.content}>
-          { artistName && songTitle &&
+          { songArtistName && songTitle &&
             <SongCard
-              artistName={artistName}
+              artistName={songArtistName}
               songTitle={songTitle}
               albumName={albumName}
               albumImageUrl={albumImageUrl}

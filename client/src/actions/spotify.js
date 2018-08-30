@@ -17,6 +17,7 @@ export const FETCH_USER_INFO_FAILURE = 'SPOTIFY/FETCH_USER_INFO_FAILURE';
 export const FETCH_NOW_PLAYING_REQUEST = 'SPOTIFY/FETCH_NOW_PLAYING_REQUEST';
 export const FETCH_NOW_PLAYING_SUCCESS = 'SPOTIFY/FETCH_NOW_PLAYING_SUCCESS';
 export const FETCH_NOW_PLAYING_FAILURE = 'SPOTIFY/FETCH_NOW_PLAYING_FAILURE';
+export const ADD_RELATED_ALBUMS = 'SPOTIFY/ADD_RELATED_ALBUMS';
 
 //////////////
 // Creators //
@@ -60,9 +61,56 @@ export function getMyInfo() {
     }).catch((err) => {
       dispatch({
         type: FETCH_USER_INFO_FAILURE,
-        payload: new Error(),
+        payload: new Error(err),
         error: true,
       });
+    });
+  };
+}
+
+export function addRelatedAlbums(albums) {
+  return {
+    type: ADD_RELATED_ALBUMS,
+    payload: {
+      albums,
+    },
+  };
+}
+
+export function getRelatedAlbums() {
+  return function getRelatedAlbumsThunk(dispatch, getState) {
+    const {
+      nowPlaying: {
+        info: {
+          songArtists = [],
+          albumArtists = [],
+        },
+      },
+    } = getState();
+
+    const artistIds =
+      songArtists
+        .concat(albumArtists)
+        .map(artist => artist.id);
+
+    const uniqueArtistIds = new Set(artistIds);    
+    uniqueArtistIds.forEach(id => {
+      spotifyApi.getArtistAlbums(id, {
+        include_groups: 'album',
+      }).then((data) => {
+        const {
+          items,
+        } = data;
+
+        const albums = items.map(item => ({
+          id: item.id,
+          images: item.images,
+          name: item.name,
+          uri: item.uri,
+        }));
+
+        dispatch(addRelatedAlbums(albums))
+      }).catch(console.err);
     });
   };
 }
@@ -73,6 +121,9 @@ export function getNowPlaying() {
       nowPlaying: {
         request: {
           loading,
+        },
+        info: {
+          songId: currentSongId,
         },
       },
     } = getState();
@@ -87,11 +138,14 @@ export function getNowPlaying() {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       const {
         item: {
+          id: songId,
           name: songTitle,
-          artists,
+          artists: songArtists,
           album: {
+            id: albumId,
             name: albumName,
             images: albumImages,
+            artists: albumArtists,
           },
         },
       } = data;
@@ -100,14 +154,21 @@ export function getNowPlaying() {
         type: FETCH_NOW_PLAYING_SUCCESS,
         payload: {
           info: {
-            artistName: artists.map(artist => artist.name).join(', '),
+            songId,
             songTitle,
+            songArtists,
+            albumId,
             albumName,
+            albumArtists,
             // Use the largest album image (first in array).
             albumImageUrl: albumImages[0].url,
           },
         },
       });
+
+      if (currentSongId !== songId) {
+        dispatch(getRelatedAlbums());
+      }
     }).catch((err) => {
       dispatch({
         type: FETCH_NOW_PLAYING_FAILURE,

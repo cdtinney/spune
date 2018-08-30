@@ -25,7 +25,7 @@ export default class NowPlayingPoller extends Component {
 
   startPoll() {    
     this.timeout = setInterval(() =>
-      this.props.updateNowPlaying(), 2000);
+      this.props.updateNowPlaying(), 3000);
   }
 
   render() {

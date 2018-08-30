@@ -27,8 +27,8 @@ function mapStateToProps(state) {
     },
     nowPlaying: {
       info: {
-        artistName,
         songTitle,
+        songArtists,
         albumName,
         albumImageUrl,
       },
@@ -46,8 +46,8 @@ function mapStateToProps(state) {
       userImageUrl: avatarImageUrl,
     },
     nowPlaying: {
-      artistName,
       songTitle,
+      songArtistName: (songArtists || []).map(artist => artist.name).join(', '),
       albumName,
       albumImageUrl,
     },
