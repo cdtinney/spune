@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import TopAppBar from '../TopAppBar';
 import SongCard from './components/SongCard';
+import NowPlayingPoller from './components/NowPlayingPoller';
 
 const styles = {
   root: {
@@ -39,7 +40,6 @@ export class HomePage extends Component {
       userImageUrl: PropTypes.string,
     }).isRequired,
     nowPlaying: PropTypes.shape({
-      artistName: PropTypes.string,
       songTitle: PropTypes.string,
       albumName: PropTypes.string,
       albumImageUrl: PropTypes.string,
@@ -76,6 +76,7 @@ export class HomePage extends Component {
     
     return (
       <div className={classes.root}>
+        <NowPlayingPoller />
         <TopAppBar
           title="spune"
           userName={userName}
