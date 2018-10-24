@@ -16,12 +16,14 @@ function mapStateToProps(state) {
     nowPlaying: {
       request: {
         loading,
+        interval,
       },
     },
   } = state;
 
   return {
     loading,
+    interval,
   };
 }
 
