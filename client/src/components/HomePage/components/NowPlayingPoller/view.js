@@ -6,12 +6,15 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
+ * Non-UI component.
+ *
  * Polls the endpoint for updating the currently
  * played track every three seconds.
  */
 export default class NowPlayingPoller extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
+    interval: PropTypes.number.isRequired,
     updateNowPlaying: PropTypes.func.isRequired,
   };
 
@@ -23,9 +26,13 @@ export default class NowPlayingPoller extends Component {
     clearInterval(this.timeout);
   }
 
-  startPoll() {    
-    this.timeout = setInterval(() =>
-      this.props.updateNowPlaying(), 3000);
+  startPoll() {
+    const {
+      interval,
+      updateNowPlaying,
+    } = this.props;
+
+    this.timeout = setInterval(updateNowPlaying, interval);
   }
 
   render() {

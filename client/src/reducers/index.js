@@ -27,6 +27,7 @@ const initialState = {
     request: {
       loading: false,
       lastUpdated: null,
+      interval: 3000, // MS
     },
     info: {
       songId: null,
@@ -102,6 +103,7 @@ export default function reducer(state = initialState, action) {
         nowPlaying: {
           ...state.nowPlaying,
           request: {
+            ...state.nowPlaying.request,
             loading: true,
             lastUpdated: null,
           },
@@ -121,6 +123,7 @@ export default function reducer(state = initialState, action) {
         nowPlaying: {
           ...state.nowPlaying,
           request: {
+            ...state.nowPlaying.request,
             loading: false,
             lastUpdated: Date.now(),
           },
