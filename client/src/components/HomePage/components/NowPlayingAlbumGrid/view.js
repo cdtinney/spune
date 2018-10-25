@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 import StackGrid from "react-stack-grid";
 import { withStyles } from '@material-ui/core/styles';
 
+//////////////////////////
+// Internal dependencies//
+//////////////////////////
+
+import AlbumImage from './components/AlbumImage';
+
 const styles = theme => ({
   root: {
     position: 'absolute',
@@ -42,15 +48,12 @@ function AlbumGrid(props) {
         appearDelay={300}
       >
         {albums.map(album => (
-          <img
-            key={album.imageUrl}
-            src={album.imageUrl}
+          <AlbumImage
+            key={album.images.fullSize}
+            src={album.images.fullSize}
             alt={album.title}
-            className={classes.img}
-            style={{
-              height: `${columnHeight}px`,
-              width: `${columnWidth}px`,
-            }}
+            width={columnWidth}
+            height={columnHeight}
           />
         ))}
       </StackGrid>
@@ -61,7 +64,10 @@ function AlbumGrid(props) {
 AlbumGrid.propTypes = {
   albums: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    images: PropTypes.shape({
+      fullSize: PropTypes.string.isRequired,
+      thumbnail: PropTypes.string.isRequired,
+    }).isRequired,
   })).isRequired,
   classes: PropTypes.object.isRequired,
 };
