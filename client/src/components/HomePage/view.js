@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TopAppBar from '../TopAppBar';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
-import AlbumGrid from './components/AlbumGrid';
+import NowPlayingAlbumGrid from './components/NowPlayingAlbumGrid';
 
 const styles = {
   root: {
@@ -46,10 +46,6 @@ export class HomePage extends Component {
       songArtistName: PropTypes.string,
       albumName: PropTypes.string,
       albumImageUrl: PropTypes.string,
-      relatedAlbums: PropTypes.arrayOf(PropTypes.shape({        
-        title: PropTypes.string.isRequired,
-        imageUrl: PropTypes.string.isRequired,
-      })).isRequired,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
   };
@@ -78,7 +74,6 @@ export class HomePage extends Component {
         songArtistName,
         albumName,
         albumImageUrl,
-        relatedAlbums,
       },
     } = this.props;
     
@@ -98,9 +93,7 @@ export class HomePage extends Component {
               albumName={albumName}
               albumImageUrl={albumImageUrl}
             />
-            <AlbumGrid
-              albums={relatedAlbums}
-            />
+            <NowPlayingAlbumGrid />
           </div>
         }
       </div>
