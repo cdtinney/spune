@@ -20,7 +20,10 @@ function mapStateToProps(state) {
   return {
     albums: relatedAlbums.map(album => ({
       title: album.name,
-      imageUrl: album.images[0].url,
+      images: {
+        fullSize: album.images[0].url,
+        thumbnail: album.images[album.images.length - 1].url,
+      },
     })),
   };
 }
