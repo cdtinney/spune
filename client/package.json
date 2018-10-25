@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "1.5.1",
     "connected-react-router": "4.3.0",
+    "immutability-helper": "2.8.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-progressive-image": "0.6.0",

@@ -1,3 +1,13 @@
+////////////////////////////
+// External dependencies  //
+////////////////////////////
+
+import update from 'immutability-helper';
+
+////////////////////////////
+// Internal dependencies  //
+////////////////////////////
+
 import {
   SET_TOKENS,
   FETCH_USER_INFO_REQUEST,
@@ -55,27 +65,28 @@ export default function reducer(state = initialState, action) {
           refreshToken,
         },
       } = action;
-      
-      return {
-        ...state,
+
+      return update(state, {
         tokens: {
-          accessToken,
-          refreshToken,
+          $set: {
+            accessToken,
+            refreshToken,
+          },
         },
-      };
+      });
     }
     
     case FETCH_USER_INFO_REQUEST: {
-      return {
-        ...state,
+      return update(state, {
         user: {
-          ...state.user,
           request: {
-            loading: true,
-            lastUpdated: null,
+            $merge: {
+              loading: true,
+              lastUpdated: null,
+            },
           },
         },
-      };
+      });
     }
     
     case FETCH_USER_INFO_SUCCESS: {
@@ -84,34 +95,32 @@ export default function reducer(state = initialState, action) {
           info,
         },
       } = action;
-      
-      return {
-        ...state,
+      return update(state, {
         user: {
-          ...state.user,
           request: {
-            loading: false,
-            lastUpdated: Date.now(),
+            $merge: {
+              loading: false,
+              lastUpdated: Date.now(),
+            },
           },
           info: {
-            ...info,
+            $set: info,
           },
         },
-      };
+      });
     }
     
     case FETCH_NOW_PLAYING_REQUEST: {
-      return {
-        ...state,
+      return update(state, {
         nowPlaying: {
-          ...state.nowPlaying,
           request: {
-            ...state.nowPlaying.request,
-            loading: true,
-            lastUpdated: null,
+            $merge: {
+              loading: true,
+              lastUpdated: null,
+            },
           },
         },
-      };
+      });
     }
     
     case FETCH_NOW_PLAYING_SUCCESS: {
@@ -120,33 +129,32 @@ export default function reducer(state = initialState, action) {
           info,
         },
       } = action;
-      
-      return {
-        ...state,
+
+      return update(state, {
         nowPlaying: {
-          ...state.nowPlaying,
           request: {
-            ...state.nowPlaying.request,
-            loading: false,
-            lastUpdated: Date.now(),
+            $merge: {
+              loading: false,
+              lastUpdated: Date.now(),
+            },
           },
           info: {
-            ...info,
+            $set: info,
           },
         },
-      };
+      });
     }
 
     case CLEAR_RELATED_ALBUMS: {
-      return {
-        ...state,
+      return update(state, {
         nowPlaying: {
-          ...state.nowPlaying,
           relatedAlbums: {
-            byArtist: {},
+            $set: {
+              byArtist: {},
+            },
           },
         },
-      };
+      });
     }
 
     case FETCH_RELATED_ARTIST_ALBUMS_REQUEST: {
@@ -156,22 +164,20 @@ export default function reducer(state = initialState, action) {
         },
       } = action;
 
-      return {
-        ...state,
+      return update(state, {
         nowPlaying: {
-          ...state.nowPlaying,
           relatedAlbums: {
-            ...state.nowPlaying.relatedAlbums,
             byArtist: {
-              ...state.nowPlaying.relatedAlbums.byArtist,
-              [artistId]: {
-                loading: true,
-                albums: [],
-              }
+              $merge: {
+                [artistId]: {
+                  loading: true,
+                  albums: [],
+                },
+              },
             },
           },
         },
-      };
+      });
     }
 
     case FETCH_RELATED_ARTIST_ALBUMS_SUCCESS: {
@@ -182,24 +188,22 @@ export default function reducer(state = initialState, action) {
         },
       } = action;
 
-      return {
-        ...state,
+      return update(state, {
         nowPlaying: {
-          ...state.nowPlaying,
           relatedAlbums: {
-            ...state.nowPlaying.relatedAlbums,
             byArtist: {
-              ...state.nowPlaying.relatedAlbums.byArtist,
               [artistId]: {
-                loading: false,
-                albums: ((state.nowPlaying.relatedAlbums.byArtist[artistId] || {})
-                  .albums || [])
-                    .concat(albums),
+                loading: {
+                  $set: true,
+                },
+                albums: {
+                  $push: albums,
+                },
               },
             },
           },
         },
-      };
+      });
     }
 
     // TODO Handle failure actions
