@@ -13,18 +13,24 @@ import AlbumGrid from './view';
 function mapStateToProps(state) {
   const {
     nowPlaying: {
-      relatedAlbums,
+      relatedAlbums: {
+        byArtist,
+      }
     },
   } = state;
 
   return {
-    albums: relatedAlbums.map(album => ({
-      title: album.name,
-      images: {
-        fullSize: album.images[0].url,
-        thumbnail: album.images[album.images.length - 1].url,
-      },
-    })),
+    albums: Object.values(byArtist)
+      // Flatten the array first
+      .reduce((acc, curr) => {
+        return acc.concat(curr.albums);
+      }, []).map(album => ({
+        title: album.name,
+        images: {
+          fullSize: album.images[0].url,
+          thumbnail: album.images[album.images.length - 1].url,
+        },
+      })),
   };
 }
 

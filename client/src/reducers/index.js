@@ -5,7 +5,8 @@ import {
   FETCH_NOW_PLAYING_REQUEST,
   FETCH_NOW_PLAYING_SUCCESS,
   CLEAR_RELATED_ALBUMS,
-  ADD_RELATED_ALBUMS,
+  FETCH_RELATED_ARTIST_ALBUMS_REQUEST,
+  FETCH_RELATED_ARTIST_ALBUMS_SUCCESS,
 } from '../actions/spotify';
 
 const initialState = {
@@ -39,7 +40,9 @@ const initialState = {
       albumImageUrL: null,
       albumArtists: null,
     },
-    relatedAlbums: [],
+    relatedAlbums: {
+      byArtist: {},
+    },
   },
 };
 
@@ -139,14 +142,42 @@ export default function reducer(state = initialState, action) {
         ...state,
         nowPlaying: {
           ...state.nowPlaying,
-          relatedAlbums: [],
+          relatedAlbums: {
+            byArtist: {},
+          },
         },
       };
     }
 
-    case ADD_RELATED_ALBUMS: {
+    case FETCH_RELATED_ARTIST_ALBUMS_REQUEST: {
       const {
         payload: {
+          artistId,
+        },
+      } = action;
+
+      return {
+        ...state,
+        nowPlaying: {
+          ...state.nowPlaying,
+          relatedAlbums: {
+            ...state.nowPlaying.relatedAlbums,
+            byArtist: {
+              ...state.nowPlaying.relatedAlbums.byArtist,
+              [artistId]: {
+                loading: true,
+                albums: [],
+              }
+            },
+          },
+        },
+      };
+    }
+
+    case FETCH_RELATED_ARTIST_ALBUMS_SUCCESS: {
+      const {
+        payload: {
+          artistId,
           albums,
         },
       } = action;
@@ -155,7 +186,18 @@ export default function reducer(state = initialState, action) {
         ...state,
         nowPlaying: {
           ...state.nowPlaying,
-          relatedAlbums: state.nowPlaying.relatedAlbums.concat(albums),
+          relatedAlbums: {
+            ...state.nowPlaying.relatedAlbums,
+            byArtist: {
+              ...state.nowPlaying.relatedAlbums.byArtist,
+              [artistId]: {
+                loading: false,
+                albums: ((state.nowPlaying.relatedAlbums.byArtist[artistId] || {})
+                  .albums || [])
+                    .concat(albums),
+              },
+            },
+          },
         },
       };
     }

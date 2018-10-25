@@ -11,14 +11,36 @@ const spotifyApi = new Spotify();
 //////////
 
 export const SET_TOKENS = 'SPOTIFY/SET_TOKENS';
+
 export const FETCH_USER_INFO_REQUEST = 'SPOTIFY/FETCH_USER_INFO_REQUEST';
 export const FETCH_USER_INFO_SUCCESS = 'SPOTIFY/FETCH_USER_INFO_SUCCESS';
 export const FETCH_USER_INFO_FAILURE = 'SPOTIFY/FETCH_USER_INFO_FAILURE';
+
 export const FETCH_NOW_PLAYING_REQUEST = 'SPOTIFY/FETCH_NOW_PLAYING_REQUEST';
 export const FETCH_NOW_PLAYING_SUCCESS = 'SPOTIFY/FETCH_NOW_PLAYING_SUCCESS';
 export const FETCH_NOW_PLAYING_FAILURE = 'SPOTIFY/FETCH_NOW_PLAYING_FAILURE';
-export const CLEAR_RELATED_ALBUMS = 'SPOTIFY/CLEAR_RELATED_ALBUMS';
-export const ADD_RELATED_ALBUMS = 'SPOTIFY/ADD_RELATED_ALBUMS';
+
+export const CLEAR_RELATED_ALBUMS = 'SPOTIFY/RELATED_ALBUMS/CLEAR';
+
+export const FETCH_RELATED_ARTIST_ALBUMS_REQUEST =
+  'SPOTIFY/RELATED_ALBUMS/FETCH_ARTIST_ALBUMS_REQUEST';
+export const FETCH_RELATED_ARTIST_ALBUMS_SUCCESS =
+  'SPOTIFY/RELATED_ALBUMS/FETCH_ARTIST_ALBUMS_SUCCESS';
+export const FETCH_RELATED_ARTIST_ALBUMS_FAILURE =
+  'SPOTIFY/RELATED_ALBUMS/FETCH_ARTIST_ALBUMS_FAILURE';
+
+///////////////
+// Utilities //
+///////////////
+
+function itemsToAlbums(items) {
+  return items.map(item => ({
+    id: item.id,
+    images: item.images,
+    name: item.name,
+    uri: item.uri,
+  }));
+}
 
 //////////////
 // Creators //
@@ -28,7 +50,7 @@ export function setTokens({ accessToken, refreshToken }) {
   if (accessToken) {
     spotifyApi.setAccessToken(accessToken);
   }
-  
+
   return {
     type: SET_TOKENS,
     payload: {
@@ -41,8 +63,8 @@ export function setTokens({ accessToken, refreshToken }) {
 export function getMyInfo() {
   return function getMyInfoThunk(dispatch) {
     dispatch({ type: FETCH_USER_INFO_REQUEST });
-    
-    spotifyApi.getMe().then((data) => {      
+
+    spotifyApi.getMe().then((data) => {
       const {
         id,
         display_name: displayName,
@@ -75,26 +97,37 @@ export function clearRelatedAlbums() {
   };
 }
 
-export function addRelatedAlbums(albums) {
+export function fetchArtistAlbumsRequest(artistId) {
   return {
-    type: ADD_RELATED_ALBUMS,
+    type: FETCH_RELATED_ARTIST_ALBUMS_REQUEST,
     payload: {
-      albums,
+      artistId,
     },
   };
 }
 
-function itemsToAlbums(items) {
-  return items.map(item => ({
-    id: item.id,
-    images: item.images,
-    name: item.name,
-    uri: item.uri,
-  }));
+export function fetchArtistAlbumsSuccess(artistId, albums) {
+  return {
+    type: FETCH_RELATED_ARTIST_ALBUMS_SUCCESS,
+    payload: {
+      artistId,
+      albums,
+    },
+  };
+}
+export function fetchArtistAlbumsFailure(artistId, error) {
+  return {
+    type: FETCH_RELATED_ARTIST_ALBUMS_FAILURE,
+    payload: {
+      artistId,
+      error: error,
+    },
+    errored: true,
+  };
 }
 
-function getArtistAlbums(artistId) {
-  return function getAlbumsForArtistThunk(dispatch, getState) {
+function fetchArtistAlbums(artistId) {
+  return function fetchAlbumsForArtistThunk(dispatch, getState) {
     const {
       nowPlaying: {
         info: {
@@ -102,6 +135,8 @@ function getArtistAlbums(artistId) {
         },
       },
     } = getState();
+
+    dispatch(fetchArtistAlbumsRequest(artistId));
 
     spotifyApi.getArtistAlbums(artistId, {
       include_groups: 'album',
@@ -123,13 +158,16 @@ function getArtistAlbums(artistId) {
             }) === index;
           });
 
-      dispatch(addRelatedAlbums(uniqueAlbums));
-    }).catch(console.error);
+      dispatch(fetchArtistAlbumsSuccess(artistId, uniqueAlbums));
+    }).catch((error) => {
+      console.error(error);
+      dispatch(fetchArtistAlbumsFailure(artistId, error));
+    });
   };
 }
 
-export function getRelatedAlbums() {
-  return function getRelatedAlbumsThunk(dispatch, getState) {
+export function fetchRelatedAlbums() {
+  return function fetchRelatedAlbumsThunk(dispatch, getState) {
     const {
       nowPlaying: {
         info: {
@@ -148,15 +186,7 @@ export function getRelatedAlbums() {
 
     const uniqueArtistIds = new Set(artistIds);
     uniqueArtistIds.forEach(id => {
-      dispatch(getArtistAlbums(id));
-      spotifyApi.getArtistRelatedArtists(id)
-        .then((data) => {
-          const {
-            artists,
-          } = data;
-
-          // TODO wat do
-        }).catch(console.error);          
+      dispatch(fetchArtistAlbums(id));
     });
   };
 }
@@ -180,7 +210,7 @@ export function getNowPlaying() {
     }
 
     dispatch({ type: FETCH_NOW_PLAYING_REQUEST });
-    
+
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       const {
         item: {
@@ -213,7 +243,7 @@ export function getNowPlaying() {
       });
 
       if (currentAlbumId !== albumId) {
-        dispatch(getRelatedAlbums());
+        dispatch(fetchRelatedAlbums());
       }
     }).catch((err) => {
       dispatch({
