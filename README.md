@@ -21,7 +21,6 @@
 ### Requirements
 
 * [Node.js/npm](https://nodejs.org/en/)
-* [Git](https://git-scm.com/) (duh)
 * [Spotify application](https://developer.spotify.com/dashboard/login)
 * (optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
