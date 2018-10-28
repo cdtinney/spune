@@ -15,8 +15,10 @@ import {
   FETCH_NOW_PLAYING_REQUEST,
   FETCH_NOW_PLAYING_SUCCESS,
   CLEAR_RELATED_ALBUMS,
-  FETCH_RELATED_ARTIST_ALBUMS_REQUEST,
-  FETCH_RELATED_ARTIST_ALBUMS_SUCCESS,
+  FETCH_ARTIST_ALBUMS_REQUEST,
+  FETCH_ARTIST_ALBUMS_SUCCESS,
+  FETCH_RELATED_ARTISTS_REQUEST,
+  FETCH_RELATED_ARTISTS_SUCCESS,
 } from '../actions/spotify';
 
 const initialState = {
@@ -51,6 +53,9 @@ const initialState = {
       albumArtists: null,
     },
     relatedAlbums: {
+      byArtist: {},
+    },
+    relatedArtists: {
       byArtist: {},
     },
   },
@@ -157,7 +162,7 @@ export default function reducer(state = initialState, action) {
       });
     }
 
-    case FETCH_RELATED_ARTIST_ALBUMS_REQUEST: {
+    case FETCH_ARTIST_ALBUMS_REQUEST: {
       const {
         payload: {
           artistId,
@@ -180,7 +185,7 @@ export default function reducer(state = initialState, action) {
       });
     }
 
-    case FETCH_RELATED_ARTIST_ALBUMS_SUCCESS: {
+    case FETCH_ARTIST_ALBUMS_SUCCESS: {
       const {
         payload: {
           artistId,
@@ -194,10 +199,59 @@ export default function reducer(state = initialState, action) {
             byArtist: {
               [artistId]: {
                 loading: {
-                  $set: true,
+                  $set: false,
                 },
                 albums: {
                   $push: albums,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    case FETCH_RELATED_ARTISTS_REQUEST: {
+      const {
+        payload: {
+          artistId,
+        },
+      } = action;
+
+      return update(state, {
+        nowPlaying: {
+          relatedArtists: {
+            byArtist: {
+              $merge: {
+                [artistId]: {
+                  loading: true,
+                  artists: [],
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    case FETCH_RELATED_ARTISTS_SUCCESS: {
+      const {
+        payload: {
+          artistId,
+          artists,
+        },
+      } = action;
+
+      return update(state, {
+        nowPlaying: {
+          relatedArtists: {
+            byArtist: {
+              [artistId]: {
+                loading: {
+                  $set: true,
+                },
+                artists: {
+                  $push: artists,
                 },
               },
             },
