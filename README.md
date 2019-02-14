@@ -113,19 +113,18 @@ $ npm run client:build
 
 ### Deploying
 
-This project was made to be deployed to Heroku, with a single dyno serving both the static React front-end and API requests.
+The application is deployed to Heroku via Travis CI, with a single dyno
+serving both the static React front-end and API requests.
 
-To deploy via Heroku and GitHub:
+To deploy via Heroku and Travis CI:
 
-1. Create a new project on Heroku
-2. Connect the project to the GitHub repository
-3. Set environment variables:
+1. Connect the repository on Travis CI as a new project
+2. [Set environment variables](#setting-environment-variables) within Travis for the project
+3. Create a Heroku project for the application
+4. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
+5. Update the Heroku app name
 
-    ```
-    heroku config:set SPOT_REDIRECT_URI=https://<PROJECT_NAME>.herokuapp.com/api/callback -a <PROJECT_NAME>
-    heroku config:set SPOT_CLIENT_ID=<INSERT_CLIENT_ID> -a <PROJECT_NAME>
-    heroku config:set SPOT_CLIENT_SECRET=<INSERT_CLIENT_SECRET> -a <PROJECT_NAME>
-    ```
+Then, all commits to `master` should be deployed (by default).
 
 ### Debugging
 
