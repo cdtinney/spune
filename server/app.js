@@ -6,16 +6,17 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 
 const spotifyRoutes = require('./routes/spotify');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+const paths = require('./config/paths');
+
 if (process.env.NODE_ENV === 'production') {
     // Serve static React files.
-    app.use(express.static(path.join(__dirname, '../client/build')));
+    app.use(express.static(paths.clientBuild));
 }
 
 // Parse cookies BEFORE routing.
