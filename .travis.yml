@@ -4,6 +4,7 @@ node_js:
 
 install:
   - "npm run install:all"
+  - "npm run client:build"
 
 deploy:
   api_key:
