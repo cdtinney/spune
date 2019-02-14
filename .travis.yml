@@ -1,5 +1,9 @@
+language: node_js
+node_js:
+  - "node"
+
 install:
-  - npm run install:all
+  - "npm run install:all"
 
 deploy:
   api_key:
