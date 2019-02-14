@@ -1,5 +1,5 @@
 install:
-  - npm install:all
+  - npm run install:all
 
 deploy:
   api_key:
