@@ -100,7 +100,7 @@ $ kill -9 <SERVER_PID> <CLIENT_PID>
 To run client tests (in watch mode):
 
 ```
-$ npm run client-test
+$ npm run client:test
 ```
 
 ### Building
@@ -108,7 +108,7 @@ $ npm run client-test
 To build the client:
 
 ```
-$ npm run client-build
+$ npm run client:build
 ```
 
 ### Deploying
