@@ -5,15 +5,15 @@
 
 - [Table of Contents](#table-of-contents)
 - [Developing](#developing)
-    - [Requirements](#requirements)
-    - [Installing](#installing)
-    - [Creating Spotify Client ID](#creating-spotify-client-id)
-    - [Setting Environment Variables](#setting-environment-variables)
-    - [Running](#running)
-    - [Testing](#testing)
-    - [Building](#building)
-    - [Deploying](#deploying)
-    - [Debugging](#debugging)
+  - [Requirements](#requirements)
+  - [Installing](#installing)
+  - [Creating Spotify Client ID](#creating-spotify-client-id)
+  - [Setting Environment Variables](#setting-environment-variables)
+  - [Running](#running)
+  - [Testing](#testing)
+  - [Building](#building)
+  - [Deploying](#deploying)
+  - [Debugging](#debugging)
 - [Thanks to..](#thanks-to)
 
 ## Developing
@@ -21,7 +21,7 @@
 ### Requirements
 
 * [Node.js/npm](https://nodejs.org/en/)
-* [Spotify application](https://developer.spotify.com/dashboard/login)
+* [Configured Spotify application](https://developer.spotify.com/dashboard/login)
 * (optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 ### Installing
@@ -29,14 +29,14 @@
 Clone the repository (and navigate into it):
 
 ```
-git clone git@github.com:cdtinney/spune.git
-cd spune
+$ git clone git@github.com:cdtinney/spune.git
+$ cd spune
 ```
 
 Install dependencies:
 
 ```
-npm install
+$ npm install
 ```
 
 ### Creating Spotify Client ID
@@ -60,25 +60,25 @@ SPOT_CLIENT_SECRET = <CLIENT_SECRET>
 To run both client and server:
 
 ```
-npm run dev
+$ npm run dev
 ```
 
 To run client only:
 
 ```
-npm run client
+$ npm run client
 ```
 
 To run server only (watch mode):
 
 ```
-npm run server
+$ npm run server
 ```
 
 To run server only (non-watch mode):
 
 ```
-npm run start
+$ npm run start
 ```
 
 ### Testing
@@ -86,7 +86,7 @@ npm run start
 To run client tests (in watch mode):
 
 ```
-npm run client-test
+$ npm run client-test
 ```
 
 ### Building
@@ -94,7 +94,7 @@ npm run client-test
 To build the client:
 
 ```
-npm run client-build
+$ npm run client-build
 ```
 
 ### Deploying
