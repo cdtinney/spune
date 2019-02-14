@@ -1,7 +1,6 @@
 'use strict';
 
 const Spotify = require('spotify-web-api-node');
-const querystring = require('querystring');
 const express = require('express');
 
 const generateCookie = require('../modules/generateCookie.js');
@@ -14,6 +13,7 @@ const {
     SPOT_CLIENT_SECRET: CLIENT_SECRET,
     SPOT_REDIRECT_URI: REDIRECT_URI,
 } = process.env;
+
 // Permission scopes.
 const SPOT_SCOPES = [
     'user-read-private',
