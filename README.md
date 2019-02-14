@@ -10,6 +10,7 @@
   - [Creating Spotify Client ID](#creating-spotify-client-id)
   - [Setting Environment Variables](#setting-environment-variables)
   - [Running](#running)
+  - [Stopping](#stopping)
   - [Testing](#testing)
   - [Building](#building)
   - [Deploying](#deploying)
@@ -37,6 +38,7 @@ Install dependencies:
 
 ```
 $ npm install
+$ cd client && npm install
 ```
 
 ### Creating Spotify Client ID
@@ -49,8 +51,8 @@ $ npm install
 Create an `.env` file in the root directory, and set these variables:
 
 ```
-CLIENT_HOST = http://localhost:3000 # Local Webpack dev server host
-SPOT_REDIRECT_URI = http://localhost:5000/api/callback # Local Node.js server host
+CLIENT_HOST = http://localhost:3000
+SPOT_REDIRECT_URI = http://localhost:5000/api/callback
 SPOT_CLIENT_ID = <CLIENT_ID>
 SPOT_CLIENT_SECRET = <CLIENT_SECRET>
 ```
@@ -79,6 +81,18 @@ To run server only (non-watch mode):
 
 ```
 $ npm run start
+```
+
+### Stopping
+
+To stop a running development server, use `Ctrl+C` to gracefully shut it down.
+
+If you use `Ctrl+Z`, you will have to manually kill the old processes to free up the ports.
+This can be done via finding the process IDs (PIDs):
+
+```
+$ ps -A | egrep "start.js|app.js"
+$ kill -9 <SERVER_PID> <CLIENT_PID>
 ```
 
 ### Testing
