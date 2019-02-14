@@ -7,6 +7,7 @@
     "client:build": "cd client && npm run build",
     "client:test": "cd client && npm run test",
     "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "install:all": "npm install && cd client && npm install",
     "server": "nodemon server/app.js",
     "start": "node server/app.js"
