@@ -7,6 +7,7 @@ install:
   - "npm run client:build"
 
 deploy:
+  provider: heroku
   api_key:
     secure: fAMuppVXivwbOdtZ0ED0WzSK9YRYc6144QDugJx+p5Im3QBWYydx6nFCha+/Z5Tw3Hp5HoJExEsm5uC6R7bWfEv+PX3koIqLqs+ambsrKWQonu6NjCpihEnvvsfqb2iRqseaKskh7+wyIg5ImzAt7nrsP/AkFhl+KTSt/72byjhUH/Q+C7EQ1fsS7h5t5V/+dLV1nc10j7rCUc9aGN5o+HsJFzJc+lERFZReoAs6qdzEOgy7GkNmNfa8wVtQ7r6CuRGJY7lRetOEMESwamQdRVR6UlA6Z1Vbv28w+v66QYbuHWnCmZPPE7R8AE/omF8+lZPAvYuaFuOimK7ZyvcNNQLEoIGLRq6LDgB74rfui6qU+o12WcqIDDpxNBO9aI0guuTsEItR18lohRWT5GVjmZYu6IVY6Rxm6ygqGFAO+b+midxY8A70XsbjVhj3bgdKQ51dwjY6ukg/aylw9Wpzka/5lbd0hEstfOdleEIjFI2Hm2QJa8TlYkcLXv96MnWTgCH23YHYpSnXoi2lQJitbnDB5k41atOC+QTiege3+z5wwx+e1cPhB+aEYIniDSlswch9T5jDDblWyDVKFpch3On8lj5tHBvPvwF9ZbkpmI3ot5qX5/kB5odHWQNa5xF7K13kGdVyYN2DgiLiF6KTpuoE82JREjCXKJX27Pr/mBk=
   app: spune-vis
