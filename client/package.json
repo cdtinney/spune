@@ -28,5 +28,8 @@
     "/api": {
       "target": "http://localhost:5000/"
     }
-  }
+  },
+  "browserslist": [
+    "last 1 version"
+  ]
 }
