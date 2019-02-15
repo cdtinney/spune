@@ -49,13 +49,13 @@ $ cd client && npm install
 
 ### Creating Spotify Client ID
 
-* Login to the Spotify developer dashboard [here](https://developer.spotify.com/dashboard/applications)
+* Login to [the Spotify developer dashboard](https://developer.spotify.com/dashboard/applications)
 * Create a new Client ID
   * Keep the page open so you can copy/paste the ID and secret next
 
 ### Setting Environment Variables
 
-Create an `.env` file in the root directory, and set these variables:
+Create an `.env` file in the root directory, and set these variables (for a local environment):
 
 ```
 CLIENT_HOST = http://localhost:3000
@@ -63,6 +63,8 @@ SPOT_REDIRECT_URI = http://localhost:5000/api/callback
 SPOT_CLIENT_ID = <CLIENT_ID>
 SPOT_CLIENT_SECRET = <CLIENT_SECRET>
 ```
+
+In production, replace `localhost:port` with the URL it's being hosted at.
 
 ### Running
 
