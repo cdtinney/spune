@@ -11,7 +11,8 @@
     "install:all": "npm install && cd client && npm install",
     "server": "node server/app.js",
     "server:watch": "nodemon server/app.js",
-    "start": "npm run server"
+    "start": "npm run server",
+    "test": "npm run client:test"
   },
   "keywords": [],
   "author": "Colin Tinney",
