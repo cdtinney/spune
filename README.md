@@ -130,7 +130,7 @@ To deploy via Heroku and Travis CI:
 1. Connect the repository on Travis CI as a new project
 2. Create a new Heroku application (e.g. `spune`)
 3. [Set config variables](#setting-environment-variables) for the Heroku application
-  * Ensure that `SPOT_REDIRECT_URI`, `SPOT_CLIENT_ID`, and `SPOT_CLIENT_SECRET` are set correctly
+      * Ensure that `SPOT_REDIRECT_URI`, `SPOT_CLIENT_ID`, and `SPOT_CLIENT_SECRET` are set correctly
 4. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
 5. Update the Heroku app name
 
