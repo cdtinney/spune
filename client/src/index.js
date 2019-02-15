@@ -13,14 +13,14 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 import Routes from './routes';
-import configureStore from './store/configureStore';
-
-const { store, history } = configureStore();
+import configureStore, {
+  history,
+} from './store/configureStore';
 
 class Root extends Component {
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={configureStore()}>
         <ConnectedRouter history={history}>
           <Routes />
         </ConnectedRouter>

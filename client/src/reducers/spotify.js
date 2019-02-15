@@ -61,7 +61,7 @@ const initialState = {
   },
 };
 
-export default function reducer(state = initialState, action) {
+export default function spotify(state = initialState, action) {
   switch (action.type) {
     case SET_TOKENS: {
       const {
