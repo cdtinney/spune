@@ -21,9 +21,15 @@
 
 ### Requirements
 
+To run the application:
+
 * [Node.js/npm](https://nodejs.org/en/)
 * [Configured Spotify application](https://developer.spotify.com/dashboard/login)
-* (optional) [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+
+For CI/CD:
+
+* [Travis CI CLI](https://github.com/travis-ci/travis.rb#readme)
+* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 
 ### Installing
 
