@@ -55,10 +55,12 @@ function itemsToAlbums(items) {
 
 function nowPlayingArtists(getState) {
   const {
-    nowPlaying: {
-      info: {
-        songArtists = [],
-        albumArtists = [],
+    spotify: {
+      nowPlaying: {
+        info: {
+          songArtists = [],
+          albumArtists = [],
+        },
       },
     },
   } = getState();
@@ -258,12 +260,14 @@ function fetchRelatedAlbums() {
 export function getNowPlaying() {
   return function getNowPlayingThunk(dispatch, getState) {
     const {
-      nowPlaying: {
-        request: {
-          loading,
-        },
-        info: {
-          albumId: currentAlbumId,
+      spotify: {
+        nowPlaying: {
+          request: {
+            loading,
+          },
+          info: {
+            albumId: currentAlbumId,
+          },
         },
       },
     } = getState();

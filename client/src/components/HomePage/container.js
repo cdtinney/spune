@@ -14,23 +14,25 @@ import HomePage from './view';
 
 function mapStateToProps(state) {
   const {
-    user: {
-      request: {
-        loading: userLoading,
-        lastUpdated: userLastUpdated,
+    spotify: {
+      user: {
+        request: {
+          loading: userLoading,
+          lastUpdated: userLastUpdated,
+        },
+        info: {
+          id,
+          displayName,
+          avatarImageUrl,
+        },
       },
-      info: {
-        id,
-        displayName,
-        avatarImageUrl,
-      },
-    },
-    nowPlaying: {
-      info: {
-        songTitle,
-        songArtists,
-        albumName,
-        albumImageUrl,
+      nowPlaying: {
+        info: {
+          songTitle,
+          songArtists,
+          albumName,
+          albumImageUrl,
+        },
       },
     },
   } = state;

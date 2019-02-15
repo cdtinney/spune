@@ -4,19 +4,21 @@
 
 import { connect } from 'react-redux';
 
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
+///////////////////////////
+// Internal dependencies //
+///////////////////////////
 
 import * as spotifyActions from '../../../../actions/spotify';
 import NowPlayingPoller from './view';
 
 function mapStateToProps(state) {
   const {
-    nowPlaying: {
-      request: {
-        loading,
-        interval,
+    spotify: {
+      nowPlaying: {
+        request: {
+          loading,
+          interval,
+        },
       },
     },
   } = state;
@@ -31,8 +33,8 @@ function mapDispatchToProps(dispatch) {
   return {
     updateNowPlaying() {
       dispatch(spotifyActions.getNowPlaying());
-    }
-  }
+    },
+  };
 }
 
 export default connect(
