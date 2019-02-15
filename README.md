@@ -44,7 +44,8 @@ $ cd client && npm install
 ### Creating Spotify Client ID
 
 * Login to the Spotify developer dashboard [here](https://developer.spotify.com/dashboard/applications)
-* Create a new Client ID (and keep the page open)
+* Create a new Client ID
+  * Keep the page open so you can copy/paste the ID and secret next
 
 ### Setting Environment Variables
 
@@ -87,7 +88,7 @@ $ npm run start
 
 To stop a running development server, use `Ctrl+C` to gracefully shut it down.
 
-If you use `Ctrl+Z`, you will have to manually kill the old processes to free up the ports.
+If you accidentally use `Ctrl+Z`, you will have to manually kill the old processes to free up the ports.
 This can be done via finding the process IDs (PIDs):
 
 ```
@@ -119,12 +120,13 @@ serving both the static React front-end and API requests.
 To deploy via Heroku and Travis CI:
 
 1. Connect the repository on Travis CI as a new project
-2. [Set environment variables](#setting-environment-variables) within Travis for the project
-3. Create a Heroku project for the application
+2. Create a new Heroku application (e.g. `spune`)
+3. [Set config variables](#setting-environment-variables) for the Heroku application
+  * Ensure that `SPOT_REDIRECT_URI`, `SPOT_CLIENT_ID`, and `SPOT_CLIENT_SECRET` are set correctly
 4. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
 5. Update the Heroku app name
 
-Then, all commits to `master` should be deployed (by default).
+All commits to `master` should be deployed (by default).
 
 ### Debugging
 
