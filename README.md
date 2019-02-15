@@ -75,13 +75,13 @@ $ npm run client
 To run server only (watch mode):
 
 ```
-$ npm run server
+$ npm run server:watch
 ```
 
 To run server only (non-watch mode):
 
 ```
-$ npm run start
+$ npm run server
 ```
 
 ### Stopping
