@@ -12,10 +12,12 @@ import AlbumGrid from './view';
 
 function mapStateToProps(state) {
   const {
-    nowPlaying: {
-      relatedAlbums: {
-        byArtist,
-      }
+    spotify: {
+      nowPlaying: {
+        relatedAlbums: {
+          byArtist,
+        }
+      },
     },
   } = state;
 
