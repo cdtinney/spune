@@ -40,7 +40,7 @@ $ git clone git@github.com:cdtinney/spune.git
 $ cd spune
 ```
 
-Install dependencies:
+Install dependencies for both server and client:
 
 ```
 $ npm install
