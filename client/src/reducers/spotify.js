@@ -14,11 +14,10 @@ import {
   FETCH_USER_INFO_SUCCESS,
   FETCH_NOW_PLAYING_REQUEST,
   FETCH_NOW_PLAYING_SUCCESS,
-  CLEAR_RELATED_ALBUMS,
-  FETCH_ARTIST_ALBUMS_REQUEST,
-  FETCH_ARTIST_ALBUMS_SUCCESS,
-  FETCH_RELATED_ARTISTS_REQUEST,
-  FETCH_RELATED_ARTISTS_SUCCESS,
+  CLEAR_NOW_PLAYING_RELATED_ALBUMS,
+  FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
+  FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
+  FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
 } from '../actions/spotify';
 
 const initialState = {
@@ -53,9 +52,6 @@ const initialState = {
       albumArtists: null,
     },
     relatedAlbums: {
-      byArtist: {},
-    },
-    relatedArtists: {
       byArtist: {},
     },
   },
@@ -150,7 +146,7 @@ export default function spotify(state = initialState, action) {
       });
     }
 
-    case CLEAR_RELATED_ALBUMS: {
+    case CLEAR_NOW_PLAYING_RELATED_ALBUMS: {
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
@@ -162,102 +158,60 @@ export default function spotify(state = initialState, action) {
       });
     }
 
-    case FETCH_ARTIST_ALBUMS_REQUEST: {
-      const {
-        payload: {
-          artistId,
-        },
-      } = action;
-
-      return update(state, {
-        nowPlaying: {
-          relatedAlbums: {
-            byArtist: {
-              $merge: {
-                [artistId]: {
-                  loading: true,
-                  albums: [],
-                },
-              },
-            },
-          },
-        },
-      });
+    case FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST: {
+      return state;
+      // return update(state, {
+      //   nowPlaying: {
+      //     relatedAlbums: {
+      //       byArtist: {
+      //         $merge: {
+      //           [artistId]: {
+      //             loading: true,
+      //             albums: [],
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // });
     }
 
-    case FETCH_ARTIST_ALBUMS_SUCCESS: {
-      const {
-        payload: {
-          artistId,
-          albums,
-        },
-      } = action;
-
-      return update(state, {
-        nowPlaying: {
-          relatedAlbums: {
-            byArtist: {
-              [artistId]: {
-                loading: {
-                  $set: false,
-                },
-                albums: {
-                  $push: albums,
-                },
-              },
-            },
-          },
-        },
-      });
+    case FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
+      return state;
+      // return update(state, {
+      //   nowPlaying: {
+      //     relatedAlbums: {
+      //       byArtist: {
+      //         [artistId]: {
+      //           loading: {
+      //             $set: false,
+      //           },
+      //           albums: {
+      //             $push: albums,
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // });
     }
 
-    case FETCH_RELATED_ARTISTS_REQUEST: {
-      const {
-        payload: {
-          artistId,
-        },
-      } = action;
-
-      return update(state, {
-        nowPlaying: {
-          relatedArtists: {
-            byArtist: {
-              $merge: {
-                [artistId]: {
-                  loading: true,
-                  artists: [],
-                },
-              },
-            },
-          },
-        },
-      });
-    }
-
-    case FETCH_RELATED_ARTISTS_SUCCESS: {
-      const {
-        payload: {
-          artistId,
-          artists,
-        },
-      } = action;
-
-      return update(state, {
-        nowPlaying: {
-          relatedArtists: {
-            byArtist: {
-              [artistId]: {
-                loading: {
-                  $set: true,
-                },
-                artists: {
-                  $push: artists,
-                },
-              },
-            },
-          },
-        },
-      });
+    case FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE: {
+      return state;
+      // return update(state, {
+      //   nowPlaying: {
+      //     relatedArtists: {
+      //       byArtist: {
+      //         $merge: {
+      //           [artistId]: {
+      //             loading: true,
+      //             artists: [],
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // });
     }
 
     // TODO Handle failure actions
