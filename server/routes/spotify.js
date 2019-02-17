@@ -37,10 +37,15 @@ async function fetchArtistStudioAlbums(artistId) {
 * Returns a list of albums related to the currently playing track.
 */
 module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedAlbums(req, res) {
+  const {
+    songId,
+  } = req.query;
+
   // TODO Extract to method
   spotifyApi.getMyCurrentPlayingTrack().then((data) => {
     const {
       item: {
+        id,
         artists: songArtists,
         album: {
           artists: albumArtists,
@@ -48,9 +53,13 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
       },
     } = data.body;
 
-    // TODO Logging
-
-    // TODO Error check for songId mismatch
+    // ID mismatch
+    if (songId !== id) {
+      res.status(400).json({
+        error: `Song ID mismatch (currently playing = ${id}, query = ${songId})`,
+      });
+      return;
+    }
 
     return combineTrackArtists({
       songArtists,
