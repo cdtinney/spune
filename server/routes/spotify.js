@@ -1,17 +1,23 @@
 const spotifyApi = require('../spotify/api/spotifyApi');
+const getRelatedArtists = require('../spotify/getRelatedArtists');
 
-// const uniqueAlbums =
-//   itemsToAlbums(items, currentAlbumId)
-//     // Ignore current album.
-//     .filter(album => album.id !== currentAlbumId)
-//     // Remove duplicates by name.
-//     // For some reason, the API returns duplicates with different
-//     // IDs and image URLs.
-//     .filter((elem, index, self) => {
-//       return self.findIndex(album => {
-//         return album.name === elem.name;
-//       }) === index;
-//     });
+function uniqueAlbums(albums) {
+  // Remove duplicates by name.
+  // For some reason, the API returns duplicates with different
+  // IDs and image URLs.
+  return albums.filter((elem, index, self) => {
+    return self.findIndex(album => album.name === elem.name);
+  });
+}
+
+async function fetchUniqueArtistAlbums(artistId) {
+  return spotifyApi.getArtistAlbums(artistId, {
+    include_groups: 'album', // Ignore compilations/appears on/etc.
+  }).then(data => ({
+    artistId,
+    albums: uniqueAlbums(data.body.items),
+  }));
+}
 
 function combineTrackArtists({ songArtists, albumArtists }) {
   const artistIds =
@@ -19,16 +25,8 @@ function combineTrackArtists({ songArtists, albumArtists }) {
       .concat(albumArtists)
       .map(artist => artist.id);
 
-  return new Set(artistIds);
-}
-
-async function fetchArtistStudioAlbums(artistId) {
-  return spotifyApi.getArtistAlbums(artistId, {
-    include_groups: 'album', // Ignore compilations/appears on/etc.
-  }).then(data => ({
-    artistId,
-    albums: data.body,
-  }));
+  // Use Set to filter for uniqueness
+  return [...new Set(artistIds)];
 }
 
 /**
@@ -65,17 +63,16 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
       songArtists,
       albumArtists,
     });
-  }).then((artistIds) => {
-    const requests = [...artistIds]
-      .map(fetchArtistStudioAlbums);
-    Promise.all(requests)
-      .then(artistAlbums => res.send(artistAlbums));
-  }).catch((error) => {
-    console.error(error);
-    res.send(error);
-  });
-
-  // TODO Get all related artists, de-duplicate
-  // TODO Get related artist albums
-  // TODO Combine everything into one result
+  }).then(getRelatedArtists)
+    .then((artistIds) => {
+      console.log(artistIds);
+      const requests = [...artistIds]
+        .map(fetchUniqueArtistAlbums);
+      Promise.all(requests)
+        .then(artistAlbums => res.send(artistAlbums));
+    })
+    .catch((error) => {
+      console.error(error);
+      res.send(error);
+    });
 };
