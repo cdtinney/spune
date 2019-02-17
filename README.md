@@ -1,6 +1,8 @@
 # spune
 > Web-based Spotify display for your living room TV.
 
+[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune)
+
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
