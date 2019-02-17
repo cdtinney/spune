@@ -1,20 +1,6 @@
 const spotifyApi = require('../spotify/api/spotifyApi');
 const getRelatedArtists = require('../spotify/getRelatedArtists');
-
-function uniqueAlbums(albums) {
-  // Remove duplicates by name.
-  // For some reason, the API returns duplicates with different
-  // IDs and image URLs.
-  const uniqueMap = albums.reduce((map, album) => {
-    if (map[album.name]) {
-      return map;
-    }
-
-    map[album.name] = album;
-    return map;
-  }, {});
-  return Object.values(uniqueMap);
-}
+const uniqueAlbums = require('../spotify/uniqueAlbums');
 
 async function fetchUniqueArtistAlbums(artistId) {
   return spotifyApi.getArtistAlbums(artistId, {
