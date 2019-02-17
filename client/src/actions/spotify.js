@@ -102,12 +102,12 @@ export function fetchNowPlayingRelatedAlbumsRequest(songId) {
   };
 }
 
-export function fetchNowPlayingRelatedAlbumsSuccess(songId, albums) {
+export function fetchNowPlayingRelatedAlbumsSuccess(songId, albumsByArtist) {
   return {
     type: FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
     payload: {
       songId,
-      albums,
+      albumsByArtist,
     },
   };
 }
