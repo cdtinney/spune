@@ -14,7 +14,11 @@ export default class SpotifyApi {
     return this._originalApi;
   }
 
-  getCurrentlyPlayingRelatedAlbums() {
-    return axios.get('/api/currently-playing/related-albums');
+  getCurrentlyPlayingRelatedAlbums(songId) {
+    return axios.get('/api/currently-playing/related-albums', {
+      params: {
+        songId,
+      },
+    });
   }
 }
