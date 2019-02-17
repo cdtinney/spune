@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-const spotifyRoutes = require('./routes/spotify');
+const routes = require('./routes/index');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'production') {
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
 
-// Add Spotify authorization routes under `/api`.
-app.use('/api', spotifyRoutes);
+// Add API routes.
+app.use('/api', routes);
 
 // Start listening for requests.
 app.listen(port, () => console.log(`Listening on port ${port}`));
