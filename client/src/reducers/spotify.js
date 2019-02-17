@@ -52,6 +52,11 @@ const initialState = {
       albumArtists: null,
     },
     relatedAlbums: {
+      request: {
+        errored: false,
+        loading: false,
+        error: undefined,
+      },
       byArtist: {},
     },
   },
@@ -151,6 +156,11 @@ export default function spotify(state = initialState, action) {
         nowPlaying: {
           relatedAlbums: {
             $set: {
+              request: {
+                loading: false,
+                errored: false,
+                error: undefined,
+              },
               byArtist: {},
             },
           },
@@ -159,59 +169,57 @@ export default function spotify(state = initialState, action) {
     }
 
     case FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST: {
-      return state;
-      // return update(state, {
-      //   nowPlaying: {
-      //     relatedAlbums: {
-      //       byArtist: {
-      //         $merge: {
-      //           [artistId]: {
-      //             loading: true,
-      //             albums: [],
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // });
+      return update(state, {
+        nowPlaying: {
+          relatedAlbums: {
+            request: {
+              $merge: {
+                loading: true,
+              },
+            },
+          },
+        },
+      });
     }
 
     case FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
-      return state;
-      // return update(state, {
-      //   nowPlaying: {
-      //     relatedAlbums: {
-      //       byArtist: {
-      //         [artistId]: {
-      //           loading: {
-      //             $set: false,
-      //           },
-      //           albums: {
-      //             $push: albums,
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // });
+      const {
+        albumsByArtist,
+      } = action.payload;
+      return update(state, {
+        nowPlaying: {
+          relatedAlbums: {
+            byArtist: {
+              $set: albumsByArtist,
+            },
+            request: {
+              $merge: {
+                loading: false,
+              },
+            },
+          },
+        },
+      });
     }
 
     case FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE: {
-      return state;
-      // return update(state, {
-      //   nowPlaying: {
-      //     relatedArtists: {
-      //       byArtist: {
-      //         $merge: {
-      //           [artistId]: {
-      //             loading: true,
-      //             artists: [],
-      //           },
-      //         },
-      //       },
-      //     },
-      //   },
-      // });
+      const {
+        error,
+      } = action.payload;
+      return update(state, {
+        nowPlaying: {
+          relatedAlbums: {
+            $set: {
+              byArtist: {},
+              request: {
+                loading: false,
+                errored: true,
+                error,
+              },
+            },
+          },
+        },
+      });
     }
 
     // TODO Handle failure actions
