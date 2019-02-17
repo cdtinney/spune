@@ -5,9 +5,15 @@ function uniqueAlbums(albums) {
   // Remove duplicates by name.
   // For some reason, the API returns duplicates with different
   // IDs and image URLs.
-  return albums.filter((elem, index, self) => {
-    return self.findIndex(album => album.name === elem.name);
-  });
+  const uniqueMap = albums.reduce((map, album) => {
+    if (map[album.name]) {
+      return map;
+    }
+
+    map[album.name] = album;
+    return map;
+  }, {});
+  return Object.values(uniqueMap);
 }
 
 async function fetchUniqueArtistAlbums(artistId) {
@@ -65,7 +71,6 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
     });
   }).then(getRelatedArtists)
     .then((artistIds) => {
-      console.log(artistIds);
       const requests = [...artistIds]
         .map(fetchUniqueArtistAlbums);
       Promise.all(requests)
