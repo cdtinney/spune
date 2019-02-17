@@ -2,7 +2,11 @@
 // Internal dependencies //
 ///////////////////////////
 
+// API
 import SpotifyApi from '../api/SpotifyApi';
+
+// Selectors
+import nowPlayingInfoSelector from '../selectors/nowPlayingInfoSelector';
 
 const spotifyApi = new SpotifyApi();
 
@@ -98,11 +102,12 @@ export function fetchNowPlayingRelatedAlbumsRequest(songId) {
   };
 }
 
-export function fetchNowPlayingRelatedAlbumsSuccess(songId) {
+export function fetchNowPlayingRelatedAlbumsSuccess(songId, albums) {
   return {
     type: FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
     payload: {
       songId,
+      albums,
     },
   };
 }
@@ -118,9 +123,18 @@ export function fetchNowPlayingRelatedAlbumsFailure(songId, error) {
 }
 
 function fetchNowPlayingRelatedAlbums() {
-  return function fetchNowPlayingRelatedAlbumsThunk(dispatch) {
-    spotifyApi.getCurrentlyPlayingRelatedAlbums()
-      .then(console.log);
+  return function fetchNowPlayingRelatedAlbumsThunk(dispatch, getState) {
+    const {
+      songId,
+    } = nowPlayingInfoSelector(getState());
+
+    dispatch(fetchNowPlayingRelatedAlbumsRequest(songId));
+
+    spotifyApi.getCurrentlyPlayingRelatedAlbums(songId)
+      .then(response =>
+        dispatch(fetchNowPlayingRelatedAlbumsSuccess(songId, response.data)))
+      .catch(error =>
+        dispatch(fetchNowPlayingRelatedAlbumsFailure(songId, error)));
   };
 }
 
