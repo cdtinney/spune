@@ -1,4 +1,4 @@
-const spotifyApi = require('../api/spotifyApi');
+const spotifyApi = require('../spotify/api/spotifyApi');
 
 // const uniqueAlbums =
 //   itemsToAlbums(items, currentAlbumId)

@@ -1,15 +1,15 @@
-const spotifyApi = require('../api/spotifyApi');
-const generateCookie = require('../modules/generateCookie.js');
+const spotifyApi = require('../spotify/api/spotifyApi');
+const generateCookie = require('../utils/generateCookie.js');
 
-// Permission scopes.
-const SPOT_SCOPES = [
+const SPOTIFY_PERMISSION_SCOPES = [
   'user-read-private',
   'user-read-email',
   // Required for getting user's current playback info.
   'user-read-playback-state',
 ];
 
-const SPOT_AUTH_STATE_KEY = 'spotify_auth_state';
+const SPOTIFY_AUTH_STATE_COOKIE_KEY =
+  'spotify_auth_state';
 const CLIENT_HOST = process.env.CLIENT_HOST || '';
 
 /**
@@ -20,8 +20,8 @@ const CLIENT_HOST = process.env.CLIENT_HOST || '';
 */
 module.exports.login = function login(req, res) {
   const state = generateCookie(16);
-  res.cookie(SPOT_AUTH_STATE_KEY, state);
-  res.redirect(spotifyApi.createAuthorizeURL(SPOT_SCOPES, state));
+  res.cookie(SPOTIFY_AUTH_STATE_COOKIE_KEY, state);
+  res.redirect(spotifyApi.createAuthorizeURL(SPOTIFY_PERMISSION_SCOPES, state));
 };
 
 /**
@@ -37,13 +37,13 @@ module.exports.login = function login(req, res) {
 */
 module.exports.callback = function callback(req, res) {
   const { code, state } = req.query;
-  const storedState = req.cookies ? req.cookies[SPOT_AUTH_STATE_KEY] : null;
+  const storedState = req.cookies ? req.cookies[SPOTIFY_AUTH_STATE_COOKIE_KEY] : null;
   if (state === null || state !== storedState) {
     res.redirect(`${CLIENT_HOST}/#/error/state mismatch`);
     return;
   }
 
-  res.clearCookie(SPOT_AUTH_STATE_KEY);
+  res.clearCookie(SPOTIFY_AUTH_STATE_COOKIE_KEY);
 
   // Retrieve an access token and a refresh token
   spotifyApi.authorizationCodeGrant(code).then(async (data) => {
