@@ -4,9 +4,9 @@
 
 import { connect } from 'react-redux';
 
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
+///////////////////////////
+// Internal dependencies //
+///////////////////////////
 
 import * as spotifyActions from '../../actions/spotify';
 
@@ -56,20 +56,9 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch) {
   return {
     onLoad() {
-      // Props injected by react-router.
-      const {
-        match: {
-          params: {
-            accessToken,
-            refreshToken,
-          },
-        },
-      } = ownProps;
-
-      dispatch(spotifyActions.setTokens({ accessToken, refreshToken }));
       dispatch(spotifyActions.getMyInfo());
       dispatch(spotifyActions.getNowPlaying());
     },

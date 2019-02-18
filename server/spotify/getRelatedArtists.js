@@ -1,11 +1,9 @@
-const spotifyApi = require('./api/spotifyApi');
-
-module.exports = async function getRelatedArtists(trackArtists) {
+module.exports = async function getRelatedArtists(spotifyApi, trackArtists) {
   const relatedArtistsReqs = trackArtists
-    .map((artistId) =>{
+    .map((artistId) => {
       return spotifyApi.getArtistRelatedArtists(artistId)
-        .then(data => data.body.artists);
-        // TODO Error handling
+        .then(response => response.body.artists)
+        .catch(error => console.error(error));
     });
   return Promise.all(relatedArtistsReqs)
     .then((relatedArtists) => {

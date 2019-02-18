@@ -26,8 +26,8 @@ export function Login(props) {
   
   return (
     <div className={classes.root}>
-      <Button variant="contained" href="/api/login">
-        Connect to Spotify
+      <Button variant="contained" href="/api/auth/spotify">
+        Login with Spotify
       </Button>
     </div>
   );

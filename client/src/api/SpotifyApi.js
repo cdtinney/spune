@@ -2,23 +2,29 @@
 // External dependencies//
 //////////////////////////
 
-import Spotify from 'spotify-web-api-js';
 import axios from 'axios';
 
 export default class SpotifyApi {
-  constructor() {
-    this._originalApi = new Spotify();
+  _getResponseData(request) {
+    // TODO Transform to include status + statusText if errored
+    return request.then(response => response.data);
   }
 
-  get originalApi() {
-    return this._originalApi;
+  getMe(options) {
+    return this._getResponseData(axios.get('/api/spotify/me', options))
+  }
+
+  getMyCurrentPlaybackState(options) {
+    return this._getResponseData(axios.get('/api/spotify/me/player', options));
   }
 
   getCurrentlyPlayingRelatedAlbums(songId) {
-    return axios.get('/api/currently-playing/related-albums', {
-      params: {
-        songId,
-      },
-    });
+    return this._getResponseData(
+      axios.get('/api/spotify/currently-playing/related-albums', {
+        params: {
+          songId,
+        },
+      }),
+    );
   }
 }
