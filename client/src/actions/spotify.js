@@ -6,7 +6,7 @@
 import SpotifyApi from '../api/SpotifyApi';
 
 // Selectors
-import nowPlayingInfoSelector from '../selectors/nowPlayingInfoSelector';
+import * as nowPlayingSelectors from '../selectors/nowPlayingSelectors';
 
 const spotifyApi = new SpotifyApi();
 
@@ -110,7 +110,7 @@ function fetchNowPlayingRelatedAlbums() {
   return function fetchNowPlayingRelatedAlbumsThunk(dispatch, getState) {
     const {
       songId,
-    } = nowPlayingInfoSelector(getState());
+    } = nowPlayingSelectors.nowPlayingInfoSelector(getState());
 
     dispatch(fetchNowPlayingRelatedAlbumsRequest(songId));
 
