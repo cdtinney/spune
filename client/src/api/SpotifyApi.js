@@ -6,7 +6,6 @@ import axios from 'axios';
 
 export default class SpotifyApi {
   _getResponseData(request) {
-    // TODO Transform to include status + statusText if errored
     return request.then(response => response.data);
   }
 
