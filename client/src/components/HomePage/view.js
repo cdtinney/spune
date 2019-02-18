@@ -20,6 +20,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    overflow: 'hidden',
   },
   content: {
     position: 'relative',
