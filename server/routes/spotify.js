@@ -36,13 +36,22 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
     .then(albums => res.send(albums))
     .catch(next);
 };
-
+/**
+* `/me` endpoint.
+* 
+* Returns the user's profile; this is a simple proxy.
+*/
 function me(req, res, next) {
   spotifyApiWithToken(accessToken(req)).getMe()
     .then(response => res.send(response.body))
     .catch(next);
 };
 
+/**
+ * `/me/player` endpoint.
+ * 
+ * Returns the current state of the player; this is a simple proxy.
+ */
 function mePlayer(req, res, next) {
   spotifyApiWithToken(accessToken(req)).getMyCurrentPlaybackState()
     .then(response => res.send(response.body))
