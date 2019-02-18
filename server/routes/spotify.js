@@ -1,12 +1,7 @@
 const { spotifyApiWithToken } =
   require('../spotify/api/SpotifyApi');
-const getRelatedArtists =
-  require('../spotify/api/helpers/getRelatedArtists');
-const getArtistStudioAlbums =
-  require('../spotify/api/helpers/getArtistStudioAlbums');
-
-const combineTrackArtists =
-  require('../spotify/utils/combineTrackArtists');
+const getCurrentlyPlayingRelatedAlbums =
+  require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
 //////////////
 // Helpers  //
@@ -37,38 +32,9 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
   } = req;
 
   const spotifyApi = spotifyApiWithToken(accessToken(req));
-
-  // TODO Extract to function
-  spotifyApi.getMyCurrentPlayingTrack().then((response) => {
-    const {
-      item: {
-        id,
-        artists: songArtists,
-        album: {
-          artists: albumArtists,
-        },
-      },
-    } = response.body;
-
-    // ID mismatch
-    if (songId !== id) {
-      return next(`Song ID mismatch (currently playing = ${id}, query = ${songId})`);
-    }
-
-    return combineTrackArtists({
-      songArtists,
-      albumArtists,
-    });
-  }).then((trackArtists) => {
-    return getRelatedArtists(spotifyApi, trackArtists);
-  }).then((artistIds) => {
-    const requests = [...artistIds]
-      .map(artistId => getArtistStudioAlbums(spotifyApi, artistId));
-    Promise.all(requests)
-      .then(artistAlbums => res.send(artistAlbums))
-      .catch(next);
-  })
-  .catch(next);
+  getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)
+    .then(albums => res.send(albums))
+    .catch(next);
 };
 
 function me(req, res, next) {
