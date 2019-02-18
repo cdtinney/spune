@@ -8,6 +8,18 @@ const getArtistStudioAlbums =
 const combineTrackArtists =
   require('../spotify/utils/combineTrackArtists');
 
+//////////////
+// Helpers  //
+//////////////
+
+function accessToken(req) {
+  if (!req.user || !req.user.spotifyAccessToken) {
+    throw new Error('Request has no user or access token');
+  }
+
+  return req.user.spotifyAccessToken;
+}
+
 //////////////////////
 // Route functions  //
 //////////////////////
@@ -17,17 +29,14 @@ const combineTrackArtists =
 *
 * Returns a list of albums related to the currently playing track.
 */
-module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedAlbums(req, res) {
+function currentlyPlayingRelatedAlbums(req, res, next) {
   const {
     query: {
       songId,
     },
-    user: {
-      spotifyAccessToken,
-    },
   } = req;
 
-  const spotifyApi = spotifyApiWithToken(spotifyAccessToken);
+  const spotifyApi = spotifyApiWithToken(accessToken(req));
 
   // TODO Extract to function
   spotifyApi.getMyCurrentPlayingTrack().then((response) => {
@@ -43,10 +52,7 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
 
     // ID mismatch
     if (songId !== id) {
-      res.status(400).json({
-        error: `Song ID mismatch (currently playing = ${id}, query = ${songId})`,
-      });
-      return;
+      return next(`Song ID mismatch (currently playing = ${id}, query = ${songId})`);
     }
 
     return combineTrackArtists({
@@ -60,22 +66,23 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
       .map(artistId => getArtistStudioAlbums(spotifyApi, artistId));
     Promise.all(requests)
       .then(artistAlbums => res.send(artistAlbums))
-      .catch(error => console.error(error));
+      .catch(next);
   })
-  .catch((error) => {
-    console.error(error);
-    res.send(error);
-  });
+  .catch(next);
 };
 
-module.exports.me = function me(req, res) {
-  spotifyApiWithToken(req.user.spotifyAccessToken).getMe()
+function me(req, res, next) {
+  spotifyApiWithToken(accessToken(req)).getMe()
     .then(response => res.send(response.body))
-    .catch(error => res.status(400).json(error));
+    .catch(next);
 };
 
-module.exports.mePlayer = function mePlayer(req, res) {
-  spotifyApiWithToken(req.user.spotifyAccessToken).getMyCurrentPlaybackState()
+function mePlayer(req, res, next) {
+  spotifyApiWithToken(accessToken(req)).getMyCurrentPlaybackState()
     .then(response => res.send(response.body))
-    .catch(error => res.status(400).json(error));
+    .catch(next);
 };
+
+module.exports.currentlyPlayingRelatedAlbums = currentlyPlayingRelatedAlbums;
+module.exports.me = me;
+module.exports.mePlayer = mePlayer;
