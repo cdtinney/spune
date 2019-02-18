@@ -12,14 +12,6 @@
   - [Installing](#installing)
   - [Creating Spotify Client ID](#creating-spotify-client-id)
   - [Setting Environment Variables](#setting-environment-variables)
-  - [Running](#running)
-  - [Stopping](#stopping)
-  - [Testing](#testing)
-  - [Building](#building)
-  - [Deploying](#deploying)
-  - [Debugging](#debugging)
-    - [Heroku](#heroku)
-- [Thanks to..](#thanks-to)
 
 ## Developing
 
@@ -68,10 +60,14 @@ SPOT_REDIRECT_URI = http://localhost:5000/api/callback
 SPOT_CLIENT_ID = <CLIENT_ID>
 SPOT_CLIENT_SECRET = <CLIENT_SECRET>
 SESSION_SECRET = <SESSION_SECRET_STRING> # This can be anything
-MONGODB_URI = <MONGODB_URI> # Optional, defaults to mongodb://localhost:27107:spune
-```
 
 In production, replace `localhost:port` with the URL it's being hosted at.
+
+There are also optional variables:
+
+```
+MONGODB_URI = <MONGODB_URI> # Defaults to mongodb://localhost:27107:spune
+```
 
 ### Running
 
