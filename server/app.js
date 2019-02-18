@@ -14,6 +14,7 @@ const connectDatabase = require('./database/connectDatabase');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
 const passportStrategy = require('./spotify/auth/passportStrategy');
+const configurePassport = require('./auth/configurePassport');
 
 connectDatabase();
 
@@ -40,17 +41,10 @@ app.use(session({
   saveUninitialized: true,
 }));
 
-// Initialize Passport.js.
+// Initialize Passport.js for authentication of users.
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
+configurePassport(passport);
 
 // Add API routes.
 app.use('/api', routes);
