@@ -15,10 +15,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: '20px',
+    boxShadow: '4px 4px 5px 0px rgba(0,0,0,0.29)',
   },
   details: {
     display: 'flex',
     flexDirection: 'column',
+    width: '250px',
   },
   content: {
     flex: '1 0 auto',

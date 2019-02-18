@@ -27,8 +27,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // Justifies children in bottom right.
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   },
 };
 
