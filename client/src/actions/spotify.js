@@ -14,8 +14,6 @@ const spotifyApi = new SpotifyApi();
 // Types//
 //////////
 
-export const SET_TOKENS = 'SPOTIFY/SET_TOKENS';
-
 export const FETCH_USER_INFO_REQUEST = 'SPOTIFY/FETCH_USER_INFO_REQUEST';
 export const FETCH_USER_INFO_SUCCESS = 'SPOTIFY/FETCH_USER_INFO_SUCCESS';
 export const FETCH_USER_INFO_FAILURE = 'SPOTIFY/FETCH_USER_INFO_FAILURE';
@@ -42,25 +40,11 @@ export const FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE =
 // Creators //
 //////////////
 
-export function setTokens({ accessToken, refreshToken }) {
-  if (accessToken) {
-    spotifyApi.originalApi.setAccessToken(accessToken);
-  }
-
-  return {
-    type: SET_TOKENS,
-    payload: {
-      accessToken,
-      refreshToken,
-    },
-  };
-}
-
 export function getMyInfo() {
   return function getMyInfoThunk(dispatch) {
     dispatch({ type: FETCH_USER_INFO_REQUEST });
 
-    spotifyApi.originalApi.getMe().then((data) => {
+    spotifyApi.getMe().then((data) => {
       const {
         id,
         display_name: displayName,
@@ -131,8 +115,8 @@ function fetchNowPlayingRelatedAlbums() {
     dispatch(fetchNowPlayingRelatedAlbumsRequest(songId));
 
     spotifyApi.getCurrentlyPlayingRelatedAlbums(songId)
-      .then(response =>
-        dispatch(fetchNowPlayingRelatedAlbumsSuccess(songId, response.data)))
+      .then(data =>
+        dispatch(fetchNowPlayingRelatedAlbumsSuccess(songId, data)))
       .catch(error =>
         dispatch(fetchNowPlayingRelatedAlbumsFailure(songId, error)));
   };
@@ -160,7 +144,7 @@ export function getNowPlaying() {
 
     dispatch({ type: FETCH_NOW_PLAYING_REQUEST });
 
-    spotifyApi.originalApi.getMyCurrentPlaybackState().then((data) => {
+    spotifyApi.getMyCurrentPlaybackState().then((data) => {
       const {
         item: {
           id: songId,

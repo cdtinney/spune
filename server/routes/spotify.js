@@ -1,8 +1,12 @@
-const spotifyApi = require('../spotify/api/spotifyApi');
+const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
 const getRelatedArtists = require('../spotify/getRelatedArtists');
 const uniqueAlbums = require('../spotify/uniqueAlbums');
 
-async function fetchUniqueArtistAlbums(artistId) {
+//////////////
+// Helpers  //
+//////////////
+
+async function fetchUniqueArtistAlbums(spotifyApi, artistId) {
   return spotifyApi.getArtistAlbums(artistId, {
     include_groups: 'album', // Ignore compilations/appears on/etc.
   }).then(data => ({
@@ -21,6 +25,10 @@ function combineTrackArtists({ songArtists, albumArtists }) {
   return [...new Set(artistIds)];
 }
 
+//////////////////////
+// Route functions  //
+//////////////////////
+
 /**
 * `/currently-playing/related-albums` endpoint.
 *
@@ -28,11 +36,18 @@ function combineTrackArtists({ songArtists, albumArtists }) {
 */
 module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedAlbums(req, res) {
   const {
-    songId,
-  } = req.query;
+    query: {
+      songId,
+    },
+    user: {
+      spotifyAccessToken,
+    },
+  } = req;
 
-  // TODO Extract to method
-  spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+  const spotifyApi = spotifyApiWithToken(spotifyAccessToken);
+
+  // TODO Extract to function
+  spotifyApi.getMyCurrentPlayingTrack().then((response) => {
     const {
       item: {
         id,
@@ -41,7 +56,7 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
           artists: albumArtists,
         },
       },
-    } = data.body;
+    } = response.body;
 
     // ID mismatch
     if (songId !== id) {
@@ -55,15 +70,29 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
       songArtists,
       albumArtists,
     });
-  }).then(getRelatedArtists)
-    .then((artistIds) => {
-      const requests = [...artistIds]
-        .map(fetchUniqueArtistAlbums);
-      Promise.all(requests)
-        .then(artistAlbums => res.send(artistAlbums));
-    })
-    .catch((error) => {
-      console.error(error);
-      res.send(error);
-    });
+  }).then((trackArtists) => {
+    return getRelatedArtists(spotifyApi, trackArtists);
+  }).then((artistIds) => {
+    const requests = [...artistIds]
+      .map(artistId => fetchUniqueArtistAlbums(spotifyApi, artistId));
+    Promise.all(requests)
+      .then(artistAlbums => res.send(artistAlbums))
+      .catch(error => console.error(error));
+  })
+  .catch((error) => {
+    console.error(error);
+    res.send(error);
+  });
+};
+
+module.exports.me = function me(req, res) {
+  spotifyApiWithToken(req.user.spotifyAccessToken).getMe()
+    .then(response => res.send(response.body))
+    .catch(error => res.status(400).json(error));
+};
+
+module.exports.mePlayer = function mePlayer(req, res) {
+  spotifyApiWithToken(req.user.spotifyAccessToken).getMyCurrentPlaybackState()
+    .then(response => res.send(response.body))
+    .catch(error => res.status(400).json(error));
 };

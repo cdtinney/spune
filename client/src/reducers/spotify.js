@@ -9,7 +9,6 @@ import update from 'immutability-helper';
 ////////////////////////////
 
 import {
-  SET_TOKENS,
   FETCH_USER_INFO_REQUEST,
   FETCH_USER_INFO_SUCCESS,
   FETCH_NOW_PLAYING_REQUEST,
@@ -21,10 +20,6 @@ import {
 } from '../actions/spotify';
 
 const initialState = {
-  tokens: {
-    accessToken: null,
-    refreshToken: null,
-  },
   user: {
     request: {
       loading: false,
@@ -64,24 +59,7 @@ const initialState = {
 
 export default function spotify(state = initialState, action) {
   switch (action.type) {
-    case SET_TOKENS: {
-      const {
-        payload: {
-          accessToken,
-          refreshToken,
-        },
-      } = action;
 
-      return update(state, {
-        tokens: {
-          $set: {
-            accessToken,
-            refreshToken,
-          },
-        },
-      });
-    }
-    
     case FETCH_USER_INFO_REQUEST: {
       return update(state, {
         user: {

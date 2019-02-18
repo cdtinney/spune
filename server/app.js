@@ -1,26 +1,58 @@
 if (process.env.NODE_ENV !== 'production') {
-    // Load .env file for variables in dev environments only.
-    // The file must be in the root directory.
-    require('dotenv').load();
+  // Load .env file for variables in dev environments only.
+  // The file must be in the root directory.
+  require('dotenv').load();
 }
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const passport = require('passport');
 
+const connectDatabase = require('./database/connectDatabase');
 const routes = require('./routes/index');
+const paths = require('./config/paths');
+const passportStrategy = require('./spotify/auth/passportStrategy');
+
+connectDatabase();
+
+passport.use(passportStrategy());
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-const paths = require('./config/paths');
-
 if (process.env.NODE_ENV === 'production') {
-    // Serve static React files.
-    app.use(express.static(paths.clientBuild));
+  // TODO Redirect if not logged in
+  // Serve static React files from root.
+  app.use(express.static(paths.clientBuild));
 }
 
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
+
+// TODO Explain
+app.use(bodyParser.urlencoded({
+  extended: false,
+}));
+app.use(session({
+  // TODO Explain
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true,
+}));
+
+// Initialize Passport.js.
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 // Add API routes.
 app.use('/api', routes);

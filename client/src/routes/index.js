@@ -19,7 +19,7 @@ export default function Routes() {
     <App>
       <Switch>
         <Route exact path="/" component={Login} />
-        <Route path="/home/:accessToken/:refreshToken" component={HomePage} />
+        <Route path="/home/" component={HomePage} />
         <Route path="/error/:errorMsg" component={Error} />
       </Switch>
     </App>

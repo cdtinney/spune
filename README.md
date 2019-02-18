@@ -27,6 +27,7 @@ To run the application:
 
 * [Node.js/npm](https://nodejs.org/en/)
 * [Configured Spotify application](https://developer.spotify.com/dashboard/login)
+* [MongoDB](https://www.mongodb.org/downloads)
 
 For CI/CD:
 
@@ -57,18 +58,21 @@ $ cd client && npm install
 
 ### Setting Environment Variables
 
-Create an `.env` file in the root directory, and set these variables (for a local environment):
+Create an `.env` file in the root directory, and set these **required** variables (for a local environment):
 
 ```
 CLIENT_HOST = http://localhost:3000
 SPOT_REDIRECT_URI = http://localhost:5000/api/callback
 SPOT_CLIENT_ID = <CLIENT_ID>
 SPOT_CLIENT_SECRET = <CLIENT_SECRET>
+MONGODB_URI = <MONGODB_URI> # Optional, defaults to mongodb://localhost:27107:spune
 ```
 
 In production, replace `localhost:port` with the URL it's being hosted at.
 
 ### Running
+
+First, **ensure that the MongoDB daemon is running** (e.g. run `mongod` in a separate terminal).
 
 To run both client and server:
 
@@ -130,11 +134,13 @@ serving both the static React front-end and API requests.
 To deploy via Heroku and Travis CI:
 
 1. Connect the repository on Travis CI as a new project
-2. Create a new Heroku application (e.g. `spune`)
-3. [Set config variables](#setting-environment-variables) for the Heroku application
+1. Create a new Heroku application (e.g. `spune`)
+1. [Set config variables](#setting-environment-variables) for the Heroku application
       * Ensure that `SPOT_REDIRECT_URI`, `SPOT_CLIENT_ID`, and `SPOT_CLIENT_SECRET` are set correctly
-4. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
-5. Update the Heroku app name
+1. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
+      * This will automatically set the `MONGODB_URI` environment variable
+2. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
+3. Update the Heroku app name
 
 All commits to `master` should be deployed (by default).
 
