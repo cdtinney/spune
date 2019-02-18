@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 
-const routes = require('../config/routes');
+const paths = require('../config/paths');
 
 const spotify = require('./spotify');
 
@@ -29,8 +29,8 @@ router.get(
 router.get(
   '/auth/spotify/callback',
   passport.authenticate('spotify', {
-    successRedirect: routes.clientHome,
-    failureRedirect: routes.clientLogin,
+    successRedirect: paths.clientHome,
+    failureRedirect: paths.clientLogin,
   }),
 );
 
