@@ -1,4 +1,5 @@
-# spune
+![Spune Logo](assets/spune_logo.png)
+
 > Web-based Spotify display for your living room TV.
 
 [![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune)
@@ -136,13 +137,13 @@ serving both the static React front-end and API requests.
 To deploy via Heroku and Travis CI:
 
 1. Connect the repository on Travis CI as a new project
-1. Create a new Heroku application (e.g. `spune`)
-1. [Set config variables](#setting-environment-variables) for the Heroku application
+2. Create a new Heroku application (e.g. `spune`)
+3. [Set config variables](#setting-environment-variables) for the Heroku application
       * Ensure that `SPOT_REDIRECT_URI`, `SPOT_CLIENT_ID`, and `SPOT_CLIENT_SECRET` are set correctly
-1. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
+4. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
       * This will automatically set the `MONGODB_URI` environment variable
-2. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
-3. Update the Heroku app name
+5. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
+6. Update the Heroku app name
 
 All commits to `master` should be deployed (by default).
 
