@@ -1,29 +1,12 @@
-const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
-const getRelatedArtists = require('../spotify/getRelatedArtists');
-const uniqueAlbums = require('../spotify/uniqueAlbums');
+const { spotifyApiWithToken } =
+  require('../spotify/api/SpotifyApi');
+const getRelatedArtists =
+  require('../spotify/api/helpers/getRelatedArtists');
+const getArtistStudioAlbums =
+  require('../spotify/api/helpers/getArtistStudioAlbums');
 
-//////////////
-// Helpers  //
-//////////////
-
-async function fetchUniqueArtistAlbums(spotifyApi, artistId) {
-  return spotifyApi.getArtistAlbums(artistId, {
-    include_groups: 'album', // Ignore compilations/appears on/etc.
-  }).then(data => ({
-    artistId,
-    albums: uniqueAlbums(data.body.items),
-  }));
-}
-
-function combineTrackArtists({ songArtists, albumArtists }) {
-  const artistIds =
-    songArtists
-      .concat(albumArtists)
-      .map(artist => artist.id);
-
-  // Use Set to filter for uniqueness
-  return [...new Set(artistIds)];
-}
+const combineTrackArtists =
+  require('../spotify/utils/combineTrackArtists');
 
 //////////////////////
 // Route functions  //
@@ -74,7 +57,7 @@ module.exports.currentlyPlayingRelatedAlbums = function currentlyPlayingRelatedA
     return getRelatedArtists(spotifyApi, trackArtists);
   }).then((artistIds) => {
     const requests = [...artistIds]
-      .map(artistId => fetchUniqueArtistAlbums(spotifyApi, artistId));
+      .map(artistId => getArtistStudioAlbums(spotifyApi, artistId));
     Promise.all(requests)
       .then(artistAlbums => res.send(artistAlbums))
       .catch(error => console.error(error));
