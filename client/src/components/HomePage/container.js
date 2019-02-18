@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 ///////////////////////////
 
 import * as spotifyActions from '../../actions/spotify';
+import * as nowPlayingSelectors from '../../selectors/nowPlayingSelectors';
 
 import HomePage from './view';
 
@@ -29,7 +30,6 @@ function mapStateToProps(state) {
       nowPlaying: {
         info: {
           songTitle,
-          songArtists,
           albumName,
           albumImageUrl,
         },
@@ -49,7 +49,8 @@ function mapStateToProps(state) {
     },
     nowPlaying: {
       songTitle,
-      songArtistName: (songArtists || []).map(artist => artist.name).join(', '),
+      songArtistName:
+        nowPlayingSelectors.nowPlayingArtistNamesSelector(state),
       albumName,
       albumImageUrl,
     },
