@@ -17,6 +17,7 @@
   - [Building](#building)
   - [Deploying](#deploying)
   - [Debugging](#debugging)
+    - [Heroku](#heroku)
 - [Thanks to..](#thanks-to)
 
 ## Developing
@@ -147,7 +148,15 @@ All commits to `master` should be deployed (by default).
 
 ### Debugging
 
-TODO
+TODO Expand this section
+
+#### Heroku
+
+To view Heroku application logs (in real-time):
+
+```
+$ heroku logs -a <APP_NAME> --tail
+```
 
 ## Thanks to..
 
