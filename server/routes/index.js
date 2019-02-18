@@ -18,7 +18,6 @@ router.get(
       // Required for getting user's current playback info.
       'user-read-playback-state',
     ],
-    showDialog: true,
   }),
   function() {
     // The request will be redirected to Spotify for authentication, so this
@@ -34,7 +33,7 @@ router.get(
   }),
 );
 
-// Spotify
+// Spotify API
 
 router.get('/spotify/me', spotify.me);
 router.get('/spotify/me/player', spotify.mePlayer);
