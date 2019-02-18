@@ -25,19 +25,17 @@ const port = process.env.PORT || 5000;
 if (process.env.NODE_ENV === 'production') {
   // TODO Redirect if not logged in
   // Serve static React files from root.
-  app.use(express.static(paths.clientBuild));
+  app.use(express.static(paths.clientBuildFolder));
 }
 
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
 
-// TODO Explain
 app.use(bodyParser.urlencoded({
   extended: false,
 }));
 app.use(session({
-  // TODO Explain
-  secret: 'keyboard cat',
+  secret: process.env.SESSION_SECRET || 'secret',
   resave: true,
   saveUninitialized: true,
 }));

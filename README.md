@@ -65,6 +65,7 @@ CLIENT_HOST = http://localhost:3000
 SPOT_REDIRECT_URI = http://localhost:5000/api/callback
 SPOT_CLIENT_ID = <CLIENT_ID>
 SPOT_CLIENT_SECRET = <CLIENT_SECRET>
+SESSION_SECRET = <SESSION_SECRET_STRING> # This can be anything
 MONGODB_URI = <MONGODB_URI> # Optional, defaults to mongodb://localhost:27107:spune
 ```
 
