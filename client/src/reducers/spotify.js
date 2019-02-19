@@ -11,8 +11,10 @@ import update from 'immutability-helper';
 import {
   FETCH_USER_INFO_REQUEST,
   FETCH_USER_INFO_SUCCESS,
-  FETCH_NOW_PLAYING_REQUEST,
-  FETCH_NOW_PLAYING_SUCCESS,
+  FETCH_USER_INFO_FAILURE,
+  FETCH_NOW_PLAYING_INFO_REQUEST,
+  FETCH_NOW_PLAYING_INFO_SUCCESS,
+  FETCH_NOW_PLAYING_INFO_FAILURE,
   CLEAR_NOW_PLAYING_RELATED_ALBUMS,
   FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
   FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
@@ -24,6 +26,8 @@ const initialState = {
     request: {
       loading: false,
       lastUpdated: null,
+      error: null,
+      errored: false,
     },
     info: {
       displayName: null,
@@ -34,6 +38,8 @@ const initialState = {
     request: {
       loading: false,
       lastUpdated: null,
+      error: null,
+      errored: false,
       interval: 3000, // MS
     },
     info: {
@@ -48,9 +54,9 @@ const initialState = {
     },
     relatedAlbums: {
       request: {
-        errored: false,
         loading: false,
         error: undefined,
+        errored: false,
       },
       byArtist: {},
     },
@@ -67,6 +73,8 @@ export default function spotify(state = initialState, action) {
             $merge: {
               loading: true,
               lastUpdated: null,
+              error: null,
+              errored: false,
             },
           },
         },
@@ -79,12 +87,15 @@ export default function spotify(state = initialState, action) {
           info,
         },
       } = action;
+
       return update(state, {
         user: {
           request: {
             $merge: {
               loading: false,
               lastUpdated: Date.now(),
+              error: null,
+              errored: false,
             },
           },
           info: {
@@ -93,22 +104,49 @@ export default function spotify(state = initialState, action) {
         },
       });
     }
-    
-    case FETCH_NOW_PLAYING_REQUEST: {
+
+    case FETCH_USER_INFO_FAILURE: {
+      const {
+        payload: error,
+      } = action;
+
       return update(state, {
-        nowPlaying: {
+        user: {
           request: {
             $merge: {
-              loading: true,
+              loading: false,
               lastUpdated: null,
+              error,
+              errored: true,
+            },
+          },
+          info: {
+            $merge: {
+              displayName: null,
+              imageUrl: null,
             },
           },
         },
       });
     }
     
-    case FETCH_NOW_PLAYING_SUCCESS: {
-      const { 
+    case FETCH_NOW_PLAYING_INFO_REQUEST: {
+      return update(state, {
+        nowPlaying: {
+          request: {
+            $merge: {
+              loading: true,
+              lastUpdated: null,
+              error: null,
+              errored: false,
+            },
+          },
+        },
+      });
+    }
+    
+    case FETCH_NOW_PLAYING_INFO_SUCCESS: {
+      const {
         payload: {
           info,
         },
@@ -120,10 +158,33 @@ export default function spotify(state = initialState, action) {
             $merge: {
               loading: false,
               lastUpdated: Date.now(),
+              error: null,
+              errored: false,
             },
           },
           info: {
             $set: info,
+          },
+        },
+      });
+    }
+
+    case FETCH_NOW_PLAYING_INFO_FAILURE: {
+      const { 
+        payload: {
+          error,
+        },
+      } = action;
+
+      return update(state, {
+        nowPlaying: {
+          request: {
+            $merge: {
+              loading: false,
+              lastUpdated: Date.now(),
+              error,
+              errored: true,
+            },
           },
         },
       });
@@ -199,8 +260,6 @@ export default function spotify(state = initialState, action) {
         },
       });
     }
-
-    // TODO Handle failure actions
 
     default: {
       return state;

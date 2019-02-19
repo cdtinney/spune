@@ -61,8 +61,6 @@ export function SongCard(props) {
     albumImageUrl,
     classes,
   } = props;
-
-  // TODO Handle undefined album cover
   
   return (
     <div className={classes.card}>
@@ -91,8 +89,8 @@ export function SongCard(props) {
 SongCard.propTypes = {
   artistName: PropTypes.string.isRequired,
   songTitle: PropTypes.string.isRequired,
-  albumName: PropTypes.string,
-  albumImageUrl: PropTypes.string,
+  albumName: PropTypes.string.isRequired,
+  albumImageUrl: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(SongCard);
