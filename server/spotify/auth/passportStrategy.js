@@ -1,5 +1,13 @@
+////////////////////////////
+// External dependencies  //
+////////////////////////////
+
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const refresh = require('passport-oauth2-refresh');
+
+////////////////////////////
+// Internal dependencies  //
+////////////////////////////
 
 const User = require('../../database/schema/User');
 
