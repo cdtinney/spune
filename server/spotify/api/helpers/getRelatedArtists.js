@@ -18,9 +18,5 @@ module.exports = async function getRelatedArtists(spotifyApi, trackArtists) {
     }).then((relatedArtistsIds) => {
       const combinedArtistsIds = relatedArtistsIds.concat(trackArtists);
       return [...new Set(combinedArtistsIds)]; // Spread to convert to array
-    }).catch((error) => {
-      console.error(error);
-      // TODO Re-throw error
-      return [];
     });
 };
