@@ -5,23 +5,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
 
 const styles = {
   card: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '20px',
-    boxShadow: '4px 4px 5px 0px rgba(0,0,0,0.29)',
+    marginLeft: '30px',
+    marginBottom: '30px',
+    // Position in bottom-left.
+    alignSelf: 'flex-start',
+    marginTop: 'auto',
   },
   details: {
     display: 'flex',
     flexDirection: 'column',
-    width: '250px',
+    width: '300px',
   },
   content: {
     flex: '1 0 auto',
@@ -30,6 +31,23 @@ const styles = {
     width: 151,
     height: 151,
   },
+  text: {
+    color: '#FCFCFC',
+    overflow: 'hidden',
+    textShadow: '2px 2px 7px rgba(94,94,94,0.44)',
+  },
+  artistText: {
+    fontSize: '1.5em',
+    fontWeight: 'bold',
+  },
+  albumText: {
+    fontSize: '1.2em',
+  },
+  titleText: {
+    fontSize: '1.2em',
+    marginTop: '1.2em',
+  },
+
 };
 
 export function SongCard(props) {
@@ -44,27 +62,30 @@ export function SongCard(props) {
   // TODO Handle undefined album cover
   
   return (
-    <Card className={classes.card}>
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography variant="headline">
-            {songTitle}
-          </Typography>
-          <Typography variant="subheading" color="textSecondary">
-            {artistName}
-          </Typography>
-        </CardContent>
-      </div>
+    <div className={classes.card}>
       <CardMedia
         className={classes.cover}
         image={albumImageUrl}
         title={albumName}
       />
-    </Card>
+      <div className={classes.details}>
+        <CardContent className={classes.content}>
+          <div className={`${classes.text} ${classes.artistText}`}>
+            {artistName.toUpperCase()}
+          </div>
+          <div className={`${classes.text} ${classes.albumText}`}>
+            {albumName.toUpperCase()}
+          </div>
+          <div className={`${classes.text} ${classes.titleText}`}>
+            {songTitle}
+          </div>
+        </CardContent>
+      </div>
+    </div>
   );
 }
 
-SongCard.ropTypes = {
+SongCard.propTypes = {
   artistName: PropTypes.string.isRequired,
   songTitle: PropTypes.string.isRequired,
   albumName: PropTypes.string,
