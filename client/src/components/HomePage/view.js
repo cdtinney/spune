@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Fullscreen from 'react-full-screen';
 
 //////////////////////////
 // Internal dependencies//
@@ -15,6 +16,9 @@ import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
 import NowPlayingAlbumGrid from './components/NowPlayingAlbumGrid';
+import FullscreenButton from './components/FullscreenButton';
+
+import './style.css';
 
 const styles = {
   root: {
@@ -28,6 +32,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+  },
+  fullscreenButton: {
+    position: 'absolute',
+    right: '30px',
+    bottom: '30px',
+    zIndex: '100',
   },
 };
 
@@ -54,8 +64,23 @@ export class HomePage extends Component {
   // Lifecycle methods//
   //////////////////////
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fullscreen: false,
+    };
+
+    this.handleFullscreen = this.handleFullscreen.bind(this);
+  }
   componentDidMount() {
     this.props.onLoad();
+  }
+
+  handleFullscreen(fullscreen = true) {
+    this.setState({
+      fullscreen,
+    });
   }
 
   ////////////////////
@@ -63,6 +88,10 @@ export class HomePage extends Component {
   ////////////////////
 
   render() {
+    const {
+      fullscreen,
+    } = this.state;
+
     const {
       classes,
       user: {
@@ -76,27 +105,41 @@ export class HomePage extends Component {
         albumImageUrl,
       },
     } = this.props;
+
+    const songPlaying = songArtistName && songTitle;
     
     return (
       <div className={classes.root}>
-        <NowPlayingPoller />
-        <ColorOverlay />
-        <TopAppBar
-          title="spune"
-          userName={userName}
-          userImageUrl={userImageUrl}
-        />
-        { songArtistName && songTitle &&
-          <div className={classes.content}>
-            <SongCard
-              artistName={songArtistName}
-              songTitle={songTitle}
-              albumName={albumName}
-              albumImageUrl={albumImageUrl}
-            />
-            <NowPlayingAlbumGrid />
-          </div>
+        { songPlaying &&
+          <FullscreenButton
+            onClick={() => this.handleFullscreen(true)}
+            className={classes.fullscreenButton}
+          />
         }
+        <Fullscreen
+          enabled={fullscreen}
+          onChange={this.handleFullscreen}
+          className={classes.fullscreenContainer}
+        >
+          <NowPlayingPoller />
+          <ColorOverlay />
+          <TopAppBar
+            title="spune"
+            userName={userName}
+            userImageUrl={userImageUrl}
+          />
+          { songPlaying &&
+            <div className={classes.content}>
+              <SongCard
+                artistName={songArtistName}
+                songTitle={songTitle}
+                albumName={albumName}
+                albumImageUrl={albumImageUrl}
+              />
+              <NowPlayingAlbumGrid />
+            </div>
+          }
+        </Fullscreen>
       </div>
     );
   }

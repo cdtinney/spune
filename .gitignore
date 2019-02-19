@@ -65,3 +65,6 @@ typings/
 
 # Client builds
 client/build
+
+# MacOS thumbnails
+.DS_Store
