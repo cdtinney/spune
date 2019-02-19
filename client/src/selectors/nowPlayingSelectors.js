@@ -1,4 +1,14 @@
+////////////////////////////
+// External dependencies  //
+////////////////////////////
+
 import { createSelector } from 'reselect';
+
+////////////////////////////
+// Internal dependencies  //
+////////////////////////////
+
+import flatten from '../utils/flatten';
 
 export function nowPlayingInfoSelector(state) {
   return state.spotify.nowPlaying.info;
@@ -22,17 +32,12 @@ export const relatedAlbumImagesSelector =
   createSelector(
     nowPlayingRelatedAlbumArtists,
     (byArtist) => {
-      return Object.values(byArtist)
-        // Flatten the array first
-        // TODO Use util
-        .reduce((acc, curr) => {
-          return acc.concat(curr.albums);
-        }, []).map(album => ({
-          title: album.name,
-          images: {
-            fullSize: album.images[0].url,
-            thumbnail: album.images[album.images.length - 1].url,
-          },
-        }));
+      return flatten(Object.values(byArtist), entry => entry.albums).map(album => ({
+        title: album.name,
+        images: {
+          fullSize: album.images[0].url,
+          thumbnail: album.images[album.images.length - 1].url,
+        },
+      }));
     },
   );
