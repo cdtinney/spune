@@ -8,6 +8,7 @@
 
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
+  - [Inspiration](#inspiration)
 - [Developing](#developing)
   - [Requirements](#requirements)
   - [Installing](#installing)
@@ -31,6 +32,21 @@
 ## Introduction
 
 Spune is a simple "Now Playing" visualizer for Spotify, inspired by desktop Zune software.
+
+### Inspiration
+
+Inspiration for building this is as follows:
+
+1. Desktop Zune software is awesome to look at on your TV
+2. Desktop Spotify software sucks to look at on your TV
+1. Therefore, a client that shows what you're listening to in the style of Zune
+must be awesome
+
+Here are some screenshots of the glory that is Zune:
+
+![Zune Player 1](./assets/player.png)
+
+![Zune Player 2](./assets/player2.png)
 
 ## Developing
 
