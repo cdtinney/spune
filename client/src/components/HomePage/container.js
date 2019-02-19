@@ -61,7 +61,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onLoad() {
       dispatch(spotifyActions.getMyInfo());
-      dispatch(spotifyActions.getNowPlaying());
+      dispatch(spotifyActions.getNowPlayingInfo());
     },
   };
 }

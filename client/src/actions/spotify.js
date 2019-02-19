@@ -14,13 +14,19 @@ const spotifyApi = new SpotifyApi();
 // Types//
 //////////
 
-export const FETCH_USER_INFO_REQUEST = 'SPOTIFY/FETCH_USER_INFO_REQUEST';
-export const FETCH_USER_INFO_SUCCESS = 'SPOTIFY/FETCH_USER_INFO_SUCCESS';
-export const FETCH_USER_INFO_FAILURE = 'SPOTIFY/FETCH_USER_INFO_FAILURE';
+export const FETCH_USER_INFO_REQUEST =
+  'SPOTIFY/FETCH_USER_INFO_REQUEST';
+export const FETCH_USER_INFO_SUCCESS =
+  'SPOTIFY/FETCH_USER_INFO_SUCCESS';
+export const FETCH_USER_INFO_FAILURE =
+  'SPOTIFY/FETCH_USER_INFO_FAILURE';
 
-export const FETCH_NOW_PLAYING_REQUEST = 'SPOTIFY/FETCH_NOW_PLAYING_REQUEST';
-export const FETCH_NOW_PLAYING_SUCCESS = 'SPOTIFY/FETCH_NOW_PLAYING_SUCCESS';
-export const FETCH_NOW_PLAYING_FAILURE = 'SPOTIFY/FETCH_NOW_PLAYING_FAILURE';
+export const FETCH_NOW_PLAYING_INFO_REQUEST =
+  'SPOTIFY/FETCH_NOW_PLAYING_INFO_REQUEST';
+export const FETCH_NOW_PLAYING_INFO_SUCCESS =
+  'SPOTIFY/FETCH_NOW_PLAYING_INFO_SUCCESS';
+export const FETCH_NOW_PLAYING_INFO_FAILURE =
+  'SPOTIFY/FETCH_NOW_PLAYING_INFO_FAILURE';
 
 export const CLEAR_NOW_PLAYING_RELATED_ALBUMS =
   'SPOTIFY/NOW_PLAYING/RELATED_ALBUMS/CLEAR';
@@ -31,10 +37,6 @@ export const FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS =
   'SPOTIFY/NOW_PLAYING/RELATED_ALBUMS/FETCH_SUCCESS';
 export const FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE =
   'SPOTIFY/NOW_PLAYING/RELATED_ALBUMS/FETCH_FAILURE';
-
-///////////////
-// Utilities //
-///////////////
 
 //////////////
 // Creators //
@@ -122,8 +124,8 @@ function fetchNowPlayingRelatedAlbums() {
   };
 }
 
-export function getNowPlaying() {
-  return function getNowPlayingThunk(dispatch, getState) {
+export function getNowPlayingInfo() {
+  return function getNowPlayingInfoThunk(dispatch, getState) {
     const {
       spotify: {
         nowPlaying: {
@@ -142,7 +144,7 @@ export function getNowPlaying() {
       return;
     }
 
-    dispatch({ type: FETCH_NOW_PLAYING_REQUEST });
+    dispatch({ type: FETCH_NOW_PLAYING_INFO_REQUEST });
 
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       const {
@@ -160,7 +162,7 @@ export function getNowPlaying() {
       } = data;
 
       dispatch({
-        type: FETCH_NOW_PLAYING_SUCCESS,
+        type: FETCH_NOW_PLAYING_INFO_SUCCESS,
         payload: {
           info: {
             songId,
@@ -182,7 +184,7 @@ export function getNowPlaying() {
       }
     }).catch((err) => {
       dispatch({
-        type: FETCH_NOW_PLAYING_FAILURE,
+        type: FETCH_NOW_PLAYING_INFO_FAILURE,
         payload: new Error(err),
         error: true,
       });

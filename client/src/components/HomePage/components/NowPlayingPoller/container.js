@@ -32,7 +32,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateNowPlaying() {
-      dispatch(spotifyActions.getNowPlaying());
+      dispatch(spotifyActions.getNowPlayingInfo());
     },
   };
 }
