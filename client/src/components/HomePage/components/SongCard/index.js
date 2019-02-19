@@ -33,6 +33,7 @@ const styles = {
     width: 151,
     height: 151,
     border: '2px solid rgba(252, 252, 252, 0.95)',
+    transition: 'background-image 1s ease-in-out 0s',
   },
   text: {
     color: '#FCFCFC',
@@ -50,7 +51,6 @@ const styles = {
     fontSize: '1.2em',
     marginTop: '1.2em',
   },
-
 };
 
 export function SongCard(props) {
