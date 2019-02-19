@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 //////////////////////////
 
 import TopAppBar from '../TopAppBar';
+import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
 import NowPlayingAlbumGrid from './components/NowPlayingAlbumGrid';
@@ -79,6 +80,7 @@ export class HomePage extends Component {
     return (
       <div className={classes.root}>
         <NowPlayingPoller />
+        <ColorOverlay />
         <TopAppBar
           title="spune"
           userName={userName}

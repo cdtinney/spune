@@ -18,6 +18,8 @@ const styles = {
     // Position in bottom-left.
     alignSelf: 'flex-start',
     marginTop: 'auto',
+    // Ensure it's displayed over the color overlay
+    zIndex: 100,
   },
   details: {
     display: 'flex',

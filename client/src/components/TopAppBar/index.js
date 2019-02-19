@@ -17,6 +17,7 @@ const styles = {
     position: 'absolute',
     display: 'flex',
     width: '100%',
+    zIndex: 100,
   },
   iconContainer: {
     marginLeft: 'auto',
