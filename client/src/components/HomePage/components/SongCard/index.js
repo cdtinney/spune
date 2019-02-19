@@ -30,6 +30,7 @@ const styles = {
   cover: {
     width: 151,
     height: 151,
+    border: '2px solid rgba(252, 252, 252, 0.95)',
   },
   text: {
     color: '#FCFCFC',
