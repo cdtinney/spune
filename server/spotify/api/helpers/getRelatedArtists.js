@@ -11,6 +11,8 @@ module.exports = async function getRelatedArtists(spotifyApi, trackArtists) {
       return relatedArtists.reduce((flattened, arr) => {
           return flattened.concat(arr);
         }, [])
+        // Filter out undefined artists.
+        .filter(artist => artist !== undefined && artist !== null)
         // Then, take only their IDs.
         .map(artist => artist.id)
     // Finally, merge related artists and track artists into
