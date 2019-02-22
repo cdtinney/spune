@@ -12,6 +12,7 @@ const styles = {
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#212121',
   },
 };
 
@@ -26,7 +27,7 @@ export function Login(props) {
   
   return (
     <div className={classes.root}>
-      <Button variant="contained" href="/api/auth/spotify">
+      <Button color="primary" variant="contained" href="/api/auth/spotify">
         Login with Spotify
       </Button>
     </div>
