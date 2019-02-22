@@ -30,8 +30,9 @@ const initialState = {
       errored: false,
     },
     info: {
+      id: null,
       displayName: null,
-      imageUrl: null,
+      avatarImageUrl: null,
     },
   },
   nowPlaying: {
