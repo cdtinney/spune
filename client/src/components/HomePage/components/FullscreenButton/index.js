@@ -14,7 +14,7 @@ import FullscreenIcon from './assets/fullscreen_light.png';
 
 const styles = {
   root: {
-    // Nothing for now.
+    // TODO Hover styling
   },
 };
 
