@@ -7,12 +7,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 
-const styles = {
+const styles = (theme) => ({
   avatar: {
     margin: 30,
-    boxShadow: '4px 4px 5px 0px rgba(0,0,0,0.29)',
+    boxShadow: theme.shadows[6],
   },
-};
+});
 
 function IconAvatar(props) {
   const {
