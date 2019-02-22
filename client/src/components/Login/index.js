@@ -5,6 +5,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 
 const styles = {
   root: {
@@ -13,6 +15,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#212121',
+  },
+  icon: {
+    marginRight: '10px',
   },
 };
 
@@ -25,10 +30,20 @@ export function Login(props) {
     classes,
   } = props;
   
+  // TODO Refactor href to Redux
   return (
     <div className={classes.root}>
-      <Button color="primary" variant="contained" href="/api/auth/spotify">
-        Login with Spotify
+      <Button
+        color="primary"
+        variant="contained"
+        href="/api/auth/spotify"
+      >
+        <FontAwesomeIcon
+          icon={faSpotify}
+          size="lg"
+          className={classes.icon}
+        />
+        LOG IN WITH SPOTIFY
       </Button>
     </div>
   );
