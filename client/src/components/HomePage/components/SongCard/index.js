@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 const CARD_HEIGHT = 151;
 
-const styles = {
+const styles = (theme) => ({
   card: {
     display: 'flex',
     justifyContent: 'center',
@@ -37,9 +37,10 @@ const styles = {
     height: CARD_HEIGHT,
     border: '2px solid rgba(252, 252, 252, 0.95)',
     transition: 'background-image 1s ease-in-out 0s',
+    boxShadow: theme.shadows[6],
   },
   text: {
-    color: '#FCFCFC',
+    color: theme.palette.text.primary,
     maxWidth: '100%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -57,7 +58,7 @@ const styles = {
     fontSize: '1.2em',
     marginTop: '1.2em',
   },
-};
+});
 
 export function SongCard(props) {
   const {

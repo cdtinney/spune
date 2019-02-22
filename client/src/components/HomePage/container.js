@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 ///////////////////////////
 
 import * as spotifyActions from '../../actions/spotify';
+import * as uiActions from '../../actions/ui';
+
 import * as nowPlayingSelectors from '../../selectors/nowPlayingSelectors';
 
 import HomePage from './view';
@@ -35,6 +37,9 @@ function mapStateToProps(state) {
         },
       },
     },
+    ui: {
+      fullscreen,
+    },
   } = state;
 
   return {
@@ -54,6 +59,9 @@ function mapStateToProps(state) {
       albumName,
       albumImageUrl,
     },
+    ui: {
+      fullscreen,
+    },
   };
 }
 
@@ -62,6 +70,10 @@ function mapDispatchToProps(dispatch) {
     onLoad() {
       dispatch(spotifyActions.getMyInfo());
       dispatch(spotifyActions.getNowPlayingInfo());
+    },
+
+    setFullscreen(fullscreen) {
+      dispatch(uiActions.setFullscreen(fullscreen));
     },
   };
 }

@@ -10,10 +10,12 @@ import { connectRouter } from 'connected-react-router';
 ////////////////////////////
 
 import spotify from './spotify';
+import ui from './ui';
 
 export default function createRootReducer(history) {
   return combineReducers({
     router: connectRouter(history),
     spotify,
+    ui,
   });
 }
