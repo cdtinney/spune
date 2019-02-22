@@ -8,6 +8,8 @@ import { withStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
+const CARD_HEIGHT = 151;
+
 const styles = {
   card: {
     display: 'flex',
@@ -15,6 +17,7 @@ const styles = {
     alignItems: 'center',
     marginLeft: '30px',
     marginBottom: '30px',
+    height: CARD_HEIGHT,
     // Position in bottom-left.
     alignSelf: 'flex-start',
     marginTop: 'auto',
@@ -30,14 +33,17 @@ const styles = {
     flex: '1 0 auto',
   },
   cover: {
-    width: 151,
-    height: 151,
+    width: CARD_HEIGHT,
+    height: CARD_HEIGHT,
     border: '2px solid rgba(252, 252, 252, 0.95)',
     transition: 'background-image 1s ease-in-out 0s',
   },
   text: {
     color: '#FCFCFC',
+    maxWidth: '100%',
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
+    textOverflow: 'ellipsis',
     textShadow: '2px 2px 7px rgba(94,94,94,0.44)',
   },
   artistText: {
