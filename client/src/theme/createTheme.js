@@ -14,6 +14,9 @@ export default function createTheme() {
     },
     palette: {
       type: 'dark',
+      primary: {
+        main: '#828282',
+      },
     },
   });
 }
