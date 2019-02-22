@@ -10,9 +10,9 @@ import * as nowPlayingSelectors from '../selectors/nowPlayingSelectors';
 
 const spotifyApi = new SpotifyApi();
 
-//////////
-// Types//
-//////////
+///////////
+// Types //
+///////////
 
 export const FETCH_USER_INFO_REQUEST =
   'SPOTIFY/FETCH_USER_INFO_REQUEST';

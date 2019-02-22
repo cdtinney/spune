@@ -57,7 +57,11 @@ export class HomePage extends Component {
       albumName: PropTypes.string,
       albumImageUrl: PropTypes.string,
     }).isRequired,
+    ui: PropTypes.shape({
+      fullscreen: PropTypes.bool.isRequired,
+    }).isRequired,
     onLoad: PropTypes.func.isRequired,
+    setFullscreen: PropTypes.func.isRequired,
   };
 
   //////////////////////
@@ -66,11 +70,6 @@ export class HomePage extends Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      fullscreen: false,
-    };
-
     this.handleFullscreen = this.handleFullscreen.bind(this);
   }
   componentDidMount() {
@@ -78,9 +77,7 @@ export class HomePage extends Component {
   }
 
   handleFullscreen(fullscreen = true) {
-    this.setState({
-      fullscreen,
-    });
+    this.props.setFullscreen(fullscreen);
   }
 
   ////////////////////
@@ -88,10 +85,6 @@ export class HomePage extends Component {
   ////////////////////
 
   render() {
-    const {
-      fullscreen,
-    } = this.state;
-
     const {
       classes,
       user: {
@@ -103,6 +96,9 @@ export class HomePage extends Component {
         songArtistName,
         albumName,
         albumImageUrl,
+      },
+      ui: {
+        fullscreen,
       },
     } = this.props;
 
