@@ -16,7 +16,11 @@ const styles = {
     height: '100%',
     zIndex: 1,
     background:
-      'radial-gradient(ellipse at center, rgba(88, 0, 88, 0.9) 0%, rgba(4, 0, 33, 0.95) 100%, rgba(0,0,0,1) 50%)',
+      'radial-gradient(' +
+        'ellipse at center,' +
+        'rgba(88, 0, 88, 0.65) 0%,' +
+        'rgba(4, 0, 33, 0.95) 100%,' +
+        'rgba(0,0,0,1) 50%)',
   },
 };
 

@@ -3,12 +3,14 @@
 //////////////////////////
 
 import React, { Component } from 'react';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
 //////////////////////////
 // Internal dependencies//
 //////////////////////////
 
 import './App.css';
+import createTheme from './theme/createTheme';
 
 class App extends Component {
   render() {
@@ -16,11 +18,13 @@ class App extends Component {
     const { children } = this.props;
     
     return (
-      <div className="app">
-        <div className="app__content">
-          { children }
+      <MuiThemeProvider theme={createTheme()}>
+        <div className="app">
+          <div className="app__content">
+            { children }
+          </div>
         </div>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }

@@ -4,19 +4,23 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { withStyles } from '@material-ui/core/styles';
 
 ////////////////////////////
 // Internal dependencies  //
 ////////////////////////////
 
-import FullscreenIcon from './assets/fullscreen_light.png';
-
-const styles = {
-  root: {
-    // TODO Hover styling
+const styles = (theme) => ({
+  icon: {
+    color: theme.palette.text.primary,
+    boxShadow: theme.shadows[6],
+    '&:hover': {
+      color: theme.palette.text.secondary,
+    },
   },
-};
+});
 
 function FullscreenButton(props) {
   const {
@@ -26,13 +30,15 @@ function FullscreenButton(props) {
   } = props;
 
   return (
-    <img
-      src={FullscreenIcon}
-      alt="fullscreen"
-      width={32}
-      onClick={onClick}
-      className={`${classes.root} ${className}`}
-    ></img>
+    <div className={className}>
+      <FontAwesomeIcon
+        icon={faExpandArrowsAlt}
+        size="1x"
+        inverse
+        className={classes.icon}
+        onClick={onClick}
+      />
+    </div>
   );
 }
 
