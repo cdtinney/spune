@@ -32,6 +32,9 @@ export default function user(state = initialState, action) {
             errored: false,
           },
         },
+        profile: {
+          $set: null,
+        },
       });
     }
 
