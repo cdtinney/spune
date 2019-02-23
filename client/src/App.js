@@ -42,8 +42,8 @@ export class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    userAuthenticated: state.user.profile &&
-      state.user.profile.spotifyId,
+    userAuthenticated: state.user.profile !== null &&
+      state.user.profile.spotifyId !== undefined,
   };
 }
 
