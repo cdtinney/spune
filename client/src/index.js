@@ -1,32 +1,31 @@
-//////////////////////////
-// External dependencies//
-//////////////////////////
+///////////////////////////
+// External dependencies //
+///////////////////////////
 
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router'
 import ReactDOM from 'react-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
+///////////////////////////
+// Internal dependencies //
+///////////////////////////
 
-import './index.css';
-import Routes from './routes';
+import App from './App';
 import configureStore, {
   history,
 } from './store/configureStore';
+import createTheme from './theme/createTheme';
+import './index.css';
 
-class Root extends Component {
-  render() {
-    return (
-      <Provider store={configureStore()}>
-        <ConnectedRouter history={history}>
-          <Routes />
-        </ConnectedRouter>
-      </Provider>
-    );
-  }
+function Root() {
+  return (
+    <Provider store={configureStore()}>
+      <MuiThemeProvider theme={createTheme()}>
+        <App history={history} />
+      </MuiThemeProvider>
+    </Provider>
+  );
 }
 
 ReactDOM.render(<Root />, document.getElementById('root'));

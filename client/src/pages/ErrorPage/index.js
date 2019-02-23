@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 /**
  * Displays an error message injected by `react-router`.
  */
-export default class Error extends Component {
+export default class ErrorPage extends Component {
   render() {
     // Injected by react-router.
     const {

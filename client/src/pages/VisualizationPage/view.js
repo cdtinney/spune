@@ -7,11 +7,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
+///////////////////////////
+// Internal dependencies //
+///////////////////////////
 
-import TopAppBar from '../TopAppBar';
+import TopAppBar from './components/TopAppBar';
 import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
@@ -42,9 +42,9 @@ const styles = {
 };
 
 /**
- * Displays the user's profile image and display name.
+ * Album art visualization page for the user's currently playing track.
  */
-export class HomePage extends Component {
+export class VisualizationPage extends Component {
   static propTypes = {
     user: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -141,4 +141,4 @@ export class HomePage extends Component {
   }
 }
 
-export default withStyles(styles)(HomePage);
+export default withStyles(styles)(VisualizationPage);

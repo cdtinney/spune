@@ -6,6 +6,11 @@ const UserSchema = new Schema({
   spotifyId: String,
   spotifyAccessToken: String,
   spotifyRefreshToken: String,
+  displayName: String,
+  photos: [{
+    type: String
+  }],
+  expiresIn: String,
 });
 UserSchema.plugin(findOrCreate);
 const User = mongoose.model('User', UserSchema);

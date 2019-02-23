@@ -1,13 +1,25 @@
 const express = require('express');
 const passport = require('passport');
-
 const paths = require('../config/paths');
-
 const spotify = require('./spotify');
 
 const router = new express.Router();
 
 // Authorization
+
+router.get(
+  '/auth',
+  function(req, res) {
+    if (!req.user) {
+      res.json({});
+      return;
+    }
+
+    res.json({
+      user: req.user,
+    });
+  },
+);
 
 router.get(
   '/auth/spotify',
