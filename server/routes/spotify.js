@@ -7,7 +7,7 @@ const getCurrentlyPlayingRelatedAlbums =
 // Helpers  //
 //////////////
 
-function isLoggedIn(req) {
+function getAccessToken(req) {
   if (!req.user || !req.user.spotifyAccessToken) {
     throw new Error('Request has no user or access token');
   }
@@ -31,7 +31,7 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
     },
   } = req;
 
-  const spotifyApi = spotifyApiWithToken(isLoggedIn(req));
+  const spotifyApi = spotifyApiWithToken(getAccessToken(req));
   getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)
     .then(albums => res.send(albums))
     .catch(next);
@@ -42,7 +42,9 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
 * Returns the user's profile; this is a simple proxy.
 */
 function me(req, res, next) {
-  spotifyApiWithToken(isLoggedIn(req)).getMe()
+  const accessToken = getAccessToken(req);
+  console.log(`[API] /me/ - accessToken = ${accessToken}`);
+  spotifyApiWithToken(accessToken).getMe()
     .then(response => res.send(response.body))
     .catch(next);
 };
@@ -53,7 +55,9 @@ function me(req, res, next) {
  * Returns the current state of the player; this is a simple proxy.
  */
 function mePlayer(req, res, next) {
-  spotifyApiWithToken(isLoggedIn(req)).getMyCurrentPlaybackState()
+  const accessToken = getAccessToken(req);
+  console.log(`[API] /me/player/ - accessToken = ${accessToken}`);
+  spotifyApiWithToken(accessToken).getMyCurrentPlaybackState()
     .then(response => res.send(response.body))
     .catch(next);
 };
