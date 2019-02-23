@@ -40,7 +40,7 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
       const spotifyApi = spotifyApiWithToken(accessToken);
       return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
     },
-    handleSuccess: response => res.send(response.albums),
+    handleSuccess: res.send.bind(res),
     handleAuthFailure: () => send401Response(res),
     handleError: next,
   });
