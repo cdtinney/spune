@@ -61,7 +61,9 @@ export function fetchAuthUser() {
 
     return axios.get('/api/auth')
       .then(response =>
-        dispatch(fetchAuthUserSuccess(response.data.user)))
+        // The request can still be successful with no user returned.
+        // In this case, default to `null`.
+        dispatch(fetchAuthUserSuccess(response.data.user || null)))
       .catch(error =>
         dispatch(fetchAuthUserFailure(error)));
   };
