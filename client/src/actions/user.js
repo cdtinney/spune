@@ -70,6 +70,11 @@ export function fetchAuthUser() {
 export function fetchAuthUserAndRedirect() {
   return function fetchAuthUserAndRedirectThunk(dispatch) {
     dispatch(fetchAuthUser())
-      .then(() => dispatch(push('/visualization')));
+      .then((action) => {
+        // Only redirect if a profile was actually loaded.
+        if (action.payload && action.payload.profile) {
+          dispatch(push('/visualization'));
+        }
+      });
   };
 }
