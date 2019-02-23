@@ -20,6 +20,7 @@
   - [Debugging](#debugging)
     - [Heroku](#heroku)
   - [Database](#database)
+    - [Development](#development)
     - [Production](#production)
 - [Thanks to..](#thanks-to)
 
@@ -167,6 +168,25 @@ $ heroku logs -a <APP_NAME> --tail
 ```
 
 ### Database
+
+#### Development
+
+Development database debugging can be done via the MongoDB shell.
+
+To access the shell and switch to the Spune database:
+
+```
+$ mongo
+> use spune
+```
+
+To view all records in a collection (e.g. `users`):
+
+```
+> db.users.find().pretty()
+```
+
+To quit, press `Ctrl + C`.
 
 #### Production
 
