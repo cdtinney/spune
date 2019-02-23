@@ -23,6 +23,7 @@ module.exports = function passportStrategy() {
         // These properties will be added/updated if it exists or not.
         spotifyAccessToken: accessToken,
         spotifyRefreshToken: refreshToken,
+        expiresIn: expires_in,
         displayName: profile.displayName,
         photos: profile.photos,
       }, function(err, user) {
