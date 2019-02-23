@@ -2,7 +2,7 @@
 // External dependencies //
 ///////////////////////////
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router';
 
@@ -16,24 +16,30 @@ import ErrorPage from '../pages/ErrorPage';
 
 function PrivateRoute(props) {
   const {
-    component,
+    component: AuthenticatedComponent,
     authenticated,
     ...rest
   } = props;
 
-  return (
-    <Route
-      { ...rest }
-      render={props => (
-        authenticated ? <Component {...props} /> :
-        <Redirect to={{
-          pathname: '/',
-          state: {
-            from: props.path,
+  const CurrentComponent = authenticated ? 
+    AuthenticatedComponent :
+    function RedirectComponent(props) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/',
+            state: {
+              from: props.path,
             },
           }}
         />
-      )}
+      );
+    };
+
+  return (
+    <Route
+      { ...rest }
+      component={CurrentComponent}
     />
   );
 }
