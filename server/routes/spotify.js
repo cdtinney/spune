@@ -41,7 +41,7 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
       return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
     },
     handleSuccess: res.send.bind(res),
-    handleAuthFailure: () => send401Response(res),
+    handleAuthFailure: send401Response.bind(undefined, res),
     handleError: next,
   });
 };
@@ -62,7 +62,7 @@ function me(req, res, next) {
       return spotifyApiWithToken(accessToken).getMe();
     },
     handleSuccess: response => res.send(response.body),
-    handleAuthFailure: () => send401Response(res),
+    handleAuthFailure: send401Response.bind(undefined, res),
     handleError: next,
   });
 };
@@ -83,7 +83,7 @@ function mePlayer(req, res, next) {
       return spotifyApiWithToken(accessToken).getMyCurrentPlaybackState();
     },
     handleSuccess: response => res.send(response.body),
-    handleAuthFailure: () => send401Response(res),
+    handleAuthFailure: send401Response.bind(undefined, res),
     handleError: next,
   });
 };
