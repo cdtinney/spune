@@ -3,25 +3,23 @@
 ///////////////////////////
 
 import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Switch, Route, Redirect } from 'react-router';
 
-//////////////////////////
-// Internal dependencies//
-//////////////////////////
+///////////////////////////
+// Internal dependencies //
+///////////////////////////
 
-import App from '../App';
-import Login from '../components/Login';
-import HomePage from '../components/HomePage/container';
-import Error from '../components/Error';
+import HomePage from '../pages/HomePage';
+import VisualizationPage from '../pages/VisualizationPage';
+import ErrorPage from '../pages/ErrorPage';
 
 export default function Routes() {
   return (
-    <App>
-      <Switch>
-        <Route exact path="/" component={Login} />
-        <Route path="/home/" component={HomePage} />
-        <Route path="/error/:errorMsg" component={Error} />
-      </Switch>
-    </App>
+    <Switch>
+      <Redirect exact from="/" to="/home" />
+      <Route path="/home" component={HomePage} />
+      <Route path="/visualization" component={VisualizationPage} />
+      <Route path="/error/:errorMsg" component={ErrorPage} />
+    </Switch>
   );
 }

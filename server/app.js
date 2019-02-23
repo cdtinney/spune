@@ -8,26 +8,19 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 
 const connectDatabase = require('./database/connectDatabase');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
-const passportStrategy = require('./spotify/auth/passportStrategy');
 const configurePassport = require('./auth/configurePassport');
 
-connectDatabase();
-
-passport.use(passportStrategy());
+// Connect to our database 
+const dbConnection = connectDatabase();
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-if (process.env.NODE_ENV === 'production') {
-  // TODO Redirect if not logged in
-  // Serve static React files from root.
-  app.use(express.static(paths.clientBuildFolder));
-}
 
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
@@ -39,12 +32,24 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'secret',
   resave: true,
   saveUninitialized: true,
+  // Automatically extends the session age on each request.
+  rolling: true,
+  // Use MongoDB to store sessions.
+  store: new MongoStore({
+    mongooseConnection: dbConnection,
+  }),
 }));
 
 // Initialize Passport.js for authentication of users.
 app.use(passport.initialize());
 app.use(passport.session());
 configurePassport(passport);
+
+// Add HTML routes (for production).
+if (process.env.NODE_ENV === 'production') {
+  // Serve static React files from root.
+  app.use('/', express.static(paths.clientBuildFolder));
+}
 
 // Add API routes.
 app.use('/api', routes);

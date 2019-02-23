@@ -13,7 +13,7 @@ import * as uiActions from '../../actions/ui';
 
 import * as nowPlayingSelectors from '../../selectors/nowPlayingSelectors';
 
-import HomePage from './view';
+import VisualizationPage from './view';
 
 function mapStateToProps(state) {
   const {
@@ -81,4 +81,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(HomePage);
+)(VisualizationPage);

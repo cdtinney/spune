@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",
-    "connected-react-router": "^6.3.1",
+    "connected-react-router": "6.0.0",
     "http-proxy-middleware": "^0.19.1",
     "immutability-helper": "^3.0.0",
     "prop-types": "^15.7.2",
@@ -26,5 +26,10 @@
   },
   "browserslist": [
     "last 1 version"
-  ]
+  ],
+  "devDependencies": {
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "react-router-test-context": "^0.1.0"
+  }
 }

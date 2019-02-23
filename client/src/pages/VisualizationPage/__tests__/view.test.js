@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import HomePage from '../view';
+import VisualizationPage from '../view';
 
 // TODO Switch to shallow rendering as
 // child component is connected and fails this test
@@ -13,6 +13,6 @@ it.skip('renders without crashing', () => {
     nowPlaying: {},
     onLoad: () => {},
   };
-  ReactDOM.render(<HomePage {...props} />, div);
+  ReactDOM.render(<VisualizationPage {...props} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
