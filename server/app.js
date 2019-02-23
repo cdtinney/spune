@@ -30,8 +30,14 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secret',
+  cookie: {
+    // Persist cookies for a year. By default, cookies
+    // are not persistent and will be lost upon certain
+    // conditions like browsers exiting.
+    maxAge: 1000 * 60 * 24 * 24 * 365,
+  },
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: false,
   // Automatically extends the session age on each request.
   rolling: true,
   // Use MongoDB to store sessions.
@@ -48,6 +54,7 @@ configurePassport(passport);
 // Add HTML routes (for production).
 if (process.env.NODE_ENV === 'production') {
   // Serve static React files from root.
+  // TODO Re-route to home page if not logged in.
   app.use('/', express.static(paths.clientBuildFolder));
 }
 
