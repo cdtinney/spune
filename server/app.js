@@ -54,7 +54,6 @@ configurePassport(passport);
 // Add HTML routes (for production).
 if (process.env.NODE_ENV === 'production') {
   // Serve static React files from root.
-  // TODO Re-route to home page if not logged in.
   app.use('/', express.static(paths.clientBuildFolder));
 }
 
