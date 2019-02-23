@@ -19,6 +19,8 @@
   - [Deploying](#deploying)
   - [Debugging](#debugging)
     - [Heroku](#heroku)
+  - [Database](#database)
+    - [Production](#production)
 - [Thanks to..](#thanks-to)
 
 ## Developing
@@ -163,6 +165,13 @@ To view Heroku application logs (in real-time):
 ```
 $ heroku logs -a <APP_NAME> --tail
 ```
+
+### Database
+
+#### Production
+
+Production database debugging (e.g. deleting invalid documents) can be done via
+the [mLab UI](https://www.mlab.com/home).
 
 ## Thanks to..
 
