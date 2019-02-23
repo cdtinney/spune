@@ -15,6 +15,7 @@ router.get(
       return;
     }
 
+    // TODO Need to find User
     res.json({
       user: req.user,
     });
