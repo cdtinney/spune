@@ -1,4 +1,5 @@
 const SpotifyStrategy = require('passport-spotify').Strategy;
+const refresh = require('passport-oauth2-refresh');
 
 const User = require('../../database/schema/User');
 
@@ -10,7 +11,8 @@ const {
 } = process.env;
 
 module.exports = function passportStrategy() {
-  return new SpotifyStrategy({
+  const spotifyStrategy =
+    new SpotifyStrategy({
       clientID: SPOT_CLIENT_ID,
       clientSecret: SPOT_CLIENT_SECRET,
       callbackURL: SPOT_REDIRECT_URI,
@@ -23,6 +25,7 @@ module.exports = function passportStrategy() {
         // These properties will be added/updated if it exists or not.
         spotifyAccessToken: accessToken,
         spotifyRefreshToken: refreshToken,
+        tokenUpdated: Date.now(),
         expiresIn: expires_in,
         displayName: profile.displayName,
         photos: profile.photos,
@@ -30,6 +33,9 @@ module.exports = function passportStrategy() {
         console.log(`Created user ${user.spotifyId}.`);
         return done(err, user);
       });
-    },
-  );
+    });
+
+  // Adds a plugin to enable simple token swapping.
+  refresh.use(spotifyStrategy);
+  return spotifyStrategy;
 };

@@ -1,5 +1,11 @@
+////////////////////////////
+// Internal dependencies  //
+////////////////////////////
+
 const { spotifyApiWithToken } =
   require('../spotify/api/SpotifyApi');
+const apiRequestWithRefresh =
+  require('../spotify/api/helpers/apiRequestWithRefresh');
 const getCurrentlyPlayingRelatedAlbums =
   require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
@@ -7,12 +13,8 @@ const getCurrentlyPlayingRelatedAlbums =
 // Helpers  //
 //////////////
 
-function getAccessToken(req) {
-  if (!req.user || !req.user.spotifyAccessToken) {
-    throw new Error('Request has no user or access token');
-  }
-
-  return req.user.spotifyAccessToken;
+function send401Response(response, error = {}) {
+  return response.status(401).json(error).end();
 }
 
 //////////////////////
@@ -29,37 +31,61 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
     query: {
       songId,
     },
+    user,
   } = req;
 
-  const spotifyApi = spotifyApiWithToken(getAccessToken(req));
-  getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)
-    .then(albums => res.send(albums))
-    .catch(next);
+  apiRequestWithRefresh({
+    user,
+    apiFn: (accessToken) => {
+      const spotifyApi = spotifyApiWithToken(accessToken);
+      return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
+    },
+    handleSuccess: response => res.send(response.albums),
+    handleAuthFailure: () => send401Response(res),
+    handleError: next,
+  });
 };
+
 /**
 * `/me` endpoint.
-* 
+*
 * Returns the user's profile; this is a simple proxy.
 */
 function me(req, res, next) {
-  const accessToken = getAccessToken(req);
-  console.log(`[API] /me/ - accessToken = ${accessToken}`);
-  spotifyApiWithToken(accessToken).getMe()
-    .then(response => res.send(response.body))
-    .catch(next);
+  let {
+    user,
+  } = req;
+
+  apiRequestWithRefresh({
+    user,
+    apiFn: (accessToken) => {
+      return spotifyApiWithToken(accessToken).getMe();
+    },
+    handleSuccess: response => res.send(response.body),
+    handleAuthFailure: () => send401Response(res),
+    handleError: next,
+  });
 };
 
 /**
  * `/me/player` endpoint.
- * 
+ *
  * Returns the current state of the player; this is a simple proxy.
  */
 function mePlayer(req, res, next) {
-  const accessToken = getAccessToken(req);
-  console.log(`[API] /me/player/ - accessToken = ${accessToken}`);
-  spotifyApiWithToken(accessToken).getMyCurrentPlaybackState()
-    .then(response => res.send(response.body))
-    .catch(next);
+  const {
+    user,
+  } = req;
+
+  apiRequestWithRefresh({
+    user,
+    apiFn: (accessToken) => {
+      return spotifyApiWithToken(accessToken).getMyCurrentPlaybackState();
+    },
+    handleSuccess: response => res.send(response.body),
+    handleAuthFailure: () => send401Response(res),
+    handleError: next,
+  });
 };
 
 module.exports.currentlyPlayingRelatedAlbums = currentlyPlayingRelatedAlbums;

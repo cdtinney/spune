@@ -34,7 +34,7 @@ app.use(session({
     // Persist cookies for a year. By default, cookies
     // are not persistent and will be lost upon certain
     // conditions like browsers exiting.
-    maxAge: 1000 * 60 * 24 * 24 * 365,
+    maxAge: 1000 * 60 * 60 * 24 * 365,
   },
   resave: true,
   saveUninitialized: false,
