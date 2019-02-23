@@ -18,6 +18,7 @@ import SpuneLogo from '../../assets/spune_logo.png';
 const styles = {
   root: {
     display: 'flex',
+    flexDirection: 'column',
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -25,7 +26,11 @@ const styles = {
   },
   logo: {
     maxWidth: '200px',
-  }
+    marginBottom: '2em',
+  },
+  contentContainer: {
+    height: '100px',
+  },
 };
 
 function HomePageView(props) {
@@ -65,18 +70,20 @@ function HomePageView(props) {
       return <SpotifyLoginButton onClick={loginUser} />;
     }
 
-    return (
+    // This shouldn't happen...
+    return null;
+  }
+  
+  return (
+    <div className={classes.root}>
       <img
         alt="Spune Logo"
         src={SpuneLogo}
         className={classes.logo}
       />
-    );
-  }
-  
-  return (
-    <div className={classes.root}>
-      <Content />
+      <div className={classes.contentContainer}>
+        <Content />
+      </div>
     </div>
   );
 }
