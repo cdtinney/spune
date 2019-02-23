@@ -17,6 +17,7 @@ import './App.css';
 
 export class App extends Component {
   static propTypes = {
+    userAuthenticated: PropTypes.bool.isRequired,
     checkUserAuth: PropTypes.func.isRequired,
   };
 
@@ -25,14 +26,25 @@ export class App extends Component {
   }
 
   render() {
+    const {
+      userAuthenticated,
+    } = this.props;
+
     return (
       <div className="app">
         <div className="app__content">
-          <Routes />
+          <Routes authenticated={userAuthenticated} />
         </div>
       </div>
     );
   }
+}
+
+function mapStateToProps(state) {
+  return {
+    userAuthenticated: state.user.profile &&
+      state.user.profile.spotifyId,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -44,7 +56,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectedApp = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(App);
 
@@ -58,7 +70,7 @@ function RoutedApp(props) {
       <ConnectedApp />
     </ConnectedRouter>
   );
-  
+
 }
 
 RoutedApp.propTypes = {
