@@ -20,7 +20,7 @@ const initialState = {
   profile: null,
 };
 
-export default function user(state = initialState, action) {
+export default function user(state = initialState, action = {}) {
   switch (action.type) {
     case userActions.FETCH_AUTH_USER_REQ: {
       return update(state, {
