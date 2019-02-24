@@ -13,38 +13,9 @@ import { Switch, Route, Redirect } from 'react-router';
 import HomePage from '../pages/HomePage';
 import VisualizationPage from '../pages/VisualizationPage';
 import ErrorPage from '../pages/ErrorPage';
+import PrivateRoute from './components/PrivateRoute';
 
-function PrivateRoute(props) {
-  const {
-    component: AuthenticatedComponent,
-    authenticated,
-    ...rest
-  } = props;
-
-  const CurrentComponent = authenticated ? 
-    AuthenticatedComponent :
-    function RedirectComponent(props) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/',
-            state: {
-              from: props.path,
-            },
-          }}
-        />
-      );
-    };
-
-  return (
-    <Route
-      { ...rest }
-      component={CurrentComponent}
-    />
-  );
-}
-
-export function Routes(props) {
+function Routes(props) {
   const {
     authenticated,
   } = props;
