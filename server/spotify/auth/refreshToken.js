@@ -35,6 +35,7 @@ module.exports = function refreshToken(refreshToken) {
           }
           
           console.log(`Refreshed access token for user '${user.spotifyId}'`);
+          console.trace();
           resolve(user);
         });
       },
