@@ -7,7 +7,8 @@ it('renders without crashing', () => {
   const context = createRouterContext();
   shallow(
     <App
-      checkUserAuth={() => {}}
+      userAuthenticated={false}
+      fetchAuthUser={() => {}}
     />, {
       context,
     },
