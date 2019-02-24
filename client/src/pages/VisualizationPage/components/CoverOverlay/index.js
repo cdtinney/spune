@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-export function ColorOverlay(props) {
+function ColorOverlay(props) {
   const {
     classes,
   } = props;
