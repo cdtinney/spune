@@ -26,19 +26,18 @@ const styles = {
 
 function TopAppBar(props) {
   const {
-    userName,
-    userImageUrl,
+    user,
     classes,
   } = props;
   
   return (
     <div className={classes.root}>
-      { userName &&
+      { user &&
         <div className={classes.iconContainer}>
           <IconAvatar
-            title={userName}
-            alt={userName}
-            src={userImageUrl}
+            title={user.name}
+            alt={user.name}
+            src={user.imageUrl}
           />
         </div>
       }
@@ -48,9 +47,15 @@ function TopAppBar(props) {
 
 TopAppBar.propTypes = {
   title: PropTypes.string.isRequired,
-  userName: PropTypes.string,
-  userImageUrl: PropTypes.string,
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+  }),
   classes: PropTypes.object.isRequired,
+};
+
+TopAppBar.defaultProps = {
+  user: undefined,
 };
 
 export default withStyles(styles)(TopAppBar);
