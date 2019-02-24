@@ -53,7 +53,7 @@ function HomePageView(props) {
     if (displayName) {
       return (
         <Typography>
-          {`Logged in as ${nameToDisplay}. Redirecting...`}
+          {`Logged in as ${nameToDisplay}.`}
         </Typography>
       );
     }

@@ -52,7 +52,10 @@ export function Routes(props) {
   return (
     <Switch>
       <Redirect exact from="/" to="/home" />
-      <Route path="/home" component={HomePage} />
+      { authenticated ?
+        <Redirect exact from="/home" to="/visualization" /> :
+        <Route path="/home" component={HomePage} />
+      }
       <PrivateRoute
         path="/visualization"
         component={VisualizationPage}
