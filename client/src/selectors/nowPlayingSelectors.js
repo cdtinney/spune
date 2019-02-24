@@ -32,7 +32,10 @@ export const relatedAlbumImagesSelector =
   createSelector(
     nowPlayingRelatedAlbumArtists,
     (byArtist) => {
-      return flatten(Object.values(byArtist), entry => entry.albums).map(album => ({
+      return flatten(
+        Object.values(byArtist),
+        entry => entry.albums,
+      ).map(album => ({
         title: album.name,
         images: {
           fullSize: album.images[0].url,
