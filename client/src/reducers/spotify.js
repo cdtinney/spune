@@ -64,7 +64,7 @@ const initialState = {
   },
 };
 
-export default function spotify(state = initialState, action) {
+export default function spotify(state = initialState, action = {}) {
   switch (action.type) {
 
     case FETCH_USER_INFO_REQUEST: {
@@ -123,8 +123,9 @@ export default function spotify(state = initialState, action) {
           },
           info: {
             $merge: {
+              id: null,
               displayName: null,
-              imageUrl: null,
+              avatarImageUrl: null,
             },
           },
         },
@@ -172,9 +173,7 @@ export default function spotify(state = initialState, action) {
 
     case FETCH_NOW_PLAYING_INFO_FAILURE: {
       const { 
-        payload: {
-          error,
-        },
+        payload: error,
       } = action;
 
       return update(state, {
@@ -215,6 +214,9 @@ export default function spotify(state = initialState, action) {
             request: {
               $merge: {
                 loading: true,
+                lastUpdated: null,
+                error: null,
+                errored: false,
               },
             },
           },
@@ -235,6 +237,9 @@ export default function spotify(state = initialState, action) {
             request: {
               $merge: {
                 loading: false,
+                lastUpdated: Date.now(),
+                error: null,
+                errored: false,
               },
             },
           },
@@ -244,8 +249,8 @@ export default function spotify(state = initialState, action) {
 
     case FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE: {
       const {
-        error,
-      } = action.payload;
+        payload: error,
+      } = action;
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
@@ -253,6 +258,7 @@ export default function spotify(state = initialState, action) {
               byArtist: {},
               request: {
                 loading: false,
+                lastUpdated: null,
                 errored: true,
                 error,
               },
