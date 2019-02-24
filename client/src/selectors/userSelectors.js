@@ -10,7 +10,7 @@ export function userAuthenticated(state) {
           id,
         },
       },
-    }
+    },
   } = state;
 
   return !errored && lastUpdated !== null && id !== null;
