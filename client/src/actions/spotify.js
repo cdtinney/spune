@@ -100,10 +100,7 @@ export function fetchNowPlayingRelatedAlbumsSuccess(songId, albumsByArtist) {
 export function fetchNowPlayingRelatedAlbumsFailure(songId, error) {
   return {
     type: FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
-    payload: {
-      songId,
-      error,
-    },
+    payload: new Error(error),
     errored: true,
   };
 }
@@ -120,7 +117,7 @@ function fetchNowPlayingRelatedAlbums() {
       .then(data =>
         dispatch(fetchNowPlayingRelatedAlbumsSuccess(songId, data)))
       .catch(error =>
-        dispatch(fetchNowPlayingRelatedAlbumsFailure(songId, error)));
+        dispatch(fetchNowPlayingRelatedAlbumsFailure(error)));
   };
 }
 
