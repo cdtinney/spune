@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProgressiveImage from 'react-progressive-image';
 
-export default function AlbumImage(props) {
+function AlbumImage(props) {
   const {
     src,
     placeholder,
@@ -50,3 +50,10 @@ AlbumImage.propTypes = {
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
 };
+
+AlbumImage.defaultProps = {
+  placeholder: undefined,
+  className: undefined,
+};
+
+export default AlbumImage;

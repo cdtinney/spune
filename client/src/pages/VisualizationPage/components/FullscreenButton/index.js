@@ -44,7 +44,12 @@ function FullscreenButton(props) {
 
 FullscreenButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  classes: PropTypes.object.isRequired,
+};
+
+FullscreenButton.defaultProps = {
+  className: undefined,
 };
 
 export default withStyles(styles)(FullscreenButton);
