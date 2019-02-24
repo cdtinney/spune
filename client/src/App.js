@@ -18,11 +18,11 @@ import './App.css';
 export class App extends Component {
   static propTypes = {
     userAuthenticated: PropTypes.bool.isRequired,
-    checkUserAuth: PropTypes.func.isRequired,
+    fetchAuthUser: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.checkUserAuth();
+    this.props.fetchAuthUser();
   }
 
   render() {
@@ -49,8 +49,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    checkUserAuth() {
-      dispatch(userActions.fetchAuthUserAndRedirect());
+    fetchAuthUser() {
+      dispatch(userActions.fetchAuthUser());
     },
   };
 }

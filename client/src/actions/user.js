@@ -68,15 +68,3 @@ export function fetchAuthUser() {
         dispatch(fetchAuthUserFailure(error)));
   };
 }
-
-export function fetchAuthUserAndRedirect() {
-  return function fetchAuthUserAndRedirectThunk(dispatch) {
-    dispatch(fetchAuthUser())
-      .then((action) => {
-        // Only redirect if a profile was actually loaded.
-        if (action.payload && action.payload.profile) {
-          dispatch(push('/visualization'));
-        }
-      });
-  };
-}
