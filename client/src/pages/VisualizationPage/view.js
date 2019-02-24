@@ -15,7 +15,7 @@ import TopAppBar from './components/TopAppBar';
 import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
-import NowPlayingAlbumGrid from './components/NowPlayingAlbumGrid';
+import AlbumGrid from './components/AlbumGrid';
 import FullscreenButton from './components/FullscreenButton';
 
 import './style.css';
@@ -132,7 +132,7 @@ export class VisualizationPage extends Component {
                 albumName={albumName}
                 albumImageUrl={albumImageUrl}
               />
-              <NowPlayingAlbumGrid />
+              <AlbumGrid />
             </div>
           }
         </Fullscreen>
