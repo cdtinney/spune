@@ -18,6 +18,11 @@
     "redux": "^4.0.1",
     "redux-thunk": "2.3.0"
   },
+  "devDependencies": {
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "react-router-test-context": "^0.1.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -28,9 +33,12 @@
   "browserslist": [
     "last 1 version"
   ],
-  "devDependencies": {
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.9.1",
-    "react-router-test-context": "^0.1.0"
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js}",
+      "!src/setupTests.js",
+      "!src/setupProxy.js",
+      "!(build|coverage)/**"
+    ]
   }
 }
