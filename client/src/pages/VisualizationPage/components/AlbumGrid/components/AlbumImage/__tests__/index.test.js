@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import AlbumImage from '../';
 
 describe('AlbumImage', () => {
-  it('renders', () => {
+  it('renders an image when given a valid src url', () => {
     mount(
       <AlbumImage
         src='https://via.placeholder.com/150'
