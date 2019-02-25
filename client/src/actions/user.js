@@ -51,7 +51,7 @@ export function loginUser() {
   // but `connected-react-router` seems to only allow for change the fragment.
   // An authorization fragment will not be routed/proxied to the API.
   // So, we can manually change the URL for now.
-  window.location.href = '/api/auth/spotify';
+  window.location.assign('api/auth/spotify');
 }
 
 export function fetchAuthUser() {
@@ -61,9 +61,9 @@ export function fetchAuthUser() {
     return axios.get('/api/auth')
       .then(response =>
         // The request can still be successful with no user returned.
-        // In this case, default to `null`.
+        // In this case, default to `null` (instead of `undefined`).
         dispatch(fetchAuthUserSuccess(response.data.user || null)))
       .catch(error =>
-        dispatch(fetchAuthUserFailure(error)));
+        dispatch(fetchAuthUserFailure(error.response.data)));
   };
 }

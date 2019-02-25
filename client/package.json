@@ -19,6 +19,7 @@
     "redux-thunk": "2.3.0"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.16.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "react-router-test-context": "^0.1.0"
