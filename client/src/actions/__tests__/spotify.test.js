@@ -93,4 +93,14 @@ describe('spotifyActions', () => {
       });
     });
   });
+
+  describe('sync actions', () => {
+    describe('clearNowPlayingRelatedAlbums', () => {
+      it('should create an action for clearing related albums', () => {
+        expect(spotifyActions.clearNowPlayingRelatedAlbums()).toEqual({
+          type: spotifyActions.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
+        });
+      });
+    });
+  });
 });
