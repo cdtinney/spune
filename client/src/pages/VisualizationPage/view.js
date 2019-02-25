@@ -44,7 +44,7 @@ const styles = {
 /**
  * Album art visualization page for the user's currently playing track.
  */
-export class VisualizationPage extends Component {
+export class VisualizationPageView extends Component {
   static propTypes = {
     user: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -102,7 +102,8 @@ export class VisualizationPage extends Component {
       },
     } = this.props;
 
-    const songPlaying = songArtistName && songTitle;
+    const songPlaying = songArtistName !== undefined
+      && songTitle !== undefined;
     
     return (
       <div className={classes.root}>
@@ -141,4 +142,4 @@ export class VisualizationPage extends Component {
   }
 }
 
-export default withStyles(styles)(VisualizationPage);
+export default withStyles(styles)(VisualizationPageView);
