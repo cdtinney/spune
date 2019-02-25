@@ -46,7 +46,7 @@ export function getMyInfo() {
   return function getMyInfoThunk(dispatch) {
     dispatch({ type: FETCH_USER_INFO_REQUEST });
 
-    spotifyApi.getMe().then((data) => {
+    return spotifyApi.getMe().then((data) => {
       const {
         id,
         display_name: displayName,
@@ -59,7 +59,7 @@ export function getMyInfo() {
           info: {
             id,
             displayName,
-            avatarImageUrl: images[0] ? images[0].url : '',
+            avatarImageUrl: images && images.length && images[0] ? images[0].url : '',
           },
         },
       });
