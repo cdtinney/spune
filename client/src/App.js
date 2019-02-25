@@ -55,26 +55,31 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const ConnectedApp = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
-
-function RoutedApp(props) {
+function ConnectedApp(props) {
   const {
     history,
+    userAuthenticated,
+    fetchAuthUser,
   } = props;
 
   return (
     <ConnectedRouter history={history}>
-      <ConnectedApp />
+      <App
+        userAuthenticated={userAuthenticated}
+        fetchAuthUser={fetchAuthUser}
+      />
     </ConnectedRouter>
   );
 
 }
 
-RoutedApp.propTypes = {
+ConnectedApp.propTypes = {
   history: PropTypes.object.isRequired,
+  userAuthenticated: PropTypes.bool.isRequired,
+  fetchAuthUser: PropTypes.func.isRequired,
 };
 
-export default RoutedApp;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ConnectedApp);
