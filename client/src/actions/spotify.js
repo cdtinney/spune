@@ -8,10 +8,10 @@ import SpotifyApi from '../api/SpotifyApi';
 // Selectors
 import * as nowPlayingSelectors from '../selectors/nowPlayingSelectors';
 
-const spotifyApi = new SpotifyApi();
-
 // Cyclic import to assist in mocking for unit tests
 import * as thisModule from './spotify';
+
+const spotifyApi = new SpotifyApi();
 
 ///////////
 // Types //
