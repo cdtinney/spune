@@ -10,6 +10,9 @@ import * as nowPlayingSelectors from '../selectors/nowPlayingSelectors';
 
 const spotifyApi = new SpotifyApi();
 
+// Cyclic import to assist in mocking for unit tests
+import * as thisModule from './spotify';
+
 ///////////
 // Types //
 ///////////
@@ -97,15 +100,15 @@ export function fetchNowPlayingRelatedAlbumsSuccess(songId, albumsByArtist) {
     },
   };
 }
-export function fetchNowPlayingRelatedAlbumsFailure(songId, error) {
+export function fetchNowPlayingRelatedAlbumsFailure(error) {
   return {
     type: FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
     payload: new Error(error),
-    errored: true,
+    error: true,
   };
 }
 
-function fetchNowPlayingRelatedAlbums() {
+export function fetchNowPlayingRelatedAlbums() {
   return function fetchNowPlayingRelatedAlbumsThunk(dispatch, getState) {
     const {
       songId,
@@ -113,7 +116,7 @@ function fetchNowPlayingRelatedAlbums() {
 
     dispatch(fetchNowPlayingRelatedAlbumsRequest(songId));
 
-    spotifyApi.getCurrentlyPlayingRelatedAlbums(songId)
+    return spotifyApi.getCurrentlyPlayingRelatedAlbums(songId)
       .then(data =>
         dispatch(fetchNowPlayingRelatedAlbumsSuccess(songId, data)))
       .catch(error =>
@@ -138,12 +141,12 @@ export function getNowPlayingInfo() {
 
     // Ignore if already fetching.
     if (loading) {
-      return;
+      return Promise.resolve(); // We should always return the same type (Promise).
     }
 
     dispatch({ type: FETCH_NOW_PLAYING_INFO_REQUEST });
 
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
+    return spotifyApi.getMyCurrentPlaybackState().then((data) => {
       const {
         item: {
           id: songId,
@@ -177,7 +180,7 @@ export function getNowPlayingInfo() {
       // If the album has changed, update the related
       // albums.
       if (currentAlbumId !== albumId) {
-        dispatch(fetchNowPlayingRelatedAlbums());
+        dispatch(thisModule.fetchNowPlayingRelatedAlbums());
       }
     }).catch((err) => {
       dispatch({
