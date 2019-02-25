@@ -1,18 +1,140 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import VisualizationPage from '../view';
+import { shallow } from 'enzyme';
+import { VisualizationPageView } from '../view';
+import FullscreenButton from '../components/FullscreenButton';
 
-// TODO Switch to shallow rendering as
-// child component is connected and fails this test
-it.skip('renders without crashing', () => {
-  const div = document.createElement('div');
-  const props = {
-    user: {
-      loading: false,      
-    },
-    nowPlaying: {},
-    onLoad: () => {},
-  };
-  ReactDOM.render(<VisualizationPage {...props} />, div);
-  ReactDOM.unmountComponentAtNode(div);
+describe('VisualizationPageView', () => {
+  it('renders not in fullscreen when no song is provided', () => {
+    shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{}}
+        ui={{
+          fullscreen: false,
+        }}
+        onLoad={() => {}}
+        setFullscreen={() => {}}
+      />,
+    );
+  });
+
+  it('renders not in fullscreen when a song is provided', () => {
+    shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{
+          songTitle: 'bar',
+          songArtistName: 'foo',
+        }}
+        ui={{
+          fullscreen: false,
+        }}
+        onLoad={() => {}}
+        setFullscreen={() => {}}
+      />,
+    );
+  });
+
+  it('renders in fullscreen when no song is provided', () => {
+    shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{}}
+        ui={{
+          fullscreen: true,
+        }}
+        onLoad={() => {}}
+        setFullscreen={() => {}}
+      />,
+    );
+  });
+
+  it('renders in fullscreen when a song is provided', () => {
+    shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{
+          songTitle: 'bar',
+          songArtistName: 'foo',
+        }}
+        ui={{
+          fullscreen: true,
+        }}
+        onLoad={() => {}}
+        setFullscreen={() => {}}
+      />,
+    );
+  });
+
+  it('calls setFullscreen when the full screen button is clicked', () => {
+    const setFullscreenMock = jest.fn();
+    const wrapper = shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{
+          songTitle: 'bar',
+          songArtistName: 'foo',
+        }}
+        ui={{
+          fullscreen: false,
+        }}
+        onLoad={() => {}}
+        setFullscreen={setFullscreenMock}
+      />,
+    );
+
+    wrapper.find(FullscreenButton).simulate('click');
+    expect(setFullscreenMock).toHaveBeenCalled();
+  });
+  
+  it('calls setFullscreen with true when no argument is provided', () => {
+    const setFullscreenMock = jest.fn();
+    const wrapper = shallow(
+      <VisualizationPageView
+        classes={{
+          root: {},
+        }}
+        user={{
+          loading: false,      
+        }}
+        nowPlaying={{
+          songTitle: 'bar',
+          songArtistName: 'foo',
+        }}
+        ui={{
+          fullscreen: false,
+        }}
+        onLoad={() => {}}
+        setFullscreen={setFullscreenMock}
+      />,
+    );
+
+    wrapper.instance().handleFullscreen();
+    expect(setFullscreenMock).toHaveBeenCalledWith(true);
+  });
 });
