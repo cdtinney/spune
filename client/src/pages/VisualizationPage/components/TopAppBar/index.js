@@ -48,8 +48,8 @@ function TopAppBar(props) {
 TopAppBar.propTypes = {
   title: PropTypes.string.isRequired,
   user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    imageUrl: PropTypes.string,
   }),
   classes: PropTypes.object.isRequired,
 };
