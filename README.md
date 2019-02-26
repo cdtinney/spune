@@ -2,7 +2,7 @@
 
 > Web-based Spotify display for your living room TV.
 
-[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=develop-tests)](https://coveralls.io/github/cdtinney/spune?branch=develop-tests)
+[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=develop)](https://coveralls.io/github/cdtinney/spune?branch=develop)
 
 ## Table of Contents
 
