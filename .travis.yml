@@ -7,7 +7,6 @@ install:
   - "npm run client:build"
 
 script:
-  - "npm run test"
   - "npm run client:coveralls"
 
 deploy:
