@@ -6,6 +6,10 @@ install:
   - "npm run install:all"
   - "npm run client:build"
 
+script:
+  - "npm run test"
+  - "npm run client:coveralls"
+
 deploy:
   provider: heroku
   api_key:

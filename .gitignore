@@ -68,3 +68,6 @@ client/build
 
 # MacOS thumbnails
 .DS_Store
+
+# Coveralls config (only required for local dev)
+.coveralls.yml

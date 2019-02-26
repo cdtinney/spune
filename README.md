@@ -2,11 +2,12 @@
 
 > Web-based Spotify display for your living room TV.
 
-[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune)
+[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=develop-tests)](https://coveralls.io/github/cdtinney/spune?branch=develop-tests)
 
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
 - [Developing](#developing)
   - [Requirements](#requirements)
   - [Installing](#installing)
@@ -15,6 +16,8 @@
   - [Running](#running)
   - [Stopping](#stopping)
   - [Testing](#testing)
+    - [Client](#client)
+    - [Coveralls](#coveralls)
   - [Building](#building)
   - [Deploying](#deploying)
   - [Debugging](#debugging)
@@ -23,6 +26,10 @@
     - [Development](#development)
     - [Production](#production)
 - [Thanks to..](#thanks-to)
+
+## Introduction
+
+Spune is a simple "Now Playing" visualizer for Spotify, inspired by desktop Zune software.
 
 ## Developing
 
@@ -123,10 +130,41 @@ $ kill -9 <SERVER_PID> <CLIENT_PID>
 
 ### Testing
 
-To run client tests (in watch mode):
+To run all tests with coverage:
+
+```
+$ npm run test
+```
+
+#### Client
+
+To run client tests in watch mode:
 
 ```
 $ npm run client:test
+```
+
+To run client tests with coverage:
+
+```
+$ npm run client:test:coverage
+```
+
+#### Coveralls
+
+In order to use Coveralls locally, you must configure `.coveralls.yml` in the root directory
+with `repo_token` set.
+
+For example:
+
+```
+repo_token: foobar1234
+```
+
+To run client tests with coverage and report to Coveralls (**this requires `env.COVERALLS_REPO_TOKEN`**):
+
+```
+$ npm run client:coveralls
 ```
 
 ### Building
