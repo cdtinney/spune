@@ -18,14 +18,14 @@ const configurePassport = require('./auth/configurePassport');
 
 const app = express();
 
-// Parse cookies BEFORE routing.
 app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({
   extended: false,
 }));
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
+  secret: process.env.SESSION_SECRET,
   cookie: {
     // Persist cookies for a year. By default, cookies
     // are not persistent and will be lost upon certain
