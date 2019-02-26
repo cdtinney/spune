@@ -13,6 +13,7 @@
     "install:all": "npm install && cd client && npm install",
     "server": "node server/server.js",
     "server:test": "jest --watch",
+    "server:test:coverage": "jest --collectCoverage",
     "server:watch": "nodemon server/server.js",
     "start": "npm run server",
     "test": "npm run client:test:coverage"

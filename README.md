@@ -145,6 +145,12 @@ To run server tests in watch mode:
 $ npm run server:test
 ```
 
+To run server tests with coverage:
+
+```
+$ npm run server:test:coverage
+```
+
 #### Client
 
 To run client tests in watch mode:
