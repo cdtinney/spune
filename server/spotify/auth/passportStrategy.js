@@ -3,14 +3,13 @@ const refresh = require('passport-oauth2-refresh');
 
 const User = require('../../database/schema/User');
 
-// Unpack environemnt variables needed for auth.
-const {
-  SPOT_CLIENT_ID,
-  SPOT_CLIENT_SECRET,
-  SPOT_REDIRECT_URI,
-} = process.env;
-
 module.exports = function passportStrategy() {
+  const {
+    SPOT_CLIENT_ID,
+    SPOT_CLIENT_SECRET,
+    SPOT_REDIRECT_URI,
+  } = process.env;
+
   const spotifyStrategy =
     new SpotifyStrategy({
       clientID: SPOT_CLIENT_ID,
