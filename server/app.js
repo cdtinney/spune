@@ -20,7 +20,6 @@ const configurePassport = require('./auth/configurePassport');
 const dbConnection = connectDatabase();
 
 const app = express();
-const port = process.env.PORT || 5000;
 
 // Parse cookies BEFORE routing.
 app.use(cookieParser());
@@ -60,5 +59,4 @@ if (process.env.NODE_ENV === 'production') {
 // Add API routes.
 app.use('/api', routes);
 
-// Start listening for requests.
-app.listen(port, () => console.log(`Listening on port ${port}`));
+module.exports = app;
