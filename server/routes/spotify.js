@@ -88,6 +88,12 @@ function mePlayer(req, res, next) {
   });
 };
 
+module.exports = function initRoutes(router) {
+  router.get('/spotify/me', me);
+  router.get('/spotify/me/player', mePlayer);
+  router.get('/spotify/currently-playing/related-albums', currentlyPlayingRelatedAlbums);  
+};
+
 module.exports.currentlyPlayingRelatedAlbums = currentlyPlayingRelatedAlbums;
 module.exports.me = me;
 module.exports.mePlayer = mePlayer;
