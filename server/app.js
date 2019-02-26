@@ -11,13 +11,10 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 
-const connectDatabase = require('./database/connectDatabase');
+const mongoDB = require('./database/mongoDB');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
-
-// Connect to our database 
-const dbConnection = connectDatabase();
 
 const app = express();
 
@@ -41,7 +38,7 @@ app.use(session({
   rolling: true,
   // Use MongoDB to store sessions.
   store: new MongoStore({
-    mongooseConnection: dbConnection,
+    mongooseConnection: mongoDB.mongoose.connection,
   }),
 }));
 

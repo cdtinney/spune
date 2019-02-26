@@ -16,6 +16,7 @@
   - [Running](#running)
   - [Stopping](#stopping)
   - [Testing](#testing)
+    - [Server](#server)
     - [Client](#client)
     - [Coveralls](#coveralls)
   - [Building](#building)
@@ -134,6 +135,14 @@ To run all tests with coverage:
 
 ```
 $ npm run test
+```
+
+#### Server
+
+To run server tests in watch mode:
+
+```
+$ npm run server:test
 ```
 
 #### Client
