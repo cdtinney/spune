@@ -102,8 +102,8 @@ export class VisualizationPageView extends Component {
       },
     } = this.props;
 
-    const songPlaying = songArtistName !== undefined
-      && songTitle !== undefined;
+    const songPlaying = songArtistName !== null
+      && songTitle !== null;
     
     return (
       <div className={classes.root}>
@@ -122,8 +122,10 @@ export class VisualizationPageView extends Component {
           <ColorOverlay />
           <TopAppBar
             title="spune"
-            userName={userName}
-            userImageUrl={userImageUrl}
+            user={userName && userImageUrl ? {
+              name: userName,
+              imageUrl: userImageUrl,
+            } : undefined}
           />
           { songPlaying &&
             <div className={classes.content}>
