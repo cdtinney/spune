@@ -97,3 +97,5 @@ module.exports = function initRoutes(router) {
 module.exports.currentlyPlayingRelatedAlbums = currentlyPlayingRelatedAlbums;
 module.exports.me = me;
 module.exports.mePlayer = mePlayer;
+
+module.exports.send401Response = send401Response;
