@@ -1,10 +1,12 @@
 const uniqueAlbums = require('../../utils/uniqueAlbums');
 
 module.exports = async function getArtistStudioAlbums(spotifyApi, artistId) {
-  return spotifyApi.getArtistAlbums(artistId, {
+  const data = await spotifyApi.getArtistAlbums(artistId, {
     include_groups: 'album', // Ignore compilations/appears on/etc.
-  }).then(data => ({
+  });
+
+  return {
     artistId,
     albums: uniqueAlbums(data.body.items),
-  }));
+  };
 };
