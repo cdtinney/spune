@@ -1,6 +1,12 @@
 const passport = require('passport');
 const paths = require('../config/paths');
 
+const SPOTIFY_PERMISSION_SCOPES = [
+  'user-read-private',
+  'user-read-email',
+  'user-read-playback-state',
+];
+
 function authUser(req, res) {
   if (!req.user) {
     res.json({});
@@ -15,12 +21,7 @@ function authUser(req, res) {
 
 function authSpotify() {
   passport.authenticate('spotify', {
-    scope: [
-      'user-read-private',
-      'user-read-email',
-      // Required for getting user's current playback info.
-      'user-read-playback-state',
-    ],
+    scope: SPOTIFY_PERMISSION_SCOPES,
   });
 }
 
