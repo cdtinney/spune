@@ -40,8 +40,8 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
       const spotifyApi = spotifyApiWithToken(accessToken);
       return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
     },
-    handleSuccess: res.send.bind(res),
-    handleAuthFailure: send401Response.bind(undefined, res),
+    handleSuccess: (result) => res.send(result),
+    handleAuthFailure: (error) => send401Response(res, error),
     handleError: next,
   });
 };
@@ -61,8 +61,8 @@ function me(req, res, next) {
     apiFn: (accessToken) => {
       return spotifyApiWithToken(accessToken).getMe();
     },
-    handleSuccess: response => res.send(response.body),
-    handleAuthFailure: send401Response.bind(undefined, res),
+    handleSuccess: (result) => res.send(result.body),
+    handleAuthFailure: (error) => send401Response(res, error),
     handleError: next,
   });
 };
@@ -82,8 +82,8 @@ function mePlayer(req, res, next) {
     apiFn: (accessToken) => {
       return spotifyApiWithToken(accessToken).getMyCurrentPlaybackState();
     },
-    handleSuccess: response => res.send(response.body),
-    handleAuthFailure: send401Response.bind(undefined, res),
+    handleSuccess: (result) => res.send(result.body),
+    handleAuthFailure: (error) => send401Response(res, error),
     handleError: next,
   });
 };

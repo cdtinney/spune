@@ -5,7 +5,7 @@ const paths = require('../../config/paths');
 jest.mock('passport');
 
 describe('/auth', () => {
-  describe('it initializes routes without errors when given a router', () => {
+  it('initializes routes without errors when given a router', () => {
     const mockRouter = {
       get: jest.fn(),
     };
