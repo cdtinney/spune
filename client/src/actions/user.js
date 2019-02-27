@@ -58,7 +58,7 @@ export function fetchAuthUser() {
   return function fetchAuthUserThunk(dispatch) {
     dispatch(fetchAuthUserReq());
 
-    return axios.get('/api/auth')
+    return axios.get('/api/auth/user')
       .then(response =>
         // The request can still be successful with no user returned.
         // In this case, default to `null` (instead of `undefined`).

@@ -13,7 +13,7 @@ describe('user actions', () => {
   describe('async actions', () => {
     describe('fetchAuthUser', () => {
       it('creates FETCH_AUTH_USER_SUCCESS when fetching user auth succeeds with a user', () => {
-        mockAxios.onGet('/api/auth').reply(200, {
+        mockAxios.onGet('/api/auth/user').reply(200, {
           user: 'foo',
         });
     
@@ -34,7 +34,7 @@ describe('user actions', () => {
       });
 
       it('creates FETCH_AUTH_USER_SUCCESS with a null profile when fetching user auth succeeds without a user', () => {
-        mockAxios.onGet('/api/auth').reply(200, {
+        mockAxios.onGet('/api/auth/user').reply(200, {
           user: undefined,
         });
     
@@ -55,7 +55,7 @@ describe('user actions', () => {
       });
 
       it('creates FETCH_AUTH_USER_FAILURE when fetching user auth fails', () => {
-        mockAxios.onGet('/api/auth').reply(400, 'foo');
+        mockAxios.onGet('/api/auth/user').reply(400, 'foo');
     
         const expectedActions = [{
           type: userActions.FETCH_AUTH_USER_REQ,
