@@ -6,4 +6,4 @@ module.exports.spotifyApiWithToken = function withToken(accessToken) {
   const spotifyApi = new Spotify();
   spotifyApi.setAccessToken(accessToken);
   return spotifyApi;
-}
+};
