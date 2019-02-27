@@ -13,7 +13,7 @@ const getCurrentlyPlayingRelatedAlbums =
 // Helpers  //
 //////////////
 
-function send401Response(response, error = {}) {
+function send401Response(response, error) {
   return response.status(401).json(error).end();
 }
 
