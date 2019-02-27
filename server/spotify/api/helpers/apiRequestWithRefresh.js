@@ -24,16 +24,17 @@ module.exports = async function apiRequestWithRefresh({
   let currAttempt = 1;
   async function makeRequest() {
     if (currAttempt === maxAttempts) {
-      return handleAuthFailure();
+      return handleAuthFailure('Retries exceeded');
     }
 
     currAttempt += 1;
 
-    const accessToken = getAccessToken(user);
     try {
+      const accessToken = getAccessToken(user);
       const apiResponse = await apiFn(accessToken);
       // Success!
-      return apiResponse;
+      handleSuccess(apiResponse);
+      return;
     } catch (error) {
       // Unauthorized -- try refreshing the token.
       if (error.statusCode === 401) {
