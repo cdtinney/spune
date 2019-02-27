@@ -53,5 +53,64 @@ describe('/spotify', () => {
 
       spotify.currentlyPlayingRelatedAlbums(request, mockResponse, mockNext);
     });
+
+    it('returns with 401 when given a user without an access token', (done) => {
+      const request = {
+        query: {
+          songId: 'foo',
+        },
+        user: {
+          accessToken: undefined,
+        },
+      };
+
+      const mockEnd = jest.fn();
+      const mockJson = jest.fn().mockImplementation(() => ({
+        end: mockEnd,
+      }));
+      const mockStatus = jest.fn().mockImplementation(() => ({
+        json: mockJson,
+      }));
+
+      mockResponse.status = mockStatus;
+
+      apiRequestWithRefresh.mockImplementation((args) => {
+        const {
+          handleAuthFailure,
+        } = args;
+
+        handleAuthFailure('foo');
+        expect(mockStatus).toHaveBeenCalledWith(401);
+        expect(mockJson).toHaveBeenCalledWith('foo');
+        done();
+      });
+
+      spotify.currentlyPlayingRelatedAlbums(request, mockResponse, null);
+    });
+
+    it('calls next() when non-auth errors are thrown', (done) => {
+      const request = {
+        query: {
+          songId: 'foo',
+        },
+        user: {
+          accessToken: undefined,
+        },
+      };
+
+      const mockNext = jest.fn();
+
+      apiRequestWithRefresh.mockImplementation((args) => {
+        const {
+          handleError,
+        } = args;
+
+        handleError('foo');
+        expect(mockNext).toHaveBeenCalledWith('foo');
+        done();
+      });
+
+      spotify.currentlyPlayingRelatedAlbums(request, mockResponse, mockNext);
+    });
   });
 });
