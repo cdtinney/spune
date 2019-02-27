@@ -12,7 +12,7 @@ const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 
 const mongoDB = require('./database/mongoDB');
-const routes = require('./routes/index');
+const initRoutes = require('./routes/index');
 const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
@@ -55,7 +55,7 @@ module.exports = function initApp() {
   }
 
   // Add API routes.
-  app.use('/api', routes);
+  app.use('/api', initRoutes());
 
   return app;
 }
