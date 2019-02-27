@@ -12,8 +12,8 @@ function validArtistIds(artistArrs) {
     .map(artist => artist.id);
 }
 
-module.exports = async function getRelatedArtists(spotifyApi, trackArtists) {
-  const relatedArtistsReqs = trackArtists
+module.exports = async function getRelatedArtists(spotifyApi, trackArtistIds) {
+  const relatedArtistsReqs = trackArtistIds
     .map(async (artistId) => {
       try {
         const response = await spotifyApi.getArtistRelatedArtists(artistId);
