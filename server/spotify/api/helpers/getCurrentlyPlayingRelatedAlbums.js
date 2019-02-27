@@ -17,9 +17,10 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
     },
   } = response.body;
 
-  // ID mismatch
+  // ID mismatch -- the song has likely changed (this is a race condition).
   if (songId !== id) {
-    throw new Error(`Song ID mismatch (currently playing = ${id}, query = ${songId})`);
+    return Promise.reject(
+      new Error(`Song ID mismatch (currently playing = ${id}, query = ${songId})`));
   }
 
   const combinedArtists = combineTrackArtists({
