@@ -13,7 +13,7 @@ function getAccessToken(user) {
   return user.spotifyAccessToken;
 }
 
-module.exports = function apiRequestWithRefresh({
+module.exports = async function apiRequestWithRefresh({
   user,
   apiFn,
   maxAttempts = 3,
@@ -22,7 +22,7 @@ module.exports = function apiRequestWithRefresh({
   handleError,
 }) {
   let currAttempt = 1;
-  function makeRequest() {
+  async function makeRequest() {
     if (currAttempt === maxAttempts) {
       return handleAuthFailure();
     }
@@ -30,26 +30,29 @@ module.exports = function apiRequestWithRefresh({
     currAttempt += 1;
 
     const accessToken = getAccessToken(user);
-    apiFn(accessToken)
+    try {
+      const apiResponse = await apiFn(accessToken);
       // Success!
-      .then(handleSuccess)
-      .catch((error) => {
-        // Unauthorized -- try refreshing the token.
-        if (error.statusCode === 401) {
-          refreshToken(user.spotifyRefreshToken)
-            .then((updatedUser) => {
-              // This will update the tokens available for the request.
-              user = updatedUser;
-              // Retry the request.
-              makeRequest();
-            })
-            // Failed to refresh token -- pass on.
-            .catch(handleError);
-          return;
+      return apiResponse;
+    } catch (error) {
+      // Unauthorized -- try refreshing the token.
+      if (error.statusCode === 401) {
+        try {
+          const updatedUser = await refreshToken(user.spotifyRefreshToken);
+          // This will update the tokens available for the request.
+          user = updatedUser;
+          // Retry the request.
+          makeRequest();
+        } catch(error) {
+          handleError(error);
         }
+        
+        // All done.
+        return;
+      }
 
-        handleError(error);
-      });
+      handleError(error);
+    }
   }
 
   makeRequest();
