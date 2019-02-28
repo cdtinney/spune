@@ -1,4 +1,4 @@
-![Spune Logo](client/src/assets/spune_logo_small.png)
+![Spune Logo](packages/client/src/assets/spune_logo_small.png)
 
 > Web-based Spotify display for your living room TV.
 
@@ -39,7 +39,7 @@ Inspiration for building this is as follows:
 
 1. Desktop Zune software is awesome to look at on your TV
 2. Desktop Spotify software sucks to look at on your TV
-1. Therefore, a client that shows what you're listening to in the style of Zune
+3. Therefore, a client that shows what you're listening to in the style of Zune
 must be awesome
 
 Here are some screenshots of the glory that is Zune:
