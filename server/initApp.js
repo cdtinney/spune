@@ -57,5 +57,8 @@ module.exports = function initApp() {
   // Add API routes.
   app.use('/api', routes);
 
+  // Connect to the DB.
+  mongoDB.connect();
+
   return app;
 }
