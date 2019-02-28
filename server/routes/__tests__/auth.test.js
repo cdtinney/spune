@@ -1,50 +1,31 @@
+const request = require('supertest');
 const passport = require('passport');
 const auth = require('../auth');
 const paths = require('../../config/paths');
+const initApp = require('../../initApp');
 
-jest.mock('passport');
+const app = initApp();
 
 describe('/auth', () => {
-  it('initializes routes without errors when given a router', () => {
-    const mockRouter = {
-      get: jest.fn(),
-    };
-
-    auth(mockRouter);
-  });
-
   describe('/auth/user', () => {
-    it('returns a serialized empty object when the request has no user', () => {
-      const mockRes = {
-        json: jest.fn(),
-      };
-
-      auth.authUser({}, mockRes);
-      expect(mockRes.json).toHaveBeenCalledWith({});
+    it('returns an empty object when the request has no user', async () => {
+      const response = await request(app).get('/api/auth/user');
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({});
     });
 
-    it('returns a serialized user object when the request has a user', () => {
-      const mockRes = {
-        json: jest.fn(),
-      };
-
-      auth.authUser({
-        user: {
-          name: 'foo',
-        },
-      }, mockRes);
-
-      expect(mockRes.json).toHaveBeenCalledWith({
-        user: {
-          name: 'foo',
-        },
-      });
+    it('returns a serialized user object when the request has a user', async () => {
+      // TODO
     });
   });
 
   describe('/auth/spotify', () => {
-    it('authenticates the spotify passport strategy with permission scopes', () => {
-      auth.authSpotify();
+    beforeAll(() => {
+      passport.authenticate = jest.fn();
+    });
+
+    it('authenticates the spotify passport strategy with permission scopes', async () => {
+      await request(app).get('/api/auth/spotify');
       expect(passport.authenticate).toHaveBeenCalledWith('spotify', {
         scope: [
         'user-read-private',
@@ -56,8 +37,8 @@ describe('/auth', () => {
   });
 
   describe('/auth/spotify/callback', () => {
-    it('authenticates the spotify passport strategy with callbacks for success and failure', () => {
-      auth.authSpotifyCallback();
+    it('authenticates the spotify passport strategy with callbacks for success and failure', async () => {
+      await request(app).get('/api/auth/spotify/callback');
       expect(passport.authenticate).toHaveBeenCalledWith('spotify', {
         successRedirect: paths.clientHome,
         failureRedirect: paths.clientLogin,

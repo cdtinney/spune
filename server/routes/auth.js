@@ -1,3 +1,4 @@
+const router = require('express').Router();
 const passport = require('passport');
 const paths = require('../config/paths');
 
@@ -7,7 +8,7 @@ const SPOTIFY_PERMISSION_SCOPES = [
   'user-read-playback-state',
 ];
 
-function authUser(req, res) {
+router.get('/user', function authUser(req, res) {
   if (!req.user) {
     res.json({});
     return;
@@ -17,29 +18,23 @@ function authUser(req, res) {
   res.json({
     user: req.user,
   });
-}
+});
 
-function authSpotify() {
+router.get('/spotify', function authSpotify(req, res) {
   passport.authenticate('spotify', {
     scope: SPOTIFY_PERMISSION_SCOPES,
   });
-}
+  res.end();
+});
 
-function authSpotifyCallback() {
+// This route will redirect to Spotify so nothing needs to be done other than
+// calling `passport.authenticate()`.
+router.get('/spotify/callback', function authSpotifyCallback(req, res) {
   passport.authenticate('spotify', {
     successRedirect: paths.clientHome,
     failureRedirect: paths.clientLogin,
   });
-}
+  res.end();
+});
 
-module.exports = function initRoutes(router) {
-  router.get('/auth/user', authUser);
-  // This route will redirect to Spotify so nothing needs to be done other than
-  // calling `passport.authenticate()`.
-  router.get('/auth/spotify', authSpotify, () => {});
-  router.get('/auth/spotify/callback', authSpotifyCallback);
-};
-
-module.exports.authUser = authUser;
-module.exports.authSpotify = authSpotify;
-module.exports.authSpotifyCallback = authSpotifyCallback;
+module.exports = router;

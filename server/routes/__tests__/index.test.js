@@ -1,9 +1,9 @@
 const express = require('express');
-const initRouter = require('../index');
+const router = require('../index');
 
-describe('initRouter', () => {
+describe('router', () => {
   it('returns an express router', () => {
-    expect(Object.getPrototypeOf(initRouter()))
+    expect(Object.getPrototypeOf(router))
       .toEqual(express.Router);
   })
 });

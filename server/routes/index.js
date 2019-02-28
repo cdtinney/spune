@@ -1,10 +1,8 @@
 const express = require('express');
-const initAuthRoutes = require('./auth');
-const initSpotifyRoutes = require('./spotify');
+const auth = require('./auth');
+const spotify = require('./spotify');
 
-module.exports = function initRoutes() {
-  const router = new express.Router();
-  initAuthRoutes(router);
-  initSpotifyRoutes(router);
-  return router;
-};
+const router = new express.Router();
+router.use('/auth', auth);
+router.use('/spotify', spotify);
+module.exports = router;
