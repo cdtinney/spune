@@ -1,298 +1,160 @@
-let spotifyApiWithToken =
-  require('../../spotify/api/SpotifyApi').spotifyApiWithToken;
+const request = require('supertest');
+const Router = require('express').Router;
+
 const apiRequestWithRefresh =
   require('../../spotify/api/helpers/apiRequestWithRefresh');
 const getCurrentlyPlayingRelatedAlbums =
   require('../../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 const spotify = require('../spotify');
+const initApp = require('../../initApp');
+
+const app = initApp();
 
 jest.mock('../../spotify/api/helpers/apiRequestWithRefresh');
 jest.mock('../../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
-const mockResponse = {
-  send: jest.fn(),
-};
 
 describe('/spotify', () => {
-  it('initializes routes without errors when given a router', () => {
-    const mockRouter = {
-      get: jest.fn(),
-    };
-
-    spotify(mockRouter);
+  it('exports an instance of Router', () => {
+    expect(Object.getPrototypeOf(spotify))
+      .toEqual(Router);
   });
 
   describe('/spotify/currently-playing/', () => {
     describe('/spotify/currently-playing/related-albums', () => {
-      it('requests with albums for a song when given a user and song ID', (done) => {
-        const request = {
-          query: {
-            songId: 'foo',
-          },
-          user: {
-            accessToken: 'bar'
-          },
-        };
-
-        mockResponse.send.mockImplementation(() => {
-          done();
-        });
-        const mockNext = jest.fn().mockImplementation(done);
-
-        apiRequestWithRefresh.mockImplementation((args) => {
-          const {
-            user,
-            apiFn,
-            handleSuccess,
-          } = args;
-
-          apiFn(user.accessToken);
-          expect(getCurrentlyPlayingRelatedAlbums.mock.calls[0][1]).toEqual(request.query.songId);
-
-          handleSuccess('success');
-          expect(mockResponse.send).toHaveBeenCalledWith('success');
-
-          done();
+      it('returns 200 when the underlying API request succeeds', async () => {
+        apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
+          handleSuccess({
+            message: 'success',
+          });
         });
 
-        spotify.currentlyPlayingRelatedAlbums(request, mockResponse, mockNext);
+        const response = await request(app)
+          .get('/api/spotify/currently-playing/related-albums');
+        expect(response.statusCode).toEqual(200);
+        expect(response.body).toEqual({
+          message: 'success',
+        });
       });
 
-      it('returns with 401 when given a user without an access token', (done) => {
-        const request = {
-          query: {
-            songId: 'foo',
-          },
-          user: {
-            accessToken: undefined,
-          },
-        };
-
-        const mockEnd = jest.fn();
-        const mockJson = jest.fn().mockImplementation(() => ({
-          end: mockEnd,
-        }));
-        const mockStatus = jest.fn().mockImplementation(() => ({
-          json: mockJson,
-        }));
-
-        mockResponse.status = mockStatus;
-
-        apiRequestWithRefresh.mockImplementation((args) => {
-          const {
-            handleAuthFailure,
-          } = args;
-
-          handleAuthFailure('foo');
-          expect(mockStatus).toHaveBeenCalledWith(401);
-          expect(mockJson).toHaveBeenCalledWith('foo');
-          done();
+      it('returns 401 when the underlying API request returns auth failure', async () => {
+        apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
+          handleAuthFailure({
+            error: 'foo',
+          });
         });
 
-        spotify.currentlyPlayingRelatedAlbums(request, mockResponse, null);
+        const response = await request(app)
+          .get('/api/spotify/currently-playing/related-albums');
+        expect(response.statusCode).toEqual(401);
+        expect(response.body).toEqual({
+          error: 'foo',
+        });
       });
 
-      it('calls next() when non-auth errors are thrown', (done) => {
-        const request = {
-          query: {
-            songId: 'foo',
-          },
-          user: {
-            accessToken: undefined,
-          },
-        };
-
-        const mockNext = jest.fn();
-
-        apiRequestWithRefresh.mockImplementation((args) => {
-          const {
-            handleError,
-          } = args;
-
-          handleError('foo');
-          expect(mockNext).toHaveBeenCalledWith('foo');
-          done();
+      it('returns 400 when non-auth errors are thrown by the underlying API request', async () => {
+        apiRequestWithRefresh.mockImplementation(({ handleError }) => {
+          handleError({
+            error: 'foo',
+          });
         });
 
-        spotify.currentlyPlayingRelatedAlbums(request, mockResponse, mockNext);
+        const response = await request(app)
+          .get('/api/spotify/currently-playing/related-albums');
+        expect(response.statusCode).toEqual(400);
+        expect(response.body).toEqual({
+          error: 'foo',
+        });
       });
     });
   });
 
   describe('/spotify/me', () => {
-    it('requests the users profile when given a user', (done) => {
-      const request = {
-        user: {
-          id: 'foo',
-          accessToken: 'bar',
-        },
-      };
-
-      mockResponse.send.mockImplementation(() => {
-        done();
-      });
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleSuccess,
-        } = args;
-
+    it('returns 200 when the API request is successful', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
         handleSuccess({
-          body: 'success',
+          body: {
+            profile: 'foo',
+          },
         });
-        expect(mockResponse.send).toHaveBeenCalledWith('success');
-
-        done();
       });
 
-      spotify.me(request, mockResponse, jest.fn().mockImplementation(done));
+      const response = await request(app).get('/api/spotify/me');
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        profile: 'foo',
+      });
     });
 
-    it('returns with 401 when given a user without an access token', (done) => {
-      const request = {
-        query: {
-          songId: 'foo',
-        },
-        user: {
-          accessToken: undefined,
-        },
-      };
-
-      const mockEnd = jest.fn();
-      const mockJson = jest.fn().mockImplementation(() => ({
-        end: mockEnd,
-      }));
-      const mockStatus = jest.fn().mockImplementation(() => ({
-        json: mockJson,
-      }));
-
-      mockResponse.status = mockStatus;
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleAuthFailure,
-        } = args;
-
-        handleAuthFailure('foo');
-        expect(mockStatus).toHaveBeenCalledWith(401);
-        expect(mockJson).toHaveBeenCalledWith('foo');
-        done();
+    it('returns 401 when given a user without an access token', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
+        handleAuthFailure({
+          error: 'foo',
+        });
       });
 
-      spotify.me(request, mockResponse, null);
+      const response = await request(app).get('/api/spotify/me')
+        .query({
+          songId: 'foo',
+        });
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toEqual({
+        error: 'foo',
+      });
     });
 
-    it('calls next() when non-auth errors are thrown', (done) => {
-      const request = {
-        query: {
-          songId: 'foo',
-        },
-        user: {
-          accessToken: undefined,
-        },
-      };
-
-      const mockNext = jest.fn();
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleError,
-        } = args;
-
-        handleError('foo');
-        expect(mockNext).toHaveBeenCalledWith('foo');
-        done();
+    it('returns 500 when non-auth errors are thrown', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleError }) => {
+        handleError({
+          error: 'foo',
+        });
       });
 
-      spotify.me(request, mockResponse, mockNext);
+      const response = await request(app).get('/api/spotify/me')
+        .query({
+          songId: 'foo',
+        });
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toEqual({
+        error: 'foo',
+      });
     });
   });
 
   describe('/spotify/me/player', () => {
-    it('requests the users player when given a user', (done) => {
-      const request = {
-        user: {
-          id: 'foo',
-          accessToken: 'bar',
-        },
-      };
-
-      mockResponse.send.mockImplementation(() => {
-        done();
-      });
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleSuccess,
-        } = args;
-
+    it('returns 200 when the underlying API request suceeds', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
         handleSuccess({
-          body: 'success',
+          body: {
+            message: 'success',
+          },
         });
-        expect(mockResponse.send).toHaveBeenCalledWith('success');
-
-        done();
       });
 
-      spotify.mePlayer(request, mockResponse, jest.fn().mockImplementation(done));
+      const response = await request(app).get('/api/spotify/me/player');
+      expect(response.statusCode).toEqual(200);
+      expect(response.body).toEqual({
+        message: 'success',
+      });
     });
 
-    it('returns with 401 when given a user without an access token', (done) => {
-      const request = {
-        query: {
-          songId: 'foo',
-        },
-        user: {
-          accessToken: undefined,
-        },
-      };
-
-      const mockEnd = jest.fn();
-      const mockJson = jest.fn().mockImplementation(() => ({
-        end: mockEnd,
-      }));
-      const mockStatus = jest.fn().mockImplementation(() => ({
-        json: mockJson,
-      }));
-
-      mockResponse.status = mockStatus;
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleAuthFailure,
-        } = args;
-
+    it('returns 401 when the underlying API returns auth failure', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
         handleAuthFailure('foo');
-        expect(mockStatus).toHaveBeenCalledWith(401);
-        expect(mockJson).toHaveBeenCalledWith('foo');
-        done();
       });
 
-      spotify.mePlayer(request, mockResponse, null);
+      const response = await request(app).get('/api/spotify/me/player');
+      expect(response.statusCode).toEqual(401);
+      expect(response.body).toEqual('foo');
     });
 
-    it('calls next() when non-auth errors are thrown', (done) => {
-      const request = {
-        query: {
-          songId: 'foo',
-        },
-        user: {
-          accessToken: undefined,
-        },
-      };
-
-      const mockNext = jest.fn();
-
-      apiRequestWithRefresh.mockImplementation((args) => {
-        const {
-          handleError,
-        } = args;
-
+    it('returns 400 when non-auth errors are thrown by the API request', async () => {
+      apiRequestWithRefresh.mockImplementation(({ handleError }) => {
         handleError('foo');
-        expect(mockNext).toHaveBeenCalledWith('foo');
-        done();
       });
-
-      spotify.mePlayer(request, mockResponse, mockNext);
+      
+      const response = await request(app).get('/api/spotify/me/player');
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toEqual('foo');
     });
   });
 });

@@ -1,4 +1,10 @@
 ////////////////////////////
+// External dependencies  //
+////////////////////////////
+
+const express = require('express');
+
+////////////////////////////
 // Internal dependencies  //
 ////////////////////////////
 
@@ -13,9 +19,15 @@ const getCurrentlyPlayingRelatedAlbums =
 // Helpers  //
 //////////////
 
-function send401Response(response, error) {
-  return response.status(401).json(error).end();
+function errorResponse(response, statusCode, errorObj) {
+  return response.status(statusCode).json(errorObj).end();
 }
+
+//////////////
+// Globals  //
+//////////////
+
+const router = express.Router();
 
 //////////////////////
 // Route functions  //
@@ -26,7 +38,7 @@ function send401Response(response, error) {
 *
 * Returns a list of albums related to the currently playing track.
 */
-function currentlyPlayingRelatedAlbums(req, res, next) {
+router.get('/currently-playing/related-albums', function currentlyPlayingRelatedAlbums(req, res) {
   const {
     query: {
       songId,
@@ -41,17 +53,17 @@ function currentlyPlayingRelatedAlbums(req, res, next) {
       return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
     },
     handleSuccess: (result) => res.send(result),
-    handleAuthFailure: (error) => send401Response(res, error),
-    handleError: next,
+    handleAuthFailure: (error) => errorResponse(res, 401, error),
+    handleError: (error) => errorResponse(res, 400, error),
   });
-};
+});
 
 /**
 * `/me` endpoint.
 *
 * Returns the user's profile; this is a simple proxy.
 */
-function me(req, res, next) {
+router.get('/me', function me(req, res, next) {
   let {
     user,
   } = req;
@@ -62,17 +74,17 @@ function me(req, res, next) {
       return spotifyApiWithToken(accessToken).getMe();
     },
     handleSuccess: (result) => res.send(result.body),
-    handleAuthFailure: (error) => send401Response(res, error),
-    handleError: next,
+    handleAuthFailure: (error) => errorResponse(res, 401, error),
+    handleError: (error) => errorResponse(res, 400, error),
   });
-};
+});
 
 /**
  * `/me/player` endpoint.
  *
  * Returns the current state of the player; this is a simple proxy.
  */
-function mePlayer(req, res, next) {
+router.get('/me/player', function mePlayer(req, res) {
   const {
     user,
   } = req;
@@ -83,19 +95,9 @@ function mePlayer(req, res, next) {
       return spotifyApiWithToken(accessToken).getMyCurrentPlaybackState();
     },
     handleSuccess: (result) => res.send(result.body),
-    handleAuthFailure: (error) => send401Response(res, error),
-    handleError: next,
+    handleAuthFailure: (error) => errorResponse(res, 401, error),
+    handleError: (error) => errorResponse(res, 400, error),
   });
-};
+});
 
-module.exports = function initRoutes(router) {
-  router.get('/spotify/me', me);
-  router.get('/spotify/me/player', mePlayer);
-  router.get('/spotify/currently-playing/related-albums', currentlyPlayingRelatedAlbums);  
-};
-
-module.exports.currentlyPlayingRelatedAlbums = currentlyPlayingRelatedAlbums;
-module.exports.me = me;
-module.exports.mePlayer = mePlayer;
-
-module.exports.send401Response = send401Response;
+module.exports = router;
