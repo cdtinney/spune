@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.16.0",
-    "coveralls": "^3.0.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "jest": "^23.6.0",
@@ -50,8 +49,7 @@
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "test": "react-scripts test --env=jsdom",
-    "test:coverage": "npm run test -- --coverage",
-    "test:coveralls": "npm run test:coverage && cat coverage/lcov.info | coveralls ",
+    "test:coverage": "npm run test -- --coverage --detectOpenHandles --forceExit || exit 0",
     "watch": "react-scripts start"
   },
   "browserslist": [

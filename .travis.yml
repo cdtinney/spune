@@ -2,13 +2,21 @@ language: node_js
 node_js:
   - "node"
 
+services:
+  # Back-end needs a DB
+  - mongodb
+
 install:
+  # Install monorepo deps
+  - "npm install"
+  # Install package deps
   - "npm run bootstrap"
+  # Build the static client
   - "npm run client:build"
 
 script:
-  - "npm run client:test:coveralls"
-  - "npm run server:test:coveralls"
+  # Run tests with coverage reporting
+  - "npm run test:coveralls"
 
 deploy:
   provider: heroku

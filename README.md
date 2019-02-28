@@ -2,7 +2,7 @@
 
 > Web-based Spotify display for your living room TV.
 
-[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=develop)](https://coveralls.io/github/cdtinney/spune?branch=develop)
+[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=develop)](https://coveralls.io/github/cdtinney/spune?branch=develop)[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 ## Table of Contents
 
@@ -75,8 +75,7 @@ $ cd spune
 Install dependencies for both server and client:
 
 ```
-$ npm install
-$ cd client && npm install
+$ npm run bootstrap
 ```
 
 ### Creating Spotify Client ID
@@ -87,7 +86,10 @@ $ cd client && npm install
 
 ### Setting Environment Variables
 
-Create an `.env` file in the root directory, and set these **required** variables (for a local environment):
+**Only the server needs environemnt variables set.**
+
+Create an `.env` file in the `packages/server` directory,
+and set these **required** variables (for a local environment):
 
 ```
 CLIENT_HOST = http://localhost:3000
@@ -183,8 +185,8 @@ $ npm run client:test:coverage
 
 #### Coveralls
 
-In order to use Coveralls locally, you must configure `.coveralls.yml` in the root directory
-with `repo_token` set.
+**In order to use Coveralls locally, you must configure `.coveralls.yml` in the root directory
+with `repo_token` set.**
 
 For example:
 
@@ -192,10 +194,10 @@ For example:
 repo_token: foobar1234
 ```
 
-To run client tests with coverage and report to Coveralls (**this requires `env.COVERALLS_REPO_TOKEN`**):
+To run all tests and and report to Coveralls:
 
 ```
-$ npm run client:coveralls
+$ npm run test:coveralls
 ```
 
 ### Building
