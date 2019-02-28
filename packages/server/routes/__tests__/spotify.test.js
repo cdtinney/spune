@@ -3,15 +3,12 @@ const Router = require('express').Router;
 
 const apiRequestWithRefresh =
   require('../../spotify/api/helpers/apiRequestWithRefresh');
-const getCurrentlyPlayingRelatedAlbums =
-  require('../../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 const spotify = require('../spotify');
 const initApp = require('../../initApp');
 
-const app = initApp();
-
 jest.mock('../../spotify/api/helpers/apiRequestWithRefresh');
-jest.mock('../../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
+
+const app = initApp();
 
 describe('/spotify', () => {
   it('exports an instance of Router', () => {
@@ -28,12 +25,18 @@ describe('/spotify', () => {
           });
         });
 
-        const response = await request(app)
-          .get('/api/spotify/currently-playing/related-albums');
-        expect(response.statusCode).toEqual(200);
-        expect(response.body).toEqual({
-          message: 'success',
-        });
+        try {
+          const response = await request(app)
+            .get('/api/spotify/currently-playing/related-albums');
+
+          expect(response.statusCode).toEqual(200);
+          expect(response.body).toEqual({
+            message: 'success',
+          });
+
+        } catch (error) {
+          console.error(error);
+        }
       });
 
       it('returns 401 when the underlying API request returns auth failure', async () => {
@@ -43,12 +46,17 @@ describe('/spotify', () => {
           });
         });
 
-        const response = await request(app)
-          .get('/api/spotify/currently-playing/related-albums');
-        expect(response.statusCode).toEqual(401);
-        expect(response.body).toEqual({
-          error: 'foo',
-        });
+        try {
+          const response = await request(app)
+            .get('/api/spotify/currently-playing/related-albums');
+
+          expect(response.statusCode).toEqual(401);
+          expect(response.body).toEqual({
+            error: 'foo',
+          });
+        } catch (error) {
+          console.error(error);
+        }
       });
 
       it('returns 400 when non-auth errors are thrown by the underlying API request', async () => {
@@ -60,6 +68,7 @@ describe('/spotify', () => {
 
         const response = await request(app)
           .get('/api/spotify/currently-playing/related-albums');
+
         expect(response.statusCode).toEqual(400);
         expect(response.body).toEqual({
           error: 'foo',
@@ -79,6 +88,7 @@ describe('/spotify', () => {
       });
 
       const response = await request(app).get('/api/spotify/me');
+
       expect(response.statusCode).toEqual(200);
       expect(response.body).toEqual({
         profile: 'foo',
@@ -96,6 +106,7 @@ describe('/spotify', () => {
         .query({
           songId: 'foo',
         });
+
       expect(response.statusCode).toEqual(401);
       expect(response.body).toEqual({
         error: 'foo',
@@ -151,7 +162,7 @@ describe('/spotify', () => {
       apiRequestWithRefresh.mockImplementation(({ handleError }) => {
         handleError('foo');
       });
-      
+
       const response = await request(app).get('/api/spotify/me/player');
       expect(response.statusCode).toEqual(400);
       expect(response.body).toEqual('foo');
