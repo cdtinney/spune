@@ -28,7 +28,8 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
     albumArtists,
   });
 
-  const relatedArtistIds = await getRelatedArtists(spotifyApi, combinedArtists);
+  const relatedArtistIds =
+    await getRelatedArtists(spotifyApi, combinedArtists);
   const requests = [...relatedArtistIds]
     .map(artistId => getArtistStudioAlbums(spotifyApi, artistId));
   return Promise.all(requests);
