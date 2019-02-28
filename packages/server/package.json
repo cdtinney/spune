@@ -16,7 +16,7 @@
   "scripts": {
     "start": "node server/app.js",
     "test": "jest --watch",
-    "test:coverage": "jest --collectCoverage",
+    "test:coverage": "jest --coverage --detectOpenHandles --forceExit || exit 0",
     "watch": "nodemon server/app.js"
   },
   "dependencies": {
@@ -35,7 +35,6 @@
     "spotify-web-api-node": "^4.0.0"
   },
   "devDependencies": {
-    "coveralls": "^3.0.3",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2"
   }

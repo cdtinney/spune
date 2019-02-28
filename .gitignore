@@ -69,5 +69,8 @@ client/build
 # MacOS thumbnails
 .DS_Store
 
-# Coveralls config (only required for local dev)
-.coveralls.yml
+# Coveralls config files (only required for local dev)
+**/.coveralls.yml
+
+# Merged coverage
+coverage_merged.info

@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== 'production') {
   // Load .env file for variables in dev environments only.
-  // The file must be in the root directory.
+  // The file must be in the server package directory.
   require('dotenv').load();
 }
 
