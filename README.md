@@ -220,7 +220,7 @@ To deploy to Herokua via Travis CI:
         * `SPOT_CLIENT_ID`
         * `SPOT_CLIENT_SECRET`
         * `SESSION_SECRET`
-1. Create a new Heroku application (e.g. `spune`)
+1. Create a new Heroku application (e.g. `spune-fork-foo`)
 1. [Set config variables](#setting-environment-variables) for the Heroku application
       * Required variables:
         * `SPOT_REDIRECT_URI`
