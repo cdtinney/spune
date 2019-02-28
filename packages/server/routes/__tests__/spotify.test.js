@@ -35,6 +35,7 @@ describe('/spotify', () => {
           });
 
         } catch (error) {
+          console.log(response);
           console.error(error);
         }
       });
@@ -55,6 +56,7 @@ describe('/spotify', () => {
             error: 'foo',
           });
         } catch (error) {
+          console.log(response);
           console.error(error);
         }
       });
