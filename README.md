@@ -215,23 +215,23 @@ To deploy to Herokua via Travis CI:
 
 1. Connect the repository on Travis CI as a new project
 1. [Set environment variables](#setting-environment-variables) for Travis CI in order for tests to run
-1. Create a new Heroku application (e.g. `spune`)
       * Required variables:
         * `SPOT_REDIRECT_URI`
         * `SPOT_CLIENT_ID`
         * `SPOT_CLIENT_SECRET`
         * `SESSION_SECRET`
-2. [Set config variables](#setting-environment-variables) for the Heroku application
+1. Create a new Heroku application (e.g. `spune`)
+1. [Set config variables](#setting-environment-variables) for the Heroku application
       * Required variables:
         * `SPOT_REDIRECT_URI`
         * `SPOT_CLIENT_ID`
         * `SPOT_CLIENT_SECRET`
         * `SESSION_SECRET`
         * `MONGODB_URI` - this should be set automatically after the next step
-3. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
+1. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
       * This will automatically set the `MONGODB_URI` environment variable
-4. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
-5. Update the Heroku app name
+1. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
+1. Update the Heroku app name
 
 All commits to `master` should be deployed (by default).
 
