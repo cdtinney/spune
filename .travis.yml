@@ -3,11 +3,12 @@ node_js:
   - "node"
 
 install:
-  - "npm run install:all"
+  - "npm run bootstrap"
   - "npm run client:build"
 
 script:
-  - "npm run client:coveralls"
+  - "npm run client:test:coveralls"
+  - "npm run server:test:coveralls"
 
 deploy:
   provider: heroku

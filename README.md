@@ -109,28 +109,28 @@ MONGODB_URI = <MONGODB_URI> # Defaults to mongodb://localhost:27107:spune
 
 First, **ensure that the MongoDB daemon is running** (e.g. run `mongod` in a separate terminal).
 
-To run both client and server:
+To run both client and server, in watch mode:
 
 ```
-$ npm run dev
+$ npm run watch
 ```
 
-To run client only:
+To run the client in watch mode:
 
 ```
-$ npm run client
+$ npm run client:watch
 ```
 
-To run server only (watch mode):
+To run the server in watch mode:
 
 ```
 $ npm run server:watch
 ```
 
-To run server only (non-watch mode):
+To run server in non-watch mode:
 
 ```
-$ npm run server
+$ npm run server:start
 ```
 
 ### Stopping
