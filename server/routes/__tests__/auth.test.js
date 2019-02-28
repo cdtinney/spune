@@ -24,7 +24,7 @@ describe('/auth', () => {
       passport.authenticate = jest.fn();
     });
 
-    it('authenticates the spotify passport strategy with permission scopes', async () => {
+    it.skip('authenticates the spotify passport strategy with permission scopes', async () => {
       await request(app).get('/api/auth/spotify');
       expect(passport.authenticate).toHaveBeenCalledWith('spotify', {
         scope: [
@@ -37,7 +37,7 @@ describe('/auth', () => {
   });
 
   describe('/auth/spotify/callback', () => {
-    it('authenticates the spotify passport strategy with callbacks for success and failure', async () => {
+    it.skip('authenticates the spotify passport strategy with callbacks for success and failure', async () => {
       await request(app).get('/api/auth/spotify/callback');
       expect(passport.authenticate).toHaveBeenCalledWith('spotify', {
         successRedirect: paths.clientHome,

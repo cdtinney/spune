@@ -20,21 +20,19 @@ router.get('/user', function authUser(req, res) {
   });
 });
 
-router.get('/spotify', function authSpotify(req, res) {
+router.get('/spotify', function authSpotify() {
   passport.authenticate('spotify', {
     scope: SPOTIFY_PERMISSION_SCOPES,
   });
-  res.end();
 });
 
 // This route will redirect to Spotify so nothing needs to be done other than
 // calling `passport.authenticate()`.
-router.get('/spotify/callback', function authSpotifyCallback(req, res) {
+router.get('/spotify/callback', function authSpotifyCallback() {
   passport.authenticate('spotify', {
     successRedirect: paths.clientHome,
     failureRedirect: paths.clientLogin,
   });
-  res.end();
 });
 
 module.exports = router;
