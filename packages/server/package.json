@@ -1,0 +1,42 @@
+{
+  "name": "spune-server",
+  "version": "0.1.0",
+  "description": "Spune back-end.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdtinney/spune.git"
+  },
+  "author": "Colin Tinney",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cdtinney/spune/issues"
+  },
+  "homepage": "https://github.com/cdtinney/spune#readme",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "test": "jest --watch",
+    "test:coverage": "jest --collectCoverage",
+    "watch": "nodemon server/app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.3",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "jest": "^23.6.0",
+    "mongoose": "^5.4.13",
+    "mongoose-findorcreate": "^3.0.0",
+    "passport": "^0.4.0",
+    "passport-oauth2-refresh": "^1.1.0",
+    "passport-spotify": "^1.0.1",
+    "spotify-web-api-node": "^4.0.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.3",
+    "nodemon": "^1.18.10",
+    "supertest": "^3.4.2"
+  }
+}
