@@ -15,7 +15,6 @@ describe('/auth', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual({});
       } catch (error) {
-        console.log(response);
         console.error(error);
       }
     });
@@ -43,7 +42,6 @@ describe('/auth', () => {
           ],
         });
       } catch (error) {
-        console.log(response);
         console.error(error);
       }
     });
