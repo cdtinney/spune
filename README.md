@@ -19,6 +19,7 @@
   - [Testing](#testing)
     - [Server](#server)
     - [Client](#client)
+    - [Linting](#linting)
     - [Coveralls](#coveralls)
   - [Building](#building)
   - [Deploying](#deploying)
@@ -179,6 +180,14 @@ To run client tests with coverage:
 
 ```
 $ npm run client:test:coverage
+```
+
+#### Linting
+
+To lint the server:
+
+```
+$ npm run server:lint
 ```
 
 #### Coveralls

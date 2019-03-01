@@ -14,6 +14,7 @@
     "client:watch": "cd packages/client && npm run watch",
     "coverage:report": "./node_modules/.bin/lcov-result-merger '**/coverage/lcov.info' | coveralls",
     "heroku-postbuild": "cd packages/client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "server:lint": "cd packages/server && npm run lint",
     "server:start": "cd packages/server && npm run start",
     "server:test": "cd packages/server && npm run test",
     "server:test:coverage": "cd packages/server && npm run test:coverage",
