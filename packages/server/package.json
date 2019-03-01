@@ -14,10 +14,12 @@
   "homepage": "https://github.com/cdtinney/spune#readme",
   "main": "app.js",
   "scripts": {
-    "start": "node server/app.js",
+    "start": "node app.js",
+    "lint": "eslint src; exit 0",
+    "lint:fix": "eslint --fix src; exit 0",
     "test": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
-    "watch": "nodemon server/app.js"
+    "watch": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -35,6 +37,9 @@
     "spotify-web-api-node": "^4.0.0"
   },
   "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "nodemon": "^1.18.10",
     "supertest": "^3.4.2"
   }
