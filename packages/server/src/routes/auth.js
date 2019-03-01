@@ -30,11 +30,12 @@ router.get(
   },
 );
 
-router.get('/spotify/callback', () => {
+router.get(
+  '/spotify/callback',
   passport.authenticate('spotify', {
     successRedirect: paths.clientHome,
     failureRedirect: paths.clientLogin,
-  });
-});
+  }),
+);
 
 module.exports = router;
