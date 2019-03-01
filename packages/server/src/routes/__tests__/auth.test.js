@@ -1,5 +1,6 @@
 const request = require('supertest');
 const passport = require('passport');
+const logger = require('../../logger');
 const paths = require('../../config/paths');
 const initApp = require('../../initApp');
 
@@ -15,7 +16,7 @@ describe('/auth', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body).toEqual({});
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     });
 
@@ -42,7 +43,7 @@ describe('/auth', () => {
           ],
         });
       } catch (error) {
-        console.error(error);
+        logger.error(error);
       }
     });
   });

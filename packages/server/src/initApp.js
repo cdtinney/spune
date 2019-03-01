@@ -12,6 +12,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 
+const logger = require('./logger');
+
 const mongoDB = require('./database/mongoDB');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
@@ -64,7 +66,7 @@ module.exports = function initApp() {
       return next(err);
     }
 
-    console.error(err);
+    logger.error(err);
     return res.status(500).send({
       name: err.name,
       message: err.message,
