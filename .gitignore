@@ -63,8 +63,8 @@ typings/
 # VS Code workspace
 *.code-workspace
 
-# Client builds
-client/build
+# Package build folders
+packages/**/build
 
 # MacOS thumbnails
 .DS_Store
