@@ -1,13 +1,14 @@
-// //////////////////////////
-// External dependencies  //
-// //////////////////////////
+// /////////////////////////
+// External dependencies //
+// /////////////////////////
 
 const refresh = require('passport-oauth2-refresh');
 
-// //////////////////////////
-// Internal dependencies  //
-// //////////////////////////
+// /////////////////////////
+// Internal dependencies //
+// /////////////////////////
 
+const logger = require('../../logger');
 const User = require('../../database/schema/User');
 
 function findAndUpdateUser({
@@ -31,8 +32,7 @@ function findAndUpdateUser({
       return;
     }
 
-    console.log(`Refreshed access token for user '${user.spotifyId}'`);
-    console.trace();
+    logger.info(`Refreshed access token for user '${user.spotifyId}'`);
     resolve(user);
   });
 }

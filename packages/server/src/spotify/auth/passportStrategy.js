@@ -9,6 +9,7 @@ const refresh = require('passport-oauth2-refresh');
 // Internal dependencies  //
 // //////////////////////////
 
+const logger = require('../../logger');
 const User = require('../../database/schema/User');
 
 function verify(accessToken, refreshToken, expiresIn, profile, done) {
@@ -24,7 +25,7 @@ function verify(accessToken, refreshToken, expiresIn, profile, done) {
     displayName: profile.displayName,
     photos: profile.photos,
   }, (err, user) => {
-    console.log(`Created user ${user.spotifyId}.`);
+    logger.info(`Created user ${user.spotifyId}.`);
     return done(err, user);
   });
 }

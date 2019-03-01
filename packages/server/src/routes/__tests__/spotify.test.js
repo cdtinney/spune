@@ -1,6 +1,8 @@
 const request = require('supertest');
 const { Router } = require('express');
 
+const logger = require('../../logger');
+
 const apiRequestWithRefresh = require('../../spotify/api/helpers/apiRequestWithRefresh');
 const spotify = require('../spotify');
 const initApp = require('../../initApp');
@@ -33,7 +35,7 @@ describe('/spotify', () => {
             message: 'success',
           });
         } catch (error) {
-          console.error(error);
+          logger.error(error);
         }
       });
 
@@ -53,7 +55,7 @@ describe('/spotify', () => {
             error: 'foo',
           });
         } catch (error) {
-          console.error(error);
+          logger.error(error);
         }
       });
 

@@ -1,3 +1,4 @@
+const logger = require('../../../logger');
 const uniqueSet = require('../../../utils/uniqueSet');
 
 function validArtistIds(artistArrs) {
@@ -17,7 +18,7 @@ module.exports = async function getRelatedArtists(spotifyApi, trackArtistIds) {
         const response = await spotifyApi.getArtistRelatedArtists(artistId);
         return response.body.artists;
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         throw error;
       }
     });
