@@ -51,7 +51,7 @@ module.exports = function initApp() {
   app.use(passport.session());
   configurePassport(passport);
 
-  
+
   // Add HTML routes (for production).
   if (process.env.NODE_ENV === 'production') {
     logger.info(`Serving static files from ${paths.clientBuildFolder}`);
