@@ -11,7 +11,6 @@
   "bugs": {
     "url": "https://github.com/cdtinney/spune/issues"
   },
-  "homepage": "https://github.com/cdtinney/spune#readme",
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",
