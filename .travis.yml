@@ -2,6 +2,9 @@ language: node_js
 node_js:
   - "node"
 
+# Caches node_modules for 3 minutes
+cache: npm
+
 services:
   # Back-end needs a DB
   - mongodb
