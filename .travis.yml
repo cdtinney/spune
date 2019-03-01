@@ -18,6 +18,8 @@ install:
   - "npm run client:build"
 
 script:
+  # Lint the server
+  - "npm run server:lint"
   # Run tests with coverage reporting
   - "npm run test:coveralls"
 
