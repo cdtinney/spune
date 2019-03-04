@@ -35,7 +35,8 @@ export const relatedAlbumImagesSelector =
       return flatten(
         Object.values(byArtist),
         entry => entry.albums,
-      ).map(album => ({
+      ).map((album, index)=> ({
+        id: `${album.id}_${index}`,
         title: album.name,
         images: {
           fullSize: album.images[0].url,
