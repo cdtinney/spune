@@ -73,7 +73,6 @@ export default function spotify(state = initialState, action = {}) {
           request: {
             $merge: {
               loading: true,
-              lastUpdated: null,
               error: null,
               errored: false,
             },
@@ -81,9 +80,9 @@ export default function spotify(state = initialState, action = {}) {
         },
       });
     }
-    
+
     case FETCH_USER_INFO_SUCCESS: {
-      const { 
+      const {
         payload: {
           info,
         },
@@ -131,14 +130,13 @@ export default function spotify(state = initialState, action = {}) {
         },
       });
     }
-    
+
     case FETCH_NOW_PLAYING_INFO_REQUEST: {
       return update(state, {
         nowPlaying: {
           request: {
             $merge: {
               loading: true,
-              lastUpdated: null,
               error: null,
               errored: false,
             },
@@ -146,7 +144,7 @@ export default function spotify(state = initialState, action = {}) {
         },
       });
     }
-    
+
     case FETCH_NOW_PLAYING_INFO_SUCCESS: {
       const {
         payload: {
@@ -172,7 +170,7 @@ export default function spotify(state = initialState, action = {}) {
     }
 
     case FETCH_NOW_PLAYING_INFO_FAILURE: {
-      const { 
+      const {
         payload: error,
       } = action;
 
@@ -214,7 +212,6 @@ export default function spotify(state = initialState, action = {}) {
             request: {
               $merge: {
                 loading: true,
-                lastUpdated: null,
                 error: null,
                 errored: false,
               },
