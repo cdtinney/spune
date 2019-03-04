@@ -1,7 +1,12 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
+import { Provider } from "react-redux";
+import configureStore from 'redux-mock-store';
 import { VisualizationPageView } from '../view';
 import FullscreenButton from '../components/FullscreenButton';
+
+const middlewares = [];
+const mockStore = configureStore(middlewares);
 
 describe('VisualizationPageView', () => {
   it('renders not in fullscreen when no song is provided', () => {
@@ -11,7 +16,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{}}
         ui={{
@@ -30,7 +35,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{
           songTitle: 'bar',
@@ -52,7 +57,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{}}
         ui={{
@@ -71,7 +76,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{
           songTitle: 'bar',
@@ -94,7 +99,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{
           songTitle: 'bar',
@@ -111,7 +116,7 @@ describe('VisualizationPageView', () => {
     wrapper.find(FullscreenButton).simulate('click');
     expect(setFullscreenMock).toHaveBeenCalled();
   });
-  
+
   it('calls setFullscreen with true when no argument is provided', () => {
     const setFullscreenMock = jest.fn();
     const wrapper = shallow(
@@ -120,7 +125,7 @@ describe('VisualizationPageView', () => {
           root: {},
         }}
         user={{
-          loading: false,      
+          loading: false,
         }}
         nowPlaying={{
           songTitle: 'bar',
@@ -136,5 +141,43 @@ describe('VisualizationPageView', () => {
 
     wrapper.instance().handleFullscreen();
     expect(setFullscreenMock).toHaveBeenCalledWith(true);
+  });
+
+  it('displays a message indicating no song is playing when no song is provided', () => {
+    const store = mockStore({
+      spotify: {
+        nowPlaying: {
+          request: {
+            // Required for NowPlayingPoller (a connected child node)
+            loading: false,
+            interval: 3000,
+          },
+        },
+      },
+    });
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <VisualizationPageView
+          classes={{
+            root: {},
+          }}
+          user={{
+            loading: false,
+          }}
+          nowPlaying={{
+            songTitle: null,
+            songArtistName: null,
+          }}
+          ui={{
+            fullscreen: false,
+          }}
+          onLoad={() => {}}
+          setFullscreen={() => {}}
+        />
+      </Provider>
+    );
+
+    expect(wrapper.text()).toContain('No song playing');
   });
 });
