@@ -18,7 +18,10 @@ import calculateColumnSize from './utils/calculateColumnSize';
 import memoizeWithCache from './utils/memoizeWithCache';
 
 const memoizedCalculateColumnSize =
-  memoizeWithCache(calculateColumnSize);
+  memoizeWithCache(
+    args => args.windowWidth,
+    calculateColumnSize,
+  );
 
 function mapStateToProps(state, ownProps) {
   const {
@@ -35,13 +38,12 @@ function mapStateToProps(state, ownProps) {
     windowHeight,
   } = ownProps;
 
-  const columnSize = memoizedCalculateColumnSize(
-    windowWidth, {
-      windowWidth,
-      minSize,
-      maxSize,
-    },
-  );
+  const columnSize = memoizedCalculateColumnSize({
+    windowWidth,
+    minSize,
+    maxSize,
+  });
+
   const numCols = Math.ceil(windowWidth / columnSize);
   const numRows = Math.ceil(windowHeight / columnSize);
 
