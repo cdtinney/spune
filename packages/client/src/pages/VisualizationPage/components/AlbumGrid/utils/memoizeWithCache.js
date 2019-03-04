@@ -1,18 +1,19 @@
 export default function memoizeWithCache(
+  paramSelector,
   resultFunc,
 ) {
-  const cache = {};
+  const paramResultCache = {};
 
   return function memoizeWithCacheInner() {
-    const inputVal = arguments[0];
-    const cacheVal = cache[inputVal];
+    const param = paramSelector(...arguments);
+    const cacheVal = paramResultCache[param];
     if (cacheVal) {
       return cacheVal;
     }
 
     const result =
-      resultFunc.apply(null, [...arguments].slice(1));
-    cache[inputVal] = result;
+      resultFunc.apply(null, arguments);
+    paramResultCache[param] = result;
     return result;
   };
 }
