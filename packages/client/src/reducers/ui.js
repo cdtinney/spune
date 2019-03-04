@@ -6,6 +6,11 @@ import * as uiActions from '../actions/ui';
 
 const initialState = {
   fullscreen: false,
+  albums: {
+    maxPerRow: 26,
+    minSize: 80,
+    maxSize: 151,
+  },
 };
 
 export default function ui(state = initialState, action = {}) {
