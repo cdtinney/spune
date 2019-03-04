@@ -8,16 +8,13 @@ import { withStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
-const CARD_HEIGHT = 151;
-
 const styles = (theme) => ({
   card: {
     display: 'flex',
-    justifyContent: 'center',
+    flexWrap: 'wrap',
     alignItems: 'center',
     marginLeft: '30px',
     marginBottom: '30px',
-    height: CARD_HEIGHT,
     // Position in bottom-left.
     alignSelf: 'flex-start',
     marginTop: 'auto',
@@ -31,10 +28,12 @@ const styles = (theme) => ({
   },
   content: {
     flex: '1 0 auto',
+    padding: '16px 0',
   },
   cover: {
-    width: CARD_HEIGHT,
-    height: CARD_HEIGHT,
+    width: 151,
+    height: 151,
+    marginRight: 16,
     border: '2px solid rgba(252, 252, 252, 0.95)',
     transition: 'background-image 1s ease-in-out 0s',
     boxShadow: theme.shadows[6],
@@ -68,7 +67,7 @@ export function SongCard(props) {
     albumImageUrl,
     classes,
   } = props;
-  
+
   return (
     <div className={classes.card}>
       <CardMedia
