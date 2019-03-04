@@ -4,6 +4,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 
@@ -37,7 +38,14 @@ const styles = {
     position: 'absolute',
     right: '30px',
     bottom: '30px',
-    zIndex: '100',
+    zIndex: 100,
+  },
+  nothingPlayingContainer: {
+    display: 'flex',
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
   },
 };
 
@@ -104,15 +112,13 @@ export class VisualizationPageView extends Component {
 
     const songPlaying = songArtistName !== null
       && songTitle !== null;
-    
+
     return (
       <div className={classes.root}>
-        { songPlaying &&
-          <FullscreenButton
-            onClick={() => this.handleFullscreen(true)}
-            className={classes.fullscreenButton}
-          />
-        }
+        <FullscreenButton
+          onClick={() => this.handleFullscreen(true)}
+          className={classes.fullscreenButton}
+        />
         <Fullscreen
           enabled={fullscreen}
           onChange={this.handleFullscreen}
@@ -127,17 +133,27 @@ export class VisualizationPageView extends Component {
               imageUrl: userImageUrl,
             } : undefined}
           />
-          { songPlaying &&
-            <div className={classes.content}>
-              <SongCard
-                artistName={songArtistName}
-                songTitle={songTitle}
-                albumName={albumName}
-                albumImageUrl={albumImageUrl}
-              />
-              <AlbumGrid />
-            </div>
-          }
+          <div className={classes.content}>
+            { songPlaying
+              ? (
+                <React.Fragment>
+                  <SongCard
+                  artistName={songArtistName}
+                    songTitle={songTitle}
+                    albumName={albumName}
+                    albumImageUrl={albumImageUrl}
+                  />
+                  <AlbumGrid />
+                </React.Fragment>
+              ) : (
+                <div className={classes.nothingPlayingContainer}>
+                  <Typography>
+                    {'No song playing. Play something.'}
+                  </Typography>
+                </div>
+              )
+            }
+          </div>
         </Fullscreen>
       </div>
     );
