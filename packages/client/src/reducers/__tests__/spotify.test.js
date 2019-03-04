@@ -204,7 +204,6 @@ describe('spotify reducer', () => {
             ...initialState.nowPlaying.relatedAlbums,
             request: {
               loading: true,
-              lastUpdated: null,
               error: null,
               errored: false,
             },

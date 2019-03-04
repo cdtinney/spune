@@ -2,8 +2,9 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Provider } from "react-redux";
 import configureStore from 'redux-mock-store';
-import { VisualizationPageView } from '../view';
+import LoadingScreen from '../../../components/LoadingScreen';
 import FullscreenButton from '../components/FullscreenButton';
+import { VisualizationPageView } from '../view';
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
@@ -20,6 +21,7 @@ describe('VisualizationPageView', () => {
         }}
         nowPlaying={{}}
         ui={{
+          loading: false,
           fullscreen: false,
         }}
         onLoad={() => {}}
@@ -42,6 +44,7 @@ describe('VisualizationPageView', () => {
           songArtistName: 'foo',
         }}
         ui={{
+          loading: false,
           fullscreen: false,
         }}
         onLoad={() => {}}
@@ -61,6 +64,7 @@ describe('VisualizationPageView', () => {
         }}
         nowPlaying={{}}
         ui={{
+          loading: false,
           fullscreen: true,
         }}
         onLoad={() => {}}
@@ -81,8 +85,10 @@ describe('VisualizationPageView', () => {
         nowPlaying={{
           songTitle: 'bar',
           songArtistName: 'foo',
+          initialRequestFinished: true,
         }}
         ui={{
+          loading: false,
           fullscreen: true,
         }}
         onLoad={() => {}}
@@ -104,8 +110,10 @@ describe('VisualizationPageView', () => {
         nowPlaying={{
           songTitle: 'bar',
           songArtistName: 'foo',
+          initialRequestFinished: true,
         }}
         ui={{
+          loading: false,
           fullscreen: false,
         }}
         onLoad={() => {}}
@@ -132,6 +140,7 @@ describe('VisualizationPageView', () => {
           songArtistName: 'foo',
         }}
         ui={{
+          loading: false,
           fullscreen: false,
         }}
         onLoad={() => {}}
@@ -143,7 +152,7 @@ describe('VisualizationPageView', () => {
     expect(setFullscreenMock).toHaveBeenCalledWith(true);
   });
 
-  it('displays a message indicating no song is playing when no song is provided', () => {
+  it('displays a message indicating no song is playing when no song is provided and the request has finished', () => {
     const store = mockStore({
       spotify: {
         nowPlaying: {
@@ -170,6 +179,7 @@ describe('VisualizationPageView', () => {
             songArtistName: null,
           }}
           ui={{
+            loading: false,
             fullscreen: false,
           }}
           onLoad={() => {}}
@@ -179,5 +189,84 @@ describe('VisualizationPageView', () => {
     );
 
     expect(wrapper.text()).toContain('No song playing');
+  });
+
+  it('does not display a message indicating no song is playing when no song is provided and the request has not finished', () => {
+    const store = mockStore({
+      spotify: {
+        nowPlaying: {
+          request: {
+            // Required for NowPlayingPoller (a connected child node)
+            loading: true,
+            interval: 3000,
+          },
+        },
+      },
+    });
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <VisualizationPageView
+          classes={{
+            root: {},
+          }}
+          user={{
+            loading: false,
+          }}
+          nowPlaying={{
+            songTitle: null,
+            songArtistName: null,
+          }}
+          ui={{
+            loading: true,
+            fullscreen: false,
+          }}
+          onLoad={() => {}}
+          setFullscreen={() => {}}
+        />
+      </Provider>
+    );
+
+    expect(wrapper.text()).not.toContain('No song playing');
+  });
+
+  it('displays a loading screen when the page is still loading', () => {
+    const store = mockStore({
+      spotify: {
+        nowPlaying: {
+          request: {
+            // Required for NowPlayingPoller (a connected child node)
+            loading: true,
+            interval: 3000,
+          },
+        },
+      },
+    });
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <VisualizationPageView
+          classes={{
+            root: {},
+          }}
+          user={{
+            loading: false,
+          }}
+          nowPlaying={{
+            songTitle: null,
+            songArtistName: null,
+          }}
+          ui={{
+            loading: true,
+            fullscreen: false,
+          }}
+          onLoad={() => {}}
+          setFullscreen={() => {}}
+        />
+      </Provider>
+    );
+
+    expect(wrapper.find(LoadingScreen)).toHaveLength(1);
+
   });
 });
