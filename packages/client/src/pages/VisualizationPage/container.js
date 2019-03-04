@@ -20,7 +20,7 @@ function mapStateToProps(state) {
     spotify: {
       user: {
         request: {
-          loading: userLoading,
+          errored: userErrored,
           lastUpdated: userLastUpdated,
         },
         info: {
@@ -35,6 +35,10 @@ function mapStateToProps(state) {
           albumName,
           albumImageUrl,
         },
+        request: {
+          lastUpdated: nowPlayingLastUpdated,
+          errored: nowPlayingErrored,
+        },
       },
     },
     ui: {
@@ -42,12 +46,17 @@ function mapStateToProps(state) {
     },
   } = state;
 
+  const userReqPendingOrInitialLoad =
+    userLastUpdated === null && !userErrored;
+  const nowPlayingReqPendingOrInitialLoad =
+    nowPlayingLastUpdated === null && !nowPlayingErrored;
+
   return {
     user: {
-      loading: userLoading || userLastUpdated === null || false,
+      loading: userReqPendingOrInitialLoad,
       // There is an open bug with the API where some users don't have
       // the `display_name` property set. Fallback to ID.
-      // 
+      //
       // More info: https://github.com/spotify/web-api/issues/371
       userName: displayName || id,
       userImageUrl: avatarImageUrl,
@@ -60,6 +69,7 @@ function mapStateToProps(state) {
       albumImageUrl,
     },
     ui: {
+      loading: userReqPendingOrInitialLoad || nowPlayingReqPendingOrInitialLoad,
       fullscreen,
     },
   };

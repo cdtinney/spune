@@ -12,6 +12,7 @@ import Fullscreen from 'react-full-screen';
 // Internal dependencies //
 ///////////////////////////
 
+import LoadingScreen from '../../components/LoadingScreen';
 import TopAppBar from './components/TopAppBar';
 import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
@@ -47,6 +48,11 @@ const styles = {
     alignItems: 'center',
     zIndex: 100,
   },
+  loadingScreen: {
+    zIndex: 100,
+    alignSelf: 'center',
+    margin: 'auto 0',
+  },
 };
 
 /**
@@ -66,6 +72,7 @@ export class VisualizationPageView extends Component {
       albumImageUrl: PropTypes.string,
     }).isRequired,
     ui: PropTypes.shape({
+      loading: PropTypes.bool.isRequired,
       fullscreen: PropTypes.bool.isRequired,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
@@ -106,12 +113,10 @@ export class VisualizationPageView extends Component {
         albumImageUrl,
       },
       ui: {
+        loading,
         fullscreen,
       },
     } = this.props;
-
-    const songPlaying = songArtistName !== null
-      && songTitle !== null;
 
     return (
       <div className={classes.root}>
@@ -124,34 +129,50 @@ export class VisualizationPageView extends Component {
           onChange={this.handleFullscreen}
           className={classes.fullscreenContainer}
         >
-          <NowPlayingPoller />
           <ColorOverlay />
-          <TopAppBar
-            title="spune"
-            user={userName && userImageUrl ? {
-              name: userName,
-              imageUrl: userImageUrl,
-            } : undefined}
-          />
+          { !loading &&
+            <React.Fragment>
+              <NowPlayingPoller />
+              <TopAppBar
+                title="spune"
+                user={userName && userImageUrl ? {
+                  name: userName,
+                  imageUrl: userImageUrl,
+                } : undefined}
+              />
+            </React.Fragment>
+          }
           <div className={classes.content}>
-            { songPlaying
-              ? (
-                <React.Fragment>
-                  <SongCard
-                  artistName={songArtistName}
-                    songTitle={songTitle}
-                    albumName={albumName}
-                    albumImageUrl={albumImageUrl}
-                  />
-                  <AlbumGrid />
-                </React.Fragment>
-              ) : (
-                <div className={classes.nothingPlayingContainer}>
-                  <Typography>
-                    {'No song playing. Play something.'}
-                  </Typography>
-                </div>
-              )
+            {
+              (() => {
+                if (loading) {
+                  return <LoadingScreen className={classes.loadingScreen} />;
+                }
+
+                const songPlaying = songArtistName !== null
+                  && songTitle !== null;
+                if (!songPlaying) {
+                  return (
+                    <div className={classes.nothingPlayingContainer}>
+                      <Typography>
+                        {'No song playing. Play something.'}
+                      </Typography>
+                    </div>
+                  );
+                }
+
+                return (
+                  <React.Fragment>
+                    <SongCard
+                    artistName={songArtistName}
+                      songTitle={songTitle}
+                      albumName={albumName}
+                      albumImageUrl={albumImageUrl}
+                    />
+                    <AlbumGrid />
+                  </React.Fragment>
+                );
+              })()
             }
           </div>
         </Fullscreen>

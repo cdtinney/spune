@@ -5,14 +5,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
-import SpotifyLoginButton from './components/SpotifyLoginButton';
 
 ////////////////////////////
 // Internal dependencies  //
 ////////////////////////////
 
+import LoadingScreen from '../../components/LoadingScreen';
+import SpotifyLoginButton from './components/SpotifyLoginButton';
 import SpuneLogo from '../../assets/spune_logo.png';
 
 const styles = {
@@ -47,7 +47,7 @@ function HomePageView(props) {
 
   function Content() {
     if (displayLoadingIcon) {
-      return <CircularProgress color="primary" />;
+      return <LoadingScreen />;
     }
 
     if (displayName) {
@@ -73,7 +73,7 @@ function HomePageView(props) {
     // This shouldn't happen...
     return null;
   }
-  
+
   return (
     <div className={classes.root}>
       <img

@@ -2,6 +2,7 @@
 // Internal dependencies  //
 // //////////////////////////
 
+const logger = require('../../../logger');
 const refreshToken = require('../../auth/refreshToken');
 
 function getAccessToken(user) {
@@ -30,13 +31,15 @@ module.exports = async function apiRequestWithRefresh({
 
     currAttempt += 1;
 
+    let accessToken;
     try {
-      const accessToken = getAccessToken(currUser);
+      accessToken = getAccessToken(currUser);
       const apiResponse = await apiFn(accessToken);
       // Success!
       handleSuccess(apiResponse);
       return;
     } catch (error) {
+      logger.info(`API request error (token = ${accessToken})`);
       // Unauthorized -- try refreshing the token.
       if (error.statusCode === 401) {
         try {
