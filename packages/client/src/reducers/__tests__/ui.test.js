@@ -3,6 +3,11 @@ import uiReducer from '../ui';
 
 const initialState = {
   fullscreen: false,
+  albums: {
+    maxPerRow: 26,
+    minSize: 80,
+    maxSize: 151,
+  },
 };
 
 describe('ui reducer', () => {
