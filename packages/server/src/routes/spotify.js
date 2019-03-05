@@ -8,16 +8,19 @@ const express = require('express');
 // Internal dependencies  //
 // //////////////////////////
 
-const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
-const apiRequestWithRefresh = require('../spotify/api/helpers/apiRequestWithRefresh');
-const getCurrentlyPlayingRelatedAlbums = require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
+const { spotifyApiWithToken } =
+  require('../spotify/api/SpotifyApi');
+const apiRequestWithRefresh =
+  require('../spotify/api/helpers/apiRequestWithRefresh');
+const getCurrentlyPlayingRelatedAlbums =
+  require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
 // ////////////
 // Helpers  //
 // ////////////
 
-function errorResponse(response, statusCode, errorObj) {
-  return response.status(statusCode).json(errorObj).end();
+function errorResponse(response, statusCode, errorMessage) {
+  return response.status(statusCode).json(errorMessage).end();
 }
 
 // ////////////
@@ -35,7 +38,7 @@ const router = express.Router();
 *
 * Returns a list of albums related to the currently playing track.
 */
-router.get('/currently-playing/related-albums', (req, res) => {
+router.get('/currently-playing/related-albums', async (req, res) => {
   const {
     query: {
       songId,
@@ -43,16 +46,17 @@ router.get('/currently-playing/related-albums', (req, res) => {
     user,
   } = req;
 
-  apiRequestWithRefresh({
-    user,
-    apiFn: (accessToken) => {
-      const spotifyApi = spotifyApiWithToken(accessToken);
-      return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
-    },
-    handleSuccess: result => res.send(result),
-    handleAuthFailure: error => errorResponse(res, 401, error),
-    handleError: error => errorResponse(res, 400, error),
-  });
+  try {
+    res.send(await apiRequestWithRefresh({
+      user,
+      apiFn: (accessToken) => {
+        const spotifyApi = spotifyApiWithToken(accessToken);
+        return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
+      },
+    }));
+  } catch (error) {
+    errorResponse(res, 400, error.message);
+  }
 });
 
 /**
@@ -60,18 +64,20 @@ router.get('/currently-playing/related-albums', (req, res) => {
 *
 * Returns the user's profile; this is a simple proxy.
 */
-router.get('/me', (req, res) => {
+router.get('/me', async (req, res) => {
   const {
     user,
   } = req;
 
-  apiRequestWithRefresh({
-    user,
-    apiFn: accessToken => spotifyApiWithToken(accessToken).getMe(),
-    handleSuccess: result => res.send(result.body),
-    handleAuthFailure: error => errorResponse(res, 401, error),
-    handleError: error => errorResponse(res, 400, error),
-  });
+  try {
+    const result = await apiRequestWithRefresh({
+      user,
+      apiFn: accessToken => spotifyApiWithToken(accessToken).getMe(),
+    });
+    res.send(result.body);
+  } catch (error) {
+    errorResponse(res, 400, error.message);
+  }
 });
 
 /**
@@ -79,18 +85,21 @@ router.get('/me', (req, res) => {
  *
  * Returns the current state of the player; this is a simple proxy.
  */
-router.get('/me/player', (req, res) => {
+router.get('/me/player', async (req, res) => {
   const {
     user,
   } = req;
 
-  apiRequestWithRefresh({
-    user,
-    apiFn: accessToken => spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
-    handleSuccess: result => res.send(result.body),
-    handleAuthFailure: error => errorResponse(res, 401, error),
-    handleError: error => errorResponse(res, 400, error),
-  });
+  try {
+    const result = await apiRequestWithRefresh({
+      user,
+      apiFn: accessToken =>
+        spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
+    });
+    res.send(result.body)
+  } catch (error) {
+    errorResponse(res, 400, error.message);
+  }
 });
 
 module.exports = router;

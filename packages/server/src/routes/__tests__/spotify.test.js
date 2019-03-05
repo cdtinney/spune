@@ -20,10 +20,10 @@ describe('/spotify', () => {
   describe('/spotify/currently-playing/', () => {
     describe('/spotify/currently-playing/related-albums', () => {
       it('returns 200 when the underlying API request succeeds', async () => {
-        apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
-          handleSuccess({
+        apiRequestWithRefresh.mockImplementation(() => {
+          return {
             message: 'success',
-          });
+          };
         });
 
         try {
@@ -39,52 +39,28 @@ describe('/spotify', () => {
         }
       });
 
-      it('returns 401 when the underlying API request returns auth failure', async () => {
-        apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
-          handleAuthFailure({
-            error: 'foo',
-          });
-        });
-
-        try {
-          const response = await request(app)
-            .get('/api/spotify/currently-playing/related-albums');
-
-          expect(response.statusCode).toEqual(401);
-          expect(response.body).toEqual({
-            error: 'foo',
-          });
-        } catch (error) {
-          logger.error(error);
-        }
-      });
-
-      it('returns 400 when non-auth errors are thrown by the underlying API request', async () => {
-        apiRequestWithRefresh.mockImplementation(({ handleError }) => {
-          handleError({
-            error: 'foo',
-          });
+      it('returns 400 when errors are thrown by the underlying API request', async () => {
+        apiRequestWithRefresh.mockImplementation(() => {
+          throw new Error('foo');
         });
 
         const response = await request(app)
           .get('/api/spotify/currently-playing/related-albums');
 
         expect(response.statusCode).toEqual(400);
-        expect(response.body).toEqual({
-          error: 'foo',
-        });
+        expect(response.body).toEqual('foo');
       });
     });
   });
 
   describe('/spotify/me', () => {
     it('returns 200 when the API request is successful', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
-        handleSuccess({
+      apiRequestWithRefresh.mockImplementation(() => {
+        return {
           body: {
             profile: 'foo',
           },
-        });
+        };
       });
 
       const response = await request(app).get('/api/spotify/me');
@@ -95,29 +71,9 @@ describe('/spotify', () => {
       });
     });
 
-    it('returns 401 when given a user without an access token', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
-        handleAuthFailure({
-          error: 'foo',
-        });
-      });
-
-      const response = await request(app).get('/api/spotify/me')
-        .query({
-          songId: 'foo',
-        });
-
-      expect(response.statusCode).toEqual(401);
-      expect(response.body).toEqual({
-        error: 'foo',
-      });
-    });
-
     it('returns 500 when non-auth errors are thrown', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleError }) => {
-        handleError({
-          error: 'foo',
-        });
+      apiRequestWithRefresh.mockImplementation(() => {
+        throw new Error('foo');
       });
 
       const response = await request(app).get('/api/spotify/me')
@@ -125,20 +81,18 @@ describe('/spotify', () => {
           songId: 'foo',
         });
       expect(response.statusCode).toEqual(400);
-      expect(response.body).toEqual({
-        error: 'foo',
-      });
+      expect(response.body).toEqual('foo');
     });
   });
 
   describe('/spotify/me/player', () => {
     it('returns 200 when the underlying API request suceeds', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleSuccess }) => {
-        handleSuccess({
+      apiRequestWithRefresh.mockImplementation(() => {
+        return {
           body: {
             message: 'success',
           },
-        });
+        };
       });
 
       const response = await request(app).get('/api/spotify/me/player');
@@ -148,19 +102,9 @@ describe('/spotify', () => {
       });
     });
 
-    it('returns 401 when the underlying API returns auth failure', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleAuthFailure }) => {
-        handleAuthFailure('foo');
-      });
-
-      const response = await request(app).get('/api/spotify/me/player');
-      expect(response.statusCode).toEqual(401);
-      expect(response.body).toEqual('foo');
-    });
-
     it('returns 400 when non-auth errors are thrown by the API request', async () => {
-      apiRequestWithRefresh.mockImplementation(({ handleError }) => {
-        handleError('foo');
+      apiRequestWithRefresh.mockImplementation(() => {
+        throw new Error('foo');
       });
 
       const response = await request(app).get('/api/spotify/me/player');
