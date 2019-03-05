@@ -5,59 +5,30 @@
 const logger = require('../../../logger');
 const refreshToken = require('../../auth/refreshToken');
 
-function getAccessToken(user) {
+function tokenExpired(tokenUpdated, expiresIn) {
+  return tokenUpdated + expiresIn <= Date.now();
+}
+
+async function getValidAccessToken(user) {
   if (!user || !user.spotifyAccessToken) {
     throw new Error('Request has no user or access token');
   }
 
-  return user.spotifyAccessToken;
+  const requiresRefresh =
+    tokenExpired(user.tokenUpdated, user.expiresIn);
+  if (!requiresRefresh) {
+      return user.spotifyAccessToken;
+  }
+
+  logger.info('Refreshing user access token...');
+  const updatedUser = await refreshToken(user.spotifyRefreshToken);
+  logger.info('Sucessfully updated user access token.');
+  return updatedUser.spotifyAccessToken;
 }
 
 module.exports = async function apiRequestWithRefresh({
   user,
   apiFn,
-  maxAttempts = 3,
-  handleSuccess,
-  handleAuthFailure,
-  handleError,
 }) {
-  let currUser = user;
-
-  let currAttempt = 1;
-  async function makeRequest() {
-    if (currAttempt === maxAttempts) {
-      handleAuthFailure('Retries exceeded');
-    }
-
-    currAttempt += 1;
-
-    let accessToken;
-    try {
-      accessToken = getAccessToken(currUser);
-      const apiResponse = await apiFn(accessToken);
-      // Success!
-      handleSuccess(apiResponse);
-      return;
-    } catch (error) {
-      logger.info(`API request error (token = ${accessToken})`);
-      // Unauthorized -- try refreshing the token.
-      if (error.statusCode === 401) {
-        try {
-          const updatedUser = await refreshToken(user.spotifyRefreshToken);
-          // This will update the tokens available for the request.
-          currUser = updatedUser;
-          // Retry the request.
-          makeRequest();
-        } catch (refreshErr) {
-          handleError(refreshErr);
-        }
-
-        return;
-      }
-
-      handleError(error);
-    }
-  }
-
-  makeRequest();
+  return await apiFn(await getValidAccessToken(user));
 };
