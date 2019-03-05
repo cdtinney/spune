@@ -8,12 +8,19 @@ describe('AlbumGrid', () => {
     mount(
       <AlbumGrid
         albums={[{
-          title: 'foo',
-          images: {
-            fullSize: 'fooFullSize',
-            thumbnail: 'fooThumbnail',
-          },
+          rowId: 1,
+          rowAlbums: [{
+            id: 'fooId_0',
+            title: 'foo',
+            images: {
+              fullSize: 'fooFullSize',
+              thumbnail: 'fooThumbnail',
+            },
+          }],
         }]}
+        ui={{
+          albumSize: 80,
+        }}
       />
     );
   });
@@ -22,6 +29,9 @@ describe('AlbumGrid', () => {
     const wrapper =  mount(
       <AlbumGrid
         albums={[]}
+        ui={{
+          albumSize: 80,
+        }}
       />
     );
 

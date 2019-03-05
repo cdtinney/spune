@@ -64,6 +64,7 @@ describe('nowPlayingSelectors', () => {
         expect(selectorFunc({
           fooArtist: {
             albums: [{
+              id: 'fooId',
               name: 'foo',
               images: [{
                 url: 'fooFullSize',
@@ -74,6 +75,7 @@ describe('nowPlayingSelectors', () => {
           },
           barArtist: {
             albums: [{
+              id: 'barId',
               name: 'bar',
               images: [{
                 url: 'barFullSize',
@@ -83,12 +85,14 @@ describe('nowPlayingSelectors', () => {
             }],
           },
         })).toEqual([{
+          id: 'fooId_0',
           title: 'foo',
           images: {
             fullSize: 'fooFullSize',
             thumbnail: 'fooThumbnail',
           },
         }, {
+          id: 'barId_1',
           title: 'bar',
           images: {
             fullSize: 'barFullSize',
