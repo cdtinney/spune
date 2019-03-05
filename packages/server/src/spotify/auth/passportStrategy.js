@@ -21,7 +21,7 @@ function verify(accessToken, refreshToken, expiresIn, profile, done) {
     spotifyAccessToken: accessToken,
     spotifyRefreshToken: refreshToken,
     tokenUpdated: Date.now(),
-    expiresIn,
+    expiresIn: expiresIn * 1000, // Convert to MS.
     displayName: profile.displayName,
     photos: profile.photos,
   }, (err, user) => {
