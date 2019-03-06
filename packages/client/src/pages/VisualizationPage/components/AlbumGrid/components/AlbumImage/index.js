@@ -17,28 +17,22 @@ function AlbumImage(props) {
   } = props;
 
   return (
-    <ProgressiveImage
-      src={src}
-      placeholder={placeholder}
-      alt={alt}
-      className={className}
-      style={{
-        height: `${height}px`,
-        width: `${width}px`,
+    <ProgressiveImage src={src}>
+      {(src, loading) => {
+        return (
+          <img
+            src={src}
+            alt={alt}
+            placeholder={placeholder}
+            className={className}
+            style={{
+              height: `${height}px`,
+              width: `${width}px`,
+              opacity: loading ? 0.25 : 1,
+            }}
+          />
+        );
       }}
-    >
-      {(src, loading) => (
-        <img
-          src={src}
-          alt={alt}
-          className={className}
-          style={{
-            height: `${height}px`,
-            width: `${width}px`,
-            opacity: loading ? 0.25 : 1,
-          }}
-        />
-      )}
     </ProgressiveImage>
   );
 }

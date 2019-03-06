@@ -24,6 +24,7 @@ const styles = theme => ({
   },
   albumRow: {
     display: 'flex',
+    flexDirection: 'row',
   },
   album: {
 
