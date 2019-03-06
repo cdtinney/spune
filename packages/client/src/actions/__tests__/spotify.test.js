@@ -14,7 +14,7 @@ const mockStore = configureStore(middlewares);
 
 describe('spotifyActions', () => {
   describe('async actions', () => {
-    describe('getMyInfo', () => {
+    describe('getMyInfo()', () => {
       beforeEach(() => {
         SpotifyApi.mockClear();
         mockGetMe.mockClear();
@@ -95,7 +95,7 @@ describe('spotifyActions', () => {
       });
     });
 
-    describe('fetchNowPlayingRelatedAlbums', () => {
+    describe('fetchNowPlayingRelatedAlbums()', () => {
       beforeEach(() => {
         SpotifyApi.mockClear();
         mockGetCurrentlyPlayingRelatedAlbums.mockClear();
@@ -165,7 +165,7 @@ describe('spotifyActions', () => {
       });
     });
 
-    describe('getNowPlayingInfo', () => {
+    describe('getNowPlayingInfo()', () => {
       beforeEach(() => {
         SpotifyApi.mockClear();
         mockGetMyCurrentPlaybackState.mockClear();
@@ -341,7 +341,7 @@ describe('spotifyActions', () => {
   });
 
   describe('sync actions', () => {
-    describe('clearNowPlayingRelatedAlbums', () => {
+    describe('clearNowPlayingRelatedAlbums()', () => {
       it('should create an action for clearing related albums', () => {
         expect(spotifyActions.clearNowPlayingRelatedAlbums()).toEqual({
           type: spotifyActions.CLEAR_NOW_PLAYING_RELATED_ALBUMS,

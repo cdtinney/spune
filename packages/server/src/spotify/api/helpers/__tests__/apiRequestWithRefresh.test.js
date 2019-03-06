@@ -5,7 +5,7 @@ const apiRequestWithRefresh = require('../apiRequestWithRefresh');
 
 jest.mock('../../../auth/refreshToken');
 
-describe('apiRequestWithRefresh', () => {
+describe('apiRequestWithRefresh()', () => {
   beforeAll(() => {
     Date.now = jest.fn().mockImplementation(() => {
       return 2000;

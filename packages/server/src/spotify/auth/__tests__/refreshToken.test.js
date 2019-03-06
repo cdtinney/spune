@@ -10,7 +10,7 @@ jest.mock('../../../database/schema/User', () => ({
   findOneAndUpdate: jest.fn(),
 }));
 
-describe('refreshToken', () => {
+describe('refreshToken()', () => {
   it('returns a Promise', () => {
     expect(refreshToken('foo')).toBeInstanceOf(Promise);
   });

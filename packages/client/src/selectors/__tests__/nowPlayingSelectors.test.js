@@ -1,7 +1,7 @@
 import * as nowPlayingSelectors from '../nowPlayingSelectors';
 
 describe('nowPlayingSelectors', () => {
-  describe('nowPlayingInfoSelector', () => {
+  describe('nowPlayingInfoSelector()', () => {
     describe('when given valid input', () => {
       it('returns the `state.spotify.nowPlaying.info` property', () => {
         expect(nowPlayingSelectors.nowPlayingInfoSelector({
@@ -15,7 +15,7 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('nowPlayingRelatedAlbumArtists', () => {
+  describe('nowPlayingRelatedAlbumArtists()', () => {
     describe('when given valid input', () => {
       it('returns the `state.spotify.nowPlaying.relatedAlbums.byArtist` property', () => {
         expect(nowPlayingSelectors.nowPlayingRelatedAlbumArtists({
@@ -31,7 +31,7 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('nowPlayingArtistNamesSelector', () => {
+  describe('nowPlayingArtistNamesSelector()', () => {
     const selectorFunc =
       nowPlayingSelectors.nowPlayingArtistNamesSelector.resultFunc;
 
@@ -56,7 +56,7 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('relatedAlbumImagesSelector', () => {
+  describe('relatedAlbumImagesSelector()', () => {
     describe('when given valid input', () => {
       it('should return album objects with title and images', () => {
         const selectorFunc =

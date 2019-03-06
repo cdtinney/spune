@@ -1,6 +1,6 @@
 const combineTrackArtists = require('../combineTrackArtists');
 
-describe('combineTrackArtists', () => {
+describe('combineTrackArtists()', () => {
   it('returns a combined array of artist IDs', () => {
     expect(combineTrackArtists({
       songArtists: [{

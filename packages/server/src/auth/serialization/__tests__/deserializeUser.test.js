@@ -5,7 +5,7 @@ jest.mock('../../../database/schema/User', () => ({
   findOne: jest.fn(),
 }));
 
-describe('deserializeUser', () => {
+describe('deserializeUser()', () => {
   it('calls done() with a user when the spotifyId matches a user in the database', () => {
     User.findOne.mockImplementation((filter, callback) => {
       callback(null, {

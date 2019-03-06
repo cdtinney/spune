@@ -1,6 +1,6 @@
 const uniqueAlbums = require('../uniqueAlbums');
 
-describe('baseAlbumName', () => {
+describe('baseAlbumName()', () => {
   it('strips out suffixes in normal braces', () => {
     uniqueAlbums.typesWithSuffixes.forEach((entry) => {
       expect(uniqueAlbums.baseAlbumName(`foo (${entry})`)).toEqual('foo');
@@ -14,7 +14,7 @@ describe('baseAlbumName', () => {
   });
 });
 
-describe('uniqueAlbums', () => {
+describe('uniqueAlbums()', () => {
   it('removes all duplicates with the same base album name', () => {
     const originalAlbum = {
       name: 'foo',
