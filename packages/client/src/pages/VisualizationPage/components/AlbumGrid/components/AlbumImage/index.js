@@ -9,21 +9,23 @@ import ProgressiveImage from 'react-progressive-image';
 function AlbumImage(props) {
   const {
     src,
-    placeholder,
     alt,
+    placeholder,
     className,
     width,
     height,
   } = props;
 
   return (
-    <ProgressiveImage src={src}>
+    <ProgressiveImage
+      placeholder={placeholder}
+      src={src}
+    >
       {(src, loading) => {
         return (
           <img
             src={src}
             alt={alt}
-            placeholder={placeholder}
             className={className}
             style={{
               height: `${height}px`,
