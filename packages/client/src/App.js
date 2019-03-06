@@ -15,14 +15,19 @@ import Routes from './routes';
 import * as userActions from './actions/user';
 import './App.css';
 
+/**
+ * Root application component.
+ *
+ * When it's first mounted, it attempts to authorize the user.
+ */
 export class App extends Component {
   static propTypes = {
     userAuthenticated: PropTypes.bool.isRequired,
-    fetchAuthUser: PropTypes.func.isRequired,
+    fetchUserAuth: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
-    this.props.fetchAuthUser();
+    this.props.fetchUserAuth();
   }
 
   render() {
@@ -49,8 +54,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchAuthUser() {
-      dispatch(userActions.fetchAuthUser());
+    fetchUserAuth() {
+      dispatch(userActions.fetchUserAuth());
     },
   };
 }
@@ -59,14 +64,14 @@ function ConnectedApp(props) {
   const {
     history,
     userAuthenticated,
-    fetchAuthUser,
+    fetchUserAuth,
   } = props;
 
   return (
     <ConnectedRouter history={history}>
       <App
         userAuthenticated={userAuthenticated}
-        fetchAuthUser={fetchAuthUser}
+        fetchUserAuth={fetchUserAuth}
       />
     </ConnectedRouter>
   );
@@ -76,7 +81,7 @@ function ConnectedApp(props) {
 ConnectedApp.propTypes = {
   history: PropTypes.object.isRequired,
   userAuthenticated: PropTypes.bool.isRequired,
-  fetchAuthUser: PropTypes.func.isRequired,
+  fetchUserAuth: PropTypes.func.isRequired,
 };
 
 export default connect(

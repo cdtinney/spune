@@ -18,7 +18,7 @@ describe('user reducer', () => {
 
   it('should set the request to loading', () => {
     expect(userReducer(initialState, {
-      type: userActions.FETCH_AUTH_USER_REQ,
+      type: userActions.FETCH_USER_AUTH_REQ,
     })).toEqual({
       ...initialState,
       request: {
@@ -34,7 +34,7 @@ describe('user reducer', () => {
   it('should set successful requests', () => {
     Date.now = jest.fn(() => 123);
     expect(userReducer(initialState, {
-      type: userActions.FETCH_AUTH_USER_SUCCESS,
+      type: userActions.FETCH_USER_AUTH_SUCCESS,
       payload: {
         profile: 'foo',
       },
@@ -52,7 +52,7 @@ describe('user reducer', () => {
 
   it('should set failed requests', () => {
     expect(userReducer(initialState, {
-      type: userActions.FETCH_AUTH_USER_FAILURE,
+      type: userActions.FETCH_USER_AUTH_FAILURE,
       payload: 'foo',
     })).toEqual({
       ...initialState,

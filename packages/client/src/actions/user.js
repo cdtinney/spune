@@ -8,40 +8,40 @@ import axios from 'axios';
 // Types  //
 ////////////
 
-export const FETCH_AUTH_USER_REQ =
-  'AUTH/FETCH_AUTH_USER_REQ';
-export const FETCH_AUTH_USER_SUCCESS =
-  'AUTH/FETCH_AUTH_USER_SUCCESS';
-export const FETCH_AUTH_USER_FAILURE =
-  'AUTH/FETCH_AUTH_USER_FAILURE';
+export const FETCH_USER_AUTH_REQ =
+  'AUTH/FETCH_USER_AUTH_REQ';
+export const FETCH_USER_AUTH_SUCCESS =
+  'AUTH/FETCH_USER_AUTH_SUCCESS';
+export const FETCH_USER_AUTH_FAILURE =
+  'AUTH/FETCH_USER_AUTH_FAILURE';
 
 //////////////////////
 // Action creators  //
 //////////////////////
 
-export function fetchAuthUserReq() {
+export function fetchUserAuthReq() {
   return {
-    type: FETCH_AUTH_USER_REQ,
+    type: FETCH_USER_AUTH_REQ,
   };
 }
 
-export function fetchAuthUserSuccess(profile) {
+export function fetchUserAuthSuccess(profile) {
   return {
-    type: FETCH_AUTH_USER_SUCCESS,
+    type: FETCH_USER_AUTH_SUCCESS,
     payload: {
       profile,
     },
   };
 }
 
-export function fetchAuthUserFailure(error) {
+export function fetchUserAuthFailure(error) {
   return {
-    type: FETCH_AUTH_USER_FAILURE,
+    type: FETCH_USER_AUTH_FAILURE,
     payload: new Error(error),
     error: true,
   };
 }
-  
+
 ////////////
 // Thunks //
 ////////////
@@ -54,16 +54,16 @@ export function loginUser() {
   window.location.assign('api/auth/spotify');
 }
 
-export function fetchAuthUser() {
-  return function fetchAuthUserThunk(dispatch) {
-    dispatch(fetchAuthUserReq());
+export function fetchUserAuth() {
+  return function fetchUserAuthThunk(dispatch) {
+    dispatch(fetchUserAuthReq());
 
     return axios.get('/api/auth/user')
       .then(response =>
         // The request can still be successful with no user returned.
         // In this case, default to `null` (instead of `undefined`).
-        dispatch(fetchAuthUserSuccess(response.data.user || null)))
+        dispatch(fetchUserAuthSuccess(response.data.user || null)))
       .catch(error =>
-        dispatch(fetchAuthUserFailure(error.response.data)));
+        dispatch(fetchUserAuthFailure(error.response.data)));
   };
 }

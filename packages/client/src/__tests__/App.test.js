@@ -10,7 +10,7 @@ describe('App', () => {
       shallow(
         <App
           userAuthenticated={false}
-          fetchAuthUser={() => {}}
+          fetchUserAuth={() => {}}
         />, {
           context,
         },
