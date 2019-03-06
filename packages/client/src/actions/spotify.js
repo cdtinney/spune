@@ -45,8 +45,8 @@ export const FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE =
 // Creators //
 //////////////
 
-export function getMyInfo() {
-  return function getMyInfoThunk(dispatch) {
+export function fetchMyInfo() {
+  return function fetchMyInfoThunk(dispatch) {
     dispatch({ type: FETCH_USER_INFO_REQUEST });
 
     return spotifyApi.getMe().then((data) => {
@@ -124,8 +124,8 @@ export function fetchNowPlayingRelatedAlbums() {
   };
 }
 
-export function getNowPlayingInfo() {
-  return function getNowPlayingInfoThunk(dispatch, getState) {
+export function fetchNowPlayingInfo() {
+  return function fetchNowPlayingInfoThunk(dispatch, getState) {
     const {
       spotify: {
         nowPlaying: {

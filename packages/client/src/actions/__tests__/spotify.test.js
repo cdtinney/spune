@@ -14,7 +14,7 @@ const mockStore = configureStore(middlewares);
 
 describe('spotifyActions', () => {
   describe('async actions', () => {
-    describe('getMyInfo()', () => {
+    describe('fetchMyInfo()', () => {
       beforeEach(() => {
         SpotifyApi.mockClear();
         mockGetMe.mockClear();
@@ -43,7 +43,7 @@ describe('spotifyActions', () => {
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.getMyInfo())
+        return store.dispatch(spotifyActions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -70,7 +70,7 @@ describe('spotifyActions', () => {
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.getMyInfo())
+        return store.dispatch(spotifyActions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -88,7 +88,7 @@ describe('spotifyActions', () => {
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.getMyInfo())
+        return store.dispatch(spotifyActions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -165,7 +165,7 @@ describe('spotifyActions', () => {
       });
     });
 
-    describe('getNowPlayingInfo()', () => {
+    describe('fetchNowPlayingInfo()', () => {
       beforeEach(() => {
         SpotifyApi.mockClear();
         mockGetMyCurrentPlaybackState.mockClear();
@@ -219,7 +219,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.getNowPlayingInfo())
+        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -250,7 +250,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.getNowPlayingInfo())
+        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -272,7 +272,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.getNowPlayingInfo())
+        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -332,7 +332,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.getNowPlayingInfo())
+        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });

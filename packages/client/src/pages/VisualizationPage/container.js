@@ -78,8 +78,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onLoad() {
-      dispatch(spotifyActions.getMyInfo());
-      dispatch(spotifyActions.getNowPlayingInfo());
+      dispatch(spotifyActions.fetchMyInfo());
+      dispatch(spotifyActions.fetchNowPlayingInfo());
     },
 
     setFullscreen(fullscreen) {
