@@ -1,7 +1,7 @@
 import * as userSelectors from '../userSelectors';
 
 describe('userSelectors', () => {
-  describe('userSelectors.userAuthenticated', () => {
+  describe('userAuthenticated()', () => {
     function mockState({
       errored = false,
       lastUpdated = null,
@@ -21,7 +21,7 @@ describe('userSelectors', () => {
         },
       };
     }
-    
+
     describe('when given valid input objects', () => {
       it('returns true when errored is false and lastUpdated and id are not null', () => {
         expect(userSelectors.userAuthenticated(mockState({
@@ -29,7 +29,7 @@ describe('userSelectors', () => {
           id: 123,
         }))).toBeTruthy();
       });
-      
+
       it('returns false when errored is true and lastUpdated and id are not null', () => {
         expect(userSelectors.userAuthenticated(mockState({
           errored: true,

@@ -15,7 +15,7 @@ describe('mongoDB', () => {
     mongoDB.connect(mockDone);
   });
 
-  describe('connectEventListeners', () => {
+  describe('connectEventListeners()', () => {
     it('calls the callback with errors when an error event occurs', () => {
       const mockConnection = (() => {
         const listeners = {};

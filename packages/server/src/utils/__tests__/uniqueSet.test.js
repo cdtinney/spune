@@ -1,6 +1,6 @@
 const uniqueSet = require('../uniqueSet');
 
-describe('uniqueSet', () => {
+describe('uniqueSet()', () => {
   it('returns an empty Set when no arrays are provided', () => {
     const set = uniqueSet();
     expect(set).toBeInstanceOf(Set);

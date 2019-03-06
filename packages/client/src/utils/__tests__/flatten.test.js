@@ -1,6 +1,6 @@
 import flatten from '../flatten';
 
-describe('flatten', () => {
+describe('flatten()', () => {
   it('returns an empty array when undefined is given', () => {
     expect(flatten()).toEqual([]);
   });

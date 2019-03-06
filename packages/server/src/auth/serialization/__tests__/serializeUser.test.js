@@ -1,6 +1,6 @@
 const serializeUser = require('../serializeUser');
 
-describe('serializeUser', () => {
+describe('serializeUser()', () => {
   it('serializes spotifyId and calls done() when given a valid user object', () => {
     const mockDone = jest.fn();
     serializeUser({

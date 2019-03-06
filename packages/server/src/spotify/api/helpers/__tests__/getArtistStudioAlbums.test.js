@@ -12,7 +12,7 @@ const mockSpotifyApi = {
   })),
 };
 
-describe('getArtistStudioAlbums', () => {
+describe('getArtistStudioAlbums()', () => {
   it('returns unique albums for the artist from the api', async () => {
     const result = await getArtistStudioAlbums(mockSpotifyApi, 'fooId');
     expect(result).toEqual({

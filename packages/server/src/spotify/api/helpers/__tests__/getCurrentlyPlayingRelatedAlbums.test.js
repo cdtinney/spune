@@ -10,7 +10,7 @@ const mockSpotifyApi = {
   getMyCurrentPlayingTrack: jest.fn(),
 };
 
-describe('getCurrentlyPlayingRelatedAlbums', () => {
+describe('getCurrentlyPlayingRelatedAlbums()', () => {
   it('throws an error when the playing track is different than the request track', () => {
     mockSpotifyApi.getMyCurrentPlayingTrack
       .mockImplementation(() => (Promise.resolve({
