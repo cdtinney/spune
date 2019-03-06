@@ -11,62 +11,62 @@ const mockAxios = new MockAdapter(axios);
 
 describe('user actions', () => {
   describe('async actions', () => {
-    describe('fetchAuthUser()', () => {
-      it('creates FETCH_AUTH_USER_SUCCESS when fetching user auth succeeds with a user', () => {
+    describe('fetchUserAuth()', () => {
+      it('creates FETCH_USER_AUTH_SUCCESS when fetching user auth succeeds with a user', () => {
         mockAxios.onGet('/api/auth/user').reply(200, {
           user: 'foo',
         });
 
         const expectedActions = [{
-          type: userActions.FETCH_AUTH_USER_REQ,
+          type: userActions.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_AUTH_USER_SUCCESS,
+          type: userActions.FETCH_USER_AUTH_SUCCESS,
           payload: {
             profile: 'foo',
           },
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchAuthUser())
+        return store.dispatch(userActions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
       });
 
-      it('creates FETCH_AUTH_USER_SUCCESS with a null profile when fetching user auth succeeds without a user', () => {
+      it('creates FETCH_USER_AUTH_SUCCESS with a null profile when fetching user auth succeeds without a user', () => {
         mockAxios.onGet('/api/auth/user').reply(200, {
           user: undefined,
         });
 
         const expectedActions = [{
-          type: userActions.FETCH_AUTH_USER_REQ,
+          type: userActions.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_AUTH_USER_SUCCESS,
+          type: userActions.FETCH_USER_AUTH_SUCCESS,
           payload: {
             profile: null,
           },
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchAuthUser())
+        return store.dispatch(userActions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
       });
 
-      it('creates FETCH_AUTH_USER_FAILURE when fetching user auth fails', () => {
+      it('creates FETCH_USER_AUTH_FAILURE when fetching user auth fails', () => {
         mockAxios.onGet('/api/auth/user').reply(400, 'foo');
 
         const expectedActions = [{
-          type: userActions.FETCH_AUTH_USER_REQ,
+          type: userActions.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_AUTH_USER_FAILURE,
+          type: userActions.FETCH_USER_AUTH_FAILURE,
           payload: new Error('foo'),
           error: true,
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchAuthUser())
+        return store.dispatch(userActions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });

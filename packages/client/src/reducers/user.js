@@ -22,7 +22,7 @@ const initialState = {
 
 export default function user(state = initialState, action = {}) {
   switch (action.type) {
-    case userActions.FETCH_AUTH_USER_REQ: {
+    case userActions.FETCH_USER_AUTH_REQ: {
       return update(state, {
         request: {
           $merge: {
@@ -38,7 +38,7 @@ export default function user(state = initialState, action = {}) {
       });
     }
 
-    case userActions.FETCH_AUTH_USER_SUCCESS: {
+    case userActions.FETCH_USER_AUTH_SUCCESS: {
       const {
         payload: {
           profile,
@@ -60,7 +60,7 @@ export default function user(state = initialState, action = {}) {
       });
     }
 
-    case userActions.FETCH_AUTH_USER_FAILURE: {
+    case userActions.FETCH_USER_AUTH_FAILURE: {
       const {
         payload: error,
       } = action;
