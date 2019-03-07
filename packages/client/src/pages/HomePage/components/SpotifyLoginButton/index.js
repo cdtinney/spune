@@ -31,7 +31,7 @@ export function SpotifyLoginButton(props) {
         size="lg"
         className={classes.icon}
       />
-      LOG IN WITH SPOTIFY
+      {'LOG IN WITH SPOTIFY'}
     </Button>
   );
 }
