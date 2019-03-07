@@ -24,6 +24,7 @@ function mapStateToProps(state) {
     },
   } = state;
 
+  // TODO Refactor this into an enum with a selector
   const displayLoadingIcon = loading;
   const displayError = !displayLoadingIcon && errored;
   const errorToDisplay = displayError ? error : null;
@@ -39,7 +40,7 @@ function mapStateToProps(state) {
     displayError,
     errorToDisplay,
     displayName,
-    nameToDisplay, 
+    nameToDisplay,
     displayLogin,
   };
 }

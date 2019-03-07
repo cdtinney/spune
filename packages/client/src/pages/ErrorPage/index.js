@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 
 /**
- * Displays an error message injected by `react-router`.
+ * Displays an error message based on route parameters.
  */
 export default class ErrorPage extends Component {
   render() {
@@ -17,7 +17,7 @@ export default class ErrorPage extends Component {
         } = {},
       } = {},
     } = this.props;
-    
+
     return (
       <div>
         <h2>Oops! Something bad happened.</h2>
