@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
-import * as userActions from '../user';
+import * as actions from '../user';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -18,16 +18,16 @@ describe('user actions', () => {
         });
 
         const expectedActions = [{
-          type: userActions.FETCH_USER_AUTH_REQ,
+          type: actions.types.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_USER_AUTH_SUCCESS,
+          type: actions.types.FETCH_USER_AUTH_SUCCESS,
           payload: {
             profile: 'foo',
           },
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchUserAuth())
+        return store.dispatch(actions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -39,16 +39,16 @@ describe('user actions', () => {
         });
 
         const expectedActions = [{
-          type: userActions.FETCH_USER_AUTH_REQ,
+          type: actions.types.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_USER_AUTH_SUCCESS,
+          type: actions.types.FETCH_USER_AUTH_SUCCESS,
           payload: {
             profile: null,
           },
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchUserAuth())
+        return store.dispatch(actions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -58,15 +58,15 @@ describe('user actions', () => {
         mockAxios.onGet('/api/auth/user').reply(400, 'foo');
 
         const expectedActions = [{
-          type: userActions.FETCH_USER_AUTH_REQ,
+          type: actions.types.FETCH_USER_AUTH_REQ,
         }, {
-          type: userActions.FETCH_USER_AUTH_FAILURE,
+          type: actions.types.FETCH_USER_AUTH_FAILURE,
           payload: new Error('foo'),
           error: true,
         }];
 
         const store = mockStore({});
-        return store.dispatch(userActions.fetchUserAuth())
+        return store.dispatch(actions.fetchUserAuth())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -79,7 +79,7 @@ describe('user actions', () => {
       const assignMock = jest.fn();
       window.location.assign = assignMock;
 
-      userActions.loginUser();
+      actions.loginUser();
       expect(assignMock).toHaveBeenCalledWith('api/auth/spotify');
     });
   });

@@ -18,6 +18,9 @@ export const history = createHashHistory();
 
 export default function configureStore() {
   const store = createStore(
+    // Routing history is stored in state thus it
+    // must be created and passed to the router
+    // reducer initially.
     createRootReducer(history),
     undefined,
     composeWithDevTools(

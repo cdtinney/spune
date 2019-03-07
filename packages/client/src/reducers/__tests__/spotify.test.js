@@ -1,6 +1,5 @@
-import * as spotifyActions from '../../actions/spotify';
-import spotifyReducer from '../spotify';
-import spotify from '../spotify';
+import { types } from '../../actions/spotify';
+import reducer from '../spotify';
 
 const initialState = {
   user: {
@@ -47,13 +46,13 @@ const initialState = {
 
 describe('spotify reducer', () => {
   it('should have initial state', () => {
-    expect(spotifyReducer()).toEqual(initialState);
+    expect(reducer()).toEqual(initialState);
   });
 
   describe('user', () => {
     it('should set user info requests as loading', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_USER_INFO_REQUEST,
+      expect(reducer(initialState, {
+        type: types.FETCH_USER_INFO_REQUEST,
       })).toEqual({
         ...initialState,
         user: {
@@ -70,8 +69,8 @@ describe('spotify reducer', () => {
 
     it('should set user profiles once fetched', () => {
       Date.now = jest.fn(() => 123);
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_USER_INFO_SUCCESS,
+      expect(reducer(initialState, {
+        type: types.FETCH_USER_INFO_SUCCESS,
         payload: {
           info: 'foo',
         },
@@ -90,8 +89,8 @@ describe('spotify reducer', () => {
     });
 
     it('should set user profile request errors', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_USER_INFO_FAILURE,
+      expect(reducer(initialState, {
+        type: types.FETCH_USER_INFO_FAILURE,
         payload: 'foo',
       })).toEqual({
         ...initialState,
@@ -114,8 +113,8 @@ describe('spotify reducer', () => {
 
   describe('now playing', () => {
     it('should set now playing info requests as loading', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_INFO_REQUEST,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_INFO_REQUEST,
       })).toEqual({
         ...initialState,
         nowPlaying: {
@@ -132,8 +131,8 @@ describe('spotify reducer', () => {
     });
 
     it('should set now playing info', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_INFO_SUCCESS,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_INFO_SUCCESS,
         payload: {
           info: 'foo',
         },
@@ -155,8 +154,8 @@ describe('spotify reducer', () => {
 
     it('should set now playing errors', () => {
       Date.now = jest.fn(() => 123);
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_INFO_FAILURE,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_INFO_FAILURE,
         payload: 'foo',
       })).toEqual({
         ...initialState,
@@ -175,8 +174,8 @@ describe('spotify reducer', () => {
 
   describe('related albums', () => {
     it('should clear related albums', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
+      expect(reducer(initialState, {
+        type: types.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
       })).toEqual({
         ...initialState,
         nowPlaying: {
@@ -194,8 +193,8 @@ describe('spotify reducer', () => {
     });
 
     it('should set related albums requests as loading', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
       })).toEqual({
         ...initialState,
         nowPlaying: {
@@ -214,8 +213,8 @@ describe('spotify reducer', () => {
 
     it('should set related albums', () => {
       Date.now = jest.fn(() => 123);
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
         payload: {
           albumsByArtist: 'foo',
         },
@@ -238,8 +237,8 @@ describe('spotify reducer', () => {
     });
 
     it('should set related album request errors', () => {
-      expect(spotifyReducer(initialState, {
-        type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
+      expect(reducer(initialState, {
+        type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
         payload: 'foo',
       })).toEqual({
         ...initialState,

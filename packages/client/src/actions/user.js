@@ -8,12 +8,14 @@ import axios from 'axios';
 // Types  //
 ////////////
 
-export const FETCH_USER_AUTH_REQ =
-  'AUTH/FETCH_USER_AUTH_REQ';
-export const FETCH_USER_AUTH_SUCCESS =
-  'AUTH/FETCH_USER_AUTH_SUCCESS';
-export const FETCH_USER_AUTH_FAILURE =
-  'AUTH/FETCH_USER_AUTH_FAILURE';
+export const types = {
+  FETCH_USER_AUTH_REQ:
+    'AUTH/FETCH_USER_AUTH_REQ',
+  FETCH_USER_AUTH_SUCCESS:
+    'AUTH/FETCH_USER_AUTH_SUCCESS',
+  FETCH_USER_AUTH_FAILURE:
+    'AUTH/FETCH_USER_AUTH_FAILURE',
+};
 
 //////////////////////
 // Action creators  //
@@ -21,13 +23,13 @@ export const FETCH_USER_AUTH_FAILURE =
 
 export function fetchUserAuthReq() {
   return {
-    type: FETCH_USER_AUTH_REQ,
+    type: types.FETCH_USER_AUTH_REQ,
   };
 }
 
 export function fetchUserAuthSuccess(profile) {
   return {
-    type: FETCH_USER_AUTH_SUCCESS,
+    type: types.FETCH_USER_AUTH_SUCCESS,
     payload: {
       profile,
     },
@@ -36,7 +38,7 @@ export function fetchUserAuthSuccess(profile) {
 
 export function fetchUserAuthFailure(error) {
   return {
-    type: FETCH_USER_AUTH_FAILURE,
+    type: types.FETCH_USER_AUTH_FAILURE,
     payload: new Error(error),
     error: true,
   };
