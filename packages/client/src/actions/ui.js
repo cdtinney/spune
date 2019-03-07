@@ -2,7 +2,9 @@
 // Types  //
 ////////////
 
-export const SET_FULLSCREEN = 'UI/SET_FULLSCREEN';
+export const types = {
+  SET_FULLSCREEN: 'UI/SET_FULLSCREEN',
+};
 
 //////////////////////
 // Action creators  //
@@ -10,7 +12,7 @@ export const SET_FULLSCREEN = 'UI/SET_FULLSCREEN';
 
 export function setFullscreen(fullscreen) {
   return {
-    type: SET_FULLSCREEN,
+    type: types.SET_FULLSCREEN,
     payload: {
       fullscreen,
     },

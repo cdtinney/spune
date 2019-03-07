@@ -1,6 +1,6 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as spotifyActions from '../spotify';
+import * as actions from '../spotify';
 import SpotifyApi, {
   mockGetMe,
   mockGetCurrentlyPlayingRelatedAlbums,
@@ -30,9 +30,9 @@ describe('spotifyActions', () => {
         }));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_USER_INFO_REQUEST,
+          type: actions.types.FETCH_USER_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_USER_INFO_SUCCESS,
+          type: actions.types.FETCH_USER_INFO_SUCCESS,
           payload: {
             info: {
               id: 'fooId',
@@ -43,7 +43,7 @@ describe('spotifyActions', () => {
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.fetchMyInfo())
+        return store.dispatch(actions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -57,9 +57,9 @@ describe('spotifyActions', () => {
         }));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_USER_INFO_REQUEST,
+          type: actions.types.FETCH_USER_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_USER_INFO_SUCCESS,
+          type: actions.types.FETCH_USER_INFO_SUCCESS,
           payload: {
             info: {
               id: 'fooId',
@@ -70,7 +70,7 @@ describe('spotifyActions', () => {
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.fetchMyInfo())
+        return store.dispatch(actions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -80,15 +80,15 @@ describe('spotifyActions', () => {
         mockGetMe.mockImplementation(() => Promise.reject('foo'));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_USER_INFO_REQUEST,
+          type: actions.types.FETCH_USER_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_USER_INFO_FAILURE,
+          type: actions.types.FETCH_USER_INFO_FAILURE,
           payload: new Error('foo'),
           error: true,
         }];
 
         const store = mockStore({});
-        return store.dispatch(spotifyActions.fetchMyInfo())
+        return store.dispatch(actions.fetchMyInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -106,12 +106,12 @@ describe('spotifyActions', () => {
           Promise.resolve('foo'));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
+          type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
           payload: {
             songId: 'fooSongId',
           },
         }, {
-          type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
+          type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
           payload: {
             songId: 'fooSongId',
             albumsByArtist: 'foo',
@@ -128,7 +128,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingRelatedAlbums())
+        return store.dispatch(actions.fetchNowPlayingRelatedAlbums())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -138,12 +138,12 @@ describe('spotifyActions', () => {
         mockGetCurrentlyPlayingRelatedAlbums.mockImplementation(() => Promise.reject('foo'));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
+          type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
           payload: {
             songId: 'fooSongId',
           },
         }, {
-          type: spotifyActions.FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
+          type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
           payload: new Error('foo'),
           error: true,
         }];
@@ -158,7 +158,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingRelatedAlbums())
+        return store.dispatch(actions.fetchNowPlayingRelatedAlbums())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -190,9 +190,9 @@ describe('spotifyActions', () => {
           }));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_REQUEST,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_SUCCESS,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_SUCCESS,
           payload: {
             info: {
               songId: 'id',
@@ -219,7 +219,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
+        return store.dispatch(actions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -230,9 +230,9 @@ describe('spotifyActions', () => {
           Promise.reject('foo'));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_REQUEST,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_FAILURE,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_FAILURE,
           payload: new Error('foo'),
           error: true,
         }];
@@ -250,7 +250,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
+        return store.dispatch(actions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -272,14 +272,14 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
+        return store.dispatch(actions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
       });
 
       it('calls fetchNowPlayingRelatedAlbums when fetching playback state succeeds and the current album is different', () => {
-        spotifyActions.fetchNowPlayingRelatedAlbums = jest.fn().mockImplementation(() => ({
+        actions.fetchNowPlayingRelatedAlbums = jest.fn().mockImplementation(() => ({
           type: 'mockFetchNowPlayingRelatedAlbums',
         }));
 
@@ -301,9 +301,9 @@ describe('spotifyActions', () => {
           }));
 
         const expectedActions = [{
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_REQUEST,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_REQUEST,
         }, {
-          type: spotifyActions.FETCH_NOW_PLAYING_INFO_SUCCESS,
+          type: actions.types.FETCH_NOW_PLAYING_INFO_SUCCESS,
           payload: {
             info: {
               songId: 'id',
@@ -332,7 +332,7 @@ describe('spotifyActions', () => {
           },
         });
 
-        return store.dispatch(spotifyActions.fetchNowPlayingInfo())
+        return store.dispatch(actions.fetchNowPlayingInfo())
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
           });
@@ -343,8 +343,8 @@ describe('spotifyActions', () => {
   describe('sync actions', () => {
     describe('clearNowPlayingRelatedAlbums()', () => {
       it('should create an action for clearing related albums', () => {
-        expect(spotifyActions.clearNowPlayingRelatedAlbums()).toEqual({
-          type: spotifyActions.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
+        expect(actions.clearNowPlayingRelatedAlbums()).toEqual({
+          type: actions.types.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
         });
       });
     });

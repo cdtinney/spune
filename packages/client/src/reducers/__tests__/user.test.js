@@ -1,5 +1,5 @@
-import * as userActions from '../../actions/user';
-import userReducer from '../user';
+import { types } from '../../actions/user';
+import reducer from '../user';
 
 const initialState = {
   request: {
@@ -13,12 +13,12 @@ const initialState = {
 
 describe('user reducer', () => {
   it('should have initial state', () => {
-    expect(userReducer()).toEqual(initialState);
+    expect(reducer()).toEqual(initialState);
   });
 
   it('should set the request to loading', () => {
-    expect(userReducer(initialState, {
-      type: userActions.FETCH_USER_AUTH_REQ,
+    expect(reducer(initialState, {
+      type: types.FETCH_USER_AUTH_REQ,
     })).toEqual({
       ...initialState,
       request: {
@@ -33,8 +33,8 @@ describe('user reducer', () => {
 
   it('should set successful requests', () => {
     Date.now = jest.fn(() => 123);
-    expect(userReducer(initialState, {
-      type: userActions.FETCH_USER_AUTH_SUCCESS,
+    expect(reducer(initialState, {
+      type: types.FETCH_USER_AUTH_SUCCESS,
       payload: {
         profile: 'foo',
       },
@@ -51,8 +51,8 @@ describe('user reducer', () => {
   });
 
   it('should set failed requests', () => {
-    expect(userReducer(initialState, {
-      type: userActions.FETCH_USER_AUTH_FAILURE,
+    expect(reducer(initialState, {
+      type: types.FETCH_USER_AUTH_FAILURE,
       payload: 'foo',
     })).toEqual({
       ...initialState,

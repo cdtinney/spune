@@ -9,16 +9,7 @@ import update from 'immutability-helper';
 ////////////////////////////
 
 import {
-  FETCH_USER_INFO_REQUEST,
-  FETCH_USER_INFO_SUCCESS,
-  FETCH_USER_INFO_FAILURE,
-  FETCH_NOW_PLAYING_INFO_REQUEST,
-  FETCH_NOW_PLAYING_INFO_SUCCESS,
-  FETCH_NOW_PLAYING_INFO_FAILURE,
-  CLEAR_NOW_PLAYING_RELATED_ALBUMS,
-  FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
-  FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
-  FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE,
+  types,
 } from '../actions/spotify';
 
 const initialState = {
@@ -64,10 +55,16 @@ const initialState = {
   },
 };
 
+/**
+ * Handles the `spotify` slice of state.
+ *
+ * @param {Object} state - Current state.
+ * @param {Object} action - Action object.
+ */
 export default function spotify(state = initialState, action = {}) {
   switch (action.type) {
 
-    case FETCH_USER_INFO_REQUEST: {
+    case types.FETCH_USER_INFO_REQUEST: {
       return update(state, {
         user: {
           request: {
@@ -81,7 +78,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_USER_INFO_SUCCESS: {
+    case types.FETCH_USER_INFO_SUCCESS: {
       const {
         payload: {
           info,
@@ -105,7 +102,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_USER_INFO_FAILURE: {
+    case types.FETCH_USER_INFO_FAILURE: {
       const {
         payload: error,
       } = action;
@@ -131,7 +128,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_INFO_REQUEST: {
+    case types.FETCH_NOW_PLAYING_INFO_REQUEST: {
       return update(state, {
         nowPlaying: {
           request: {
@@ -145,7 +142,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_INFO_SUCCESS: {
+    case types.FETCH_NOW_PLAYING_INFO_SUCCESS: {
       const {
         payload: {
           info,
@@ -169,7 +166,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_INFO_FAILURE: {
+    case types.FETCH_NOW_PLAYING_INFO_FAILURE: {
       const {
         payload: error,
       } = action;
@@ -188,7 +185,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case CLEAR_NOW_PLAYING_RELATED_ALBUMS: {
+    case types.CLEAR_NOW_PLAYING_RELATED_ALBUMS: {
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
@@ -205,7 +202,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST: {
+    case types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST: {
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
@@ -221,7 +218,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
+    case types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
       const {
         albumsByArtist,
       } = action.payload;
@@ -244,7 +241,7 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
-    case FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE: {
+    case types.FETCH_NOW_PLAYING_RELATED_ALBUMS_FAILURE: {
       const {
         payload: error,
       } = action;

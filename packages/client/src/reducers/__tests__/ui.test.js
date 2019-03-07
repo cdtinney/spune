@@ -1,5 +1,5 @@
-import * as uiActions from '../../actions/ui';
-import uiReducer from '../ui';
+import * as actions from '../../actions/ui';
+import reducer from '../ui';
 
 const initialState = {
   fullscreen: false,
@@ -12,12 +12,12 @@ const initialState = {
 
 describe('ui reducer', () => {
   it('returns initial state', () => {
-    expect(uiReducer()).toEqual(initialState);
+    expect(reducer()).toEqual(initialState);
   });
 
   it('sets fullscreen', () => {
-    expect(uiReducer(initialState, {
-      type: uiActions.SET_FULLSCREEN,
+    expect(reducer(initialState, {
+      type: actions.types.SET_FULLSCREEN,
       payload: {
         fullscreen: true,
       },

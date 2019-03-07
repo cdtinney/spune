@@ -8,7 +8,7 @@ import update from 'immutability-helper';
 // Internal dependencies  //
 ////////////////////////////
 
-import * as userActions from '../actions/user';
+import { types } from '../actions/user';
 
 const initialState = {
   request: {
@@ -20,9 +20,15 @@ const initialState = {
   profile: null,
 };
 
+/**
+ * Handles the `user` slice of state.
+ *
+ * @param {Object} state - Current state.
+ * @param {Object} action - Action object.
+ */
 export default function user(state = initialState, action = {}) {
   switch (action.type) {
-    case userActions.FETCH_USER_AUTH_REQ: {
+    case types.FETCH_USER_AUTH_REQ: {
       return update(state, {
         request: {
           $merge: {
@@ -38,7 +44,7 @@ export default function user(state = initialState, action = {}) {
       });
     }
 
-    case userActions.FETCH_USER_AUTH_SUCCESS: {
+    case types.FETCH_USER_AUTH_SUCCESS: {
       const {
         payload: {
           profile,
@@ -60,7 +66,7 @@ export default function user(state = initialState, action = {}) {
       });
     }
 
-    case userActions.FETCH_USER_AUTH_FAILURE: {
+    case types.FETCH_USER_AUTH_FAILURE: {
       const {
         payload: error,
       } = action;
