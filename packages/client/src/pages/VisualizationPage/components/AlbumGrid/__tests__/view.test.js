@@ -8,15 +8,12 @@ describe('AlbumGrid', () => {
     mount(
       <AlbumGrid
         albums={[{
-          rowId: 1,
-          rowAlbums: [{
-            id: 'fooId_0',
-            title: 'foo',
-            images: {
-              fullSize: 'fooFullSize',
-              thumbnail: 'fooThumbnail',
-            },
-          }],
+          id: 'fooId_0',
+          title: 'foo',
+          images: {
+            fullSize: 'fooFullSize',
+            thumbnail: 'fooThumbnail',
+          },
         }]}
         ui={{
           albumSize: 80,

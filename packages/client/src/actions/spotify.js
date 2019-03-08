@@ -176,9 +176,8 @@ export function fetchNowPlayingInfo() {
         },
       });
 
-      // If the album has changed, update the related
-      // albums.
       if (currentAlbumId !== albumId) {
+        dispatch(thisModule.clearNowPlayingRelatedAlbums());
         dispatch(thisModule.fetchNowPlayingRelatedAlbums());
       }
     }).catch((err) => {

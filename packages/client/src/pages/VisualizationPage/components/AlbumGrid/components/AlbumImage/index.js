@@ -3,24 +3,22 @@
 ///////////////////////////
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import ProgressiveImage from 'react-progressive-image';
+import PropTypes from 'prop-types';
+
+import './styles.css';
 
 function AlbumImage(props) {
   const {
     src,
     alt,
-    placeholder,
     className,
     width,
     height,
   } = props;
 
   return (
-    <ProgressiveImage
-      placeholder={placeholder}
-      src={src}
-    >
+    <ProgressiveImage src={src}>
       {(src, loading) => {
         return (
           <img
@@ -30,7 +28,8 @@ function AlbumImage(props) {
             style={{
               height: `${height}px`,
               width: `${width}px`,
-              opacity: loading ? 0.25 : 1,
+              opacity: loading ? 0 : '1',
+              animation: loading ? '' : 'fadein 2s',
             }}
           />
         );
@@ -41,14 +40,12 @@ function AlbumImage(props) {
 
 AlbumImage.propTypes = {
   src: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
   className: PropTypes.string,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
 };
 
 AlbumImage.defaultProps = {
-  placeholder: undefined,
   className: undefined,
 };
 

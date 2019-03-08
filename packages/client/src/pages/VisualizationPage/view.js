@@ -22,7 +22,7 @@ import FullscreenButton from './components/FullscreenButton';
 
 import './style.css';
 
-const styles = {
+const styles = theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -34,6 +34,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
   },
   fullscreenButton: {
     position: 'absolute',
@@ -53,7 +54,7 @@ const styles = {
     alignSelf: 'center',
     margin: 'auto 0',
   },
-};
+});
 
 /**
  * Album art visualization page for the user's currently playing track.

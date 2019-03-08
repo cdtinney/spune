@@ -316,6 +316,8 @@ describe('spotifyActions', () => {
             },
           },
         }, {
+          type: actions.types.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
+        }, {
           type: 'mockFetchNowPlayingRelatedAlbums',
         }];
 

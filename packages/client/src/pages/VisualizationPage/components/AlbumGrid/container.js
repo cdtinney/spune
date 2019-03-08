@@ -13,7 +13,6 @@ import * as nowPlayingSelectors from
   '../../../../selectors/nowPlayingSelectors';
 import AlbumGrid from './view';
 
-import partitionAlbums from './utils/partitionAlbums';
 import calculateColumnSize from './utils/calculateColumnSize';
 import memoizeWithCache from './utils/memoizeWithCache';
 
@@ -35,7 +34,6 @@ function mapStateToProps(state, ownProps) {
 
   const {
     windowWidth,
-    windowHeight,
   } = ownProps;
 
   const columnSize = memoizedCalculateColumnSize({
@@ -44,16 +42,8 @@ function mapStateToProps(state, ownProps) {
     maxSize,
   });
 
-  const numCols = Math.ceil(windowWidth / columnSize);
-  const numRows = Math.ceil(windowHeight / columnSize);
-
   return {
-    albums:
-      partitionAlbums({
-        albums: nowPlayingSelectors.relatedAlbumImagesSelector(state),
-        numCols,
-        numRows,
-      }),
+    albums: nowPlayingSelectors.relatedAlbumImagesSelector(state),
     ui: {
       albumSize: columnSize,
     },
