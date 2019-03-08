@@ -16,7 +16,7 @@ describe('AlbumGrid', () => {
           },
         }]}
         ui={{
-          albumSize: 80,
+          albumImageSize: 80,
         }}
       />
     );
@@ -27,7 +27,7 @@ describe('AlbumGrid', () => {
       <AlbumGrid
         albums={[]}
         ui={{
-          albumSize: 80,
+          albumImageSize: 80,
         }}
       />
     );

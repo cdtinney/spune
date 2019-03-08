@@ -216,7 +216,9 @@ describe('spotify reducer', () => {
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
         payload: {
-          albumsByArtist: 'foo',
+          albumsByArtist: [{
+            artistId: 'foo',
+          }],
         },
       })).toEqual({
         ...initialState,
@@ -224,7 +226,11 @@ describe('spotify reducer', () => {
           ...initialState.nowPlaying,
           relatedAlbums: {
             ...initialState.nowPlaying.relatedAlbums,
-            byArtist: 'foo',
+            byArtist: {
+              'foo': {
+                artistId: 'foo',
+              },
+            },
             request: {
               loading: false,
               lastUpdated: 123,

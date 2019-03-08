@@ -34,18 +34,23 @@ function mapStateToProps(state, ownProps) {
 
   const {
     windowWidth,
+    windowHeight,
   } = ownProps;
 
-  const columnSize = memoizedCalculateColumnSize({
+  const albumImageSize = memoizedCalculateColumnSize({
     windowWidth,
     minSize,
     maxSize,
   });
 
+  const numCols = windowWidth / albumImageSize;
+  const numRows = windowHeight / albumImageSize;
+
   return {
-    albums: nowPlayingSelectors.relatedAlbumImagesSelector(state),
+    albums: nowPlayingSelectors.relatedAlbumImagesSelector(state)
+      .slice(0, numCols * (numRows + 3)),
     ui: {
-      albumSize: columnSize,
+      albumImageSize,
     },
   };
 }
