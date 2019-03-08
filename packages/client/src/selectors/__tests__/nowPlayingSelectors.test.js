@@ -58,7 +58,7 @@ describe('nowPlayingSelectors', () => {
 
   describe('relatedAlbumImagesSelector()', () => {
     describe('when given valid input', () => {
-      it('should return album objects with title and images', () => {
+      it('should return shuffled album objects with title and images', () => {
         const selectorFunc =
           nowPlayingSelectors.relatedAlbumImagesSelector.resultFunc;
         expect(selectorFunc({
@@ -85,18 +85,18 @@ describe('nowPlayingSelectors', () => {
             }],
           },
         })).toEqual([{
-          id: 'fooId_0',
-          title: 'foo',
-          images: {
-            fullSize: 'fooFullSize',
-            thumbnail: 'fooThumbnail',
-          },
-        }, {
-          id: 'barId_1',
+          id: 'barId_0',
           title: 'bar',
           images: {
             fullSize: 'barFullSize',
             thumbnail: 'barThumbnail',
+          },
+        }, {
+          id: 'fooId_1',
+          title: 'foo',
+          images: {
+            fullSize: 'fooFullSize',
+            thumbnail: 'fooThumbnail',
           },
         }]);
       });
