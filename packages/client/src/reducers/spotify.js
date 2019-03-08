@@ -222,11 +222,15 @@ export default function spotify(state = initialState, action = {}) {
       const {
         albumsByArtist,
       } = action.payload;
+
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
             byArtist: {
-              $set: albumsByArtist,
+              $set: albumsByArtist.reduce((map, curr) => ({
+                ...map,
+                [curr.artistId]: curr,
+              }), {}),
             },
             request: {
               $merge: {

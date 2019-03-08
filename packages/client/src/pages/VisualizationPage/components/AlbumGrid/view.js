@@ -28,7 +28,7 @@ function AlbumGrid(props) {
     classes,
     albums,
     ui: {
-      albumSize,
+      albumImageSize,
     },
   } = props;
 
@@ -49,8 +49,8 @@ function AlbumGrid(props) {
           key={album.id}
           src={album.images.fullSize}
           alt={album.title}
-          width={albumSize}
-          height={albumSize}
+          width={albumImageSize}
+          height={albumImageSize}
         />
       ))}
     </Masonry>
@@ -68,7 +68,7 @@ AlbumGrid.propTypes = {
     }).isRequired,
   })).isRequired,
   ui: PropTypes.shape({
-    albumSize: PropTypes.number.isRequired,
+    albumImageSize: PropTypes.number.isRequired,
   }).isRequired,
 };
 
