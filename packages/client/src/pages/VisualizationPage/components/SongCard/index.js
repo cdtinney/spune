@@ -11,10 +11,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 const styles = (theme) => ({
   card: {
     display: 'flex',
+    position: 'absolute',
     flexWrap: 'wrap',
     alignItems: 'center',
-    marginLeft: '30px',
-    marginBottom: '30px',
+    left: '30px',
+    bottom: '30px',
     // Position in bottom-left.
     alignSelf: 'flex-start',
     marginTop: 'auto',
