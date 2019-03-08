@@ -6,8 +6,6 @@ import React from 'react';
 import ProgressiveImage from 'react-progressive-image';
 import PropTypes from 'prop-types';
 
-import './styles.css';
-
 function AlbumImage(props) {
   const {
     src,

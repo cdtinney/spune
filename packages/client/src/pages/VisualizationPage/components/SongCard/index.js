@@ -21,6 +21,7 @@ const styles = (theme) => ({
     marginTop: 'auto',
     // Ensure it's displayed over the color overlay
     zIndex: 100,
+    animation: 'fadein 1s',
   },
   details: {
     display: 'flex',
@@ -36,7 +37,7 @@ const styles = (theme) => ({
     height: 151,
     marginRight: 16,
     border: '2px solid rgba(252, 252, 252, 0.95)',
-    transition: 'background-image 1s ease-in-out 0s',
+    transition: 'background-image 1s ease-in 1s',
     boxShadow: theme.shadows[6],
   },
   text: {
@@ -50,13 +51,16 @@ const styles = (theme) => ({
   artistText: {
     fontSize: '1.5em',
     fontWeight: 'bold',
+    animation: 'fadein 2s',
   },
   albumText: {
     fontSize: '1.2em',
+    animation: 'fadein 2s',
   },
   titleText: {
     fontSize: '1.2em',
     marginTop: '1.2em',
+    animation: 'fadein 2s',
   },
 });
 
