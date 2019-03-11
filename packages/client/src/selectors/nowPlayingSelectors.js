@@ -8,15 +8,16 @@ import { createSelector } from 'reselect';
 // Internal dependencies  //
 ////////////////////////////
 
-import flatten from '../utils/flatten';
-import shuffle from '../utils/shuffle';
-
 export function nowPlayingInfoSelector(state) {
   return state.spotify.nowPlaying.info;
 }
 
-export function nowPlayingRelatedAlbumArtists(state) {
-  return state.spotify.nowPlaying.relatedAlbums.byArtist;
+export function nowPlayingRelatedAlbumsByAlbumId(state) {
+  return state.spotify.nowPlaying.relatedAlbums.byAlbumId;
+}
+
+export function nowPlayingRelatedAlbumIdsToDisplay(state) {
+  return state.spotify.nowPlaying.relatedAlbums.displayedAlbumIds;
 }
 
 export const nowPlayingArtistNamesSelector =
@@ -31,14 +32,11 @@ export const nowPlayingArtistNamesSelector =
 
 export const relatedAlbumImagesSelector =
   createSelector(
-    nowPlayingRelatedAlbumArtists,
-    (byArtist) => {
-      const flattenedArr = flatten(
-        Object.values(byArtist),
-        entry => entry.albums,
-      );
-
-      return shuffle(flattenedArr)
+    nowPlayingRelatedAlbumsByAlbumId,
+    nowPlayingRelatedAlbumIdsToDisplay,
+    (byAlbumId, albumIdsToDisplay) => {
+      return albumIdsToDisplay
+        .map(id => byAlbumId[id])
         .map((album, index)=> ({
           id: `${album.id}_${index}`,
           title: album.name,

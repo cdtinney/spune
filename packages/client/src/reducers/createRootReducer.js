@@ -3,6 +3,7 @@
 ////////////////////////////
 
 import { combineReducers } from 'redux';
+import { createResponsiveStateReducer } from 'redux-responsive'
 import { connectRouter } from 'connected-react-router';
 
 ////////////////////////////
@@ -25,5 +26,11 @@ export default function createRootReducer(history) {
     spotify,
     ui,
     user,
+    browser: createResponsiveStateReducer(null, {
+      extraFields: () => ({
+          width: window.innerWidth,
+          height: window.innerHeight,
+      }),
+    }),
   });
 }

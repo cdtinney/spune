@@ -39,7 +39,8 @@ const initialState = {
         error: undefined,
         errored: false,
       },
-      byArtist: {},
+      byAlbumId: {},
+      displayedAlbumIds: [],
     },
   },
 };
@@ -186,7 +187,8 @@ describe('spotify reducer', () => {
               errored: false,
               error: undefined,
             },
-            byArtist: {},
+            byAlbumId: {},
+            displayedAlbumIds: [],
           },
         },
       });
@@ -216,8 +218,8 @@ describe('spotify reducer', () => {
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
         payload: {
-          albumsByArtist: [{
-            artistId: 'foo',
+          albums: [{
+            id: 'foo',
           }],
         },
       })).toEqual({
@@ -226,9 +228,9 @@ describe('spotify reducer', () => {
           ...initialState.nowPlaying,
           relatedAlbums: {
             ...initialState.nowPlaying.relatedAlbums,
-            byArtist: {
+            byAlbumId: {
               'foo': {
-                artistId: 'foo',
+                id: 'foo',
               },
             },
             request: {
@@ -251,7 +253,8 @@ describe('spotify reducer', () => {
         nowPlaying: {
           ...initialState.nowPlaying,
           relatedAlbums: {
-            byArtist: {},
+            byAlbumId: {},
+            displayedAlbumIds: [],
             request: {
               loading: false,
               lastUpdated: null,

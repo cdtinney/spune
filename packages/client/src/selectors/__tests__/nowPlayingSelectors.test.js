@@ -15,18 +15,26 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('nowPlayingRelatedAlbumArtists()', () => {
+  describe('nowPlayingRelatedAlbumsByAlbumId()', () => {
     describe('when given valid input', () => {
-      it('returns the `state.spotify.nowPlaying.relatedAlbums.byArtist` property', () => {
-        expect(nowPlayingSelectors.nowPlayingRelatedAlbumArtists({
+      it('returns the `state.spotify.nowPlaying.relatedAlbums.byAlbumId` property', () => {
+        expect(nowPlayingSelectors.nowPlayingRelatedAlbumsByAlbumId({
           spotify: {
             nowPlaying: {
               relatedAlbums: {
-                byArtist: 'foo',
+                byAlbumId: {
+                  'foo': {
+                    id: 'foo',
+                  },
+                },
               },
             },
           },
-        })).toEqual('foo');
+        })).toEqual({
+          'foo': {
+            id: 'foo',
+          },
+        });
       });
     });
   });
@@ -58,33 +66,29 @@ describe('nowPlayingSelectors', () => {
 
   describe('relatedAlbumImagesSelector()', () => {
     describe('when given valid input', () => {
-      it('should return shuffled album objects with title and images', () => {
+      it('should return displayed album objects with title and images', () => {
         const selectorFunc =
           nowPlayingSelectors.relatedAlbumImagesSelector.resultFunc;
         expect(selectorFunc({
-          fooArtist: {
-            albums: [{
-              id: 'fooId',
-              name: 'foo',
-              images: [{
-                url: 'fooFullSize',
-              }, {
-                url: 'fooThumbnail',
-              }],
+          'foo': {
+            id: 'fooId',
+            name: 'foo',
+            images: [{
+              url: 'fooFullSize',
+            }, {
+              url: 'fooThumbnail',
             }],
           },
-          barArtist: {
-            albums: [{
-              id: 'barId',
-              name: 'bar',
-              images: [{
-                url: 'barFullSize',
-              }, {
-                url: 'barThumbnail',
-              }],
+          'bar': {
+            id: 'barId',
+            name: 'bar',
+            images: [{
+              url: 'barFullSize',
+            }, {
+              url: 'barThumbnail',
             }],
           },
-        })).toEqual([{
+        }, [ 'bar', 'foo' ])).toEqual([{
           id: 'barId_0',
           title: 'bar',
           images: {

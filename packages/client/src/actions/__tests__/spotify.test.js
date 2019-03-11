@@ -66,7 +66,7 @@ describe('spotifyActions', () => {
               displayName: 'foo',
               avatarImageUrl: '',
             },
-          },
+        },
         }];
 
         const store = mockStore({});
@@ -103,7 +103,9 @@ describe('spotifyActions', () => {
 
       it('creates FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS when fetching related albums succeeds', () => {
         mockGetCurrentlyPlayingRelatedAlbums.mockImplementation(() =>
-          Promise.resolve('foo'));
+          Promise.resolve([{
+            albumId: 'foo',
+          }]));
 
         const expectedActions = [{
           type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
@@ -114,7 +116,9 @@ describe('spotifyActions', () => {
           type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
           payload: {
             songId: 'fooSongId',
-            albumsByArtist: 'foo',
+            albums: [{
+              albumId: 'foo',
+            }],
           },
         }];
 
