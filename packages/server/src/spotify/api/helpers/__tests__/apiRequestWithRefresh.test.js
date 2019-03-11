@@ -7,9 +7,7 @@ jest.mock('../../../auth/refreshToken');
 
 describe('apiRequestWithRefresh()', () => {
   beforeAll(() => {
-    Date.now = jest.fn().mockImplementation(() => {
-      return 2000;
-    });
+    Date.now = jest.fn().mockImplementation(() => 2000);
   });
 
   it('returns succesfully the user has a valid token and the API function succeeds', async () => {
@@ -30,7 +28,7 @@ describe('apiRequestWithRefresh()', () => {
       spotifyAccessToken: 'fooAccess',
       spotifyRefreshToken: 'barRefresh',
       tokenUpdated: 123,
-      expiresIn :1000,
+      expiresIn: 1000,
     };
 
     refreshToken.mockImplementation(() => Promise.resolve(user));

@@ -20,11 +20,9 @@ describe('/spotify', () => {
   describe('/spotify/currently-playing/', () => {
     describe('/spotify/currently-playing/related-albums', () => {
       it('returns 200 when the underlying API request succeeds', async () => {
-        apiRequestWithRefresh.mockImplementation(() => {
-          return {
-            message: 'success',
-          };
-        });
+        apiRequestWithRefresh.mockImplementation(() => ({
+          message: 'success',
+        }));
 
         try {
           const response = await request(app)
@@ -55,13 +53,11 @@ describe('/spotify', () => {
 
   describe('/spotify/me', () => {
     it('returns 200 when the API request is successful', async () => {
-      apiRequestWithRefresh.mockImplementation(() => {
-        return {
-          body: {
-            profile: 'foo',
-          },
-        };
-      });
+      apiRequestWithRefresh.mockImplementation(() => ({
+        body: {
+          profile: 'foo',
+        },
+      }));
 
       const response = await request(app).get('/api/spotify/me');
 
@@ -87,13 +83,11 @@ describe('/spotify', () => {
 
   describe('/spotify/me/player', () => {
     it('returns 200 when the underlying API request suceeds', async () => {
-      apiRequestWithRefresh.mockImplementation(() => {
-        return {
-          body: {
-            message: 'success',
-          },
-        };
-      });
+      apiRequestWithRefresh.mockImplementation(() => ({
+        body: {
+          message: 'success',
+        },
+      }));
 
       const response = await request(app).get('/api/spotify/me/player');
       expect(response.statusCode).toEqual(200);
