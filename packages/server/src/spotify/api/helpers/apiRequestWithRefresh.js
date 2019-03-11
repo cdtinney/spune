@@ -14,10 +14,9 @@ async function getValidAccessToken(user) {
     throw new Error('Request has no user or access token');
   }
 
-  const requiresRefresh =
-    tokenExpired(user.tokenUpdated, user.expiresIn);
+  const requiresRefresh = tokenExpired(user.tokenUpdated, user.expiresIn);
   if (!requiresRefresh) {
-      return user.spotifyAccessToken;
+    return user.spotifyAccessToken;
   }
 
   logger.info('Refreshing user access token...');
@@ -30,5 +29,5 @@ module.exports = async function apiRequestWithRefresh({
   user,
   apiFn,
 }) {
-  return await apiFn(await getValidAccessToken(user));
+  return apiFn(await getValidAccessToken(user));
 };

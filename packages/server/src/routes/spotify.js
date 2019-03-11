@@ -8,12 +8,9 @@ const express = require('express');
 // Internal dependencies  //
 // //////////////////////////
 
-const { spotifyApiWithToken } =
-  require('../spotify/api/SpotifyApi');
-const apiRequestWithRefresh =
-  require('../spotify/api/helpers/apiRequestWithRefresh');
-const getCurrentlyPlayingRelatedAlbums =
-  require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
+const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
+const apiRequestWithRefresh = require('../spotify/api/helpers/apiRequestWithRefresh');
+const getCurrentlyPlayingRelatedAlbums = require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
 // ////////////
 // Helpers  //
@@ -93,10 +90,9 @@ router.get('/me/player', async (req, res) => {
   try {
     const result = await apiRequestWithRefresh({
       user,
-      apiFn: accessToken =>
-        spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
+      apiFn: accessToken => spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
     });
-    res.send(result.body)
+    res.send(result.body);
   } catch (error) {
     errorResponse(res, 400, error.message);
   }
