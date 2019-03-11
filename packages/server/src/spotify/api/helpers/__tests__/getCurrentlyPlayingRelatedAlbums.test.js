@@ -61,12 +61,6 @@ describe('getCurrentlyPlayingRelatedAlbums()', () => {
     }));
 
     const relatedAlbums = await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
-    expect(relatedAlbums).toEqual([{
-      artistId: 3,
-      albums: ['cat', 'dog'],
-    }, {
-      artistId: 4,
-      albums: ['cat', 'dog'],
-    }]);
+    expect(relatedAlbums).toEqual(['cat', 'dog', 'cat', 'dog']);
   });
 });

@@ -22,7 +22,7 @@ const memoizedCalculateColumnSize =
     calculateColumnSize,
   );
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   const {
     ui: {
       albums: {
@@ -30,12 +30,11 @@ function mapStateToProps(state, ownProps) {
         maxSize,
       },
     },
+    browser: {
+      width: windowWidth,
+      height: windowHeight,
+    },
   } = state;
-
-  const {
-    windowWidth,
-    windowHeight,
-  } = ownProps;
 
   const albumImageSize = memoizedCalculateColumnSize({
     windowWidth,

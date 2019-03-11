@@ -50,7 +50,8 @@ const initialState = {
         error: undefined,
         errored: false,
       },
-      byArtist: {},
+      byAlbumId: {},
+      displayedAlbumIds: [],
     },
   },
 };
@@ -195,7 +196,8 @@ export default function spotify(state = initialState, action = {}) {
                 errored: false,
                 error: undefined,
               },
-              byArtist: {},
+              byAlbumId: {},
+              displayedAlbumIds: [],
             },
           },
         },
@@ -220,20 +222,19 @@ export default function spotify(state = initialState, action = {}) {
 
     case types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
       const {
-        albumsByArtist,
+        albums,
       } = action.payload;
 
       return update(state, {
         nowPlaying: {
           relatedAlbums: {
-            byArtist: {
-              $set: albumsByArtist.reduce((map, curr) => ({
-                ...map,
-                [curr.artistId]: curr,
-              }), {}),
-            },
-            request: {
-              $merge: {
+            $merge: {
+              byAlbumId:
+                albums.reduce((map, album) => ({
+                  ...map,
+                  [album.id]: album,
+                }), {}),
+              request: {
                 loading: false,
                 lastUpdated: Date.now(),
                 error: null,
@@ -253,7 +254,8 @@ export default function spotify(state = initialState, action = {}) {
         nowPlaying: {
           relatedAlbums: {
             $set: {
-              byArtist: {},
+              byAlbumId: {},
+              displayedAlbumIds: [],
               request: {
                 loading: false,
                 lastUpdated: null,
