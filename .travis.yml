@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - "node"
+  # Latest has a bug: https://github.com/facebook/create-react-app/issues/6591
+  - "11.10.1"
 
 # Caches node_modules for 3 minutes
 cache: npm
