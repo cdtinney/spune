@@ -39,7 +39,7 @@ export function fetchUserAuthSuccess(profile) {
 export function fetchUserAuthFailure(error) {
   return {
     type: types.FETCH_USER_AUTH_FAILURE,
-    payload: new Error(error),
+    payload: error,
     error: true,
   };
 }

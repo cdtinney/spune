@@ -61,7 +61,7 @@ describe('user actions', () => {
           type: actions.types.FETCH_USER_AUTH_REQ,
         }, {
           type: actions.types.FETCH_USER_AUTH_FAILURE,
-          payload: new Error('foo'),
+          payload: 'foo',
           error: true,
         }];
 

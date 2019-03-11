@@ -29,6 +29,7 @@ const styles = {
     marginBottom: '2em',
   },
   contentContainer: {
+    textAlign: 'center',
     height: '100px',
   },
 };
