@@ -11,45 +11,15 @@ import windowSize from 'react-window-size';
 
 import * as nowPlayingSelectors from
   '../../../../selectors/nowPlayingSelectors';
+  import * as uiSelectors from
+    '../../../../selectors/uiSelectors';
 import AlbumGrid from './view';
 
-import calculateColumnSize from './utils/calculateColumnSize';
-import memoizeWithCache from './utils/memoizeWithCache';
-
-const memoizedCalculateColumnSize =
-  memoizeWithCache(
-    args => args.windowWidth,
-    calculateColumnSize,
-  );
-
 function mapStateToProps(state) {
-  const {
-    ui: {
-      albums: {
-        minSize,
-        maxSize,
-      },
-    },
-    browser: {
-      width: windowWidth,
-      height: windowHeight,
-    },
-  } = state;
-
-  const albumImageSize = memoizedCalculateColumnSize({
-    windowWidth,
-    minSize,
-    maxSize,
-  });
-
-  const numCols = windowWidth / albumImageSize;
-  const numRows = windowHeight / albumImageSize;
-
   return {
-    albums: nowPlayingSelectors.relatedAlbumImagesSelector(state)
-      .slice(0, numCols * (numRows + 3)),
+    albums: nowPlayingSelectors.relatedAlbumImagesSelector(state),
     ui: {
-      albumImageSize,
+      albumImageSize: uiSelectors.uiAlbumGridImageSizeSelector(state),
     },
   };
 }

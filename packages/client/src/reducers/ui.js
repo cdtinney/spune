@@ -8,7 +8,7 @@ const initialState = {
   // Whether or not the app is displaying in fullscreen.
   fullscreen: false,
   // Album grid properties.
-  albums: {
+  albumGrid: {
     maxPerRow: 26,
     // Min/max size of a single album image, in pixels.
     minSize: 80,

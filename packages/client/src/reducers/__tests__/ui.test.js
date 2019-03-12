@@ -3,7 +3,7 @@ import reducer from '../ui';
 
 const initialState = {
   fullscreen: false,
-  albums: {
+  albumGrid: {
     maxPerRow: 26,
     minSize: 80,
     maxSize: 151,

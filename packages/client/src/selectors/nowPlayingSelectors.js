@@ -8,16 +8,14 @@ import { createSelector } from 'reselect';
 // Internal dependencies  //
 ////////////////////////////
 
+import * as uiSelectors from './uiSelectors';
+
 export function nowPlayingInfoSelector(state) {
   return state.spotify.nowPlaying.info;
 }
 
 export function nowPlayingRelatedAlbumsByAlbumId(state) {
   return state.spotify.nowPlaying.relatedAlbums.byAlbumId;
-}
-
-export function nowPlayingRelatedAlbumIdsToDisplay(state) {
-  return state.spotify.nowPlaying.relatedAlbums.displayedAlbumIds;
 }
 
 export const nowPlayingArtistNamesSelector =
@@ -33,9 +31,10 @@ export const nowPlayingArtistNamesSelector =
 export const relatedAlbumImagesSelector =
   createSelector(
     nowPlayingRelatedAlbumsByAlbumId,
-    nowPlayingRelatedAlbumIdsToDisplay,
-    (byAlbumId, albumIdsToDisplay) => {
-      return albumIdsToDisplay
+    uiSelectors.uiAlbumGridNumAlbumsSelector,
+    (byAlbumId, numAlbums) => {
+      return Object.keys(byAlbumId)
+        .slice(0, numAlbums)
         .map(id => byAlbumId[id])
         .map((album, index)=> ({
           id: `${album.id}_${index}`,
