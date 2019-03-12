@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 function AlbumImage(props) {
   const {
     src,
+    thumbnail,
     alt,
     className,
     width,
@@ -16,7 +17,10 @@ function AlbumImage(props) {
   } = props;
 
   return (
-    <ProgressiveImage src={src}>
+    <ProgressiveImage
+      src={src}
+      placeholder={thumbnail}
+    >
       {(src, loading) => {
         return (
           <img
@@ -27,7 +31,7 @@ function AlbumImage(props) {
               height: `${height}px`,
               width: `${width}px`,
               opacity: loading ? 0 : '1',
-              animation: loading ? '' : 'fadein 2s',
+              animation: 'fadein 2s',
             }}
           />
         );
@@ -38,6 +42,7 @@ function AlbumImage(props) {
 
 AlbumImage.propTypes = {
   src: PropTypes.string.isRequired,
+  thumbnail: PropTypes.string.isRequired,
   className: PropTypes.string,
   height: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,

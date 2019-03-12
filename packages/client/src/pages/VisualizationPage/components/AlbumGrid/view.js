@@ -48,6 +48,7 @@ function AlbumGrid(props) {
         <AlbumImage
           key={album.id}
           src={album.images.fullSize}
+          thumbnail={album.images.thumbnail}
           alt={album.title}
           width={albumImageSize}
           height={albumImageSize}
