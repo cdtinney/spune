@@ -47,7 +47,10 @@ export const relatedAlbumImagesSelector =
           id: `${album.id}_${index}`,
           title: album.name,
           images: {
-            fullSize: album.images[0].url,
+            // The first image is technically the full size but
+            // we're not enlarging the album thumbnails any bigger than
+            // the mid-size image (300px by 300px).
+            fullSize: album.images[1].url,
             thumbnail: album.images[album.images.length - 1].url,
           },
         }));

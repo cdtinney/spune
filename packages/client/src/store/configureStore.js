@@ -11,6 +11,7 @@ import {
 } from 'redux-responsive';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
+import debounce from 'debounce';
 
 ///////////////////////////
 // Internal dependencies //
@@ -36,8 +37,9 @@ export default function configureStore() {
     ),
   );
 
-  window.addEventListener('resize', () =>
-    store.dispatch(calculateResponsiveState(window)));
+  // Debounce this to avoid aggressive re-calculation
+  window.addEventListener('resize', debounce(() =>
+    store.dispatch(calculateResponsiveState(window)), 300));
 
   return store;
 }
