@@ -51,7 +51,7 @@ const initialState = {
         errored: false,
       },
       byAlbumId: {},
-      displayedAlbumIds: [],
+      allAlbumIds: [],
     },
   },
 };
@@ -197,7 +197,7 @@ export default function spotify(state = initialState, action = {}) {
                 error: undefined,
               },
               byAlbumId: {},
-              displayedAlbumIds: [],
+              allAlbumIds: [],
             },
           },
         },
@@ -234,6 +234,7 @@ export default function spotify(state = initialState, action = {}) {
                   ...map,
                   [album.id]: album,
                 }), {}),
+              allAlbumIds: albums.map(album => album.id),
               request: {
                 loading: false,
                 lastUpdated: Date.now(),
@@ -255,7 +256,7 @@ export default function spotify(state = initialState, action = {}) {
           relatedAlbums: {
             $set: {
               byAlbumId: {},
-              displayedAlbumIds: [],
+              allAlbumIds: [],
               request: {
                 loading: false,
                 lastUpdated: null,
