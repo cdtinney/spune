@@ -40,7 +40,7 @@ const initialState = {
         errored: false,
       },
       byAlbumId: {},
-      displayedAlbumIds: [],
+      allAlbumIds: [],
     },
   },
 };
@@ -188,7 +188,7 @@ describe('spotify reducer', () => {
               error: undefined,
             },
             byAlbumId: {},
-            displayedAlbumIds: [],
+            allAlbumIds: [],
           },
         },
       });
@@ -233,6 +233,7 @@ describe('spotify reducer', () => {
                 id: 'foo',
               },
             },
+            allAlbumIds: [ 'foo' ],
             request: {
               loading: false,
               lastUpdated: 123,
@@ -254,7 +255,7 @@ describe('spotify reducer', () => {
           ...initialState.nowPlaying,
           relatedAlbums: {
             byAlbumId: {},
-            displayedAlbumIds: [],
+            allAlbumIds: [],
             request: {
               loading: false,
               lastUpdated: null,
