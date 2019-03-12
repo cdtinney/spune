@@ -9,21 +9,19 @@ import Avatar from '@material-ui/core/Avatar';
 
 const styles = (theme) => ({
   avatar: {
-    margin: 30,
     boxShadow: theme.shadows[6],
   },
 });
 
-function IconAvatar(props) {
-  const {
-    alt,
-    title,
-    src,
-    classes,
-  } = props;
-
+function IconAvatar({
+  alt,
+  title,
+  src,
+  classes,
+  className,
+}) {
   return (
-    <div>
+    <div className={className}>
       <Avatar
         title={title}
         alt={alt}
@@ -39,6 +37,11 @@ IconAvatar.propTypes = {
   alt: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+};
+
+IconAvatar.defaultProps = {
+  className: undefined,
 };
 
 export default withStyles(styles)(IconAvatar);

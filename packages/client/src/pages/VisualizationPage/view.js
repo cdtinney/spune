@@ -13,7 +13,7 @@ import Fullscreen from 'react-full-screen';
 ///////////////////////////
 
 import LoadingScreen from '../../components/LoadingScreen';
-import TopAppBar from './components/TopAppBar';
+import IconAvatar from './components/IconAvatar';
 import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
@@ -53,6 +53,12 @@ const styles = theme => ({
     zIndex: 100,
     alignSelf: 'center',
     margin: 'auto 0',
+  },
+  iconAvatar: {
+    position: 'absolute',
+    top: '30px',
+    right: '30px',
+    zIndex: 100,
   },
 });
 
@@ -134,13 +140,14 @@ export class VisualizationPageView extends Component {
           { !loading &&
             <React.Fragment>
               <NowPlayingPoller />
-              <TopAppBar
-                title="spune"
-                user={userName && userImageUrl ? {
-                  name: userName,
-                  imageUrl: userImageUrl,
-                } : undefined}
-              />
+              { userName && userImageUrl &&
+                <IconAvatar
+                  title={userName}
+                  alt={userName}
+                  src={userImageUrl}
+                  className={classes.iconAvatar}
+                />
+              }
             </React.Fragment>
           }
           <div className={classes.content}>
