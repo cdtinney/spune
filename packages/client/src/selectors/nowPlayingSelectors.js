@@ -23,11 +23,17 @@ export function nowPlayingRelatedAlbumsAllIds(state) {
   return state.spotify.nowPlaying.relatedAlbums.allAlbumIds;
 }
 
-export const nowPlayingArtistNamesSelector =
+export const nowPlayingArtists =
   createSelector(
     nowPlayingInfoSelector,
-    (info) => {
-      return (info.songArtists || [])
+    (info) => info.songArtists,
+  );
+
+export const nowPlayingArtistNamesSelector =
+  createSelector(
+    nowPlayingArtists,
+    (artists) => {
+      return (artists || [])
         .map(artist => artist.name)
         .join(', ');
     },

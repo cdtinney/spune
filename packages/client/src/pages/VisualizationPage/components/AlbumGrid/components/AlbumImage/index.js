@@ -6,16 +6,14 @@ import React from 'react';
 import ProgressiveImage from 'react-progressive-image';
 import PropTypes from 'prop-types';
 
-function AlbumImage(props) {
-  const {
-    src,
-    thumbnail,
-    alt,
-    className,
-    width,
-    height,
-  } = props;
-
+function AlbumImage({
+  src,
+  thumbnail,
+  alt,
+  className,
+  width,
+  height,
+}) {
   return (
     <ProgressiveImage
       src={src}

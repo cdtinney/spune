@@ -2,7 +2,7 @@
 // External dependencies //
 ///////////////////////////
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
@@ -65,7 +65,7 @@ const styles = theme => ({
 /**
  * Album art visualization page for the user's currently playing track.
  */
-export class VisualizationPageView extends Component {
+export class VisualizationPageView extends PureComponent {
   static propTypes = {
     user: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -86,17 +86,22 @@ export class VisualizationPageView extends Component {
     setFullscreen: PropTypes.func.isRequired,
   };
 
-  //////////////////////
-  // Lifecycle methods//
-  //////////////////////
+  ///////////////////////
+  // Lifecycle methods //
+  ///////////////////////
 
   constructor(props) {
     super(props);
     this.handleFullscreen = this.handleFullscreen.bind(this);
   }
+
   componentDidMount() {
     this.props.onLoad();
   }
+
+  //////////////
+  // Handlers //
+  //////////////
 
   handleFullscreen(fullscreen = true) {
     this.props.setFullscreen(fullscreen);
@@ -106,18 +111,56 @@ export class VisualizationPageView extends Component {
   // Render methods //
   ////////////////////
 
+  // TODO Extract to connected component
+  renderContent() {
+    const {
+      classes,
+      nowPlaying: {
+        songTitle,
+        songArtistName,
+        albumName,
+        albumImageUrl,
+      },
+      ui: {
+        loading,
+      },
+    } = this.props;
+
+    if (loading) {
+      return <LoadingScreen className={classes.loadingScreen} />;
+    }
+
+    const songPlaying = songArtistName !== null
+      && songTitle !== null;
+    if (!songPlaying) {
+      return (
+        <div className={classes.nothingPlayingContainer}>
+          <Typography>
+            {'No song playing. Play something.'}
+          </Typography>
+        </div>
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <SongCard
+          artistName={songArtistName}
+          songTitle={songTitle}
+          albumName={albumName}
+          albumImageUrl={albumImageUrl}
+        />
+        <AlbumGrid />
+      </React.Fragment>
+    );
+  }
+
   render() {
     const {
       classes,
       user: {
         userName,
         userImageUrl,
-      },
-      nowPlaying: {
-        songTitle,
-        songArtistName,
-        albumName,
-        albumImageUrl,
       },
       ui: {
         loading,
@@ -128,7 +171,7 @@ export class VisualizationPageView extends Component {
     return (
       <div className={classes.root}>
         <FullscreenButton
-          onClick={() => this.handleFullscreen(true)}
+          onClick={this.handleFullscreen}
           className={classes.fullscreenButton}
         />
         <Fullscreen
@@ -151,37 +194,7 @@ export class VisualizationPageView extends Component {
             </React.Fragment>
           }
           <div className={classes.content}>
-            {
-              (() => {
-                if (loading) {
-                  return <LoadingScreen className={classes.loadingScreen} />;
-                }
-
-                const songPlaying = songArtistName !== null
-                  && songTitle !== null;
-                if (!songPlaying) {
-                  return (
-                    <div className={classes.nothingPlayingContainer}>
-                      <Typography>
-                        {'No song playing. Play something.'}
-                      </Typography>
-                    </div>
-                  );
-                }
-
-                return (
-                  <React.Fragment>
-                    <SongCard
-                    artistName={songArtistName}
-                      songTitle={songTitle}
-                      albumName={albumName}
-                      albumImageUrl={albumImageUrl}
-                    />
-                    <AlbumGrid />
-                  </React.Fragment>
-                );
-              })()
-            }
+            {this.renderContent()}
           </div>
         </Fullscreen>
       </div>

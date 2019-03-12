@@ -28,6 +28,8 @@ export const types = {
     'SPOTIFY/FETCH_NOW_PLAYING_INFO_REQUEST',
   FETCH_NOW_PLAYING_INFO_SUCCESS:
     'SPOTIFY/FETCH_NOW_PLAYING_INFO_SUCCESS',
+  FETCH_NOW_PLAYING_INFO_SUCCESS_DUPE:
+    'SPOTIFY/FETCH_NOW_PLAYING_INFO_SUCCESS_DUPE',
   FETCH_NOW_PLAYING_INFO_FAILURE:
     'SPOTIFY/FETCH_NOW_PLAYING_INFO_FAILURE',
   CLEAR_NOW_PLAYING_RELATED_ALBUMS:
@@ -123,7 +125,7 @@ export function fetchNowPlayingRelatedAlbums() {
   };
 }
 
-export function fetchNowPlayingInfo() {
+export function fetchNowPlayingInfo(skipSuccess) {
   return function fetchNowPlayingInfoThunk(dispatch, getState) {
     const {
       spotify: {
@@ -132,6 +134,7 @@ export function fetchNowPlayingInfo() {
             loading,
           },
           info: {
+            songId: currentSongId,
             albumId: currentAlbumId,
           },
         },
@@ -161,7 +164,9 @@ export function fetchNowPlayingInfo() {
       } = data;
 
       dispatch({
-        type: types.FETCH_NOW_PLAYING_INFO_SUCCESS,
+        type: songId === currentSongId
+          ? types.FETCH_NOW_PLAYING_INFO_SUCCESS_DUPE
+          : types.FETCH_NOW_PLAYING_INFO_SUCCESS,
         payload: {
           info: {
             songId,
