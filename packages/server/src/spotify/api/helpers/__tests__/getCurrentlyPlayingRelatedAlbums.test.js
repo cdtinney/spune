@@ -57,10 +57,18 @@ describe('getCurrentlyPlayingRelatedAlbums()', () => {
     ]));
     getArtistStudioAlbums.mockImplementation((spotifyApi, artistId) => Promise.resolve({
       artistId,
-      albums: ['cat', 'dog'],
+      albums: [{
+        name: 'cat',
+      }, {
+        name: 'dog',
+      }],
     }));
 
     const relatedAlbums = await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
-    expect(relatedAlbums).toEqual(['cat', 'dog', 'cat', 'dog']);
+    expect(relatedAlbums).toEqual([{
+      name: 'cat',
+    }, {
+      name: 'dog',
+    }]);
   });
 });
