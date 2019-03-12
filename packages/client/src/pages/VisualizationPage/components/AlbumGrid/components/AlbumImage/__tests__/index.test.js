@@ -7,6 +7,7 @@ describe('AlbumImage', () => {
     mount(
       <AlbumImage
         src='https://via.placeholder.com/150'
+        thumbnail='https://via.placeholder.com/150'
         height={100}
         width={100}
       />

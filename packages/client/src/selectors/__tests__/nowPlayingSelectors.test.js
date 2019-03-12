@@ -45,21 +45,17 @@ describe('nowPlayingSelectors', () => {
 
     describe('when given valid input', () => {
       it('should return artist names joined by a comma and space', () => {
-        expect(selectorFunc({
-          songArtists: [{
+        expect(selectorFunc([{
             name: 'foo',
           }, {
             name: 'bar',
           }, {
             name: 'baz',
-          }],
-        })).toEqual('foo, bar, baz');
+          }])).toEqual('foo, bar, baz');
       });
 
-      it('should return an empty string when given null songArtists', () => {
-        expect(selectorFunc({
-          songArtists: null,
-        })).toEqual('');
+      it('should return an empty string when given no artists', () => {
+        expect(selectorFunc()).toEqual('');
       });
     });
   });
