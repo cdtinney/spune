@@ -15,10 +15,10 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('nowPlayingRelatedAlbumsByAlbumId()', () => {
+  describe('nowPlayingRelatedAlbumsById()', () => {
     describe('when given valid input', () => {
       it('returns the `state.spotify.nowPlaying.relatedAlbums.byAlbumId` property', () => {
-        expect(nowPlayingSelectors.nowPlayingRelatedAlbumsByAlbumId({
+        expect(nowPlayingSelectors.nowPlayingRelatedAlbumsById({
           spotify: {
             nowPlaying: {
               relatedAlbums: {
