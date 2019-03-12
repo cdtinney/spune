@@ -64,7 +64,7 @@ describe('nowPlayingSelectors', () => {
     });
   });
 
-  describe('relatedAlbumImagesSelector()', () => {
+  describe.skip('relatedAlbumImagesSelector()', () => {
     describe('when given valid input', () => {
       it('should return displayed album objects with title and images', () => {
         const selectorFunc =
