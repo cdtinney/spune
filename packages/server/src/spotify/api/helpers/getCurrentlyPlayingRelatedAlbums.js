@@ -1,5 +1,6 @@
 const getRelatedArtists = require('./getRelatedArtists');
 const getArtistStudioAlbums = require('./getArtistStudioAlbums');
+const uniqueAlbums = require('../../utils/uniqueAlbums');
 const combineTrackArtists = require('../../utils/combineTrackArtists');
 
 module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, songId) {
@@ -31,6 +32,10 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
     [...relatedArtistIds]
       .map(artistId => getArtistStudioAlbums(spotifyApi, artistId)),
   );
-  return albumsByArtist
-    .reduce((arr, curr) => arr.concat(curr.albums), []);
+
+  // Some artists share albums but they have different IDs. They will
+  // likely have matching names so we can further reduce duplicates at this
+  // final stage.
+  return uniqueAlbums(
+    albumsByArtist.reduce((arr, curr) => arr.concat(curr.albums), []));
 };
