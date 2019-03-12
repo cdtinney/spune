@@ -28,8 +28,10 @@ export default function createRootReducer(history) {
     user,
     browser: createResponsiveStateReducer(null, {
       extraFields: () => ({
+        resolution: {
           width: window.innerWidth,
           height: window.innerHeight,
+        },
       }),
     }),
   });
