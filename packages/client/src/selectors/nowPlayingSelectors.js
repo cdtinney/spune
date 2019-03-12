@@ -8,6 +8,7 @@ import { createSelector } from 'reselect';
 // Internal dependencies  //
 ////////////////////////////
 
+import shuffle from '../utils/shuffle';
 import * as uiSelectors from './uiSelectors';
 
 export function nowPlayingInfoSelector(state) {
@@ -38,9 +39,10 @@ export const relatedAlbumImagesSelector =
     nowPlayingRelatedAlbumsAllIds,
     uiSelectors.uiAlbumGridNumAlbumsSelector,
     (byAlbumId, allAlbumIds, numAlbums) => {
-      return allAlbumIds
-        .slice(0, numAlbums)
-        .map(id => byAlbumId[id])
+      const displayedIds = allAlbumIds.slice(0, numAlbums);
+      const shuffledIds = shuffle(displayedIds);
+      const displayedAlbums = shuffledIds.map(id => byAlbumId[id]);
+      return displayedAlbums
         .map((album, index)=> ({
           id: `${album.id}_${index}`,
           title: album.name,
