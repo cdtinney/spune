@@ -25,6 +25,12 @@ describe('/auth', () => {
     });
   });
 
+  describe('/auth/user/logout', () => {
+    it('logs out the user session and redirects to home', async () => {
+      // TODO
+    });
+  });
+
   describe('/auth/spotify', () => {
     beforeAll(() => {
       passport.authenticate = jest.fn();

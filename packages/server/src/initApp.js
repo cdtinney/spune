@@ -44,13 +44,14 @@ module.exports = function initApp() {
     store: new MongoStore({
       mongooseConnection: mongoDB.mongoose.connection,
     }),
+    // If `req.session` is unset, destroy the session in the DB.
+    unset: 'destroy',
   }));
 
   // Initialize Passport.js for authentication of users.
   app.use(passport.initialize());
   app.use(passport.session());
   configurePassport(passport);
-
 
   // Add HTML routes (for production and integration testing).
   const nodeEnv = process.env.NODE_ENV;

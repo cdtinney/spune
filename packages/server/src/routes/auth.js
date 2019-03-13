@@ -20,6 +20,13 @@ router.get('/user', (req, res) => {
   });
 });
 
+router.get('/user/logout', (req, res) => {
+  req.logout();
+  // Setting to `null` will clear the session in the DB.
+  req.session = null;
+  res.redirect('/');
+});
+
 router.get(
   '/spotify',
   passport.authenticate('spotify', {
