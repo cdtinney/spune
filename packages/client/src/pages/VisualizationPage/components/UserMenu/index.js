@@ -23,7 +23,11 @@ const styles = (theme) => ({
     },
   },
   menu: {
+    marginTop: '10px',
     boxShadow: theme.shadows[6],
+  },
+  menuList: {
+    padding: '5px 0',
   },
   menuItem: {
     padding: '0 10px',
@@ -88,10 +92,25 @@ class UserMenu extends PureComponent {
         <Menu
           id="user-menu"
           anchorEl={anchorElem}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
           open={Boolean(anchorElem)}
+          disableAutoFocusItem
           onClose={this.handleClose}
           classes={{
             paper: classes.menu,
+          }}
+          MenuListProps={{
+            classes: {
+              root: classes.menuList,
+            },
           }}
         >
           <MenuItem

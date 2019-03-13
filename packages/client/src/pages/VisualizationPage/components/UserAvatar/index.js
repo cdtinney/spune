@@ -5,43 +5,54 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 
 const styles = (theme) => ({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   avatar: {
+    width: '32px',
+    height: 'auto',
     boxShadow: theme.shadows[6],
+  },
+  displayName: {
+    marginLeft: '10px',
   },
 });
 
-function UserMenu({
-  alt,
-  title,
-  src,
+function UserAvatar({
+  displayName,
+  thumbnailSrc,
   classes,
   className,
 }) {
   return (
-    <div className={className}>
+    <div className={`${className} ${classes.root}`}>
       <Avatar
-        title={title}
-        alt={alt}
-        src={src}
+        title={displayName}
+        alt={displayName}
+        src={thumbnailSrc}
         className={classes.avatar}
       />
+      <Typography className={classes.displayName}>
+        {displayName}
+      </Typography>
     </div>
   );
 }
 
-UserMenu.propTypes = {
-  title: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
-  src: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired,
+UserAvatar.propTypes = {
+  displayName: PropTypes.string.isRequired,
+  thumbnailSrc: PropTypes.string.isRequired,
   className: PropTypes.string,
+  classes: PropTypes.object.isRequired,
 };
 
-UserMenu.defaultProps = {
-  className: undefined,
+UserAvatar.defaultProps = {
+  className: '',
 };
 
-export default withStyles(styles)(UserMenu);
+export default withStyles(styles)(UserAvatar);
