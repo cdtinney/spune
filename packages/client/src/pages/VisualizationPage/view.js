@@ -13,7 +13,8 @@ import Fullscreen from 'react-full-screen';
 ///////////////////////////
 
 import LoadingScreen from '../../components/LoadingScreen';
-import IconAvatar from './components/IconAvatar';
+import UserAvatar from './components/UserAvatar';
+import UserMenu from './components/UserMenu';
 import ColorOverlay from './components/CoverOverlay';
 import NowPlayingPoller from './components/NowPlayingPoller';
 import SongCard from './components/SongCard';
@@ -54,11 +55,12 @@ const styles = theme => ({
     alignSelf: 'center',
     margin: 'auto 0',
   },
-  iconAvatar: {
+  userContainer: {
     position: 'absolute',
     top: '30px',
     right: '30px',
     zIndex: 100,
+    display: 'flex',
   },
 });
 
@@ -83,6 +85,7 @@ export class VisualizationPageView extends PureComponent {
       fullscreen: PropTypes.bool.isRequired,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
+    logoutUser: PropTypes.func.isRequired,
     setFullscreen: PropTypes.func.isRequired,
   };
 
@@ -166,6 +169,7 @@ export class VisualizationPageView extends PureComponent {
         loading,
         fullscreen,
       },
+      logoutUser,
     } = this.props;
 
     return (
@@ -184,12 +188,18 @@ export class VisualizationPageView extends PureComponent {
             <React.Fragment>
               <NowPlayingPoller />
               { userName && userImageUrl &&
-                <IconAvatar
-                  title={userName}
-                  alt={userName}
-                  src={userImageUrl}
-                  className={classes.iconAvatar}
-                />
+                <div className={classes.userContainer}>
+                  <UserAvatar
+                    title={userName}
+                    alt={userName}
+                    src={userImageUrl}
+                  />
+                  <UserMenu
+                    handlers={{
+                      onLogout: logoutUser,
+                    }}
+                  />
+                </div>
               }
             </React.Fragment>
           }

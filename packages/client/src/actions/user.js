@@ -15,6 +15,7 @@ export const types = {
     'AUTH/FETCH_USER_AUTH_SUCCESS',
   FETCH_USER_AUTH_FAILURE:
     'AUTH/FETCH_USER_AUTH_FAILURE',
+  LOGOUT_USER: 'LOGOUT_USER',
 };
 
 //////////////////////
@@ -54,6 +55,11 @@ export function loginUser() {
   // An authorization fragment will not be routed/proxied to the API.
   // So, we can manually change the URL for now.
   window.location.assign('api/auth/spotify');
+}
+
+export function logoutUser() {
+  // ... same as above ...
+  window.location.assign('/api/auth/user/logout');
 }
 
 export function fetchUserAuth() {

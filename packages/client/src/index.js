@@ -20,7 +20,7 @@ import createTheme from './theme/createTheme';
 import './index.css';
 
 if (process.env.NODE_ENV !== 'production') {
-  whyDidYouUpdate(React);
+  // whyDidYouUpdate(React);
 }
 
 function Root() {

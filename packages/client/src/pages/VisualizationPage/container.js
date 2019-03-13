@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 import * as spotifyActions from '../../actions/spotify';
 import * as uiActions from '../../actions/ui';
+import * as userActions from '../../actions/user';
 
 import * as nowPlayingSelectors from '../../selectors/nowPlayingSelectors';
 
@@ -80,6 +81,11 @@ function mapDispatchToProps(dispatch) {
     onLoad() {
       dispatch(spotifyActions.fetchMyInfo());
       dispatch(spotifyActions.fetchNowPlayingInfo());
+    },
+
+    logoutUser() {
+      // This should be an action, I know.
+      userActions.logoutUser();
     },
 
     setFullscreen(fullscreen) {
