@@ -13,7 +13,7 @@ const styles = (theme) => ({
   },
 });
 
-function IconAvatar({
+function UserMenu({
   alt,
   title,
   src,
@@ -32,7 +32,7 @@ function IconAvatar({
   );
 }
 
-IconAvatar.propTypes = {
+UserMenu.propTypes = {
   title: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   src: PropTypes.string.isRequired,
@@ -40,8 +40,8 @@ IconAvatar.propTypes = {
   className: PropTypes.string,
 };
 
-IconAvatar.defaultProps = {
+UserMenu.defaultProps = {
   className: undefined,
 };
 
-export default withStyles(styles)(IconAvatar);
+export default withStyles(styles)(UserMenu);

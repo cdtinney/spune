@@ -10,22 +10,30 @@ const middlewares = [];
 const mockStore = configureStore(middlewares);
 
 describe('VisualizationPageView', () => {
+  function makeDefaultProps(overrides) {
+    return {
+      classes: {
+        root: {},
+      },
+      user: {
+        loading: false,
+      },
+      nowPlaying: {},
+      ui: {
+        loading: false,
+        fullscreen: false,
+      },
+      onLoad: () => {},
+      logoutUser: () => {},
+      setFullscreen: () => {},
+      ...overrides,
+    };
+  }
+
   it('renders not in fullscreen when no song is provided', () => {
     shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
-        user={{
-          loading: false,
-        }}
-        nowPlaying={{}}
-        ui={{
-          loading: false,
-          fullscreen: false,
-        }}
-        onLoad={() => {}}
-        setFullscreen={() => {}}
+        {...makeDefaultProps()}
       />,
     );
   });
@@ -33,22 +41,11 @@ describe('VisualizationPageView', () => {
   it('renders not in fullscreen when a song is provided', () => {
     shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
-        user={{
-          loading: false,
-        }}
+        {...makeDefaultProps()}
         nowPlaying={{
           songTitle: 'bar',
           songArtistName: 'foo',
         }}
-        ui={{
-          loading: false,
-          fullscreen: false,
-        }}
-        onLoad={() => {}}
-        setFullscreen={() => {}}
       />,
     );
   });
@@ -56,19 +53,11 @@ describe('VisualizationPageView', () => {
   it('renders in fullscreen when no song is provided', () => {
     shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
-        user={{
-          loading: false,
-        }}
-        nowPlaying={{}}
+        {...makeDefaultProps()}
         ui={{
           loading: false,
           fullscreen: true,
         }}
-        onLoad={() => {}}
-        setFullscreen={() => {}}
       />,
     );
   });
@@ -76,9 +65,7 @@ describe('VisualizationPageView', () => {
   it('renders in fullscreen when a song is provided', () => {
     shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
+        {...makeDefaultProps()}
         user={{
           loading: false,
         }}
@@ -91,8 +78,6 @@ describe('VisualizationPageView', () => {
           loading: false,
           fullscreen: true,
         }}
-        onLoad={() => {}}
-        setFullscreen={() => {}}
       />,
     );
   });
@@ -101,22 +86,12 @@ describe('VisualizationPageView', () => {
     const setFullscreenMock = jest.fn();
     const wrapper = shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
-        user={{
-          loading: false,
-        }}
+        {...makeDefaultProps()}
         nowPlaying={{
           songTitle: 'bar',
           songArtistName: 'foo',
           initialRequestFinished: true,
         }}
-        ui={{
-          loading: false,
-          fullscreen: false,
-        }}
-        onLoad={() => {}}
         setFullscreen={setFullscreenMock}
       />,
     );
@@ -129,21 +104,11 @@ describe('VisualizationPageView', () => {
     const setFullscreenMock = jest.fn();
     const wrapper = shallow(
       <VisualizationPageView
-        classes={{
-          root: {},
-        }}
-        user={{
-          loading: false,
-        }}
+        {...makeDefaultProps()}
         nowPlaying={{
           songTitle: 'bar',
           songArtistName: 'foo',
         }}
-        ui={{
-          loading: false,
-          fullscreen: false,
-        }}
-        onLoad={() => {}}
         setFullscreen={setFullscreenMock}
       />,
     );
@@ -168,22 +133,11 @@ describe('VisualizationPageView', () => {
     const wrapper = mount(
       <Provider store={store}>
         <VisualizationPageView
-          classes={{
-            root: {},
-          }}
-          user={{
-            loading: false,
-          }}
+          {...makeDefaultProps()}
           nowPlaying={{
             songTitle: null,
             songArtistName: null,
           }}
-          ui={{
-            loading: false,
-            fullscreen: false,
-          }}
-          onLoad={() => {}}
-          setFullscreen={() => {}}
         />
       </Provider>
     );
@@ -207,12 +161,7 @@ describe('VisualizationPageView', () => {
     const wrapper = mount(
       <Provider store={store}>
         <VisualizationPageView
-          classes={{
-            root: {},
-          }}
-          user={{
-            loading: false,
-          }}
+          {...makeDefaultProps()}
           nowPlaying={{
             songTitle: null,
             songArtistName: null,
@@ -221,8 +170,6 @@ describe('VisualizationPageView', () => {
             loading: true,
             fullscreen: false,
           }}
-          onLoad={() => {}}
-          setFullscreen={() => {}}
         />
       </Provider>
     );
@@ -246,12 +193,7 @@ describe('VisualizationPageView', () => {
     const wrapper = mount(
       <Provider store={store}>
         <VisualizationPageView
-          classes={{
-            root: {},
-          }}
-          user={{
-            loading: false,
-          }}
+          {...makeDefaultProps()}
           nowPlaying={{
             songTitle: null,
             songArtistName: null,
@@ -260,8 +202,6 @@ describe('VisualizationPageView', () => {
             loading: true,
             fullscreen: false,
           }}
-          onLoad={() => {}}
-          setFullscreen={() => {}}
         />
       </Provider>
     );
