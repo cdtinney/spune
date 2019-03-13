@@ -64,19 +64,6 @@ module.exports = function initApp() {
   // Add API routes.
   app.use('/api', routes);
 
-  // Error handling must be added last.
-  app.use((err, req, res, next) => {
-    if (res.headersSent) {
-      return next(err);
-    }
-
-    logger.error(err);
-    return res.status(500).send({
-      name: err.name,
-      message: err.message,
-    });
-  });
-
   // Connect to the DB.
   mongoDB.connect();
 

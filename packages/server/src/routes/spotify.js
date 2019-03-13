@@ -20,8 +20,13 @@ const getCurrentlyPlayingRelatedAlbums =
 // Helpers  //
 // ////////////
 
-function errorResponse(response, statusCode, errorMessage) {
-  return response.status(statusCode).json(errorMessage).end();
+function errorMessage(error) {
+  if (error.data) {
+    const dataObj = JSON.parse(error.data);
+    return dataObj.error_description;
+  }
+
+  return error.message || 'Unknown Error';
 }
 
 // ////////////
@@ -56,7 +61,7 @@ router.get('/currently-playing/related-albums', async (req, res) => {
       },
     }));
   } catch (error) {
-    errorResponse(res, 400, error.message);
+    res.status(500).send(errorMessage(error));
   }
 });
 
@@ -77,8 +82,7 @@ router.get('/me', async (req, res) => {
     });
     res.send(result.body);
   } catch (error) {
-    logger.error(error);
-    errorResponse(res, 400, error.message);
+    res.status(500).send(errorMessage(error));
   }
 });
 
@@ -95,11 +99,12 @@ router.get('/me/player', async (req, res) => {
   try {
     const result = await apiRequestWithRefresh({
       user,
-      apiFn: accessToken => spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
+      apiFn: accessToken =>
+        spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
     });
     res.send(result.body);
   } catch (error) {
-    errorResponse(res, 400, error.message);
+    res.status(500).send(errorMessage(error));
   }
 });
 
