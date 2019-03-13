@@ -190,9 +190,8 @@ export class VisualizationPageView extends PureComponent {
               { userName && userImageUrl &&
                 <div className={classes.userContainer}>
                   <UserAvatar
-                    title={userName}
-                    alt={userName}
-                    src={userImageUrl}
+                    displayName={userName}
+                    thumbnailSrc={userImageUrl}
                   />
                   <UserMenu
                     handlers={{
