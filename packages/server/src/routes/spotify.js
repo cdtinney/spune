@@ -8,9 +8,13 @@ const express = require('express');
 // Internal dependencies  //
 // //////////////////////////
 
-const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
-const apiRequestWithRefresh = require('../spotify/api/helpers/apiRequestWithRefresh');
-const getCurrentlyPlayingRelatedAlbums = require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
+const logger = require('../logger');
+const { spotifyApiWithToken } =
+  require('../spotify/api/SpotifyApi');
+const apiRequestWithRefresh =
+  require('../spotify/api/helpers/apiRequestWithRefresh');
+const getCurrentlyPlayingRelatedAlbums =
+  require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
 // ////////////
 // Helpers  //
@@ -73,6 +77,7 @@ router.get('/me', async (req, res) => {
     });
     res.send(result.body);
   } catch (error) {
+    logger.error(error);
     errorResponse(res, 400, error.message);
   }
 });
