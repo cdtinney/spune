@@ -23,6 +23,8 @@ script:
   - "npm run server:lint"
   # Run tests with coverage reporting
   - "npm run test:coveralls"
+  # Finally, run integration tests
+  - "npm run server:test:integration"
 
 deploy:
   provider: heroku

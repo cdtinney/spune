@@ -9,6 +9,7 @@
 - [Table of Contents](#table-of-contents)
 - [Introduction](#introduction)
   - [Inspiration](#inspiration)
+  - [Technologies](#technologies)
 - [Developing](#developing)
   - [Requirements](#requirements)
   - [Installing](#installing)
@@ -48,6 +49,22 @@ Here are some screenshots of the glory that is Zune:
 ![Zune Player 1](./assets/player.png)
 
 ![Zune Player 2](./assets/player2.png)
+
+### Technologies
+
+Spune uses the following technologies:
+
+* Client
+  * React/Redux
+  * Webpack
+  * Jest
+* Server
+  * Node.js/Express
+  * Passport.js
+  * MongoDB via Mongoose
+  * Jest/Puppeteer/Supertest
+* Both
+  * ESLint
 
 ## Developing
 
@@ -166,6 +183,12 @@ To run server tests with coverage:
 
 ```
 $ npm run server:test:coverage
+```
+
+To run integration tests (**NOTE: this requires a client production build to exist in `packages/client/build`**):
+
+```
+$ npm run server:test:integration
 ```
 
 #### Client

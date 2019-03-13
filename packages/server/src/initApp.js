@@ -52,8 +52,9 @@ module.exports = function initApp() {
   configurePassport(passport);
 
 
-  // Add HTML routes (for production).
-  if (process.env.NODE_ENV === 'production') {
+  // Add HTML routes (for production and integration testing).
+  const nodeEnv = process.env.NODE_ENV;
+  if (nodeEnv === 'production' || nodeEnv === 'integration') {
     logger.info(`Serving static files from ${paths.clientBuildFolder}`);
     // Serve static React files from root.
     app.use('/', express.static(paths.clientBuildFolder));
