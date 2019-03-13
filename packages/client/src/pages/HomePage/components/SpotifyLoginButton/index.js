@@ -22,6 +22,7 @@ export function SpotifyLoginButton(props) {
   } = props;
   return (
     <Button
+      id="button-login"
       color="primary"
       variant="contained"
       onClick={onClick}

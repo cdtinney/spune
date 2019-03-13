@@ -21,6 +21,7 @@
     "server:test": "cd packages/server && npm run test",
     "server:test:coverage": "cd packages/server && npm run test:coverage",
     "server:test:coveralls": "cd packages/server && npm run test:coveralls",
+    "server:test:integration": "cd packages/server && npm run test:integration",
     "server:watch": "cd packages/server && npm run watch",
     "start": "npm run server:start",
     "test": "lerna exec -- npm run test:coverage",

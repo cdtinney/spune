@@ -19,6 +19,8 @@
     "lint:fix": "eslint --fix src; exit 0",
     "test": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
+    "test:integration":
+      "cross-env NODE_ENV=integration jest --config jest.integration.config.js --detectOpenHandles",
     "watch": "nodemon app.js"
   },
   "dependencies": {
@@ -28,7 +30,6 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "jest": "^23.6.0",
     "mongoose": "^5.4.13",
     "mongoose-findorcreate": "^3.0.0",
     "passport": "^0.4.0",
@@ -38,10 +39,14 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "jest": "^23.6.0",
+    "jest-puppeteer": "^3.9.0",
     "nodemon": "^1.18.10",
+    "puppeteer": "^1.13.0",
     "supertest": "^3.4.2"
   }
 }
