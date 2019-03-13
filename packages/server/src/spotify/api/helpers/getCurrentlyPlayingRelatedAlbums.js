@@ -37,5 +37,6 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
   // likely have matching names so we can further reduce duplicates at this
   // final stage.
   return uniqueAlbums(
-    albumsByArtist.reduce((arr, curr) => arr.concat(curr.albums), []));
+    albumsByArtist.reduce((arr, curr) => arr.concat(curr.albums), []),
+  );
 };
