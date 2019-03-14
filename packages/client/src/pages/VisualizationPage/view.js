@@ -1,10 +1,12 @@
-///////////////////////////
 // External dependencies //
 ///////////////////////////
 
 import React, { PureComponent } from 'react';
+///////////////////////////
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { withStyles } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 
@@ -36,6 +38,16 @@ const styles = theme => ({
     flexDirection: 'column',
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+  },
+  gitHubIcon: {
+    position: 'absolute',
+    left: '30px',
+    top: '30px',
+    zIndex: 100,
+    color: theme.palette.text.primary,
+    '&:hover': {
+      color: theme.palette.text.secondary,
+    },
   },
   fullscreenButton: {
     position: 'absolute',
@@ -83,6 +95,9 @@ export class VisualizationPageView extends PureComponent {
     ui: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
       fullscreen: PropTypes.bool.isRequired,
+    }).isRequired,
+    help: PropTypes.shape({
+      repoUrl: PropTypes.string.isRequired,
     }).isRequired,
     onLoad: PropTypes.func.isRequired,
     logoutUser: PropTypes.func.isRequired,
@@ -169,15 +184,20 @@ export class VisualizationPageView extends PureComponent {
         loading,
         fullscreen,
       },
+      help: {
+        repoUrl,
+      },
       logoutUser,
     } = this.props;
 
     return (
       <div className={classes.root}>
-        <FullscreenButton
-          onClick={this.handleFullscreen}
-          className={classes.fullscreenButton}
-        />
+        { !loading &&
+          <FullscreenButton
+            onClick={this.handleFullscreen}
+            className={classes.fullscreenButton}
+          />
+        }
         <Fullscreen
           enabled={fullscreen}
           onChange={this.handleFullscreen}
@@ -186,6 +206,16 @@ export class VisualizationPageView extends PureComponent {
           <ColorOverlay />
           { !loading &&
             <React.Fragment>
+              { !fullscreen &&
+                <a href={repoUrl}>
+                  <FontAwesomeIcon
+                    icon={faGithub}
+                    inverse
+                    size="1x"
+                    className={classes.gitHubIcon}
+                  />
+                </a>
+              }
               <NowPlayingPoller />
               { userName && userImageUrl &&
                 <div className={classes.userContainer}>
@@ -210,5 +240,6 @@ export class VisualizationPageView extends PureComponent {
     );
   }
 }
+
 
 export default withStyles(styles)(VisualizationPageView);
