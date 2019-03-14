@@ -18,12 +18,6 @@ const spotifyApi = new SpotifyApi();
 ///////////
 
 export const types = {
-  FETCH_USER_INFO_REQUEST:
-    'SPOTIFY/FETCH_USER_INFO_REQUEST',
-  FETCH_USER_INFO_SUCCESS:
-    'SPOTIFY/FETCH_USER_INFO_SUCCESS',
-  FETCH_USER_INFO_FAILURE:
-    'SPOTIFY/FETCH_USER_INFO_FAILURE',
   FETCH_NOW_PLAYING_INFO_REQUEST:
     'SPOTIFY/FETCH_NOW_PLAYING_INFO_REQUEST',
   FETCH_NOW_PLAYING_INFO_SUCCESS:
@@ -45,37 +39,6 @@ export const types = {
 //////////////
 // Creators //
 //////////////
-
-export function fetchMyInfo() {
-  return function fetchMyInfoThunk(dispatch) {
-    dispatch({ type: types.FETCH_USER_INFO_REQUEST });
-
-    return spotifyApi.getMe().then((data) => {
-      const {
-        id,
-        display_name: displayName,
-        images,
-      } = data;
-
-      dispatch({
-        type: types.FETCH_USER_INFO_SUCCESS,
-        payload: {
-          info: {
-            id,
-            displayName,
-            avatarImageUrl: images && images.length && images[0] ? images[0].url : '',
-          },
-        },
-      });
-    }).catch((err) => {
-      dispatch({
-        type: types.FETCH_USER_INFO_FAILURE,
-        payload: new Error(err),
-        error: true,
-      });
-    });
-  };
-}
 
 export function clearNowPlayingRelatedAlbums() {
   return {

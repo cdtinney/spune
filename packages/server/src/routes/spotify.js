@@ -62,27 +62,6 @@ router.get('/currently-playing/related-albums', async (req, res) => {
 });
 
 /**
-* `/me` endpoint.
-*
-* Returns the user's profile; this is a simple proxy.
-*/
-router.get('/me', async (req, res) => {
-  const {
-    user,
-  } = req;
-
-  try {
-    const result = await apiRequestWithRefresh({
-      user,
-      apiFn: accessToken => spotifyApiWithToken(accessToken).getMe(),
-    });
-    res.send(result.body);
-  } catch (error) {
-    res.status(500).send(errorMessage(error));
-  }
-});
-
-/**
  * `/me/player` endpoint.
  *
  * Returns the current state of the player; this is a simple proxy.
