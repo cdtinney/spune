@@ -37,7 +37,7 @@ describe('/spotify', () => {
         }
       });
 
-      it('returns 400 when errors are thrown by the underlying API request', async () => {
+      it('returns 500 when errors are thrown by the underlying API request', async () => {
         apiRequestWithRefresh.mockImplementation(() => {
           throw new Error('foo');
         });
@@ -45,8 +45,8 @@ describe('/spotify', () => {
         const response = await request(app)
           .get('/api/spotify/currently-playing/related-albums');
 
-        expect(response.statusCode).toEqual(400);
-        expect(response.body).toEqual('foo');
+        expect(response.statusCode).toEqual(500);
+        expect(response.text).toEqual('foo');
       });
     });
   });
@@ -76,11 +76,11 @@ describe('/spotify', () => {
         .query({
           songId: 'foo',
         });
-      expect(response.statusCode).toEqual(400);
-      expect(response.body).toEqual('foo');
+      expect(response.statusCode).toEqual(500);
+      expect(response.text).toEqual('foo');
     });
-  });
 
+  });
   describe('/spotify/me/player', () => {
     it('returns 200 when the underlying API request suceeds', async () => {
       apiRequestWithRefresh.mockImplementation(() => ({
@@ -96,14 +96,14 @@ describe('/spotify', () => {
       });
     });
 
-    it('returns 400 when non-auth errors are thrown by the API request', async () => {
+    it('returns 500 when non-auth errors are thrown by the API request', async () => {
       apiRequestWithRefresh.mockImplementation(() => {
         throw new Error('foo');
       });
 
       const response = await request(app).get('/api/spotify/me/player');
-      expect(response.statusCode).toEqual(400);
-      expect(response.body).toEqual('foo');
+      expect(response.statusCode).toEqual(500);
+      expect(response.text).toEqual('foo');
     });
   });
 });
