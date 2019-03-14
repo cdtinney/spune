@@ -10,8 +10,7 @@ const express = require('express');
 
 const { spotifyApiWithToken } = require('../spotify/api/SpotifyApi');
 const apiRequestWithRefresh = require('../spotify/api/helpers/apiRequestWithRefresh');
-const getCurrentlyPlayingRelatedAlbums =
-  require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
+const getCurrentlyPlayingRelatedAlbums = require('../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums');
 
 // ////////////
 // Helpers  //
