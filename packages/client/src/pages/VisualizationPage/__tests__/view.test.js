@@ -23,6 +23,9 @@ describe('VisualizationPageView', () => {
         loading: false,
         fullscreen: false,
       },
+      help: {
+        repoUrl: 'foo',
+      },
       onLoad: () => {},
       logoutUser: () => {},
       setFullscreen: () => {},
