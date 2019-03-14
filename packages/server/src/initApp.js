@@ -20,6 +20,10 @@ const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
 module.exports = function initApp() {
+  function gracefulShutdown() {
+    mongoDB.disconnect();
+  }
+
   const app = express();
 
   app.use(cookieParser());
@@ -66,6 +70,12 @@ module.exports = function initApp() {
 
   // Connect to the DB.
   mongoDB.connect();
+
+  // This will handle process.exit():
+  process.on('exit', gracefulShutdown);
+
+  // This will handle kill command CTRL+C
+  process.on('SIGINT', gracefulShutdown);
 
   return app;
 };

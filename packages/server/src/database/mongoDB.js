@@ -32,7 +32,9 @@ module.exports = {
   disconnect: (done) => {
     mongoose.disconnect(() => {
       logger.info(`[DB] Successfully disconnected from ${MONGODB_URI}`);
-      done();
+      if (done) {
+        done();
+      }
     });
   },
 };
