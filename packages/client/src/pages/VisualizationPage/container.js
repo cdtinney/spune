@@ -73,6 +73,9 @@ function mapStateToProps(state) {
       loading: userReqPendingOrInitialLoad || nowPlayingReqPendingOrInitialLoad,
       fullscreen,
     },
+    help: {
+      repoUrl: 'https://github.com/cdtinney/spune',
+    },
   };
 }
 
