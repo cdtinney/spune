@@ -2,19 +2,6 @@ import { types } from '../../actions/spotify';
 import reducer from '../spotify';
 
 const initialState = {
-  user: {
-    request: {
-      loading: false,
-      lastUpdated: null,
-      error: null,
-      errored: false,
-    },
-    info: {
-      id: null,
-      displayName: null,
-      avatarImageUrl: null,
-    },
-  },
   nowPlaying: {
     request: {
       loading: false,
@@ -50,68 +37,6 @@ describe('spotify reducer', () => {
     expect(reducer()).toEqual(initialState);
   });
 
-  describe('user', () => {
-    it('should set user info requests as loading', () => {
-      expect(reducer(initialState, {
-        type: types.FETCH_USER_INFO_REQUEST,
-      })).toEqual({
-        ...initialState,
-        user: {
-          ...initialState.user,
-          request: {
-            loading: true,
-            lastUpdated: null,
-            error: null,
-            errored: false,
-          },
-        },
-      });
-    });
-
-    it('should set user profiles once fetched', () => {
-      Date.now = jest.fn(() => 123);
-      expect(reducer(initialState, {
-        type: types.FETCH_USER_INFO_SUCCESS,
-        payload: {
-          info: 'foo',
-        },
-      })).toEqual({
-        ...initialState,
-        user: {
-          request: {
-            loading: false,
-            lastUpdated: 123,
-            error: null,
-            errored: false,
-          },
-          info: 'foo',
-        },
-      });
-    });
-
-    it('should set user profile request errors', () => {
-      expect(reducer(initialState, {
-        type: types.FETCH_USER_INFO_FAILURE,
-        payload: 'foo',
-      })).toEqual({
-        ...initialState,
-        user: {
-          request: {
-            loading: false,
-            lastUpdated: null,
-            error: 'foo',
-            errored: true,
-          },
-          info: {
-            id: null,
-            displayName: null,
-            avatarImageUrl: null,
-          },
-        },
-      });
-    });
-  });
-
   describe('now playing', () => {
     it('should set now playing info requests as loading', () => {
       expect(reducer(initialState, {
@@ -132,6 +57,7 @@ describe('spotify reducer', () => {
     });
 
     it('should set now playing info', () => {
+      Date.now = jest.fn(() => 123);
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_INFO_SUCCESS,
         payload: {
@@ -144,7 +70,7 @@ describe('spotify reducer', () => {
           request: {
             ...initialState.nowPlaying.request,
             loading: false,
-            lastUpdated: Date.now(),
+            lastUpdated: 123,
             error: null,
             errored: false,
           },
