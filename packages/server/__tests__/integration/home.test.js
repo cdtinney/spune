@@ -8,7 +8,7 @@ describe('/#/home', () => {
   });
 
   it('redirects the user to auth when the login button is clicked', async () => {
-    await page.click('#button-login');
+    page.click('#button-login');
     const response = await page.waitForNavigation();
     const redirectUrls =
       response.request().redirectChain().map(request => request.url());
