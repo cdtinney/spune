@@ -26,9 +26,7 @@ describe('AlbumGrid', () => {
     const wrapper =  mount(
       <AlbumGrid
         albums={[]}
-        ui={{
-          albumImageSize: 80,
-        }}
+        albumImageSize={80}
       />
     );
 

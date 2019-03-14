@@ -27,9 +27,7 @@ function AlbumGrid(props) {
   const {
     classes,
     albums,
-    ui: {
-      albumImageSize,
-    },
+    albumImageSize,
   } = props;
 
   if (!albums.length) {
@@ -68,9 +66,7 @@ AlbumGrid.propTypes = {
       thumbnail: PropTypes.string.isRequired,
     }).isRequired,
   })).isRequired,
-  ui: PropTypes.shape({
-    albumImageSize: PropTypes.number.isRequired,
-  }).isRequired,
+  albumImageSize: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(AlbumGrid);
