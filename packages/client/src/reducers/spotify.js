@@ -90,6 +90,21 @@ export default function spotify(state = initialState, action = {}) {
       });
     }
 
+    case types.FETCH_NOW_PLAYING_INFO_SUCCESS_DUPE: {
+      return update(state, {
+        nowPlaying: {
+          request: {
+            $merge: {
+              loading: false,
+              lastUpdated: Date.now(),
+              error: null,
+              errored: false,
+            },
+          },
+        },
+      });
+    }
+
     case types.FETCH_NOW_PLAYING_INFO_FAILURE: {
       const {
         payload: error,
