@@ -51,36 +51,6 @@ describe('/spotify', () => {
     });
   });
 
-  describe('/spotify/me', () => {
-    it('returns 200 when the API request is successful', async () => {
-      apiRequestWithRefresh.mockImplementation(() => ({
-        body: {
-          profile: 'foo',
-        },
-      }));
-
-      const response = await request(app).get('/api/spotify/me');
-
-      expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({
-        profile: 'foo',
-      });
-    });
-
-    it('returns 500 when non-auth errors are thrown', async () => {
-      apiRequestWithRefresh.mockImplementation(() => {
-        throw new Error('foo');
-      });
-
-      const response = await request(app).get('/api/spotify/me')
-        .query({
-          songId: 'foo',
-        });
-      expect(response.statusCode).toEqual(500);
-      expect(response.text).toEqual('foo');
-    });
-
-  });
   describe('/spotify/me/player', () => {
     it('returns 200 when the underlying API request suceeds', async () => {
       apiRequestWithRefresh.mockImplementation(() => ({

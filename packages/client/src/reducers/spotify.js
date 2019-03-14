@@ -13,19 +13,6 @@ import {
 } from '../actions/spotify';
 
 const initialState = {
-  user: {
-    request: {
-      loading: false,
-      lastUpdated: null,
-      error: null,
-      errored: false,
-    },
-    info: {
-      id: null,
-      displayName: null,
-      avatarImageUrl: null,
-    },
-  },
   nowPlaying: {
     request: {
       loading: false,
@@ -64,70 +51,6 @@ const initialState = {
  */
 export default function spotify(state = initialState, action = {}) {
   switch (action.type) {
-
-    case types.FETCH_USER_INFO_REQUEST: {
-      return update(state, {
-        user: {
-          request: {
-            $merge: {
-              loading: true,
-              error: null,
-              errored: false,
-            },
-          },
-        },
-      });
-    }
-
-    case types.FETCH_USER_INFO_SUCCESS: {
-      const {
-        payload: {
-          info,
-        },
-      } = action;
-
-      return update(state, {
-        user: {
-          request: {
-            $merge: {
-              loading: false,
-              lastUpdated: Date.now(),
-              error: null,
-              errored: false,
-            },
-          },
-          info: {
-            $set: info,
-          },
-        },
-      });
-    }
-
-    case types.FETCH_USER_INFO_FAILURE: {
-      const {
-        payload: error,
-      } = action;
-
-      return update(state, {
-        user: {
-          request: {
-            $merge: {
-              loading: false,
-              lastUpdated: null,
-              error,
-              errored: true,
-            },
-          },
-          info: {
-            $merge: {
-              id: null,
-              displayName: null,
-              avatarImageUrl: null,
-            },
-          },
-        },
-      });
-    }
 
     case types.FETCH_NOW_PLAYING_INFO_REQUEST: {
       return update(state, {

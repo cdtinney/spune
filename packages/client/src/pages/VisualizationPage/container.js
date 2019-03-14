@@ -18,18 +18,18 @@ import VisualizationPage from './view';
 
 function mapStateToProps(state) {
   const {
-    spotify: {
-      user: {
-        request: {
-          errored: userErrored,
-          lastUpdated: userLastUpdated,
-        },
-        info: {
-          id,
-          displayName,
-          avatarImageUrl,
-        },
+    user: {
+      request: {
+        errored: userErrored,
+        lastUpdated: userLastUpdated,
       },
+      profile: {
+        spotifyId,
+        displayName,
+        photos,
+      },
+    },
+    spotify: {
       nowPlaying: {
         info: {
           songTitle,
@@ -59,8 +59,8 @@ function mapStateToProps(state) {
       // the `display_name` property set. Fallback to ID.
       //
       // More info: https://github.com/spotify/web-api/issues/371
-      userName: displayName || id,
-      userImageUrl: avatarImageUrl,
+      userName: displayName || spotifyId,
+      userImageUrl: photos[0],
     },
     nowPlaying: {
       songTitle,
@@ -79,7 +79,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onLoad() {
-      dispatch(spotifyActions.fetchMyInfo());
       dispatch(spotifyActions.fetchNowPlayingInfo());
     },
 
