@@ -87,6 +87,7 @@ class UserMenu extends PureComponent {
           size="1x"
           aria-owns={anchorElem ? 'user-menu' : undefined}
           aria-haspopup="true"
+          title="Menu"
           onClick={this.handleClick}
         />
         <Menu
