@@ -1,5 +1,5 @@
 const getRelatedArtists = require('./getRelatedArtists');
-const getArtistStudioAlbums = require('./getArtistStudioAlbums');
+const getArtistAlbums = require('./getArtistAlbums');
 const uniqueAlbums = require('../../utils/uniqueAlbums');
 const combineTrackArtists = require('../../utils/combineTrackArtists');
 
@@ -30,7 +30,7 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
   const relatedArtistIds = await getRelatedArtists(spotifyApi, combinedArtists);
   const albumsByArtist = await Promise.all(
     [...relatedArtistIds]
-      .map(artistId => getArtistStudioAlbums(spotifyApi, artistId)),
+      .map(artistId => getArtistAlbums(spotifyApi, artistId)),
   );
 
   // Some artists share albums but they have different IDs. They will

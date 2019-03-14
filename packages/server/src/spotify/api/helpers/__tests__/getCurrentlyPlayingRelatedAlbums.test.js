@@ -1,10 +1,10 @@
 const getCurrentlyPlayingRelatedAlbums = require('../getCurrentlyPlayingRelatedAlbums');
 
 const getRelatedArtists = require('../getRelatedArtists');
-const getArtistStudioAlbums = require('../getArtistStudioAlbums');
+const getArtistAlbums = require('../getArtistAlbums');
 
 jest.mock('../getRelatedArtists');
-jest.mock('../getArtistStudioAlbums');
+jest.mock('../getArtistAlbums');
 
 const mockSpotifyApi = {
   getMyCurrentPlayingTrack: jest.fn(),
@@ -55,7 +55,7 @@ describe('getCurrentlyPlayingRelatedAlbums()', () => {
     getRelatedArtists.mockImplementation(() => Promise.resolve([
       3, 4,
     ]));
-    getArtistStudioAlbums.mockImplementation((spotifyApi, artistId) => Promise.resolve({
+    getArtistAlbums.mockImplementation((spotifyApi, artistId) => Promise.resolve({
       artistId,
       albums: [{
         name: 'cat',

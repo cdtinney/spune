@@ -74,7 +74,8 @@ router.get('/me/player', async (req, res) => {
   try {
     const result = await apiRequestWithRefresh({
       user,
-      apiFn: accessToken => spotifyApiWithToken(accessToken).getMyCurrentPlaybackState(),
+      apiFn: accessToken => spotifyApiWithToken(accessToken)
+        .getMyCurrentPlaybackState(),
     });
     res.send(result.body);
   } catch (error) {
