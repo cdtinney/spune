@@ -58,13 +58,18 @@ Spune uses the following technologies:
   * React/Redux
   * Webpack
   * Jest
+  * ESLint
 * Server
   * Node.js/Express
   * Passport.js
   * MongoDB via Mongoose
   * Jest/Puppeteer/Supertest
-* Both
   * ESLint
+* CI/CD
+  * Travis CI
+  * Heroku
+  * mLab MongoDB
+  * Coveralls
 
 ## Developing
 
