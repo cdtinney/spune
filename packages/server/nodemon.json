@@ -4,5 +4,5 @@
     "restart": "kill-port 5000",
     "crash": "kill-port 5000"
   },
-  "delay": 1000
+  "delay": 2500
 }
