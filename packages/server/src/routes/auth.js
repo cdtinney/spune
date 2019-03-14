@@ -9,14 +9,18 @@ const SPOTIFY_PERMISSION_SCOPES = [
 ];
 
 router.get('/user', (req, res) => {
+  const { user } = req;
   if (!req.user) {
     res.json({});
     return;
   }
 
-  // TODO Need to find User
   res.json({
-    user: req.user,
+    user: {
+      spotifyId: user.spotifyId,
+      displayName: user.displayName,
+      photos: user.photos,
+    },
   });
 });
 
