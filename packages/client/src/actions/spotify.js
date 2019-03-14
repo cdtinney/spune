@@ -61,6 +61,7 @@ export function fetchNowPlayingRelatedAlbumsSuccess(songId, albums) {
     payload: {
       songId,
       albums,
+      dateUpdated: Date.now(),
     },
   };
 }
@@ -88,7 +89,7 @@ export function fetchNowPlayingRelatedAlbums() {
   };
 }
 
-export function fetchNowPlayingInfo(skipSuccess) {
+export function fetchNowPlayingInfo() {
   return function fetchNowPlayingInfoThunk(dispatch, getState) {
     const {
       spotify: {
@@ -141,6 +142,7 @@ export function fetchNowPlayingInfo(skipSuccess) {
             // Use the largest album image (first in array).
             albumImageUrl: albumImages[0].url,
           },
+          dateUpdated: Date.now(),
         },
       });
 

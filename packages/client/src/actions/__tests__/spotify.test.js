@@ -26,6 +26,7 @@ describe('spotifyActions', () => {
           Promise.resolve([{
             albumId: 'foo',
           }]));
+        Date.now = () => 123;
 
         const expectedActions = [{
           type: actions.types.FETCH_NOW_PLAYING_RELATED_ALBUMS_REQUEST,
@@ -39,6 +40,7 @@ describe('spotifyActions', () => {
             albums: [{
               albumId: 'foo',
             }],
+            dateUpdated: 123,
           },
         }];
 
@@ -112,6 +114,7 @@ describe('spotifyActions', () => {
               },
             },
           }));
+        Date.now = () => 123;
 
         const expectedActions = [{
           type: actions.types.FETCH_NOW_PLAYING_INFO_REQUEST,
@@ -127,6 +130,7 @@ describe('spotifyActions', () => {
               albumArtists: 'albumArtists',
               albumImageUrl: 'albumImageUrl',
             },
+            dateUpdated: 123,
           },
         }];
 
@@ -223,6 +227,7 @@ describe('spotifyActions', () => {
               },
             },
           }));
+        Date.now = () => 123;
 
         const expectedActions = [{
           type: actions.types.FETCH_NOW_PLAYING_INFO_REQUEST,
@@ -238,6 +243,7 @@ describe('spotifyActions', () => {
               albumArtists: 'albumArtists',
               albumImageUrl: 'albumImageUrl',
             },
+            dateUpdated: 123,
           },
         }, {
           type: actions.types.CLEAR_NOW_PLAYING_RELATED_ALBUMS,
