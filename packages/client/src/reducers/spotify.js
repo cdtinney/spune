@@ -155,7 +155,14 @@ export default function spotify(state = initialState, action = {}) {
               byAlbumId:
                 albums.reduce((map, album) => ({
                   ...map,
-                  [album.id]: album,
+                  // We don't need to store all album properties. This
+                  // creates noise within state.
+                  [album.id]: {
+                    artists: album.artists,
+                    id: album.id,
+                    images: album.images,
+                    name: album.name,
+                  },
                 }), {}),
               allAlbumIds: albums.map(album => album.id),
               request: {
