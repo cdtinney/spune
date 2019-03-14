@@ -42,7 +42,7 @@ const styles = theme => ({
   gitHubIcon: {
     position: 'absolute',
     left: '30px',
-    top: '30px',
+    top: '35px',
     zIndex: 100,
     color: theme.palette.text.primary,
     '&:hover': {

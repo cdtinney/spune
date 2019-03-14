@@ -45,9 +45,11 @@ export const relatedAlbumImagesSelector =
     nowPlayingRelatedAlbumsAllIds,
     uiSelectors.uiAlbumGridNumAlbumsSelector,
     (byAlbumId, allAlbumIds, numAlbums) => {
-      const displayedIds = allAlbumIds.slice(0, numAlbums);
-      const shuffledIds = shuffle(displayedIds);
-      const displayedAlbums = shuffledIds.map(id => byAlbumId[id]);
+      // Shuffling _before_ splicing ensures that we
+      // get a wider variety of albums.
+      const shuffledIds = shuffle(allAlbumIds);
+      const displayedIds = shuffledIds.slice(0, numAlbums);
+      const displayedAlbums = displayedIds.map(id => byAlbumId[id]);
       return displayedAlbums
         .map((album, index)=> ({
           id: `${album.id}_${index}`,
@@ -55,7 +57,8 @@ export const relatedAlbumImagesSelector =
           images: {
             // The first image is technically the full size but
             // we're not enlarging the album thumbnails any bigger than
-            // the mid-size image (300px by 300px).
+            // the mid-size image (300px by 300px) so there's
+            // no point in wasting the bandwidth.
             fullSize: album.images[1].url,
             thumbnail: album.images[album.images.length - 1].url,
           },
