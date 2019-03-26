@@ -274,8 +274,6 @@ All commits to `master` should be deployed (by default).
 
 ### Debugging
 
-TODO Expand this section
-
 #### Heroku
 
 To view Heroku application logs (in real-time):
