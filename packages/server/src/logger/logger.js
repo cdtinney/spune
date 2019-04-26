@@ -4,6 +4,8 @@ const {
   transports,
 } = require('winston');
 
+const appName = 'spune';
+
 const logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -17,21 +19,27 @@ const logger = createLogger({
     format.json(),
   ),
   defaultMeta: {
-    service: 'spune-server',
+    service: `${appName}-server`,
   },
   transports: [
     new transports.File({
-      filename: 'spune-error.log',
+      filename: `${appName}-error.log`,
       level: 'error',
     }),
     new transports.File({
-      filename: 'spune-combined.log',
+      filename: `${appName}-combined.log`,
     }),
   ],
 });
 
-// Logs to console in non-prod environments
-if (process.env.NODE_ENV !== 'production') {
+const {
+  NODE_ENV,
+  DISABLE_LOGGING,
+} = process.env;
+
+// Enable logs if and only if we are in a non-production environment
+// and logging is not explicitly disabled.
+if (NODE_ENV !== 'production' && DISABLE_LOGGING !== 'true') {
   logger.add(new transports.Console({
     format: format.combine(
       format.colorize(),
