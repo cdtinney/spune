@@ -40,7 +40,6 @@
     "react-router": "4.3.1",
     "react-scripts": "^2.1.5",
     "redux": "^4.0.1",
-    "redux-responsive": "^4.3.8",
     "redux-thunk": "2.3.0",
     "reselect": "^4.0.0",
     "why-did-you-update": "^1.0.6"

@@ -2,11 +2,15 @@ import * as actions from '../../actions/ui';
 import reducer from '../ui';
 
 const initialState = {
-  fullscreen: false,
   albumGrid: {
     maxPerRow: 26,
     minSize: 80,
     maxSize: 151,
+  },
+  window: {
+    fullscreen: false,
+    width: 0,
+    height: 0,
   },
 };
 
@@ -23,7 +27,10 @@ describe('ui reducer', () => {
       },
     })).toEqual({
       ...initialState,
-      fullscreen: true,
+      window: {
+        ...initialState.window,
+        fullscreen: true,
+      },
     });
   });
 });

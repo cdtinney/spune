@@ -11,4 +11,21 @@ describe('ui actions', () => {
       });
     });
   });
+
+  describe('calculateResponsiveState()', () => {
+    it('should create an action to set window state', () => {
+      expect(actions.calculateResponsiveState({
+        innerWidth: 123,
+        innerHeight: 456,
+      })).toEqual({
+        type: actions.types.CALCULATE_RESPONSIVE_STATE,
+        payload: {
+          window: {
+            width: 123,
+            height: 123,
+          },
+        },
+      });
+    });
+  });
 });
