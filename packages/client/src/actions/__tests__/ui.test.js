@@ -22,7 +22,7 @@ describe('ui actions', () => {
         payload: {
           window: {
             width: 123,
-            height: 123,
+            height: 456,
           },
         },
       });
