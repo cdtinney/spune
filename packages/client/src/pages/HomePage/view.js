@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import LoadingScreen from '../../components/LoadingScreen';
 import SpotifyLoginButton from './components/SpotifyLoginButton';
-import SpuneLogo from '../../assets/spune_logo.png';
+import Logo from '../../assets/logo.png';
 
 const styles = {
   root: {
@@ -79,7 +79,7 @@ function HomePageView(props) {
     <div className={classes.root}>
       <img
         alt="Spune Logo"
-        src={SpuneLogo}
+        src={Logo}
         className={classes.logo}
       />
       <div className={classes.contentContainer}>

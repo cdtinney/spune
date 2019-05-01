@@ -1,4 +1,4 @@
-![Spune Logo](packages/client/src/assets/spune_logo_small.png)
+![Spune Logo](packages/client/src/assets/logo_small.png)
 
 > Web-based Spotify display for your living room TV.
 
