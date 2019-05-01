@@ -1,6 +1,6 @@
 const serializeUser = require('./serialization/serializeUser');
 const deserializeUser = require('./serialization/deserializeUser');
-const spotifyPassportStrategy = require('../spotify/auth/passportStrategy');
+const spotifyPassportStrategy = require('./strategy/spotifyPassportStrategy');
 
 module.exports = function configurePassport(passport) {
   passport.serializeUser(serializeUser);

@@ -30,7 +30,7 @@ function verify(accessToken, refreshToken, expiresIn, profile, done) {
   });
 }
 
-module.exports = function passportStrategy() {
+module.exports = function spotifyPassportStrategy() {
   const {
     SPOT_CLIENT_ID,
     SPOT_CLIENT_SECRET,
