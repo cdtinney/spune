@@ -61,7 +61,7 @@ const styles = theme => ({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 100,
+    zIndex: 1,
   },
   loadingScreen: {
     zIndex: 100,
