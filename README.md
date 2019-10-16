@@ -79,7 +79,7 @@ To run the application:
 
 * [Node.js/npm](https://nodejs.org/en/)
 * [Configured Spotify application](https://developer.spotify.com/dashboard/login)
-* [MongoDB](https://www.mongodb.org/downloads)
+* [MongoDB Community Server](https://www.mongodb.com/download-center/community)
 
 For CI/CD:
 
