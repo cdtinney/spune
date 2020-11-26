@@ -57,11 +57,11 @@ describe('spotify reducer', () => {
     });
 
     it('should set now playing info', () => {
-      Date.now = jest.fn(() => 123);
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_INFO_SUCCESS,
         payload: {
           info: 'foo',
+          dateUpdated: 123,
         },
       })).toEqual({
         ...initialState,
@@ -80,7 +80,6 @@ describe('spotify reducer', () => {
     });
 
     it('should set now playing errors', () => {
-      Date.now = jest.fn(() => 123);
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_INFO_FAILURE,
         payload: 'foo',
@@ -90,7 +89,7 @@ describe('spotify reducer', () => {
           ...initialState.nowPlaying,
           request: {
             ...initialState.nowPlaying.request,
-            lastUpdated: 123,
+            lastUpdated: null,
             error: 'foo',
             errored: true,
           },
@@ -140,13 +139,13 @@ describe('spotify reducer', () => {
     });
 
     it('should set related albums', () => {
-      Date.now = jest.fn(() => 123);
       expect(reducer(initialState, {
         type: types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS,
         payload: {
           albums: [{
             id: 'foo',
           }],
+          dateUpdated: 123,
         },
       })).toEqual({
         ...initialState,

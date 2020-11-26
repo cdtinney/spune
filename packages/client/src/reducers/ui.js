@@ -2,17 +2,21 @@
 // Internal dependencies  //
 ////////////////////////////
 
-import * as uiActions from '../actions/ui';
+import { types } from '../actions/ui';
 
 const initialState = {
-  // Whether or not the app is displaying in fullscreen.
-  fullscreen: false,
   // Album grid properties.
   albumGrid: {
     maxPerRow: 26,
     // Min/max size of a single album image, in pixels.
     minSize: 80,
     maxSize: 151,
+  },
+  // Window properties.
+  window: {
+    fullscreen: false,
+    width: 0,
+    height: 0,
   },
 };
 
@@ -24,10 +28,24 @@ const initialState = {
  */
 export default function ui(state = initialState, action = {}) {
   switch (action.type) {
-    case uiActions.types.SET_FULLSCREEN: {
+    case types.SET_FULLSCREEN: {
       return {
         ...state,
-        fullscreen: action.payload.fullscreen,
+        window: {
+          ...state.window,
+          fullscreen: action.payload.fullscreen,
+        },
+      };
+    }
+
+    case types.CALCULATE_RESPONSIVE_STATE: {
+      const { window } = action.payload;
+      return {
+        ...state,
+        window: {
+          ...state.window,
+          ...window,
+        },
       };
     }
 

@@ -1,9 +1,10 @@
+///////////////////////////
 // External dependencies //
 ///////////////////////////
 
-import React, { PureComponent } from 'react';
-///////////////////////////
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import equal from 'fast-deep-equal';
 import Typography from '@material-ui/core/Typography';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -60,7 +61,7 @@ const styles = theme => ({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 100,
+    zIndex: 1,
   },
   loadingScreen: {
     zIndex: 100,
@@ -79,7 +80,7 @@ const styles = theme => ({
 /**
  * Album art visualization page for the user's currently playing track.
  */
-export class VisualizationPageView extends PureComponent {
+export class VisualizationPageView extends Component {
   static propTypes = {
     user: PropTypes.shape({
       loading: PropTypes.bool.isRequired,
@@ -115,6 +116,10 @@ export class VisualizationPageView extends PureComponent {
 
   componentDidMount() {
     this.props.onLoad();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !equal(this.props, nextProps);
   }
 
   //////////////

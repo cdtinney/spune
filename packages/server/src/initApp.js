@@ -71,7 +71,7 @@ module.exports = function initApp() {
   // Connect to the DB.
   mongoDB.connect();
 
-  // This will handle process.exit():
+  // This will handle process.exit()
   process.on('exit', gracefulShutdown);
 
   // This will handle kill command CTRL+C

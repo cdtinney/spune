@@ -52,6 +52,7 @@ function mapStateToProps(state) {
   const nowPlayingReqPendingOrInitialLoad =
     nowPlayingLastUpdated === null && !nowPlayingErrored;
 
+  // TODO Need to convert all to selectors
   return {
     user: {
       loading: userReqPendingOrInitialLoad,

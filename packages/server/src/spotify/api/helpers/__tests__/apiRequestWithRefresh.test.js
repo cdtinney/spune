@@ -1,16 +1,16 @@
 /* eslint-disable prefer-promise-reject-errors */
 
-const refreshToken = require('../../../auth/refreshToken');
+const refreshToken = require('../../../../auth/token/refreshToken');
 const apiRequestWithRefresh = require('../apiRequestWithRefresh');
 
-jest.mock('../../../auth/refreshToken');
+jest.mock('../../../../auth/token/refreshToken');
 
 describe('apiRequestWithRefresh()', () => {
   beforeAll(() => {
     Date.now = jest.fn().mockImplementation(() => 2000);
   });
 
-  it('returns succesfully the user has a valid token and the API function succeeds', async () => {
+  it('returns successfully the user has a valid token and the API function succeeds', async () => {
     const result = await apiRequestWithRefresh({
       user: {
         spotifyAccessToken: 'foo',

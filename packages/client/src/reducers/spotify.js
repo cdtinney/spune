@@ -70,6 +70,7 @@ export default function spotify(state = initialState, action = {}) {
       const {
         payload: {
           info,
+          dateUpdated,
         },
       } = action;
 
@@ -78,13 +79,32 @@ export default function spotify(state = initialState, action = {}) {
           request: {
             $merge: {
               loading: false,
-              lastUpdated: Date.now(),
+              lastUpdated: dateUpdated,
               error: null,
               errored: false,
             },
           },
           info: {
             $set: info,
+          },
+        },
+      });
+    }
+
+    case types.FETCH_NOW_PLAYING_INFO_SUCCESS_DUPE: {
+      const {
+        dateUpdated,
+      } = action.payload;
+
+      return update(state, {
+        nowPlaying: {
+          request: {
+            $merge: {
+              loading: false,
+              lastUpdated: dateUpdated,
+              error: null,
+              errored: false,
+            },
           },
         },
       });
@@ -100,7 +120,7 @@ export default function spotify(state = initialState, action = {}) {
           request: {
             $merge: {
               loading: false,
-              lastUpdated: Date.now(),
+              lastUpdated: null,
               error,
               errored: true,
             },
@@ -146,6 +166,7 @@ export default function spotify(state = initialState, action = {}) {
     case types.FETCH_NOW_PLAYING_RELATED_ALBUMS_SUCCESS: {
       const {
         albums,
+        dateUpdated,
       } = action.payload;
 
       return update(state, {
@@ -167,7 +188,7 @@ export default function spotify(state = initialState, action = {}) {
               allAlbumIds: albums.map(album => album.id),
               request: {
                 loading: false,
-                lastUpdated: Date.now(),
+                lastUpdated: dateUpdated,
                 error: null,
                 errored: false,
               },

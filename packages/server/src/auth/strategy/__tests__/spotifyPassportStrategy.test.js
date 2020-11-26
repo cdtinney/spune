@@ -1,14 +1,14 @@
-const passportStrategy = require('../passportStrategy');
+const spotifyPassportStrategy = require('../spotifyPassportStrategy');
 const User = require('../../../database/schema/User');
 
 jest.mock('../../../database/schema/User', () => ({
   findOrCreate: jest.fn(),
 }));
 
-describe('passportStrategy', () => {
+describe('spotifyPassportStrategy', () => {
   describe('verify', () => {
     it('filters based on spotifyId when finding users', () => {
-      passportStrategy.verify(null, null, null, { id: 'foo' });
+      spotifyPassportStrategy.verify(null, null, null, { id: 'foo' });
       expect(User.findOrCreate.mock.calls[0][0]).toEqual({
         spotifyId: 'foo',
       });
@@ -21,7 +21,7 @@ describe('passportStrategy', () => {
         });
       });
       const mockDone = jest.fn();
-      passportStrategy.verify(null, null, null, { id: 'foo: ' }, mockDone);
+      spotifyPassportStrategy.verify(null, null, null, { id: 'foo: ' }, mockDone);
       expect(mockDone).toHaveBeenCalledWith(null, {
         spotifyId: 'foo',
       });

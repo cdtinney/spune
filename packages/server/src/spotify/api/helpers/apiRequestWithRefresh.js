@@ -3,7 +3,7 @@
 // //////////////////////////
 
 const logger = require('../../../logger');
-const refreshToken = require('../../auth/refreshToken');
+const refreshToken = require('../../../auth/token/refreshToken');
 
 function tokenExpired(tokenUpdated, expiresIn) {
   return tokenUpdated + expiresIn <= Date.now();
@@ -21,7 +21,7 @@ async function getValidAccessToken(user) {
 
   logger.info('Refreshing user access token...');
   const updatedUser = await refreshToken(user.spotifyRefreshToken);
-  logger.info('Sucessfully updated user access token.');
+  logger.info('Successfully updated user access token.');
   return updatedUser.spotifyAccessToken;
 }
 

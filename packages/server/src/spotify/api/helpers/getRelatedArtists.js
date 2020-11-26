@@ -1,5 +1,5 @@
 const logger = require('../../../logger');
-const uniqueSet = require('../../../utils/uniqueSet');
+const toSet = require('../../../utils/toSet');
 
 function validArtistIds(artistArrs) {
   return artistArrs
@@ -25,7 +25,7 @@ module.exports = async function getRelatedArtists(spotifyApi, trackArtistIds) {
 
   const relatedArtists = await Promise.all(relatedArtistsReqs);
   const relatedArtistIds = validArtistIds(relatedArtists);
-  return uniqueSet(relatedArtistIds);
+  return toSet(relatedArtistIds);
 };
 
 module.exports.validArtistIds = validArtistIds;

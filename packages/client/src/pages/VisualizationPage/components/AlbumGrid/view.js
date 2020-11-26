@@ -15,7 +15,12 @@ import AlbumImage from './components/AlbumImage';
 
 const styles = {
   root: {
-    position: 'absolute',
+    // `Masonry` will set `position` to relative
+    // which will cause the element to be shifted
+    // downwards by its siblings.
+    // This will result in overflow and element layout
+    // incorrectness (album grid children are pushed down).
+    position: 'absolute !important',
     top: 0,
     left: 0,
     width: '100%',
@@ -27,9 +32,7 @@ function AlbumGrid(props) {
   const {
     classes,
     albums,
-    ui: {
-      albumImageSize,
-    },
+    albumImageSize,
   } = props;
 
   if (!albums.length) {
@@ -68,9 +71,7 @@ AlbumGrid.propTypes = {
       thumbnail: PropTypes.string.isRequired,
     }).isRequired,
   })).isRequired,
-  ui: PropTypes.shape({
-    albumImageSize: PropTypes.number.isRequired,
-  }).isRequired,
+  albumImageSize: PropTypes.number.isRequired,
 };
 
 export default withStyles(styles)(AlbumGrid);

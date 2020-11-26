@@ -10,7 +10,6 @@ import { createSelector } from 'reselect';
 
 import calculateColumnSize from '../utils/calculateColumnSize';
 import memoizeWithCache from '../utils/memoizeWithCache';
-import * as browserSelectors from './browserSelectors';
 
 const memoizedCalculateColumnSize =
   memoizeWithCache(
@@ -22,14 +21,18 @@ export function uiAlbumGridSelector(state) {
   return state.ui.albumGrid;
 }
 
+export function uiWindowSelector(state) {
+  return state.ui.window;
+}
+
 export const uiAlbumGridImageSizeSelector =
   createSelector(
     uiAlbumGridSelector,
-    browserSelectors.browserResolutionSelector,
-    (albumGrid, resolution) => {
+    uiWindowSelector,
+    (albumGrid, window) => {
       const {
         width: windowWidth,
-      } = resolution;
+      } = window;
 
       const {
         minSize,
@@ -47,11 +50,11 @@ export const uiAlbumGridImageSizeSelector =
 export const uiAlbumGridNumAlbumsSelector =
   createSelector(
     uiAlbumGridImageSizeSelector,
-    browserSelectors.browserResolutionSelector,
-    (imageSize, resolution) => {
+    uiWindowSelector,
+    (imageSize, window) => {
       const {
         width, height
-      } = resolution;
+      } = window;
       // Rounding up ensures that there will be enough albums
       // to cover the entire screen.
       const numCols = Math.ceil(width / imageSize);
