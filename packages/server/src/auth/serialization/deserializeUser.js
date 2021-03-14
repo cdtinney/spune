@@ -2,10 +2,10 @@
 // Internal dependencies  //
 // /////////////////////////
 
-const User = require('../../database/schema/User');
+const Database = require('../../database');
 
-module.exports = function deserializeUser(spotifyId, done) {
-  User.findOne({
+module.exports = async function deserializeUser(spotifyId, done) {
+  await Database.getInstance().Models.User.findOne({
     spotifyId,
   }, (err, user) => {
     done(err, user);

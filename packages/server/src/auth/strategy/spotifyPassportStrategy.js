@@ -10,13 +10,10 @@ const refresh = require('passport-oauth2-refresh');
 // //////////////////////////
 
 const logger = require('../../logger');
-const User = require('../../database/schema/User');
+const Database = require('../../database');
 
 function verify(accessToken, refreshToken, expiresIn, profile, done) {
-  User.findOrCreate({
-    // Used to find the document -- if it exists.
-    spotifyId: profile.id,
-  }, {
+  Database.getInstance().Models.User.upsert(profile.id, {
     // These properties will be added/updated if it exists or not.
     spotifyAccessToken: accessToken,
     spotifyRefreshToken: refreshToken,

@@ -14,18 +14,19 @@
   "homepage": "https://github.com/cdtinney/spune#readme",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "db:init": "./tools/init-database.sh",
     "lint": "eslint src; exit 0",
     "lint:fix": "eslint --fix src; exit 0",
+    "start": "node app.js",
     "test": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
-    "test:integration":
-      "cross-env NODE_ENV=integration jest --config jest.integration.config.js --detectOpenHandles --runInBand",
+    "test:integration": "cross-env NODE_ENV=integration jest --config jest.integration.config.js --detectOpenHandles --runInBand",
     "watch": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
+    "connect-pg-simple": "^6.2.1",
     "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
@@ -35,6 +36,9 @@
     "passport": "^0.4.0",
     "passport-oauth2-refresh": "^1.1.0",
     "passport-spotify": "^1.0.1",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.5.1",
     "spotify-web-api-node": "^4.0.0",
     "winston": "^3.2.1"
   },

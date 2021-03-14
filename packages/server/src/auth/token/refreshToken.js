@@ -9,7 +9,7 @@ const refresh = require('passport-oauth2-refresh');
 // /////////////////////////
 
 const logger = require('../../logger');
-const User = require('../../database/schema/User');
+const Database = require('../../database');
 
 function findAndUpdateUser({
   refreshToken,
@@ -17,15 +17,9 @@ function findAndUpdateUser({
   resolve,
   reject,
 }) {
-  User.findOneAndUpdate({
-    spotifyRefreshToken: refreshToken,
-  }, {
-    $set: {
-      spotifyAccessToken: accessToken,
-      tokenUpdated: Date.now(),
-    },
-  }, {
-    returnNewDocument: true,
+  Database.getInstance().Models.User.findOneAndUpdate(refreshToken, {
+    spotifyAccessToken: accessToken,
+    tokenUpdated: Date.now(),
   }, (err, user) => {
     if (err) {
       reject(err);

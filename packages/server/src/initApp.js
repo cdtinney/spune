@@ -9,21 +9,16 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const passport = require('passport');
 
 const logger = require('./logger');
 
-const mongoDB = require('./database/mongoDB');
+const Database = require('./database');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
 module.exports = function initApp() {
-  function gracefulShutdown() {
-    mongoDB.disconnect();
-  }
-
   const app = express();
 
   app.use(cookieParser());
@@ -44,10 +39,9 @@ module.exports = function initApp() {
     saveUninitialized: false,
     // Automatically extends the session age on each request.
     rolling: true,
-    // Use MongoDB to store sessions.
-    store: new MongoStore({
-      mongooseConnection: mongoDB.mongoose.connection,
-    }),
+    // Use PostgreSQL to store sessions.
+    // eslint-disable-next-line global-require
+    store: new (require('connect-pg-simple')(session))(),
     // If `req.session` is unset, destroy the session in the DB.
     unset: 'destroy',
   }));
@@ -69,13 +63,18 @@ module.exports = function initApp() {
   app.use('/api', routes);
 
   // Connect to the DB.
-  mongoDB.connect();
+  const database = new Database();
+  database.connect();
 
   // This will handle process.exit()
-  process.on('exit', gracefulShutdown);
+  process.on('exit', () => {
+    database.disconnect();
+  });
 
   // This will handle kill command CTRL+C
-  process.on('SIGINT', gracefulShutdown);
+  process.on('SIGINT', () => {
+    database.disconnect();
+  });
 
   return app;
 };
