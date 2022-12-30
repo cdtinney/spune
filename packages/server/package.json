@@ -43,7 +43,7 @@
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
-    "jest": "^23.6.0",
+    "jest": "^29.3.1",
     "jest-puppeteer": "^3.9.0",
     "nodemon": "^1.18.10",
     "puppeteer": "^1.13.0",
