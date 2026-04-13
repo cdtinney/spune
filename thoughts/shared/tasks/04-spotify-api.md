@@ -46,4 +46,4 @@ Replace the abandoned Spotify SDK, fix OAuth configuration for current Spotify r
 - No references to removed Spotify API response fields.
 - Related Artists has a fallback path if the endpoint is inaccessible.
 - Server starts and Spotify-related unit tests pass (update mocks as needed).
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.

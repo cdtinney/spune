@@ -35,4 +35,4 @@ Replace all MongoDB/Mongoose usage with PostgreSQL. The database layer is small 
 - All MongoDB code and dependencies are removed.
 - The server connects to PostgreSQL and the three query operations work.
 - Session storage uses `connect-pg-simple`.
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.

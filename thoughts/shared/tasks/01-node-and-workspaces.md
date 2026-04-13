@@ -31,7 +31,7 @@ Get the project running on Node 22 LTS and replace Lerna with npm workspaces so 
 - `lerna.json` is deleted, `lerna` is removed from dependencies.
 - Root `package.json` uses `"workspaces"` and all scripts work without Lerna.
 - `npm install` completes without errors on Node 22.
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.
 
 ## Reference
 

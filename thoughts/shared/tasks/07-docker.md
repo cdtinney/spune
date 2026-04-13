@@ -38,4 +38,4 @@ Make the app deployable to any Docker host with a single command. Target deploym
 - The production Docker image builds, is reasonably small, and runs correctly.
 - README has deployment instructions.
 - CI builds the Docker image.
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.

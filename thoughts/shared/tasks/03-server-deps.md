@@ -34,4 +34,4 @@ These packages have breaking changes between the pinned version and current:
 - `req.logout()` has a callback.
 - `body-parser` is removed.
 - Server starts and existing unit tests pass.
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.

@@ -44,4 +44,4 @@ After previous tasks, the state is:
 - `.github/workflows/ci.yml` exists and runs successfully.
 - All Heroku-related scripts are removed.
 - Linting and unit tests pass in CI.
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.

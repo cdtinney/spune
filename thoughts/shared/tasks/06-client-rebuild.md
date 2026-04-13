@@ -52,4 +52,4 @@ Given the volume of dead dependencies, scaffold a **new Vite + React 19 app** in
 - Core features work: login, see currently playing track, see album artwork grid.
 - Basic tests exist using React Testing Library.
 - CI passes (update GitHub Actions workflow if needed).
-- A clean commit on a feature branch.
+- All changes are on a feature branch off master, submitted as a PR. Do not merge directly to master.
