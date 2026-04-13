@@ -31,7 +31,7 @@ Heroku killed its free tier in 2022. Dockerize the app (`Dockerfile` + `docker-c
 
 ### 3. Database: MongoDB → PostgreSQL
 
-The current MongoDB usage is trivially simple — one collection, 7 flat fields, 3 query types, plus session storage. PostgreSQL is the industry-standard relational database, runs anywhere, and pairs naturally with Docker and DigitalOcean's managed database offering. Use a lightweight ORM like Drizzle or Knex. Replace `connect-mongo` with `connect-pg-simple` for sessions. ~100 lines of database code to rewrite.
+The current MongoDB usage is trivially simple — one collection, 7 flat fields, 3 query types, plus session storage. PostgreSQL is the industry-standard relational database and runs anywhere. Use Supabase as the managed Postgres host (free tier) — but only as a standard Postgres connection, not Supabase's proprietary features, so the app stays portable to any Postgres instance. Use a lightweight ORM like Drizzle or Knex. Replace `connect-mongo` with `connect-pg-simple` for sessions. ~100 lines of database code to rewrite.
 
 ### 4. Auth: Simplify OAuth
 
