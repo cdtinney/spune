@@ -13,3 +13,4 @@ These tasks should be executed in order. Each task is self-contained and designe
 5. [GitHub Actions](./05-github-actions.md) — Replace Travis CI
 6. [Client rebuild](./06-client-rebuild.md) — Vite + React 19, port business logic
 7. [Dockerize + deploy config](./07-docker.md) — Dockerfile, docker-compose, deploy docs
+8. [Code + docs cleanup](./08-cleanup.md) — TypeScript migration, linting/Prettier, performance audit, simplify, docs
