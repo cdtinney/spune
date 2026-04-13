@@ -19,6 +19,8 @@ Replace the abandoned Spotify SDK, fix OAuth configuration for current Spotify r
 - OAuth redirect URI: `localhost` was banned Nov 2025, must use `127.0.0.1` for local dev.
 - Several response fields were removed in Feb 2026: `popularity`, `available_markets`, `followers`, user profile fields (`country`, `email`, `explicit_content`, `product`).
 
+**Spotify app dashboard**: [spune app](https://developer.spotify.com/dashboard/c5538c30ef864e4fa9e22108528af89f)
+
 ## What to do
 
 - Replace `spotify-web-api-node` with `@spotify/web-api-ts-sdk` across all server code that makes Spotify API calls. Key files:

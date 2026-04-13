@@ -54,6 +54,8 @@ The Spotify Web API has had major breaking changes since 2019.
 - Several response fields removed (Feb 2026): `popularity`, `available_markets`, `followers`, user profile fields
 - `spotify-web-api-node` is abandoned — official replacement is `@spotify/web-api-ts-sdk`
 
+**Spotify app dashboard**: [spune app](https://developer.spotify.com/dashboard/c5538c30ef864e4fa9e22108528af89f)
+
 **Source**: [Spotify Nov 2024 API changes](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api) | [Feb 2026 changelog](https://developer.spotify.com/documentation/web-api/references/changes/february-2026)
 
 ---
