@@ -1,13 +1,7 @@
-// //////////////////////////
-// Internal dependencies  //
-// //////////////////////////
-
-const User = require('../../database/schema/User');
+const { findUserBySpotifyId } = require('../../database/queries/userQueries');
 
 module.exports = function deserializeUser(spotifyId, done) {
-  User.findOne({
-    spotifyId,
-  }, (err, user) => {
-    done(err, user);
-  });
+  findUserBySpotifyId(spotifyId)
+    .then((user) => done(null, user))
+    .catch((err) => done(err));
 };

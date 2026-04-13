@@ -1,39 +1,14 @@
-// /////////////////////////
-// External dependencies //
-// /////////////////////////
-
 const refresh = require('passport-oauth2-refresh');
-
-// /////////////////////////
-// Internal dependencies //
-// /////////////////////////
-
 const logger = require('../../logger');
-const User = require('../../database/schema/User');
+const { updateUserByRefreshToken } = require('../../database/queries/userQueries');
 
-function findAndUpdateUser({
-  refreshToken,
-  accessToken,
-  resolve,
-  reject,
-}) {
-  User.findOneAndUpdate({
-    spotifyRefreshToken: refreshToken,
-  }, {
-    $set: {
-      spotifyAccessToken: accessToken,
-      tokenUpdated: Date.now(),
-    },
-  }, {
-    returnNewDocument: true,
-  }, (err, user) => {
-    if (err) {
-      reject(err);
-      return;
-    }
-
+function findAndUpdateUser({ refreshToken, accessToken }) {
+  return updateUserByRefreshToken(refreshToken, {
+    spotifyAccessToken: accessToken,
+    tokenUpdated: Date.now(),
+  }).then((user) => {
     logger.info(`Refreshed access token for user '${user.spotifyId}'`);
-    resolve(user);
+    return user;
   });
 }
 
@@ -51,9 +26,7 @@ module.exports = function refreshToken(currRefreshToken) {
         findAndUpdateUser({
           refreshToken: currRefreshToken,
           accessToken,
-          resolve,
-          reject,
-        });
+        }).then(resolve).catch(reject);
       },
     );
   });

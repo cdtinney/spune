@@ -1,19 +1,15 @@
-const mongoose = require('mongoose');
-const findOrCreate = require('mongoose-findorcreate');
+// User table schema reference (see migrations/001_create_users.sql for DDL)
+//
+// columns:
+//   id              SERIAL PRIMARY KEY
+//   spotify_id      TEXT UNIQUE NOT NULL
+//   spotify_access_token  TEXT
+//   spotify_refresh_token TEXT
+//   token_updated   BIGINT
+//   expires_in      BIGINT
+//   display_name    TEXT
+//   photos          JSON
 
-const { Schema } = mongoose;
-const UserSchema = new Schema({
-  spotifyId: String,
-  spotifyAccessToken: String,
-  spotifyRefreshToken: String,
-  tokenUpdated: Number,
-  expiresIn: Number,
-  displayName: String,
-  photos: [{
-    type: String,
-  }],
-});
-UserSchema.plugin(findOrCreate);
-const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
+module.exports = {
+  tableName: 'users',
+};

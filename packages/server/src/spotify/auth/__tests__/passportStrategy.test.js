@@ -1,29 +1,24 @@
 const passportStrategy = require('../passportStrategy');
-const User = require('../../../database/schema/User');
+const { findOrCreateUser } = require('../../../database/queries/userQueries');
 
-jest.mock('../../../database/schema/User', () => ({
-  findOrCreate: jest.fn(),
+jest.mock('../../../database/queries/userQueries', () => ({
+  findOrCreateUser: jest.fn(),
 }));
 
 describe('passportStrategy', () => {
   describe('verify', () => {
-    it('filters based on spotifyId when finding users', () => {
-      passportStrategy.verify(null, null, null, { id: 'foo' });
-      expect(User.findOrCreate.mock.calls[0][0]).toEqual({
-        spotifyId: 'foo',
-      });
+    it('calls findOrCreateUser with the spotifyId', () => {
+      findOrCreateUser.mockResolvedValue({ spotifyId: 'foo' });
+      passportStrategy.verify(null, null, null, { id: 'foo' }, jest.fn());
+      expect(findOrCreateUser.mock.calls[0][0]).toEqual('foo');
     });
 
-    it('calls done() when the user is found or created', () => {
-      User.findOrCreate.mockImplementation((filter, properties, callback) => {
-        callback(null, {
-          spotifyId: 'foo',
-        });
-      });
-      const mockDone = jest.fn();
-      passportStrategy.verify(null, null, null, { id: 'foo: ' }, mockDone);
-      expect(mockDone).toHaveBeenCalledWith(null, {
-        spotifyId: 'foo',
+    it('calls done() when the user is found or created', (done) => {
+      findOrCreateUser.mockResolvedValue({ spotifyId: 'foo' });
+      passportStrategy.verify(null, null, null, { id: 'foo' }, (err, user) => {
+        expect(err).toBeNull();
+        expect(user).toEqual({ spotifyId: 'foo' });
+        done();
       });
     });
   });

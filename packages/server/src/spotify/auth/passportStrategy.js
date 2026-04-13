@@ -1,33 +1,22 @@
-// //////////////////////////
-// External dependencies  //
-// //////////////////////////
-
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const refresh = require('passport-oauth2-refresh');
-
-// //////////////////////////
-// Internal dependencies  //
-// //////////////////////////
-
 const logger = require('../../logger');
-const User = require('../../database/schema/User');
+const { findOrCreateUser } = require('../../database/queries/userQueries');
 
 function verify(accessToken, refreshToken, expiresIn, profile, done) {
-  User.findOrCreate({
-    // Used to find the document -- if it exists.
-    spotifyId: profile.id,
-  }, {
-    // These properties will be added/updated if it exists or not.
+  findOrCreateUser(profile.id, {
     spotifyAccessToken: accessToken,
     spotifyRefreshToken: refreshToken,
     tokenUpdated: Date.now(),
-    expiresIn: expiresIn * 1000, // Convert to MS.
+    expiresIn: expiresIn * 1000,
     displayName: profile.displayName,
     photos: profile.photos,
-  }, (err, user) => {
-    logger.info(`Created user ${user.spotifyId}.`);
-    return done(err, user);
-  });
+  })
+    .then((user) => {
+      logger.info(`Created user ${user.spotifyId}.`);
+      done(null, user);
+    })
+    .catch((err) => done(err));
 }
 
 module.exports = function passportStrategy() {
@@ -44,7 +33,6 @@ module.exports = function passportStrategy() {
   },
   verify);
 
-  // Adds a plugin to enable simple token swapping.
   refresh.use(spotifyStrategy);
   return spotifyStrategy;
 };
