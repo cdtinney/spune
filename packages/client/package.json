@@ -12,11 +12,11 @@
     "url": "https://github.com/cdtinney/spune/issues"
   },
   "scripts": {
-    "build": "react-scripts build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "eject": "react-scripts eject",
-    "test": "react-scripts test --env=jsdom",
+    "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test --env=jsdom",
     "test:coverage": "npm run test -- --coverage --detectOpenHandles --forceExit",
-    "watch": "react-scripts start"
+    "watch": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
