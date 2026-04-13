@@ -2,12 +2,10 @@ if (process.env.NODE_ENV !== 'production') {
   // Load .env file for variables in dev environments only.
   // The file must be in the server package directory.
   // eslint-disable-next-line global-require
-  require('dotenv').load();
+  require('dotenv').config();
 }
 
 const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
@@ -26,11 +24,8 @@ module.exports = function initApp() {
 
   const app = express();
 
-  app.use(cookieParser());
-
-  app.use(bodyParser.urlencoded({
-    extended: false,
-  }));
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json());
 
   app.use(session({
     secret: process.env.SESSION_SECRET,
