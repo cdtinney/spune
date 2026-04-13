@@ -21,8 +21,8 @@ describe('validArtistIds()', () => {
 describe('getRelatedArtists()', () => {
   it('requests related artists for each artist and combines into a unique set', async () => {
     const mockSpotifyApi = {
-      getArtistRelatedArtists: jest.fn().mockImplementation(artistId => Promise.resolve({
-        body: {
+      artists: {
+        relatedArtists: jest.fn().mockImplementation(artistId => Promise.resolve({
           artists: [{
             id: 3,
           }, {
@@ -30,8 +30,8 @@ describe('getRelatedArtists()', () => {
           }, {
             id: artistId * 5,
           }],
-        },
-      })),
+        })),
+      },
     };
     const trackArtistIds = [1, 2];
 
@@ -39,5 +39,16 @@ describe('getRelatedArtists()', () => {
     expect(Array.from(relatedArtists.values())).toEqual([
       3, 4, 5, 10,
     ]);
+  });
+
+  it('returns empty results when endpoint returns 403', async () => {
+    const mockSpotifyApi = {
+      artists: {
+        relatedArtists: jest.fn().mockRejectedValue({ status: 403 }),
+      },
+    };
+
+    const relatedArtists = await getRelatedArtists(mockSpotifyApi, ['artist1']);
+    expect(Array.from(relatedArtists.values())).toEqual([]);
   });
 });

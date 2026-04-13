@@ -17,11 +17,6 @@ const getCurrentlyPlayingRelatedAlbums = require('../spotify/api/helpers/getCurr
 // ////////////
 
 function errorMessage(error) {
-  if (error.data) {
-    const dataObj = JSON.parse(error.data);
-    return dataObj.error_description;
-  }
-
   return error.message || 'Unknown Error';
 }
 
@@ -75,9 +70,9 @@ router.get('/me/player', async (req, res) => {
     const result = await apiRequestWithRefresh({
       user,
       apiFn: accessToken => spotifyApiWithToken(accessToken)
-        .getMyCurrentPlaybackState(),
+        .player.getPlaybackState(),
     });
-    res.send(result.body);
+    res.send(result);
   } catch (error) {
     res.status(500).send(errorMessage(error));
   }
