@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  lint-and-test:
+  server:
     runs-on: ubuntu-latest
 
     services:
@@ -37,20 +37,16 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install server dependencies
+        run: npm install -w packages/server
 
       - name: Run migration
         run: psql "$DATABASE_URL" -f packages/server/src/database/migrations/001_create_users.sql
 
-      - name: Build client
-        run: npm run client:build
-
-      - name: Lint server
+      - name: Lint
         run: npm run server:lint
 
-      - name: Test server
+      - name: Test
         run: npm run server:test:coverage
 
-      # TODO: Client tests need react-scripts/Jest upgrade (Task 6)
-      # TODO: Integration tests (Puppeteer) need client rebuild (Task 6)
+  # TODO: Add client job after Task 6 (client rebuild with Vite + React 19)
