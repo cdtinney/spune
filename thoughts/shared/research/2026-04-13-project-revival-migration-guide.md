@@ -46,7 +46,7 @@ The current auth stack is 5 packages (`passport`, `passport-spotify`, `passport-
 
 The Spotify Web API has had major breaking changes since 2019.
 
-**Related Artists endpoint — deprecated (CRITICAL)**: The `GET /artists/{id}/related-artists` endpoint — the app's core feature — was restricted in November 2024. Extended Quota Mode (required for access) is now only available to organizations with 250K+ MAU. Check whether the existing Spotify developer app is grandfathered in. If not, the feature needs redesigning.
+**Related Artists endpoint — deprecated but grandfathered**: The `GET /artists/{id}/related-artists` endpoint — the app's core feature — was restricted in November 2024 for new apps. The existing Spotify app predates this change and should retain access. Monitor for future removal — Spotify has not announced a sunset date, but the endpoint is officially deprecated.
 
 **Other breaking changes**:
 - `localhost` banned as OAuth redirect URI (Nov 2025) — must use `127.0.0.1`
@@ -87,6 +87,5 @@ The Spotify Web API has had major breaking changes since 2019.
 
 ## Open Questions
 
-1. **Does the existing Spotify app still have Related Artists access?** This determines whether the core feature works or needs redesigning.
-2. **Client rewrite vs. incremental upgrade?** Given the volume of dead dependencies, a fresh scaffold is probably faster.
-3. **Keep the monorepo?** For a personal project, a flat structure may be simpler than two packages.
+1. **Client rewrite vs. incremental upgrade?** Given the volume of dead dependencies, a fresh scaffold is probably faster.
+2. **Keep the monorepo?** For a personal project, a flat structure may be simpler than two packages.

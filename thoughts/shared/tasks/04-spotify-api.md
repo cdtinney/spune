@@ -14,7 +14,7 @@ Replace the abandoned Spotify SDK, fix OAuth configuration for current Spotify r
 - `passport-spotify`: Unmaintained (last release 2021) but still functional for Authorization Code Flow.
 - The app uses these Spotify endpoints:
   - Get current playback state — still works
-  - Get artist's related artists — **deprecated Nov 2024**, restricted to Extended Quota Mode apps
+  - Get artist's related artists — deprecated Nov 2024, but the existing app is grandfathered in
   - Get artist's albums — still works
 - OAuth redirect URI: `localhost` was banned Nov 2025, must use `127.0.0.1` for local dev.
 - Several response fields were removed in Feb 2026: `popularity`, `available_markets`, `followers`, user profile fields (`country`, `email`, `explicit_content`, `product`).
@@ -34,9 +34,7 @@ Replace the abandoned Spotify SDK, fix OAuth configuration for current Spotify r
   - **Drop Passport**: Implement the Authorization Code Flow directly (redirect → exchange code → refresh). Eliminates `passport`, `passport-spotify`, `passport-oauth2-refresh`, and `express-session`. Use a signed cookie or JWT instead.
 - Update the default redirect URI in config/env to use `127.0.0.1` instead of `localhost`.
 - Audit code for any usage of removed response fields (`popularity`, `available_markets`, `followers`, etc.) and remove references.
-- Handle the Related Artists deprecation:
-  - If the endpoint still works with the existing app credentials, keep it but add a graceful fallback.
-  - If it returns 403, redesign to show the current artist's own albums (or another available data source).
+- The Related Artists endpoint is deprecated but the existing app is grandfathered in. Keep using it, but add a graceful fallback (e.g., show the current artist's own albums) in case Spotify removes it entirely in the future.
 - Remove `spotify-web-api-node` from `package.json`.
 
 ## Done when
