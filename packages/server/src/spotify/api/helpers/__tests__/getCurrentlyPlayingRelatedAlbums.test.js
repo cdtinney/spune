@@ -7,20 +7,20 @@ jest.mock('../getRelatedArtists');
 jest.mock('../getArtistAlbums');
 
 const mockSpotifyApi = {
-  getMyCurrentPlayingTrack: jest.fn(),
+  player: {
+    getCurrentlyPlayingTrack: jest.fn(),
+  },
 };
 
 describe('getCurrentlyPlayingRelatedAlbums()', () => {
   it('throws an error when the playing track is different than the request track', () => {
-    mockSpotifyApi.getMyCurrentPlayingTrack
+    mockSpotifyApi.player.getCurrentlyPlayingTrack
       .mockImplementation(() => (Promise.resolve({
-        body: {
-          item: {
-            id: 'bar',
+        item: {
+          id: 'bar',
+          artists: [],
+          album: {
             artists: [],
-            album: {
-              artists: [],
-            },
           },
         },
       })));
@@ -30,28 +30,25 @@ describe('getCurrentlyPlayingRelatedAlbums()', () => {
   });
 
   it('combines song artists, track artists, and related artists into a single object when successful', async () => {
-    mockSpotifyApi.getMyCurrentPlayingTrack
+    mockSpotifyApi.player.getCurrentlyPlayingTrack
       .mockImplementation(() => (Promise.resolve({
-        body: {
-          item: {
-            id: 'foo',
+        item: {
+          id: 'foo',
+          artists: [{
+            id: 1,
+          }, {
+            id: 2,
+          }],
+          album: {
             artists: [{
               id: 1,
             }, {
               id: 2,
             }],
-            album: {
-              artists: [{
-                id: 1,
-              }, {
-                id: 2,
-              }],
-            },
           },
         },
       })));
 
-    // Mock API functions.
     getRelatedArtists.mockImplementation(() => Promise.resolve([
       3, 4,
     ]));

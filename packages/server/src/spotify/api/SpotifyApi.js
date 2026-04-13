@@ -1,9 +1,12 @@
-const Spotify = require('spotify-web-api-node');
+const { SpotifyApi } = require('@spotify/web-api-ts-sdk');
 
-module.exports = Spotify;
+const SPOT_CLIENT_ID = process.env.SPOT_CLIENT_ID || '';
 
 module.exports.spotifyApiWithToken = function withToken(accessToken) {
-  const spotifyApi = new Spotify();
-  spotifyApi.setAccessToken(accessToken);
-  return spotifyApi;
+  return SpotifyApi.withAccessToken(SPOT_CLIENT_ID, {
+    access_token: accessToken,
+    token_type: 'Bearer',
+    expires_in: 3600,
+    refresh_token: '',
+  });
 };

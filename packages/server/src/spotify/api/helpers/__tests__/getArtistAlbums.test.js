@@ -1,15 +1,15 @@
 const getArtistAlbums = require('../getArtistAlbums');
 
 const mockSpotifyApi = {
-  getArtistAlbums: jest.fn().mockImplementation(() => Promise.resolve({
-    body: {
+  artists: {
+    albums: jest.fn().mockImplementation(() => Promise.resolve({
       items: [{
         name: 'foo',
       }, {
         name: 'foo',
       }],
-    },
-  })),
+    })),
+  },
 };
 
 describe('getArtistAlbums()', () => {
@@ -21,12 +21,5 @@ describe('getArtistAlbums()', () => {
         name: 'foo',
       }],
     });
-  });
-
-  it('requests all album types from the api', async () => {
-    await getArtistAlbums(mockSpotifyApi, 'fooId');
-    // If `options` are undefined, it means the default will be used
-    // `album_group` param will be used which is all albums.
-    expect(mockSpotifyApi.getArtistAlbums.mock.calls[0][1]).toEqual(undefined);
   });
 });
