@@ -6,7 +6,7 @@
   "author": "Colin Tinney",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "workspaces": [
     "packages/*"
