@@ -12,7 +12,7 @@ Spune uses Supabase as a managed PostgreSQL host. Only the standard Postgres con
 1. In your project dashboard, go to **Project Settings > Database**.
 2. Copy the **URI** connection string. It looks like:
    ```
-   postgresql://postgres:[YOUR-PASSWORD]@db.[ref].supabase.co:5432/postgres
+   postgresql://postgres.[project-ref]:[YOUR-PASSWORD]@aws-0-[region].pooler.supabase.com:5432/postgres
    ```
 
 ## 3. Run the migration
@@ -36,7 +36,7 @@ cp .env.example .env
 Set `DATABASE_URL` to your Supabase connection string:
 
 ```
-DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@db.XXXX.supabase.co:5432/postgres
+DATABASE_URL=postgresql://postgres.PROJECT_REF:YOUR_PASSWORD@aws-0-REGION.pooler.supabase.com:5432/postgres
 ```
 
 ## 5. Row Level Security (RLS)
