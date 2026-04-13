@@ -9,19 +9,19 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const pgSession = require('connect-pg-simple')(session);
 const passport = require('passport');
 
 const logger = require('./logger');
 
-const mongoDB = require('./database/mongoDB');
+const { pool, connect, disconnect } = require('./database/db');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
 module.exports = function initApp() {
   function gracefulShutdown() {
-    mongoDB.disconnect();
+    disconnect();
   }
 
   const app = express();
@@ -40,13 +40,13 @@ module.exports = function initApp() {
       // conditions like browsers exiting.
       maxAge: 1000 * 60 * 60 * 24 * 365,
     },
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     // Automatically extends the session age on each request.
     rolling: true,
-    // Use MongoDB to store sessions.
-    store: new MongoStore({
-      mongooseConnection: mongoDB.mongoose.connection,
+    store: new pgSession({
+      pool,
+      createTableIfMissing: true,
     }),
     // If `req.session` is unset, destroy the session in the DB.
     unset: 'destroy',
@@ -69,7 +69,7 @@ module.exports = function initApp() {
   app.use('/api', routes);
 
   // Connect to the DB.
-  mongoDB.connect();
+  connect();
 
   // This will handle process.exit():
   process.on('exit', gracefulShutdown);
