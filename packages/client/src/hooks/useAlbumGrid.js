@@ -25,7 +25,13 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     const numAlbums = numCols * numRows;
 
     const shuffledIds = shuffle(allAlbumIds);
-    const displayedIds = shuffledIds.slice(0, numAlbums);
+
+    // Cycle through shuffled albums to fill the entire grid,
+    // repeating if we don't have enough unique albums.
+    const displayedIds = [];
+    for (let i = 0; i < numAlbums; i++) {
+      displayedIds.push(shuffledIds[i % shuffledIds.length]);
+    }
 
     const albums = displayedIds.map((id, index) => {
       const album = byAlbumId[id];
