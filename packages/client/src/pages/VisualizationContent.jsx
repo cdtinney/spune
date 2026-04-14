@@ -65,9 +65,7 @@ export default function VisualizationContent() {
 
           {userName && (
             <div className="visualization__user-container">
-              {userImageUrl && (
-                <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
-              )}
+              <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
               <UserMenu onLogout={logout} />
             </div>
           )}
