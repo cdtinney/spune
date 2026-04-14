@@ -11,43 +11,38 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
     return Promise.reject(new Error(`Song ID mismatch (currently playing = ${id}, query = ${songId})`));
   }
 
-  // Use the Recommendations API to discover related artists, since
-  // Spotify removed the "Get Related Artists" endpoint in late 2024.
-  // Seed with up to 5 of the track's artists (API limit).
   const trackArtistIds = combineTrackArtists({ songArtists, albumArtists });
-  const seedArtists = trackArtistIds.slice(0, 5);
 
-  let relatedArtistIds;
+  // Use the Recommendations API to discover similar music, since
+  // Spotify removed the "Get Related Artists" endpoint in late 2024.
+  // Seed with the track itself + up to 4 of its artists (5 seeds max).
+  const seedArtists = trackArtistIds.slice(0, 4);
+  let recommendedAlbums = [];
   try {
     const recs = await spotifyApi.recommendations.get({
       seed_artists: seedArtists.join(','),
+      seed_tracks: songId,
       limit: 100,
     });
-    // Extract unique artist IDs from recommended tracks
-    const artistIdSet = new Set();
+
+    // Extract albums directly from recommended tracks — each track
+    // carries its album object with images, so no extra API calls needed.
+    const seenAlbumIds = new Set();
     for (const track of recs.tracks) {
-      for (const artist of track.artists) {
-        artistIdSet.add(artist.id);
+      if (track.album && track.album.images?.length > 0 && !seenAlbumIds.has(track.album.id)) {
+        seenAlbumIds.add(track.album.id);
+        recommendedAlbums.push(track.album);
       }
     }
-    // Remove the seed artists themselves so we get truly "related" artists
-    for (const id of trackArtistIds) {
-      artistIdSet.delete(id);
-    }
-    relatedArtistIds = [...artistIdSet];
   } catch (error) {
     logger.warn(`Recommendations unavailable, falling back to track artists: ${error.message}`);
-    relatedArtistIds = [];
   }
 
-  // Combine related artists with the track's own artists for a fuller grid
-  const allArtistIds = [...new Set([...trackArtistIds, ...relatedArtistIds])];
-
-  const albumsByArtist = await Promise.all(
-    allArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
+  // Also fetch the track's own artists' albums for a fuller pool
+  const artistAlbumResults = await Promise.all(
+    trackArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
   );
+  const artistAlbums = artistAlbumResults.reduce((arr, curr) => arr.concat(curr.albums), []);
 
-  return uniqueAlbums(
-    albumsByArtist.reduce((arr, curr) => arr.concat(curr.albums), []),
-  );
+  return uniqueAlbums([...recommendedAlbums, ...artistAlbums]);
 };
