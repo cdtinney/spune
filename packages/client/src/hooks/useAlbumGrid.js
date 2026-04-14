@@ -56,10 +56,10 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     let tileIndex = 0;
 
     while (y < height + BAND_HEIGHT) {
-      // Estimate: band grid cells / weighted-average tile area
-      // Weighted avg: 0.35*1 + 0.35*4 + 0.20*9 + 0.10*16 = 4.15
+      // Overestimate tiles needed — better to have excess (CSS Grid
+      // just won't place them) than gaps from underestimation
       const bandCells = BAND_ROWS * bandCols;
-      const estTiles = Math.ceil(bandCells / 4.5);
+      const estTiles = Math.ceil(bandCells / 2.5);
 
       const tiles = [];
       let prevSpan = 0;
