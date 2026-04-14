@@ -1,36 +1,43 @@
 import AlbumImage from './AlbumImage';
 import './AlbumGrid.css';
 
-export default function AlbumGrid({ albums, baseUnit, cols }) {
-  if (!albums.length) {
+function AlbumRow({ row }) {
+  const { height, tiles, direction, duration } = row;
+  const animationClass = direction === 'left'
+    ? 'album-row--pan-left'
+    : 'album-row--pan-right';
+
+  return (
+    <div
+      className={`album-row ${animationClass}`}
+      style={{
+        height: `${height}px`,
+        animationDuration: `${duration}s`,
+      }}
+    >
+      {tiles.map((tile) => (
+        <div
+          key={tile.id}
+          className="album-row__tile"
+          style={{ width: `${height}px`, height: `${height}px` }}
+        >
+          <AlbumImage src={tile.imageUrl} alt={tile.title} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default function AlbumGrid({ rows }) {
+  if (!rows || !rows.length) {
     return null;
   }
 
   return (
     <div className="album-grid-wrapper">
-      <div
-        className="album-grid"
-        style={{
-          gridTemplateColumns: `repeat(${cols}, ${baseUnit}px)`,
-          gridAutoRows: `${baseUnit}px`,
-        }}
-      >
-        {albums.map((album) => (
-          <div
-            key={album.id}
-            className="album-grid__tile"
-            style={{
-              gridColumn: `span ${album.span}`,
-              gridRow: `span ${album.span}`,
-            }}
-          >
-            <AlbumImage
-              src={album.imageUrl}
-              alt={album.title}
-            />
-          </div>
-        ))}
-      </div>
+      {rows.map((row, i) => (
+        <AlbumRow key={i} row={row} />
+      ))}
     </div>
   );
 }

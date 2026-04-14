@@ -5,32 +5,45 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.album-grid {
-  display: grid;
-  grid-auto-flow: dense;
-  animation: pan-horizontal 90s ease-in-out infinite alternate;
-  /* Start offset so the grid begins centered */
-  transform: translateX(-25%);
+.album-row {
+  display: flex;
+  flex-shrink: 0;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
 }
 
-.album-grid__tile {
+.album-row--pan-left {
+  animation-name: pan-left;
+}
+
+.album-row--pan-right {
+  animation-name: pan-right;
+}
+
+.album-row__tile {
+  flex-shrink: 0;
   overflow: hidden;
 }
 
-.album-grid__tile img {
+.album-row__tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-@keyframes pan-horizontal {
-  0% {
-    transform: translateX(-25%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+@keyframes pan-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-40%); }
+}
+
+@keyframes pan-right {
+  0% { transform: translateX(-40%); }
+  100% { transform: translateX(0); }
 }

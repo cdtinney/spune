@@ -3,27 +3,29 @@ const uniqueAlbums = require('../../utils/uniqueAlbums');
 const combineTrackArtists = require('../../utils/combineTrackArtists');
 const logger = require('../../../logger');
 
-async function searchRelatedAlbums(spotifyApi, artistNames) {
-  const allAlbums = [];
+async function searchAlbums(spotifyApi, query, limit = 50, offset = 0) {
+  try {
+    const results = await spotifyApi.search(query, ['album'], undefined, limit, offset);
+    const albums = results.albums?.items || [];
+    return albums.filter(a => a.images?.length > 0 && a.album_type !== 'single');
+  } catch (error) {
+    logger.warn(`Album search failed for "${query}": ${error.message}`);
+    return [];
+  }
+}
 
+async function searchRelatedAlbums(spotifyApi, artistNames) {
+  // Run multiple searches in parallel to build a large diverse pool:
+  // - Two pages per artist name (offset 0 and 50)
+  const searches = [];
   for (const name of artistNames.slice(0, 3)) {
-    try {
-      // Search for albums by similar artists using the artist name as a
-      // tag query. The "tag:hipster" modifier biases toward lesser-known
-      // results, giving more variety beyond the obvious hits.
-      const results = await spotifyApi.search(`artist:"${name}"`, ['album'], undefined, 50);
-      const albums = results.albums?.items || [];
-      logger.info(`Search for artist:"${name}" returned ${albums.length} albums`);
-      for (const album of albums) {
-        if (album.images?.length > 0 && album.album_type !== 'single') {
-          allAlbums.push(album);
-        }
-      }
-    } catch (error) {
-      logger.warn(`Album search failed for "${name}": ${error.message}`);
-    }
+    searches.push(searchAlbums(spotifyApi, `artist:"${name}"`, 50, 0));
+    searches.push(searchAlbums(spotifyApi, `artist:"${name}"`, 50, 50));
   }
 
+  const results = await Promise.all(searches);
+  const allAlbums = results.flat();
+  logger.info(`Search yielded ${allAlbums.length} albums from ${artistNames.length} artist name(s)`);
   return allAlbums;
 }
 
@@ -40,15 +42,12 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
   const trackArtistIds = combineTrackArtists({ songArtists, albumArtists });
   const artistNames = songArtists.map(a => a.name);
 
-  // Search for albums by similar artists using the Spotify Search API.
-  // The Related Artists and Recommendations endpoints were removed in late 2024.
-  const searchedAlbums = await searchRelatedAlbums(spotifyApi, artistNames);
-  logger.info(`Search yielded ${searchedAlbums.length} total albums from ${artistNames.length} artist name(s)`);
+  // Fetch searched albums and artist albums in parallel
+  const [searchedAlbums, ...artistAlbumResults] = await Promise.all([
+    searchRelatedAlbums(spotifyApi, artistNames),
+    ...trackArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
+  ]);
 
-  // Also fetch the track's own artists' albums
-  const artistAlbumResults = await Promise.all(
-    trackArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
-  );
   const artistAlbums = artistAlbumResults.reduce((arr, curr) => arr.concat(curr.albums), []);
   logger.info(`Artist albums: ${artistAlbums.length} from ${trackArtistIds.length} artist(s)`);
 
