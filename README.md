@@ -98,86 +98,69 @@ SESSION_SECRET=your-secret
 
 ### Production Deployment (DigitalOcean Droplet)
 
-CI automatically builds and pushes a Docker image to GitHub Container Registry (`ghcr.io`) on every merge to `master`. Your droplet pulls the latest image automatically via Watchtower.
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. Your droplet auto-updates via Watchtower.
 
-#### One-time droplet setup
+#### 1. Set up the droplet
 
-1. **Create a droplet** (Ubuntu 24.04, any size with 1GB+ RAM).
-
-2. **Install Docker**:
+Create an Ubuntu 24.04 droplet (1GB RAM is enough). SSH in and run the setup script:
 
 ```bash
-curl -fsSL https://get.docker.com | sh
+ssh root@YOUR_DROPLET_IP
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
 ```
 
-3. **Log in to GitHub Container Registry** (use a [personal access token](https://github.com/settings/tokens) with `read:packages` scope):
+The script installs Docker, creates `/opt/spune` with a `docker-compose.yml` and `.env`, and generates random secrets.
+
+#### 2. Configure credentials
+
+Log in to GitHub Container Registry (create a [personal access token](https://github.com/settings/tokens) with `read:packages` scope):
 
 ```bash
 echo "YOUR_GITHUB_PAT" | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
 ```
 
-4. **Create a project directory and env file**:
+Edit `/opt/spune/.env` and fill in your Spotify + Last.fm credentials:
 
 ```bash
-mkdir -p /opt/spune && cd /opt/spune
-cat > .env <<'EOF'
-DATABASE_URL=postgresql://user:pass@host:5432/spune
-SESSION_SECRET=generate-a-long-random-string
-SPOT_CLIENT_ID=your-client-id
-SPOT_CLIENT_SECRET=your-client-secret
+nano /opt/spune/.env
+```
+
+#### 3. Point your domain to the droplet
+
+In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
+
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` (or subdomain) | `YOUR_DROPLET_IP` |
+
+Then update `/opt/spune/.env` to use your domain:
+
+```
 SPOT_REDIRECT_URI=https://your-domain.com/api/auth/spotify/callback
 CLIENT_HOST=https://your-domain.com
-LAST_FM_API_KEY=your-lastfm-key
-EOF
 ```
 
-5. **Create `docker-compose.yml`**:
+Also add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
 
-```yaml
-services:
-  app:
-    image: ghcr.io/cdtinney/spune:latest
-    restart: always
-    ports:
-      - "5000:5000"
-    env_file: .env
-    environment:
-      NODE_ENV: production
-
-  watchtower:
-    image: containrrr/watchtower
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json:ro
-    command: --interval 60 --cleanup
-```
-
-6. **Run the database migration** against your PostgreSQL instance:
+#### 4. Start
 
 ```bash
-psql "$DATABASE_URL" -f packages/server/src/database/migrations/001_create_users.sql
-```
-
-Or if using a managed database, run the SQL from `packages/server/src/database/migrations/001_create_users.sql` in your DB console.
-
-7. **Start everything**:
-
-```bash
+cd /opt/spune
 docker compose up -d
 ```
 
-#### How auto-deploy works
+Wait ~10 seconds for PostgreSQL to initialize, then run the migration:
 
-- You merge a PR to `master`
-- CI runs tests, then builds and pushes `ghcr.io/cdtinney/spune:latest`
-- Watchtower (running on your droplet) polls every 60 seconds
-- When it detects a new image, it pulls it and restarts the app container
-- Zero manual intervention needed
+```bash
+docker compose exec db psql -U spune -d spune -c \
+  "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, spotify_id TEXT UNIQUE NOT NULL, spotify_access_token TEXT, spotify_refresh_token TEXT, token_updated BIGINT, expires_in BIGINT, display_name TEXT, photos JSON);"
+```
 
-#### Putting it behind a reverse proxy
+The app is now running. If you're using a domain with the setup script's default config, it serves on port 80 (HTTP). For HTTPS, see below.
 
-For HTTPS, put nginx or Caddy in front of the app. Example with Caddy (add to `docker-compose.yml`):
+#### HTTPS with Caddy (optional)
+
+The setup script serves on port 80 (HTTP). To add automatic HTTPS, edit `/opt/spune/docker-compose.yml` and add a Caddy service:
 
 ```yaml
   caddy:
@@ -193,7 +176,9 @@ volumes:
   caddy_data:
 ```
 
-With a `Caddyfile`:
+Change the `app` service ports from `"80:5000"` to `"5000:5000"` (internal only).
+
+Create `/opt/spune/Caddyfile`:
 
 ```
 your-domain.com {
@@ -201,13 +186,14 @@ your-domain.com {
 }
 ```
 
-### Database Migration
+Restart: `docker compose down && docker compose up -d`. Caddy auto-provisions a Let's Encrypt TLS certificate.
 
-The migration runs automatically when using `docker compose up` locally (via the init script). For production, run the SQL against your database before first deploy:
+#### How auto-deploy works
 
-```bash
-psql "$DATABASE_URL" -f packages/server/src/database/migrations/001_create_users.sql
-```
+1. You merge a PR to `master`
+2. CI runs tests, builds, and pushes `ghcr.io/cdtinney/spune:latest`
+3. Watchtower (on your droplet) detects the new image within 60 seconds
+4. It pulls the image and restarts the app container automatically
 
 ## Inspiration
 
