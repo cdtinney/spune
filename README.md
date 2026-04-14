@@ -112,10 +112,13 @@ The script installs Docker, creates `/opt/spune` with a `docker-compose.yml` and
 
 #### 2. Configure credentials
 
-Log in to GitHub Container Registry (create a [personal access token](https://github.com/settings/tokens) with `read:packages` scope):
+Log in to GitHub Container Registry so the droplet can pull the Docker image:
+
+1. Go to https://github.com/settings/tokens and create a **classic** personal access token with the `read:packages` scope.
+2. Run this on the droplet, replacing the placeholders:
 
 ```bash
-echo "YOUR_GITHUB_PAT" | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+echo "ghp_yourTokenHere" | docker login ghcr.io -u your-github-username --password-stdin
 ```
 
 Edit `/opt/spune/.env` and fill in your Spotify + Last.fm credentials:
