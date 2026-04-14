@@ -15,7 +15,7 @@ async function searchRelatedAlbums(spotifyApi, artistNames) {
       const albums = results.albums?.items || [];
       logger.info(`Search for artist:"${name}" returned ${albums.length} albums`);
       for (const album of albums) {
-        if (album.images?.length > 0) {
+        if (album.images?.length > 0 && album.album_type !== 'single') {
           allAlbums.push(album);
         }
       }

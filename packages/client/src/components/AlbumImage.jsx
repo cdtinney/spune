@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function AlbumImage({ src, alt, width, height }) {
+export default function AlbumImage({ src, alt }) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -10,11 +10,8 @@ export default function AlbumImage({ src, alt, width, height }) {
       loading="lazy"
       onLoad={() => setLoaded(true)}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
         opacity: loaded ? 1 : 0,
-        animation: loaded ? 'fadein 2s' : 'none',
-        display: 'block',
+        transition: 'opacity 1s ease-in',
       }}
     />
   );

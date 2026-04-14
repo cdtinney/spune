@@ -22,7 +22,7 @@ export default function VisualizationContent() {
   const { user, logout } = useUser();
   const { nowPlaying, relatedAlbums, initialized } = useSpotify();
   const windowSize = useWindowSize();
-  const { albums, imageSize } = useAlbumGrid(relatedAlbums, windowSize);
+  const { albums, baseUnit, cols } = useAlbumGrid(relatedAlbums, windowSize);
   const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
@@ -93,9 +93,11 @@ export default function VisualizationContent() {
         )}
 
         {!isInitialLoad && songPlaying && (
-          <AlbumGrid albums={albums} imageSize={imageSize} />
+          <AlbumGrid albums={albums} baseUnit={baseUnit} cols={cols} />
         )}
       </div>
+
+      <div className="visualization__bottom-gradient" />
     </div>
   );
 }
