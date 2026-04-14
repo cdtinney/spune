@@ -9,6 +9,7 @@ const initialState = {
     byAlbumId: {},
     allAlbumIds: [],
   },
+  initialized: false,
   loading: false,
   albumsLoading: false,
   error: null,
@@ -22,16 +23,17 @@ function reducer(state, action) {
     case 'FETCH_NOW_PLAYING_SUCCESS':
       return {
         ...state,
+        initialized: true,
         loading: false,
         error: null,
         nowPlaying: action.payload,
       };
 
     case 'FETCH_NOW_PLAYING_DUPE':
-      return { ...state, loading: false };
+      return { ...state, initialized: true, loading: false };
 
     case 'FETCH_NOW_PLAYING_FAILURE':
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, initialized: true, loading: false, error: action.payload };
 
     case 'CLEAR_RELATED_ALBUMS':
       return {

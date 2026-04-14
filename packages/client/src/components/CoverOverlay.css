@@ -20,7 +20,8 @@
   );
   opacity: 0.75;
   background-size: 1200% 1200%;
-  animation: move-background 180s ease infinite alternate;
+  animation: move-background 360s ease infinite alternate;
+  pointer-events: none;
 }
 
 .cover-overlay__darken {

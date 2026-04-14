@@ -20,7 +20,7 @@ const REPO_URL = 'https://github.com/cdtinney/spune';
 export default function VisualizationContent() {
   useNowPlayingPoller();
   const { user, logout } = useUser();
-  const { nowPlaying, relatedAlbums, loading } = useSpotify();
+  const { nowPlaying, relatedAlbums, initialized } = useSpotify();
   const windowSize = useWindowSize();
   const { albums, imageSize } = useAlbumGrid(relatedAlbums, windowSize);
   const [fullscreen, setFullscreen] = useState(false);
@@ -42,8 +42,9 @@ export default function VisualizationContent() {
   }, []);
 
   const userName = user?.displayName || user?.spotifyId;
-  const userImageUrl = user?.photos?.[0];
-  const isInitialLoad = loading && !nowPlaying;
+  const photo = user?.photos?.[0];
+  const userImageUrl = typeof photo === 'string' ? photo : photo?.url;
+  const isInitialLoad = !initialized;
   const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
 
   return (
