@@ -12,19 +12,12 @@ const passport = require('passport');
 
 const logger = require('./logger');
 
-const { pool, connect, disconnect } = require('./database/db');
+const { pool, connect } = require('./database/db');
 const routes = require('./routes/index');
 const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
 module.exports = function initApp() {
-  let shuttingDown = false;
-  function gracefulShutdown() {
-    if (shuttingDown) return;
-    shuttingDown = true;
-    disconnect();
-  }
-
   const app = express();
 
   app.use(express.urlencoded({ extended: false }));
@@ -68,10 +61,6 @@ module.exports = function initApp() {
 
   // Connect to the DB.
   connect();
-
-  process.on('exit', gracefulShutdown);
-  process.on('SIGINT', gracefulShutdown);
-  process.on('SIGTERM', gracefulShutdown);
 
   return app;
 };
