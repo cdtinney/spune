@@ -62,7 +62,9 @@ describe('/spotify', () => {
       const response = await request(app).get('/api/spotify/me/player');
       expect(response.statusCode).toEqual(200);
       expect(response.body).toEqual({
-        message: 'success',
+        body: {
+          message: 'success',
+        },
       });
     });
 
