@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spune
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./packages/server/src/database/migrations/001_create_users.sql:/docker-entrypoint-initdb.d/001_create_users.sql
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/spune
+      SESSION_SECRET: ${SESSION_SECRET:-change-me-in-production}
+      SPOT_CLIENT_ID: ${SPOT_CLIENT_ID}
+      SPOT_CLIENT_SECRET: ${SPOT_CLIENT_SECRET}
+      SPOT_REDIRECT_URI: ${SPOT_REDIRECT_URI}
+      CLIENT_HOST: ${CLIENT_HOST:-}
+      LAST_FM_API_KEY: ${LAST_FM_API_KEY:-}
+
+volumes:
+  pgdata:

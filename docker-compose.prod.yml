@@ -1,0 +1,19 @@
+# Production overrides — use with:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Assumes an external PostgreSQL database (e.g., managed Supabase, RDS, etc.)
+# so the db service is not included.
+
+services:
+  app:
+    restart: always
+    environment:
+      NODE_ENV: production
+      # Override DATABASE_URL to point to your production database
+      DATABASE_URL: ${DATABASE_URL}
+      SESSION_SECRET: ${SESSION_SECRET}
+      SPOT_CLIENT_ID: ${SPOT_CLIENT_ID}
+      SPOT_CLIENT_SECRET: ${SPOT_CLIENT_SECRET}
+      SPOT_REDIRECT_URI: ${SPOT_REDIRECT_URI}
+      CLIENT_HOST: ${CLIENT_HOST}
+      LAST_FM_API_KEY: ${LAST_FM_API_KEY:-}
