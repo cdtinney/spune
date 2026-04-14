@@ -29,8 +29,9 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     // 2x viewport width — enough for animation without burning too many albums
     const bandCols = Math.ceil((width * 2) / BASE);
 
-    // Single global pool — exhaust all unique albums before repeating
-    let pool = shuffle(allAlbumIds);
+    // Pool uses albums in server order first (artist albums come first),
+    // then shuffles the full set for any remaining/repeating tiles.
+    let pool = [...allAlbumIds].reverse(); // reverse so pop() gives first items first
     const usedSet = new Set();
 
     function nextAlbum() {
@@ -41,7 +42,7 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
           return byAlbumId[id];
         }
       }
-      // Exhausted — allow repeats from here
+      // Exhausted — reshuffle for repeats
       usedSet.clear();
       pool = shuffle(allAlbumIds);
       const id = pool.pop();

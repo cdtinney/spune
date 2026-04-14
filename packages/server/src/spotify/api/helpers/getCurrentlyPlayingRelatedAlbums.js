@@ -71,8 +71,10 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
   const artistAlbums = artistAlbumResults.reduce((arr, curr) => arr.concat(curr.albums), []);
   logger.info(`Artist albums: ${artistAlbums.length} from ${trackArtistIds.length} artist(s)`);
 
-  const combined = uniqueAlbums([...searchedAlbums, ...artistAlbums]);
-  logger.info(`Combined unique albums: ${combined.length}`);
+  // Artist albums first — uniqueAlbums keeps the first occurrence per
+  // base name, so the track's own artists' albums are always included.
+  const combined = uniqueAlbums([...artistAlbums, ...searchedAlbums]);
+  logger.info(`Combined unique albums: ${combined.length} (${artistAlbums.length} artist + ${searchedAlbums.length} searched)`);
 
   return combined;
 };
