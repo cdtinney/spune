@@ -12,8 +12,8 @@ Polish the codebase: migrate to TypeScript, set up consistent linting/formatting
 
 ### TypeScript Migration
 - Add TypeScript to both packages.
-- Migrate server code from JS to TS (Express types, route handlers, database queries).
-- Migrate client code from JS to TSX (React components, Redux slices, API calls).
+- Migrate server code from JS to TS.
+- Migrate client code from JS to TS/TSX.
 - Add `tsconfig.json` to each package and the root.
 - Ensure builds and tests still work after migration.
 
