@@ -43,7 +43,7 @@ export default function VisualizationContent() {
 
   const userName = user?.displayName || user?.spotifyId;
   const photo = user?.photos?.[0];
-  const userImageUrl = typeof photo === 'string' ? photo : photo?.url;
+  const userImageUrl = typeof photo === 'string' ? photo : (photo?.url || photo?.value);
   const isInitialLoad = !initialized;
   const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
 
