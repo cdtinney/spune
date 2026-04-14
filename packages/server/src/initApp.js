@@ -18,7 +18,10 @@ const paths = require('./config/paths');
 const configurePassport = require('./auth/configurePassport');
 
 module.exports = function initApp() {
+  let shuttingDown = false;
   function gracefulShutdown() {
+    if (shuttingDown) return;
+    shuttingDown = true;
     disconnect();
   }
 
