@@ -33,8 +33,8 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
         id: `${album.id}_${index}`,
         title: album.name,
         images: {
-          fullSize: album.images[1].url,
-          thumbnail: album.images[album.images.length - 1].url,
+          fullSize: (album.images[1] || album.images[0])?.url,
+          thumbnail: album.images[album.images.length - 1]?.url,
         },
       };
     });

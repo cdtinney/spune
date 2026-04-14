@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useUser } from '../contexts/UserContext';
@@ -25,13 +25,19 @@ export default function VisualizationContent() {
   const { albums, imageSize } = useAlbumGrid(relatedAlbums, windowSize);
   const [fullscreen, setFullscreen] = useState(false);
 
+  useEffect(() => {
+    const handleChange = () => {
+      setFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleChange);
+    return () => document.removeEventListener('fullscreenchange', handleChange);
+  }, []);
+
   const handleFullscreenToggle = useCallback(() => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
-      setFullscreen(true);
     } else {
       document.exitFullscreen();
-      setFullscreen(false);
     }
   }, []);
 
@@ -56,9 +62,11 @@ export default function VisualizationContent() {
             </a>
           )}
 
-          {userName && userImageUrl && (
+          {userName && (
             <div className="visualization__user-container">
-              <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
+              {userImageUrl && (
+                <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
+              )}
               <UserMenu onLogout={logout} />
             </div>
           )}

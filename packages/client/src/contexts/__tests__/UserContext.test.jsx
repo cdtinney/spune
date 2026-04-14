@@ -72,7 +72,7 @@ describe('UserContext', () => {
     });
 
     await userEvent.click(screen.getByText('Login'));
-    expect(window.location.assign).toHaveBeenCalledWith('api/auth/spotify');
+    expect(window.location.assign).toHaveBeenCalledWith('/api/auth/spotify');
   });
 
   it('logout navigates to logout endpoint', async () => {

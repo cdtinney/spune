@@ -5,8 +5,6 @@
   align-items: center;
   left: 30px;
   bottom: 30px;
-  align-self: flex-start;
-  margin-top: auto;
   z-index: 100;
   animation: fadein 1s;
 }

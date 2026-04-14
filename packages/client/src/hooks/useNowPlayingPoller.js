@@ -12,11 +12,14 @@ export default function useNowPlayingPoller() {
 
   const loadingRef = useRef(false);
   const currentAlbumIdRef = useRef(null);
+  const currentSongIdRef = useRef(null);
 
   useEffect(() => {
     const poll = async () => {
-      const info = await fetchNowPlaying(loadingRef);
+      const info = await fetchNowPlaying(loadingRef, currentSongIdRef.current);
       if (!info) return;
+
+      currentSongIdRef.current = info.songId;
 
       if (currentAlbumIdRef.current !== info.albumId) {
         currentAlbumIdRef.current = info.albumId;

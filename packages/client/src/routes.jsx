@@ -3,11 +3,12 @@ import { useUser } from './contexts/UserContext';
 import HomePage from './pages/HomePage';
 import VisualizationPage from './pages/VisualizationPage';
 import ErrorPage from './pages/ErrorPage';
+import LoadingScreen from './components/LoadingScreen';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useUser();
 
-  if (loading) return null;
+  if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/" replace />;
   return children;
 }

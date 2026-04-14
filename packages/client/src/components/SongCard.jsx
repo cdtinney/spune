@@ -5,7 +5,7 @@ export default function SongCard({ artistName, songTitle, albumName, albumImageU
     <div className="song-card">
       <div
         className="song-card__cover"
-        style={{ backgroundImage: `url(${albumImageUrl})` }}
+        style={{ backgroundImage: `url("${albumImageUrl}")` }}
         title={albumName}
       />
       <div className="song-card__details">

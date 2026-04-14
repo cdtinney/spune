@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useCallback } from 'react';
+import { createContext, useContext, useReducer, useCallback, useMemo } from 'react';
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
 
 const SpotifyContext = createContext(null);
@@ -67,7 +67,7 @@ function reducer(state, action) {
 export function SpotifyProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const fetchNowPlaying = useCallback(async (loadingRef) => {
+  const fetchNowPlaying = useCallback(async (loadingRef, currentSongId) => {
     if (loadingRef.current) return;
     loadingRef.current = true;
 
@@ -75,7 +75,18 @@ export function SpotifyProvider({ children }) {
 
     try {
       const data = await getPlaybackState();
-      const { item } = data;
+      const item = data?.item;
+
+      if (!item) {
+        dispatch({ type: 'FETCH_NOW_PLAYING_DUPE' });
+        return null;
+      }
+
+      if (item.id === currentSongId) {
+        dispatch({ type: 'FETCH_NOW_PLAYING_DUPE' });
+        return { songId: item.id, albumId: item.album?.id };
+      }
+
       const info = {
         songId: item.id,
         songTitle: item.name,
@@ -83,7 +94,7 @@ export function SpotifyProvider({ children }) {
         artistName: item.artists.map((a) => a.name).join(', '),
         albumId: item.album.id,
         albumName: item.album.name,
-        albumImageUrl: item.album.images[0].url,
+        albumImageUrl: item.album.images[0]?.url,
         albumArtists: item.album.artists,
         albumImages: item.album.images,
       };
@@ -112,15 +123,18 @@ export function SpotifyProvider({ children }) {
     dispatch({ type: 'CLEAR_RELATED_ALBUMS' });
   }, []);
 
+  const value = useMemo(
+    () => ({
+      ...state,
+      fetchNowPlaying,
+      fetchRelatedAlbums,
+      clearRelatedAlbums,
+    }),
+    [state, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
+  );
+
   return (
-    <SpotifyContext.Provider
-      value={{
-        ...state,
-        fetchNowPlaying,
-        fetchRelatedAlbums,
-        clearRelatedAlbums,
-      }}
-    >
+    <SpotifyContext.Provider value={value}>
       {children}
     </SpotifyContext.Provider>
   );

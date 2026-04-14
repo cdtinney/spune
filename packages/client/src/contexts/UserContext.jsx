@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { getAuthUser } from '../api/spotify';
 
 const UserContext = createContext(null);
@@ -20,16 +20,21 @@ export function UserProvider({ children }) {
       });
   }, []);
 
-  const login = () => {
-    window.location.assign('api/auth/spotify');
-  };
+  const login = useCallback(() => {
+    window.location.assign('/api/auth/spotify');
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     window.location.assign('/api/auth/user/logout');
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, loading, error, login, logout }),
+    [user, loading, error, login, logout],
+  );
 
   return (
-    <UserContext.Provider value={{ user, loading, error, login, logout }}>
+    <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
