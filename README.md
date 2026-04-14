@@ -1,321 +1,204 @@
-**This is no longer maintained.**
+# Spune
 
-![Spune Logo](packages/client/src/assets/spune_logo_small.png)
-
-> Web-based Spotify display for your living room TV.
-
-[![Build Status](https://travis-ci.org/cdtinney/spune.svg?branch=master)](https://travis-ci.org/cdtinney/spune) [![Coverage Status](https://coveralls.io/repos/github/cdtinney/spune/badge.svg?branch=master)](https://coveralls.io/github/cdtinney/spune?branch=master) [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
-
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Introduction](#introduction)
-  - [Inspiration](#inspiration)
-  - [Technologies](#technologies)
-- [Developing](#developing)
-  - [Requirements](#requirements)
-  - [Installing](#installing)
-  - [Creating Spotify Client ID](#creating-spotify-client-id)
-  - [Setting Environment Variables](#setting-environment-variables)
-  - [Running](#running)
-  - [Stopping](#stopping)
-  - [Testing](#testing)
-    - [Server](#server)
-    - [Client](#client)
-    - [Linting](#linting)
-    - [Coveralls](#coveralls)
-  - [Building](#building)
-  - [Deploying](#deploying)
-  - [Debugging](#debugging)
-    - [Heroku](#heroku)
-  - [Database](#database)
-    - [Development](#development)
-    - [Production](#production)
-- [Thanks to..](#thanks-to)
-
-## Introduction
-
-Spune is a simple "Now Playing" visualizer for Spotify, inspired by desktop Zune software.
-
-### Inspiration
-
-Inspiration for building this is as follows:
-
-1. Desktop Zune software is awesome to look at on your TV
-2. Desktop Spotify software sucks to look at on your TV
-3. Therefore, a client that shows what you're listening to in the style of Zune
-must be awesome
-
-Here are some screenshots of the glory that is Zune:
+> Web-based Spotify "Now Playing" visualizer, inspired by the Zune desktop software.
 
 ![Zune Player 1](./assets/player.png)
-
 ![Zune Player 2](./assets/player2.png)
 
-### Technologies
+## Overview
 
-Spune uses the following technologies:
+Spune displays album artwork from related artists in a Zune-style mosaic while you listen to Spotify. It polls your currently playing track, discovers related artists via Last.fm and ListenBrainz, and renders their album covers as an animated background.
 
-* Client
-  * React/Redux
-  * Webpack
-  * Jest
-  * ESLint
-* Server
-  * Node.js/Express
-  * Passport.js
-  * MongoDB via Mongoose
-  * Jest/Puppeteer/Supertest
-  * ESLint
-* CI/CD
-  * Travis CI
-  * Heroku
-  * mLab MongoDB
-  * Coveralls
+### Stack
 
-## Developing
+- **Client**: React 19, Vite, React Router v7, plain CSS
+- **Server**: Node.js 22, Express, Passport.js (Spotify OAuth), PostgreSQL
+- **APIs**: Spotify Web API, Last.fm, ListenBrainz/MusicBrainz
+- **CI/CD**: GitHub Actions, Docker
 
-### Requirements
+## Getting Started
 
-To run the application:
+### Prerequisites
 
-* [Node.js/npm](https://nodejs.org/en/)
-* [Configured Spotify application](https://developer.spotify.com/dashboard/login)
-* [MongoDB Community Server](https://www.mongodb.com/download-center/community)
+- [Node.js 22+](https://nodejs.org/)
+- [PostgreSQL 16+](https://www.postgresql.org/)
+- [Spotify Developer Application](https://developer.spotify.com/dashboard)
+- (Optional) [Last.fm API key](https://www.last.fm/api/account/create) for better related artist discovery
 
-For CI/CD:
+### Setup
 
-* [Travis CI CLI](https://github.com/travis-ci/travis.rb#readme)
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
-
-### Installing
-
-Clone the repository (and navigate into it):
-
-```
-$ git clone git@github.com:cdtinney/spune.git
-$ cd spune
+```bash
+git clone git@github.com:cdtinney/spune.git
+cd spune
+npm install
 ```
 
-Install dependencies for both server and client:
+Create `packages/server/.env` from the example:
 
-```
-$ npm run bootstrap
-```
-
-### Creating Spotify Client ID
-
-* Login to [the Spotify developer dashboard](https://developer.spotify.com/dashboard/applications)
-* Create a new Client ID
-  * Keep the page open so you can copy/paste the ID and secret next
-
-### Setting Environment Variables
-
-Create an `.env` file in the `packages/server` directory,
-and set these **required** variables (for a local environment):
-
-```
-CLIENT_HOST = http://localhost:3000
-SPOT_REDIRECT_URI = http://localhost:5000/api/callback
-SPOT_CLIENT_ID = <CLIENT_ID>
-SPOT_CLIENT_SECRET = <CLIENT_SECRET>
-SESSION_SECRET = <SESSION_SECRET_STRING> # This can be anything
+```bash
+cp packages/server/.env.example packages/server/.env
 ```
 
-In production, replace `localhost:port` with the URL it's being hosted at.
+Edit `.env` and fill in your credentials:
 
-There are also optional variables:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `SESSION_SECRET` | Yes | Express session secret (any random string) |
+| `SPOT_CLIENT_ID` | Yes | Spotify app client ID |
+| `SPOT_CLIENT_SECRET` | Yes | Spotify app client secret |
+| `SPOT_REDIRECT_URI` | Yes | OAuth callback URL. Dev: `http://127.0.0.1:3000/api/auth/spotify/callback` |
+| `CLIENT_HOST` | Yes | Client origin for redirects. Dev: `http://127.0.0.1:3000` |
+| `PORT` | No | Server port (default: 5000) |
+| `LAST_FM_API_KEY` | No | Last.fm API key for similar artist discovery |
 
-```
-MONGODB_URI = <MONGODB_URI> # Defaults to mongodb://localhost:27107:spune
-```
+Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
 
-### Running
+### Running (Development)
 
-First, **ensure that the MongoDB daemon is running** (e.g. run `mongod` in a separate terminal).
-
-To run both client and server, in watch mode:
-
-```
-$ npm run watch
-```
-
-To run the client in watch mode:
-
-```
-$ npm run client:watch
+```bash
+npm run dev
 ```
 
-To run the server in watch mode:
-
-```
-$ npm run server:watch
-```
-
-To run server in non-watch mode:
-
-```
-$ npm run server:start
-```
-
-### Stopping
-
-To stop a running development server, use `Ctrl+C` to gracefully shut it down.
-
-If you accidentally use `Ctrl+Z`, you will have to manually kill the old processes to free up the ports.
-This can be done via finding the process IDs (PIDs):
-
-```
-$ ps -A | egrep "start.js|app.js"
-$ kill -9 <SERVER_PID> <CLIENT_PID>
-```
+This starts both the Express server (port 5000) and Vite dev server (port 3000) concurrently. Open `http://127.0.0.1:3000`.
 
 ### Testing
 
-To run all tests with coverage:
-
-```
-$ npm run test
-```
-
-#### Server
-
-To run server tests in watch mode:
-
-```
-$ npm run server:test
-```
-
-To run server tests with coverage:
-
-```
-$ npm run server:test:coverage
-```
-
-To run integration tests (**NOTE: this requires a client production build to exist in `packages/client/build`**):
-
-```
-$ npm run server:test:integration
-```
-
-#### Client
-
-To run client tests in watch mode:
-
-```
-$ npm run client:test
-```
-
-To run client tests with coverage:
-
-```
-$ npm run client:test:coverage
-```
-
-#### Linting
-
-To lint the server:
-
-```
-$ npm run server:lint
-```
-
-#### Coveralls
-
-**In order to use Coveralls locally, you must configure `.coveralls.yml` in the root directory
-with `repo_token` set.**
-
-For example:
-
-```
-repo_token: foobar1234
-```
-
-To run all tests and and report to Coveralls:
-
-```
-$ npm run test:coveralls
+```bash
+npm run client:test        # Client tests (Vitest)
+npm run client:lint         # Client lint (ESLint)
+npm run server:test:coverage # Server tests (Jest)
+npm run server:lint         # Server lint (ESLint)
 ```
 
 ### Building
 
-To build the client:
-
-```
-$ npm run client:build
+```bash
+npm run client:build   # Builds to packages/client/build/
 ```
 
-### Deploying
+## Docker
 
-The application is deployed to Heroku via Travis CI, with a single dyno
-serving both the static React front-end and API requests.
+### Local Development with Docker
 
-To deploy to Herokua via Travis CI:
-
-1. Connect the repository on Travis CI as a new project
-1. [Set environment variables](#setting-environment-variables) for Travis CI in order for tests to run
-      * Required variables:
-        * `SPOT_REDIRECT_URI`
-        * `SPOT_CLIENT_ID`
-        * `SPOT_CLIENT_SECRET`
-        * `SESSION_SECRET`
-1. Create a new Heroku application (e.g. `spune-fork-foo`)
-1. [Set config variables](#setting-environment-variables) for the Heroku application
-      * Required variables:
-        * `SPOT_REDIRECT_URI`
-        * `SPOT_CLIENT_ID`
-        * `SPOT_CLIENT_SECRET`
-        * `SESSION_SECRET`
-        * `MONGODB_URI` - this should be set automatically after the next step
-1. Add the [mLab MongoDB add-on](https://elements.heroku.com/addons/mongolab)
-      * This will automatically set the `MONGODB_URI` environment variable
-1. [Update the Heroku API key in `.travis.yml`](https://docs.travis-ci.com/user/deployment/heroku/)
-1. Update the Heroku app name
-
-All commits to `master` should be deployed (by default).
-
-### Debugging
-
-TODO Expand this section
-
-#### Heroku
-
-To view Heroku application logs (in real-time):
-
-```
-$ heroku logs -a <APP_NAME> --tail
+```bash
+docker compose up
 ```
 
-### Database
+This starts the app + PostgreSQL. The database migration runs automatically. Open `http://localhost:5000`.
 
-#### Development
+You must set the Spotify env vars. Either export them or create a `.env` file in the project root:
 
-Development database debugging can be done via the MongoDB shell.
-
-To access the shell and switch to the Spune database:
-
-```
-$ mongo
-> use spune
+```bash
+SPOT_CLIENT_ID=your-client-id
+SPOT_CLIENT_SECRET=your-client-secret
+SPOT_REDIRECT_URI=http://localhost:5000/api/auth/spotify/callback
+SESSION_SECRET=your-secret
 ```
 
-To view all records in a collection (e.g. `users`):
+### Production Deployment (DigitalOcean Droplet)
+
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. Your droplet auto-updates via Watchtower.
+
+#### 1. Set up the droplet
+
+Create an Ubuntu 24.04 droplet (1GB RAM is enough). Open the **Droplet Console** in the DigitalOcean dashboard and run the setup script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
+```
+
+The script installs Docker, creates `/opt/spune` with a `docker-compose.yml` and `.env`, and generates random secrets.
+
+#### 2. Configure credentials
+
+Log in to GitHub Container Registry so the droplet can pull the Docker image:
+
+1. Go to https://github.com/settings/tokens and create a **classic** personal access token with the `read:packages` scope.
+2. Run this on the droplet, replacing the placeholders:
+
+```bash
+echo "ghp_yourTokenHere" | docker login ghcr.io -u your-github-username --password-stdin
+```
+
+Edit `/opt/spune/.env` and fill in your Spotify + Last.fm credentials:
+
+```bash
+nano /opt/spune/.env
+```
+
+#### 3. Point your domain to the droplet
+
+In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
+
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` (or subdomain) | `YOUR_DROPLET_IP` |
+
+Then update `/opt/spune/.env` to use your domain:
 
 ```
-> db.users.find().pretty()
+SPOT_REDIRECT_URI=https://your-domain.com/api/auth/spotify/callback
+CLIENT_HOST=https://your-domain.com
 ```
 
-To quit, press `Ctrl + C`.
+Also add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
 
-#### Production
+#### 4. Start
 
-Production database debugging (e.g. deleting invalid documents) can be done via
-the [mLab UI](https://www.mlab.com/home).
+```bash
+cd /opt/spune
+docker compose up -d
+```
 
-## Thanks to..
+Wait ~10 seconds for PostgreSQL to initialize, then run the migration:
 
-Resources used:
+```bash
+docker compose exec db psql -U spune -d spune -c \
+  "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, spotify_id TEXT UNIQUE NOT NULL, spotify_access_token TEXT, spotify_refresh_token TEXT, token_updated BIGINT, expires_in BIGINT, display_name TEXT, photos JSON);"
+```
 
-* [Deploying a React app alongside a server to Heroku](https://www.fullstackreact.com/articles/deploying-a-react-app-with-a-server/)
-* [Spotify Auth With React + React-Router](https://github.com/kauffecup/spotify-react-router-auth)
-* Zune and Spotify, obviously
+The app is now running. If you're using a domain with the setup script's default config, it serves on port 80 (HTTP). For HTTPS, see below.
+
+#### HTTPS with Caddy (optional)
+
+The setup script serves on port 80 (HTTP). To add automatic HTTPS, edit `/opt/spune/docker-compose.yml` and add a Caddy service:
+
+```yaml
+  caddy:
+    image: caddy:2-alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+volumes:
+  caddy_data:
+```
+
+Change the `app` service ports from `"80:5000"` to `"5000:5000"` (internal only).
+
+Create `/opt/spune/Caddyfile`:
+
+```
+your-domain.com {
+    reverse_proxy app:5000
+}
+```
+
+Restart: `docker compose down && docker compose up -d`. Caddy auto-provisions a Let's Encrypt TLS certificate.
+
+#### How auto-deploy works
+
+1. You merge a PR to `master`
+2. CI runs tests, builds, and pushes `ghcr.io/cdtinney/spune:latest`
+3. Watchtower (on your droplet) detects the new image within 60 seconds
+4. It pulls the image and restarts the app container automatically
+
+## Inspiration
+
+1. Desktop Zune software is awesome to look at on your TV
+2. Desktop Spotify software sucks to look at on your TV
+3. Therefore, a client that shows what you're listening to in the style of Zune must be awesome

@@ -1,0 +1,17 @@
+node_modules
+packages/client/node_modules
+packages/server/node_modules
+packages/client/build
+packages/client/coverage
+packages/server/coverage
+.git
+.github
+.claude
+thoughts
+assets
+docs
+*.md
+!README.md
+.env
+.env.*
+.DS_Store

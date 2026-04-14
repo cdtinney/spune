@@ -6,7 +6,7 @@ Task 5 (GitHub Actions) is merged. The server is fully functional and CI is runn
 
 ## Goal
 
-Replace the dead client stack (CRA + React 16 + MUI v3 + Enzyme) with a modern equivalent. This is the biggest task.
+Replace the dead client stack (CRA + React 16 + MUI v3 + Enzyme) with a modern equivalent. Simplify. This is the biggest task.
 
 ## Context
 
