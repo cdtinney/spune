@@ -1,8 +1,4 @@
-export default function calculateColumnSize({
-  windowWidth,
-  minSize,
-  maxSize,
-}) {
+export default function calculateColumnSize({ windowWidth, minSize, maxSize }) {
   if (windowWidth === 0) {
     return 0;
   }
