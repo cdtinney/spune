@@ -18,17 +18,18 @@
     "client:test": "npm run test -w packages/client",
     "client:test:coverage": "npm run test:coverage -w packages/client",
     "client:watch": "npm run watch -w packages/client",
+    "dev": "npm run watch",
     "server:lint": "npm run lint -w packages/server",
     "server:start": "npm run start -w packages/server",
     "server:test": "npm run test -w packages/server",
     "server:test:coverage": "npm run test:coverage -w packages/server",
     "server:test:integration": "npm run test:integration -w packages/server",
     "server:watch": "npm run watch -w packages/server",
-    "start": "npm run server:start",
+    "start": "npm run watch",
     "test": "npm run test:coverage --workspaces --if-present",
     "watch": "concurrently --kill-others \"npm run server:watch\" \"npm run client:watch\""
   },
   "devDependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^9.2.1"
   }
 }
