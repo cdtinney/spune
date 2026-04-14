@@ -9,23 +9,44 @@ async function searchAlbums(spotifyApi, query, limit = 50, offset = 0) {
     const albums = results.albums?.items || [];
     return albums.filter(a => a.images?.length > 0 && a.album_type !== 'single');
   } catch (error) {
-    logger.warn(`Album search failed for "${query}": ${error.message}`);
+    logger.warn(`Album search failed for "${query}" offset=${offset}: ${error.message}`);
     return [];
   }
 }
 
-async function searchRelatedAlbums(spotifyApi, artistNames) {
-  // Run multiple searches in parallel to build a large diverse pool:
-  // - Two pages per artist name (offset 0 and 50)
+async function getArtistGenres(spotifyApi, artistId) {
+  try {
+    const artist = await spotifyApi.artists.get(artistId);
+    return artist.genres || [];
+  } catch {
+    return [];
+  }
+}
+
+async function searchRelatedAlbums(spotifyApi, artistNames, artistIds) {
   const searches = [];
-  for (const name of artistNames.slice(0, 3)) {
+
+  // Search by artist name (general keyword — returns albums mentioning the artist)
+  for (const name of artistNames.slice(0, 2)) {
+    searches.push(searchAlbums(spotifyApi, name, 50, 0));
+    searches.push(searchAlbums(spotifyApi, name, 50, 50));
+  }
+
+  // Search by artist name with artist: filter (strict — albums BY the artist)
+  for (const name of artistNames.slice(0, 2)) {
     searches.push(searchAlbums(spotifyApi, `artist:"${name}"`, 50, 0));
-    searches.push(searchAlbums(spotifyApi, `artist:"${name}"`, 50, 50));
+  }
+
+  // Fetch genres and search by them
+  const genres = await getArtistGenres(spotifyApi, artistIds[0]);
+  for (const genre of genres.slice(0, 3)) {
+    searches.push(searchAlbums(spotifyApi, `genre:"${genre}"`, 50, 0));
+    searches.push(searchAlbums(spotifyApi, `genre:"${genre}"`, 50, 50));
   }
 
   const results = await Promise.all(searches);
   const allAlbums = results.flat();
-  logger.info(`Search yielded ${allAlbums.length} albums from ${artistNames.length} artist name(s)`);
+  logger.info(`Search yielded ${allAlbums.length} albums (${artistNames.length} artist names, ${genres.length} genres)`);
   return allAlbums;
 }
 
@@ -42,9 +63,8 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
   const trackArtistIds = combineTrackArtists({ songArtists, albumArtists });
   const artistNames = songArtists.map(a => a.name);
 
-  // Fetch searched albums and artist albums in parallel
   const [searchedAlbums, ...artistAlbumResults] = await Promise.all([
-    searchRelatedAlbums(spotifyApi, artistNames),
+    searchRelatedAlbums(spotifyApi, artistNames, trackArtistIds),
     ...trackArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
   ]);
 
