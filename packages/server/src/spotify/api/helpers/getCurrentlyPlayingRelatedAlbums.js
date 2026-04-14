@@ -34,6 +34,8 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
         recommendedAlbums.push(track.album);
       }
     }
+
+    logger.info(`Recommendations returned ${recs.tracks.length} tracks, extracted ${recommendedAlbums.length} unique albums`);
   } catch (error) {
     logger.warn(`Recommendations unavailable, falling back to track artists: ${error.message}`);
   }
