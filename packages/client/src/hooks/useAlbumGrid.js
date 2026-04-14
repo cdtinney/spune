@@ -1,20 +1,20 @@
 import { useMemo } from 'react';
 import shuffle from '../utils/shuffle';
 
-// Row heights — each row is one of these heights.
-// Tiles within a row always match the row height (square tiles)
-// but adjacent rows have different heights, creating the mosaic look.
-const ROW_HEIGHTS = [80, 120, 160, 240, 320];
-const ROW_WEIGHTS = [25, 30, 25, 15, 5];
+const BASE = 80;
+const SPANS = [1, 2, 3, 4];
+const SPAN_WEIGHTS = [35, 35, 20, 10];
+const BAND_ROWS = 4;
+const BAND_HEIGHT = BAND_ROWS * BASE;
 
-function pickRowHeight(index) {
-  const roll = ((index * 7 + 13) * 31) % 100;
+function pickSpan(index) {
+  const roll = ((index * 13 + 7) * 37) % 100;
   let cumulative = 0;
-  for (let i = 0; i < ROW_HEIGHTS.length; i++) {
-    cumulative += ROW_WEIGHTS[i];
-    if (roll < cumulative) return ROW_HEIGHTS[i];
+  for (let i = 0; i < SPANS.length; i++) {
+    cumulative += SPAN_WEIGHTS[i];
+    if (roll < cumulative) return SPANS[i];
   }
-  return ROW_HEIGHTS[0];
+  return 1;
 }
 
 export default function useAlbumGrid(relatedAlbums, windowSize) {
@@ -23,15 +23,17 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     const { byAlbumId, allAlbumIds } = relatedAlbums;
 
     if (allAlbumIds.length === 0) {
-      return { rows: [] };
+      return { bands: [], base: BASE, bandRows: BAND_ROWS };
     }
 
-    // Build a pool that avoids repeats until exhausted
+    // 2x viewport width — enough for animation without burning too many albums
+    const bandCols = Math.ceil((width * 2) / BASE);
+
+    // Single global pool — exhaust all unique albums before repeating
     let pool = shuffle(allAlbumIds);
     const usedSet = new Set();
 
     function nextAlbum() {
-      // Try to find an unused album first
       while (pool.length > 0) {
         const id = pool.pop();
         if (!usedSet.has(id)) {
@@ -39,7 +41,7 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
           return byAlbumId[id];
         }
       }
-      // All albums used — reset and reshuffle
+      // Exhausted — allow repeats from here
       usedSet.clear();
       pool = shuffle(allAlbumIds);
       const id = pool.pop();
@@ -47,42 +49,43 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
       return byAlbumId[id];
     }
 
-    const rows = [];
+    const bands = [];
     let y = 0;
-    let rowIndex = 0;
-    let prevHeight = 0;
+    let bandIndex = 0;
+    let tileIndex = 0;
 
-    while (y < height + 400) {
-      let rowHeight = pickRowHeight(rowIndex);
-      // Avoid two consecutive rows of the same large height
-      if (rowHeight >= 240 && prevHeight >= 240) {
-        rowHeight = 120;
-      }
-      prevHeight = rowHeight;
-
-      // Each row is ~3x viewport width for animation headroom
-      const rowWidth = width * 3;
-      const tilesInRow = Math.ceil(rowWidth / rowHeight);
+    while (y < height + BAND_HEIGHT) {
+      // Estimate: band grid cells / weighted-average tile area
+      // Weighted avg: 0.35*1 + 0.35*4 + 0.20*9 + 0.10*16 = 4.15
+      const bandCells = BAND_ROWS * bandCols;
+      const estTiles = Math.ceil(bandCells / 4.5);
 
       const tiles = [];
-      for (let t = 0; t < tilesInRow; t++) {
+      let prevSpan = 0;
+      for (let t = 0; t < estTiles; t++) {
         const album = nextAlbum();
+        let span = pickSpan(tileIndex);
+        if (span > BAND_ROWS) span = BAND_ROWS;
+        if (span >= 3 && prevSpan >= 3) span = 1;
+        prevSpan = span;
+        tileIndex++;
+
         tiles.push({
-          id: `${album.id}_r${rowIndex}_t${t}`,
+          id: `${album.id}_b${bandIndex}_t${t}`,
           title: album.name,
+          span,
           imageUrl: (album.images[1] || album.images[0])?.url,
         });
       }
 
-      const direction = rowIndex % 2 === 0 ? 'left' : 'right';
-      // Slower for larger rows, faster for smaller — feels more natural
-      const duration = 50 + rowHeight / 4 + (rowIndex % 3) * 10;
+      const direction = bandIndex % 2 === 0 ? 'left' : 'right';
+      const duration = 70 + (bandIndex % 4) * 15;
 
-      rows.push({ height: rowHeight, tiles, direction, duration });
-      y += rowHeight;
-      rowIndex++;
+      bands.push({ tiles, direction, duration, cols: bandCols });
+      y += BAND_HEIGHT;
+      bandIndex++;
     }
 
-    return { rows };
+    return { bands, base: BASE, bandRows: BAND_ROWS };
   }, [relatedAlbums, windowSize]);
 }
