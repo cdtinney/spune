@@ -28,6 +28,9 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/spune_test
       SESSION_SECRET: ci-test-secret
+      SPOT_CLIENT_ID: test-client-id
+      SPOT_CLIENT_SECRET: test-client-secret
+      SPOT_REDIRECT_URI: http://localhost:3000/auth/spotify/callback
 
     steps:
       - uses: actions/checkout@v4
