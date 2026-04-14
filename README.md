@@ -102,10 +102,9 @@ CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`
 
 #### 1. Set up the droplet
 
-Create an Ubuntu 24.04 droplet (1GB RAM is enough). SSH in and run the setup script:
+Create an Ubuntu 24.04 droplet (1GB RAM is enough). Open the **Droplet Console** in the DigitalOcean dashboard and run the setup script:
 
 ```bash
-ssh root@YOUR_DROPLET_IP
 curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
 ```
 
