@@ -1,0 +1,22 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #212121;
+}
+
+.home-page__logo {
+  max-width: 200px;
+  margin-bottom: 2em;
+}
+
+.home-page__content {
+  text-align: center;
+  height: 100px;
+}
+
+.home-page__error {
+  color: #f44336;
+}

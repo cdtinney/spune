@@ -1,0 +1,15 @@
+.fullscreen-button {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.fullscreen-button__icon {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.fullscreen-button__icon:hover {
+  color: rgba(255, 255, 255, 0.54);
+}

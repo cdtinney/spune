@@ -1,69 +1,41 @@
 {
   "name": "spune-client",
   "version": "0.1.0",
-  "description": "Spune front-end",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cdtinney/spune.git"
-  },
-  "author": "Colin Tinney",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cdtinney/spune/issues"
-  },
+  "private": true,
+  "type": "module",
   "scripts": {
-    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
-    "eject": "react-scripts eject",
-    "test": "NODE_OPTIONS=--openssl-legacy-provider react-scripts test --env=jsdom",
-    "test:coverage": "npm run test -- --coverage --detectOpenHandles --forceExit",
-    "watch": "NODE_OPTIONS=--openssl-legacy-provider react-scripts start"
+    "dev": "vite",
+    "watch": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src/"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.15",
-    "@fortawesome/free-brands-svg-icons": "^5.7.2",
-    "@fortawesome/free-solid-svg-icons": "^5.7.2",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "@material-ui/core": "^3.9.2",
-    "axios": "^0.18.0",
-    "connected-react-router": "6.0.0",
-    "debounce": "^1.2.0",
-    "http-proxy-middleware": "^0.19.1",
-    "immutability-helper": "^3.0.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.8.1",
-    "react-dom": "^16.8.1",
-    "react-full-screen": "^0.2.3",
-    "react-masonry-component": "^6.2.1",
-    "react-progressive-image": "^0.6.0",
-    "react-redux": "^6.0.0",
-    "react-router": "4.3.1",
-    "react-scripts": "^2.1.5",
-    "react-window-size": "^1.2.2",
-    "redux": "^4.0.1",
-    "redux-responsive": "^4.3.8",
-    "redux-thunk": "2.3.0",
-    "reselect": "^4.0.0",
-    "why-did-you-update": "^1.0.6"
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "axios": "^1.7.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
-    "axios-mock-adapter": "^1.16.0",
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.9.1",
-    "jest": "^23.6.0",
-    "react-router-dom": "^4.3.1",
-    "react-router-test-context": "^0.1.0",
-    "redux-devtools-extension": "^2.13.8",
-    "redux-mock-store": "^1.5.3"
-  },
-  "browserslist": [
-    "last 1 version"
-  ],
-  "jest": {
-    "collectCoverageFrom": [
-      "**/*.{js}",
-      "!src/index.js",
-      "!src/(setupTests|setupProxy).js",
-      "!(build|coverage)/**"
-    ]
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^3.0.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "vite": "^6.0.5",
+    "vitest": "^3.0.4"
   }
 }

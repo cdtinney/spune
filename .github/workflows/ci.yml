@@ -41,7 +41,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci --install-strategy=hoisted --loglevel=verbose
+        run: npm ci --install-strategy=hoisted
 
       - name: Run migration
         run: psql "$DATABASE_URL" -f packages/server/src/database/migrations/001_create_users.sql
@@ -52,4 +52,25 @@ jobs:
       - name: Test
         run: npm run server:test:coverage
 
-  # TODO: Add client job after Task 6 (client rebuild with Vite + React 19)
+  client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --install-strategy=hoisted
+
+      - name: Lint
+        run: npm run client:lint
+
+      - name: Test
+        run: npm run client:test:coverage
+
+      - name: Build
+        run: npm run client:build

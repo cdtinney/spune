@@ -14,6 +14,7 @@
   "scripts": {
     "clean": "rm -rf node_modules packages/client/node_modules packages/server/node_modules package-lock.json",
     "client:build": "npm run build -w packages/client",
+    "client:lint": "npm run lint -w packages/client",
     "client:test": "npm run test -w packages/client",
     "client:test:coverage": "npm run test:coverage -w packages/client",
     "client:watch": "npm run watch -w packages/client",
