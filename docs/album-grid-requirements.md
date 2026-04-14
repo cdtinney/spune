@@ -6,15 +6,15 @@ The album grid is a full-viewport background mosaic of album artwork displayed b
 
 ### Tile Sizes
 
-Albums are displayed at **5 different sizes** based on a base grid unit. The sizes create visual hierarchy and variety:
+Albums are displayed at **5 different sizes**. Within each row, tiles vary in size to create visual variety — rows are NOT uniform height strips.
 
-| Size   | Grid Span | Approx Pixels (at 80px base) |
-|--------|-----------|------------------------------|
-| XS     | 1x1       | 80x80                        |
-| S      | 2x2       | 160x160                      |
-| M      | 3x3       | 240x240                      |
-| L      | 4x4       | 320x320                      |
-| XL     | 5x5       | 400x400                      |
+| Size   | Approx Pixels |
+|--------|---------------|
+| XS     | 80x80         |
+| S      | 160x160       |
+| M      | 240x240       |
+| L      | 320x320       |
+| XL     | 400x400       |
 
 **Size distribution** (approximate):
 - XS: 35% of tiles
@@ -23,41 +23,44 @@ Albums are displayed at **5 different sizes** based on a base grid unit. The siz
 - L: 10% of tiles
 - XL: 5% of tiles
 
+Large tiles (L/XL) should not appear consecutively.
+
 ### Arrangement
 
-- Albums are packed into a **CSS Grid with dense auto-flow**, filling gaps automatically.
-- The grid should extend **wider than the viewport** to allow horizontal scrolling animation.
+- Albums are arranged in horizontal rows that scroll independently.
+- Each row contains tiles of **mixed sizes** for visual variety.
+- Rows extend **~2.5x wider than the viewport** to allow horizontal scrolling animation.
 - No visible gaps between tiles.
 
 ### Animation
 
-- The entire grid slowly animates horizontally, panning left and right.
-- The animation should be smooth and continuous (CSS `translateX` keyframe).
-- Duration should be long enough to feel ambient, not distracting (~60-120 seconds per cycle).
-- The grid should be wide enough that the animation doesn't reveal empty space.
+- Individual rows animate independently, scrolling horizontally.
+- **Even rows pan left**, **odd rows pan right** — creating a layered, organic effect.
+- Each row has a slightly different animation speed (~60-120 seconds per cycle).
+- Animation is smooth and continuous (`translateX` keyframe, `ease-in-out`, `infinite alternate`).
 
 ## Content Rules
 
 ### No Duplicates
 
 - Each unique album should appear **at most once** in the visible grid.
-- If there are not enough unique albums to fill the grid, it is acceptable to repeat, but duplicates should be spread out (not adjacent).
+- Only repeat albums after exhausting all unique albums in the pool.
+- When repeating is necessary, re-shuffle to avoid adjacent duplicates.
 
 ### No Singles
 
-- Albums with `album_type: "single"` should be **filtered out** on the server side before sending to the client.
-- Only `album_type: "album"` and `album_type: "compilation"` should be included.
-- Singles typically have less recognizable cover art and degrade the visual quality of the grid.
+- Albums with `album_type: "single"` are **filtered out** on the server side.
+- Only `album_type: "album"` and `album_type: "compilation"` are included.
 
 ### Image Quality
 
 - Use the mid-size image (300x300) from Spotify's image array for bandwidth efficiency.
 - Use `loading="lazy"` for native browser lazy loading.
-- Images should fade in with a subtle animation when loaded.
+- Images fade in with a subtle opacity transition when loaded.
 
 ## Bottom Gradient
 
-A gradient at the bottom of the viewport mimics a sound wave / audio pulse effect. This provides visual grounding and separates the song card from the album grid behind it.
+A gradient at the bottom of the viewport mimics a sound wave / audio pulse effect. It gently pulses in height and opacity (~4 second cycle), providing visual grounding and separating the song card from the album grid behind it.
 
 ## Visual Reference
 
