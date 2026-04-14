@@ -72,6 +72,15 @@ export default function VisualizationContent() {
         </>
       )}
 
+      {!isInitialLoad && songPlaying && (
+        <SongCard
+          artistName={nowPlaying.artistName}
+          songTitle={nowPlaying.songTitle}
+          albumName={nowPlaying.albumName}
+          albumImageUrl={nowPlaying.albumImageUrl}
+        />
+      )}
+
       <div className="visualization__content">
         {isInitialLoad && (
           <LoadingScreen className="visualization__loading" />
@@ -84,15 +93,7 @@ export default function VisualizationContent() {
         )}
 
         {!isInitialLoad && songPlaying && (
-          <>
-            <SongCard
-              artistName={nowPlaying.artistName}
-              songTitle={nowPlaying.songTitle}
-              albumName={nowPlaying.albumName}
-              albumImageUrl={nowPlaying.albumImageUrl}
-            />
-            <AlbumGrid albums={albums} imageSize={imageSize} />
-          </>
+          <AlbumGrid albums={albums} imageSize={imageSize} />
         )}
       </div>
     </div>
