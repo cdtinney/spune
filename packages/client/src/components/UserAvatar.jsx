@@ -17,7 +17,6 @@ export default function UserAvatar({ displayName, thumbnailSrc }) {
           {initial}
         </div>
       )}
-      <span className="user-avatar__name">{displayName}</span>
     </div>
   );
 }
