@@ -1,54 +1,70 @@
+const axios = require('axios');
 const getRelatedArtists = require('../getRelatedArtists');
 
-describe('validArtistIds()', () => {
-  it('returns a flattened array of IDs when given a 2D array with both null and defined values', () => {
-    const input = [[{
-      id: 1,
-    }, {
-      id: 2,
-    }, null], [{
-      id: 3,
-    }, {
-      id: 4,
-    }, undefined]];
-
-    expect(getRelatedArtists.validArtistIds(input)).toEqual([
-      1, 2, 3, 4,
-    ]);
-  });
-});
+jest.mock('axios');
 
 describe('getRelatedArtists()', () => {
-  it('requests related artists for each artist and combines into a unique set', async () => {
-    const mockSpotifyApi = {
-      artists: {
-        relatedArtists: jest.fn().mockImplementation(artistId => Promise.resolve({
-          artists: [{
-            id: 3,
-          }, {
-            id: 4,
-          }, {
-            id: artistId * 5,
-          }],
-        })),
-      },
-    };
-    const trackArtistIds = [1, 2];
-
-    const relatedArtists = await getRelatedArtists(mockSpotifyApi, trackArtistIds);
-    expect(Array.from(relatedArtists.values())).toEqual([
-      3, 4, 5, 10,
-    ]);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    process.env.LAST_FM_API_KEY = 'test-key';
   });
 
-  it('returns empty results when endpoint returns 403', async () => {
-    const mockSpotifyApi = {
-      artists: {
-        relatedArtists: jest.fn().mockRejectedValue({ status: 403 }),
-      },
-    };
+  afterEach(() => {
+    delete process.env.LAST_FM_API_KEY;
+  });
 
-    const relatedArtists = await getRelatedArtists(mockSpotifyApi, ['artist1']);
-    expect(Array.from(relatedArtists.values())).toEqual([]);
+  it('returns artist names from Last.fm and ListenBrainz combined', async () => {
+    // Last.fm response
+    axios.get.mockImplementation((url) => {
+      if (url.includes('audioscrobbler')) {
+        return Promise.resolve({
+          data: {
+            similarartists: {
+              artist: [
+                { name: 'Artist A' },
+                { name: 'Artist B' },
+              ],
+            },
+          },
+        });
+      }
+      if (url.includes('musicbrainz')) {
+        return Promise.resolve({
+          data: { artists: [{ id: 'mbid-123' }] },
+        });
+      }
+      if (url.includes('listenbrainz')) {
+        return Promise.resolve({
+          data: {
+            payload: {
+              jspf: {
+                playlist: {
+                  track: [
+                    { creator: 'Artist B' },
+                    { creator: 'Artist C' },
+                  ],
+                },
+              },
+            },
+          },
+        });
+      }
+      return Promise.reject(new Error('unexpected URL'));
+    });
+
+    const names = await getRelatedArtists('Test Artist');
+    expect(names).toContain('Artist A');
+    expect(names).toContain('Artist B');
+    expect(names).toContain('Artist C');
+    // Deduplicated — Artist B appears in both but only once
+    expect(names.filter(n => n === 'Artist B')).toHaveLength(1);
+  });
+
+  it('returns empty array when LAST_FM_API_KEY is not set and ListenBrainz fails', async () => {
+    delete process.env.LAST_FM_API_KEY;
+    axios.get.mockRejectedValue(new Error('network error'));
+
+    const names = await getRelatedArtists('Test Artist');
+    expect(names).toEqual([]);
   });
 });
