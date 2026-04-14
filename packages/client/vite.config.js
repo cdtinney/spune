@@ -9,7 +9,12 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': 'http://localhost:5000',
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        // Ensure cookies set by the server are forwarded to the browser
+        cookieDomainRewrite: 'localhost',
+      },
     },
   },
   test: {
