@@ -69,11 +69,9 @@ module.exports = function initApp() {
   // Connect to the DB.
   connect();
 
-  // This will handle process.exit():
   process.on('exit', gracefulShutdown);
-
-  // This will handle kill command CTRL+C
   process.on('SIGINT', gracefulShutdown);
+  process.on('SIGTERM', gracefulShutdown);
 
   return app;
 };
