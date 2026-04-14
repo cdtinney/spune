@@ -45,10 +45,16 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     const shuffledIds = shuffle(allAlbumIds);
 
     const albums = [];
+    let prevSpan = 0;
     for (let i = 0; i < numTiles; i++) {
       const albumId = shuffledIds[i % shuffledIds.length];
       const album = byAlbumId[albumId];
-      const span = pickSize(i);
+      let span = pickSize(i);
+      // Avoid placing two large tiles (L/XL) consecutively
+      if (span >= 4 && prevSpan >= 4) {
+        span = 2;
+      }
+      prevSpan = span;
       albums.push({
         id: `${album.id}_${i}`,
         title: album.name,
