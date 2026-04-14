@@ -1,52 +1,80 @@
 import { useMemo } from 'react';
 
-// Column widths — varying widths create the mosaic look
-const COL_WIDTHS = [100, 140, 180, 120, 200, 100, 160, 140, 180, 120, 160, 200, 100, 140, 180];
+const BASE = 120;
+
+// Fixed 6×6 tile template — guaranteed gap-free because every cell is
+// explicitly assigned. Mix of 2×2 large tiles and 1×1 small tiles.
+// This pattern tiles seamlessly when repeated horizontally and vertically.
+const TEMPLATE = [
+  // { col, row, span } — all tiles are square (span × span)
+  { col: 0, row: 0, span: 2 },
+  { col: 2, row: 0, span: 1 },
+  { col: 3, row: 0, span: 2 },
+  { col: 5, row: 0, span: 1 },
+  { col: 2, row: 1, span: 1 },
+  { col: 5, row: 1, span: 1 },
+  { col: 0, row: 2, span: 1 },
+  { col: 1, row: 2, span: 2 },
+  { col: 3, row: 2, span: 1 },
+  { col: 4, row: 2, span: 2 },
+  { col: 0, row: 3, span: 1 },
+  { col: 3, row: 3, span: 1 },
+  { col: 0, row: 4, span: 2 },
+  { col: 2, row: 4, span: 1 },
+  { col: 3, row: 4, span: 1 },
+  { col: 4, row: 4, span: 2 },
+  { col: 2, row: 5, span: 1 },
+  { col: 3, row: 5, span: 1 },
+];
+const TEMPLATE_COLS = 6;
+const TEMPLATE_ROWS = 6;
 
 export default function useAlbumGrid(relatedAlbums, windowSize) {
   return useMemo(() => {
-    const { height } = windowSize;
+    const { width, height } = windowSize;
     const { byAlbumId, allAlbumIds } = relatedAlbums;
 
     if (allAlbumIds.length === 0) {
-      return { columns: [] };
+      return { tiles: [], gridWidth: 0, gridHeight: 0, base: BASE };
     }
 
-    // Build columns to fill viewport width, cycling through COL_WIDTHS
-    const columns = [];
-    let totalWidth = 0;
-    let colIndex = 0;
-    // Global album index — cycles through all albums without adjacent dupes
+    // How many template repetitions to fill ~1.5x viewport in each direction
+    // (extra for animation headroom)
+    const blockWidth = TEMPLATE_COLS * BASE;
+    const blockHeight = TEMPLATE_ROWS * BASE;
+    const repsX = Math.ceil((width * 1.5) / blockWidth) + 1;
+    const repsY = Math.ceil((height * 1.5) / blockHeight) + 1;
+
     let albumCursor = 0;
+    const tiles = [];
 
-    while (totalWidth < windowSize.width + 400) {
-      const colWidth = COL_WIDTHS[colIndex % COL_WIDTHS.length];
-      // Each column needs enough tiles to fill ~2.5x viewport height
-      // (for scroll animation headroom). Tiles are square: width = height.
-      const tilesNeeded = Math.ceil((height * 2.5) / colWidth);
+    for (let ry = 0; ry < repsY; ry++) {
+      for (let rx = 0; rx < repsX; rx++) {
+        const offsetX = rx * TEMPLATE_COLS;
+        const offsetY = ry * TEMPLATE_ROWS;
 
-      const tiles = [];
-      for (let t = 0; t < tilesNeeded; t++) {
-        const id = allAlbumIds[albumCursor % allAlbumIds.length];
-        const album = byAlbumId[id];
-        tiles.push({
-          id: `${album.id}_c${colIndex}_t${t}`,
-          title: album.name,
-          imageUrl: (album.images[1] || album.images[0])?.url,
-        });
-        albumCursor++;
+        for (const slot of TEMPLATE) {
+          const id = allAlbumIds[albumCursor % allAlbumIds.length];
+          const album = byAlbumId[id];
+          albumCursor++;
+
+          tiles.push({
+            id: `${album.id}_${rx}_${ry}_${slot.col}_${slot.row}`,
+            title: album.name,
+            imageUrl: (album.images[1] || album.images[0])?.url,
+            col: offsetX + slot.col + 1,
+            row: offsetY + slot.row + 1,
+            span: slot.span,
+          });
+        }
       }
-
-      // Alternate scroll direction per column
-      const direction = colIndex % 2 === 0 ? 'up' : 'down';
-      // Vary speed — larger columns scroll slower
-      const duration = 40 + colWidth / 3 + (colIndex % 3) * 10;
-
-      columns.push({ width: colWidth, tiles, direction, duration });
-      totalWidth += colWidth;
-      colIndex++;
     }
 
-    return { columns };
+    return {
+      tiles,
+      gridCols: repsX * TEMPLATE_COLS,
+      gridRows: repsY * TEMPLATE_ROWS,
+      base: BASE,
+    };
   }, [relatedAlbums, windowSize]);
 }

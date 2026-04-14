@@ -22,7 +22,7 @@ export default function VisualizationContent() {
   const { user, logout } = useUser();
   const { nowPlaying, relatedAlbums, initialized } = useSpotify();
   const windowSize = useWindowSize();
-  const { columns } = useAlbumGrid(relatedAlbums, windowSize);
+  const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
   const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function VisualizationContent() {
         )}
 
         {!isInitialLoad && songPlaying && (
-          <AlbumGrid columns={columns} />
+          <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} base={base} />
         )}
       </div>
 

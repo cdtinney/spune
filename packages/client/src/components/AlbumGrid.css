@@ -1,49 +1,44 @@
-.album-grid-wrapper {
+.album-grid-viewport {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  display: flex;
-  flex-direction: row;
 }
 
-.album-col {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+.album-grid {
+  display: grid;
+  animation: mosaic-drift 120s ease-in-out infinite alternate;
   will-change: transform;
 }
 
-.album-col--scroll-up {
-  animation-name: scroll-up;
-}
-
-.album-col--scroll-down {
-  animation-name: scroll-down;
-}
-
-.album-col__tile {
-  flex-shrink: 0;
+.album-grid__tile {
   overflow: hidden;
 }
 
-.album-col__tile img {
+.album-grid__tile img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
 
-@keyframes scroll-up {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
-}
-
-@keyframes scroll-down {
-  0% { transform: translateY(-50%); }
-  100% { transform: translateY(0); }
+/* Slow diagonal drift — moves in all 4 directions over the cycle */
+@keyframes mosaic-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-8%, -5%);
+  }
+  50% {
+    transform: translate(-15%, -2%);
+  }
+  75% {
+    transform: translate(-5%, -10%);
+  }
+  100% {
+    transform: translate(-12%, -8%);
+  }
 }
