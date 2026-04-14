@@ -1,30 +1,25 @@
 import AlbumImage from './AlbumImage';
 import './AlbumGrid.css';
 
-function AlbumBand({ band, base, bandRows }) {
-  const { tiles, direction, duration, cols } = band;
-  const animationClass = direction === 'left'
-    ? 'album-band--pan-left'
-    : 'album-band--pan-right';
+function AlbumColumn({ column }) {
+  const { width, tiles, direction, duration } = column;
+  const animClass = direction === 'up'
+    ? 'album-col--scroll-up'
+    : 'album-col--scroll-down';
 
   return (
     <div
-      className={`album-band ${animationClass}`}
+      className={`album-col ${animClass}`}
       style={{
-        height: `${bandRows * base}px`,
-        gridTemplateColumns: `repeat(${cols}, ${base}px)`,
-        gridTemplateRows: `repeat(${bandRows}, ${base}px)`,
+        width: `${width}px`,
         animationDuration: `${duration}s`,
       }}
     >
       {tiles.map((tile) => (
         <div
           key={tile.id}
-          className="album-band__tile"
-          style={{
-            gridColumn: `span ${tile.span}`,
-            gridRow: `span ${tile.span}`,
-          }}
+          className="album-col__tile"
+          style={{ width: `${width}px`, height: `${width}px` }}
         >
           <AlbumImage src={tile.imageUrl} alt={tile.title} />
         </div>
@@ -33,15 +28,15 @@ function AlbumBand({ band, base, bandRows }) {
   );
 }
 
-export default function AlbumGrid({ bands, base, bandRows }) {
-  if (!bands || !bands.length) {
+export default function AlbumGrid({ columns }) {
+  if (!columns || !columns.length) {
     return null;
   }
 
   return (
     <div className="album-grid-wrapper">
-      {bands.map((band, i) => (
-        <AlbumBand key={i} band={band} base={base} bandRows={bandRows} />
+      {columns.map((col, i) => (
+        <AlbumColumn key={i} column={col} />
       ))}
     </div>
   );
