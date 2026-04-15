@@ -21,7 +21,12 @@ describe('CastButton', () => {
   it('calls onConnect when clicked and not connected', async () => {
     const onConnect = vi.fn();
     render(
-      <CastButton available={true} connected={false} onConnect={onConnect} onDisconnect={vi.fn()} />,
+      <CastButton
+        available={true}
+        connected={false}
+        onConnect={onConnect}
+        onDisconnect={vi.fn()}
+      />,
     );
     await userEvent.click(screen.getByRole('button'));
     expect(onConnect).toHaveBeenCalled();
@@ -30,7 +35,12 @@ describe('CastButton', () => {
   it('calls onDisconnect when clicked and connected', async () => {
     const onDisconnect = vi.fn();
     render(
-      <CastButton available={true} connected={true} onConnect={vi.fn()} onDisconnect={onDisconnect} />,
+      <CastButton
+        available={true}
+        connected={true}
+        onConnect={vi.fn()}
+        onDisconnect={onDisconnect}
+      />,
     );
     await userEvent.click(screen.getByRole('button', { name: 'Stop casting' }));
     expect(onDisconnect).toHaveBeenCalled();
