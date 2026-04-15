@@ -21,6 +21,20 @@ function TestConsumer() {
   );
 }
 
+function renderWithProvider() {
+  return render(
+    <UserProvider>
+      <TestConsumer />
+    </UserProvider>,
+  );
+}
+
+async function waitForLoaded() {
+  await waitFor(() => {
+    expect(screen.getByTestId('loading')).toHaveTextContent('false');
+  });
+}
+
 describe('UserContext', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -34,47 +48,29 @@ describe('UserContext', () => {
   it('fetches user on mount and provides profile', async () => {
     mockedApi.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
 
-    render(
-      <UserProvider>
-        <TestConsumer />
-      </UserProvider>,
-    );
+    renderWithProvider();
 
     expect(screen.getByTestId('loading')).toHaveTextContent('true');
 
-    await waitFor(() => {
-      expect(screen.getByTestId('loading')).toHaveTextContent('false');
-    });
+    await waitForLoaded();
     expect(screen.getByTestId('user')).toHaveTextContent('user1');
   });
 
   it('sets error when auth check fails', async () => {
     mockedApi.getAuthUser.mockRejectedValue({ message: 'Network error' });
 
-    render(
-      <UserProvider>
-        <TestConsumer />
-      </UserProvider>,
-    );
+    renderWithProvider();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('loading')).toHaveTextContent('false');
-    });
+    await waitForLoaded();
     expect(screen.getByTestId('error')).toHaveTextContent('Network error');
   });
 
   it('login navigates to auth endpoint', async () => {
     mockedApi.getAuthUser.mockResolvedValue(null);
 
-    render(
-      <UserProvider>
-        <TestConsumer />
-      </UserProvider>,
-    );
+    renderWithProvider();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('loading')).toHaveTextContent('false');
-    });
+    await waitForLoaded();
 
     await userEvent.click(screen.getByText('Login'));
     expect(window.location.assign).toHaveBeenCalledWith('/api/auth/spotify');
@@ -83,15 +79,9 @@ describe('UserContext', () => {
   it('logout navigates to logout endpoint', async () => {
     mockedApi.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
 
-    render(
-      <UserProvider>
-        <TestConsumer />
-      </UserProvider>,
-    );
+    renderWithProvider();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('loading')).toHaveTextContent('false');
-    });
+    await waitForLoaded();
 
     await userEvent.click(screen.getByText('Logout'));
     expect(window.location.assign).toHaveBeenCalledWith('/api/auth/user/logout');

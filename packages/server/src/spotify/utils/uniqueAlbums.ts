@@ -24,9 +24,7 @@ const suffixRegexp = new RegExp(`${openingBrace}(${joinedTypesWithSuffixes})${cl
 // Filters out some common suffixes that results in duplicate
 // album covers, such as special and deluxe edition albums.
 export function baseAlbumName(albumName: string): string {
-  const strippedAlbumName = albumName.replace(suffixRegexp, '');
-  // Ensures all whitespace between base album name and suffix is removed.
-  return strippedAlbumName.trim();
+  return albumName.replace(suffixRegexp, '').trim();
 }
 
 export default function uniqueAlbums(albums: SpotifyAlbum[]): SpotifyAlbum[] {

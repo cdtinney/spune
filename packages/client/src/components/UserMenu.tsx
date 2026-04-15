@@ -32,7 +32,7 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
   return (
     <div className="user-menu" ref={menuRef}>
       <button
-        className="user-menu__trigger"
+        className="user-menu__trigger icon-interactive focus-ring"
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         aria-label="User menu"

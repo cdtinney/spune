@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 import type { RelatedAlbums, WindowSize, Album, AlbumGridResult } from '../types';
 
-const BASE = 100;
+const TILE_SIZE_PX = 100;
+const OVERSCAN_MULTIPLIER = 1.6;
+const OVERSCAN_EXTRA_BLOCKS = 1;
 
 interface TemplateSlot {
   col: number;
@@ -93,12 +95,12 @@ export default function useAlbumGrid(
     const { byAlbumId, allAlbumIds } = relatedAlbums;
 
     if (allAlbumIds.length === 0) {
-      return { tiles: [], gridCols: 0, gridRows: 0, base: BASE };
+      return { tiles: [], gridCols: 0, gridRows: 0, tileSize: TILE_SIZE_PX };
     }
 
-    const blockSize = TEMPLATE_SIZE * BASE;
-    const repsX = Math.ceil((width * 1.6) / blockSize) + 1;
-    const repsY = Math.ceil((height * 1.6) / blockSize) + 1;
+    const blockSize = TEMPLATE_SIZE * TILE_SIZE_PX;
+    const repsX = Math.ceil((width * OVERSCAN_MULTIPLIER) / blockSize) + OVERSCAN_EXTRA_BLOCKS;
+    const repsY = Math.ceil((height * OVERSCAN_MULTIPLIER) / blockSize) + OVERSCAN_EXTRA_BLOCKS;
 
     let albumCursor = 0;
     const tiles: Album[] = [];
@@ -132,7 +134,7 @@ export default function useAlbumGrid(
       tiles,
       gridCols: repsX * TEMPLATE_SIZE,
       gridRows: repsY * TEMPLATE_SIZE,
-      base: BASE,
+      tileSize: TILE_SIZE_PX,
     };
   }, [relatedAlbums, windowSize]);
 }

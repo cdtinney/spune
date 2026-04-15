@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './SongCard.css';
 
+const SONG_CARD_FADE_MS = 500;
+
 interface SongCardProps {
   artistName: string;
   songTitle: string;
@@ -37,7 +39,7 @@ export default function SongCard({
     const timer = setTimeout(() => {
       setDisplayedSong({ artistName, songTitle, albumName, albumImageUrl, songId });
       setVisible(true);
-    }, 500);
+    }, SONG_CARD_FADE_MS);
 
     return () => clearTimeout(timer);
   }, [songId, artistName, songTitle, albumName, albumImageUrl, displayedSong.songId]);

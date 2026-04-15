@@ -12,16 +12,16 @@ export default function useNowPlayingPoller(): void {
 
   useEffect(() => {
     const poll = async (): Promise<void> => {
-      const info = await fetchNowPlaying(loadingRef, currentSongIdRef.current);
-      if (!info) return;
+      const nowPlayingResult = await fetchNowPlaying(loadingRef, currentSongIdRef.current);
+      if (!nowPlayingResult) return;
 
-      currentSongIdRef.current = info.songId;
+      currentSongIdRef.current = nowPlayingResult.songId;
 
-      if (currentAlbumIdRef.current !== info.albumId) {
-        currentAlbumIdRef.current = info.albumId;
+      if (currentAlbumIdRef.current !== nowPlayingResult.albumId) {
+        currentAlbumIdRef.current = nowPlayingResult.albumId;
         // Stale-while-revalidate: keep old albums visible while new ones load.
         // FETCH_RELATED_ALBUMS_SUCCESS replaces the state entirely.
-        fetchRelatedAlbums(info.songId);
+        fetchRelatedAlbums(nowPlayingResult.songId);
       }
     };
 

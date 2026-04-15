@@ -42,7 +42,7 @@ export default function ReceiverApp() {
 
   const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
   const windowSize = useWindowSize();
-  const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
+  const { tiles, gridCols, gridRows, tileSize } = useAlbumGrid(relatedAlbums, windowSize);
 
   const handleMessage = useCallback((event: cast.framework.system.Event) => {
     try {
@@ -125,7 +125,12 @@ export default function ReceiverApp() {
             {!connected && !songPlaying && <LoadingScreen className="visualization__loading" />}
 
             {songPlaying && (
-              <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} base={base} />
+              <AlbumGrid
+                tiles={tiles}
+                gridCols={gridCols}
+                gridRows={gridRows}
+                tileSize={tileSize}
+              />
             )}
           </div>
 

@@ -28,7 +28,7 @@ export default function VisualizationContent() {
   const { nowPlaying, relatedAlbums, initialized, error, connectionLost } = useSpotify();
   const castSession = useCastSession();
   const windowSize = useWindowSize();
-  const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
+  const { tiles, gridCols, gridRows, tileSize } = useAlbumGrid(relatedAlbums, windowSize);
   const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
@@ -81,7 +81,7 @@ export default function VisualizationContent() {
   const photo = user?.photos?.[0];
   const userImageUrl = typeof photo === 'string' ? photo : photo?.url || photo?.value;
   const isInitialLoad = !initialized;
-  const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
+  const isSongPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
   const hasError = !!error;
 
   return (
@@ -93,7 +93,7 @@ export default function VisualizationContent() {
       {!isInitialLoad && (
         <>
           {!fullscreen && (
-            <a href={REPO_URL} className="visualization__github-icon">
+            <a href={REPO_URL} className="visualization__github-icon icon-interactive">
               <FontAwesomeIcon icon={faGithub} size="1x" />
             </a>
           )}
@@ -114,7 +114,7 @@ export default function VisualizationContent() {
         </>
       )}
 
-      {!isInitialLoad && songPlaying && (
+      {!isInitialLoad && isSongPlaying && (
         <SongCard
           songId={nowPlaying.songId}
           artistName={nowPlaying.artistName}
@@ -130,29 +130,31 @@ export default function VisualizationContent() {
 
         {!isInitialLoad && (hasError || connectionLost) && (
           <div
-            className={`visualization__error${songPlaying ? ' visualization__error--overlay' : ''}`}
+            className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
           >
             <p>
-              {songPlaying ? 'Connection lost. Retrying…' : 'Session expired or connection failed.'}
+              {isSongPlaying
+                ? 'Connection lost. Retrying…'
+                : 'Session expired or connection failed.'}
             </p>
-            <button className="visualization__reconnect-btn" onClick={login}>
+            <button className="btn-primary" onClick={login}>
               Reconnect with Spotify
             </button>
           </div>
         )}
 
-        {!isInitialLoad && !hasError && !connectionLost && !songPlaying && (
+        {!isInitialLoad && !hasError && !connectionLost && !isSongPlaying && (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
           </div>
         )}
 
-        {!isInitialLoad && songPlaying && (
-          <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} base={base} />
+        {!isInitialLoad && isSongPlaying && (
+          <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} tileSize={tileSize} />
         )}
       </div>
 
-      {!isInitialLoad && songPlaying && (
+      {!isInitialLoad && isSongPlaying && (
         <ProgressBar
           progressMs={nowPlaying.progressMs}
           durationMs={nowPlaying.durationMs}

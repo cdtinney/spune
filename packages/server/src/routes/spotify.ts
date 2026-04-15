@@ -2,14 +2,8 @@ import { Router, type IRouter, Request, Response } from 'express';
 import { spotifyApiWithToken } from '../spotify/api/SpotifyApi';
 import apiRequestWithRefresh from '../spotify/api/helpers/apiRequestWithRefresh';
 import getCurrentlyPlayingRelatedAlbums from '../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums';
+import errorMessage from '../utils/errorMessage';
 import type { SpotifyAlbum } from '../types';
-
-function errorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'Unknown Error';
-}
 
 const router: IRouter = Router();
 

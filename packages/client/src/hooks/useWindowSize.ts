@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { WindowSize } from '../types';
 
+const RESIZE_DEBOUNCE_MS = 300;
+
 export default function useWindowSize(): WindowSize {
   const [size, setSize] = useState<WindowSize>({
     width: window.innerWidth,
@@ -13,7 +15,7 @@ export default function useWindowSize(): WindowSize {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         setSize({ width: window.innerWidth, height: window.innerHeight });
-      }, 300);
+      }, RESIZE_DEBOUNCE_MS);
     };
 
     window.addEventListener('resize', handleResize);
