@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import getCurrentlyPlayingRelatedAlbums from '../getCurrentlyPlayingRelatedAlbums';
 
 import getRelatedArtists from '../getRelatedArtists';
 import getArtistAlbums from '../getArtistAlbums';
+import { artistIdCache } from '../../../../cache';
 
 vi.mock('../getRelatedArtists');
 vi.mock('../getArtistAlbums');
@@ -14,9 +15,14 @@ const mockSpotifyApi = {
   player: {
     getCurrentlyPlayingTrack: vi.fn(),
   },
+  search: vi.fn(),
 };
 
 describe('getCurrentlyPlayingRelatedAlbums()', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    artistIdCache.clear();
+  });
   it('throws an error when the playing track is different than the request track', () => {
     mockSpotifyApi.player.getCurrentlyPlayingTrack.mockImplementation(() =>
       Promise.resolve({

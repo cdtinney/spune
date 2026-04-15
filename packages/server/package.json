@@ -32,6 +32,7 @@
     "express": "^4.22.1",
     "express-rate-limit": "^8.3.2",
     "express-session": "^1.19.0",
+    "lru-cache": "^11.3.5",
     "passport": "^0.7.0",
     "passport-oauth2-refresh": "^2.2.0",
     "passport-spotify": "^1.0.1",

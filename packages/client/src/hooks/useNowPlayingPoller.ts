@@ -4,7 +4,7 @@ import { useSpotify } from '../contexts/SpotifyContext';
 const POLL_INTERVAL = 3000;
 
 export default function useNowPlayingPoller(): void {
-  const { fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums } = useSpotify();
+  const { fetchNowPlaying, fetchRelatedAlbums } = useSpotify();
 
   const loadingRef = useRef<boolean>(false);
   const currentAlbumIdRef = useRef<string | null>(null);
@@ -19,7 +19,8 @@ export default function useNowPlayingPoller(): void {
 
       if (currentAlbumIdRef.current !== info.albumId) {
         currentAlbumIdRef.current = info.albumId;
-        clearRelatedAlbums();
+        // Stale-while-revalidate: keep old albums visible while new ones load.
+        // FETCH_RELATED_ALBUMS_SUCCESS replaces the state entirely.
         fetchRelatedAlbums(info.songId);
       }
     };
@@ -27,5 +28,5 @@ export default function useNowPlayingPoller(): void {
     poll();
     const id = setInterval(poll, POLL_INTERVAL);
     return () => clearInterval(id);
-  }, [fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums]);
+  }, [fetchNowPlaying, fetchRelatedAlbums]);
 }
