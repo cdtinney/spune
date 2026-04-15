@@ -1,5 +1,3 @@
-// Shared types for the Spune client application
-
 export interface SpotifyImage {
   url: string;
   height?: number;
@@ -54,31 +52,4 @@ export interface NowPlaying {
 export interface RelatedAlbums {
   byAlbumId: Record<string, SpotifyAlbum>;
   allAlbumIds: string[];
-}
-
-export interface WindowSize {
-  width: number;
-  height: number;
-}
-
-export interface Album {
-  id: string;
-  title: string;
-  imageUrl: string | undefined;
-  span: number;
-  col: number;
-  row: number;
-}
-
-export interface AlbumGridResult {
-  tiles: Album[];
-  gridCols: number;
-  gridRows: number;
-  base: number;
-}
-
-export interface UserProfile {
-  spotifyId: string;
-  displayName?: string;
-  photos?: Array<string | { url?: string; value?: string }>;
 }

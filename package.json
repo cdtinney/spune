@@ -28,9 +28,11 @@
     "server:watch": "pnpm --filter spune-server watch",
     "start": "pnpm watch",
     "test": "pnpm -r test:coverage",
+    "test:e2e": "playwright test",
     "watch": "concurrently --kill-others \"pnpm server:watch\" \"pnpm client:watch\""
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "concurrently": "^9.2.1",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.8.2"
