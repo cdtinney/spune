@@ -10,6 +10,7 @@ describe('SongCard', () => {
         songTitle="Test Song"
         albumName="Test Album"
         albumImageUrl="http://img/cover.jpg"
+        songId="test-song-id"
       />,
     );
 

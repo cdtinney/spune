@@ -30,7 +30,7 @@ Spune displays album artwork from related artists in a Zune-style mosaic while y
 ```bash
 git clone git@github.com:cdtinney/spune.git
 cd spune
-npm install
+pnpm install
 ```
 
 Create `packages/server/.env` from the example:
@@ -57,7 +57,7 @@ Edit `.env` and fill in your credentials:
 ### Running (Development)
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 This starts both the Express server (port 5000) and Vite dev server (port 3000) concurrently. Open `http://127.0.0.1:3000`.
@@ -67,16 +67,16 @@ The Vite dev server proxies `/api` requests to the Express server, so the redire
 ### Testing
 
 ```bash
-npm run client:test         # Client tests (Vitest)
-npm run client:lint          # Client lint (ESLint)
-npm run server:test:coverage # Server tests (Jest)
-npm run server:lint          # Server lint (ESLint)
+pnpm client:test         # Client tests (Vitest)
+pnpm client:lint          # Client lint (ESLint)
+pnpm server:test:coverage # Server tests (Jest)
+pnpm server:lint          # Server lint (ESLint)
 ```
 
 ### Building
 
 ```bash
-npm run client:build   # Builds to packages/client/build/
+pnpm client:build   # Builds to packages/client/build/
 ```
 
 ## Docker
