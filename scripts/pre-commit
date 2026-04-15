@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+# Format check — only staged files
+echo "$STAGED" | xargs pnpm prettier --check
+
+# Lint — only staged .ts/.tsx/.js/.jsx files, split by package
+CLIENT_FILES=$(echo "$STAGED" | grep '^packages/client/src/.*\.\(ts\|tsx\|js\|jsx\)$' || true)
+SERVER_FILES=$(echo "$STAGED" | grep '^packages/server/src/.*\.\(ts\|tsx\|js\|jsx\)$' || true)
+
+if [ -n "$CLIENT_FILES" ]; then
+  echo "$CLIENT_FILES" | xargs pnpm --filter spune-client exec eslint
+fi
+
+if [ -n "$SERVER_FILES" ]; then
+  echo "$SERVER_FILES" | xargs pnpm --filter spune-server exec eslint
+fi
