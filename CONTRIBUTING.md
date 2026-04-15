@@ -81,6 +81,16 @@ This runs formatting, linting, tests, build, and type-checking for both packages
 - **Rate limiters** — Use `createLimiter(max, message)` in `rateLimiter.ts` to add new limiters.
 - **Test mocks** — Use `mockUseUser()` from `packages/client/src/__tests__/helpers/mockUserContext.ts` instead of repeating the full mock shape. Only pass overrides for what your test cares about.
 
+## Git Hooks
+
+Install the pre-commit hook to catch formatting and lint issues before they reach CI:
+
+```bash
+./scripts/install-hooks.sh
+```
+
+The hook runs Prettier and ESLint on staged files only, so it's fast. It does not run tests or type checks — those are covered by `pre-pr.sh` and CI.
+
 Individual checks:
 
 ```bash
