@@ -81,6 +81,9 @@ jobs:
       - name: Test
         run: pnpm server:test:coverage
 
+      - name: Type check
+        run: pnpm --filter spune-server exec tsc --noEmit
+
   client:
     runs-on: ubuntu-latest
 
@@ -107,6 +110,9 @@ jobs:
 
       - name: Build
         run: pnpm client:build
+
+      - name: Type check
+        run: pnpm --filter spune-client exec tsc --noEmit
 
   docker:
     runs-on: ubuntu-latest
