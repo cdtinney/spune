@@ -102,8 +102,14 @@ VITE_CAST_APP_ID=your-cast-app-id
 To test Chromecast discovery and the cast button locally:
 
 1. Your dev machine and Chromecast must be on the same Wi-Fi network.
-2. Run `pnpm dev` — the cast button appears in the top-right when a Chromecast is detected.
-3. During development without a registered app, the default media receiver (`CC1AD845`) is used for testing device discovery. The visualization won't render on the TV until you register a Custom Receiver.
+2. **Register your Chromecast as a test device** in the [Cast Developer Console](https://cast.google.com/publish/):
+   - Click **Add New Device**
+   - Enter the Chromecast's serial number (found in Google Home app → device settings, or on the back of the device)
+   - Wait ~15 minutes for registration to take effect
+3. Run `pnpm dev` in Chrome (Cast SDK only works in Chrome).
+4. The cast button appears in the top-right when the Chromecast is detected.
+
+**Note**: Unpublished Cast apps can only discover Chromecasts that are registered as test devices. Published apps (like YouTube) discover all devices. If the cast button doesn't appear, your device likely isn't registered yet.
 
 #### How it works
 
