@@ -1,4 +1,4 @@
-import { Strategy as SpotifyStrategy, type VerifyFunction, type SpotifyProfile } from 'passport-spotify';
+import { Strategy as SpotifyStrategy, type VerifyFunction } from 'passport-spotify';
 import refresh from 'passport-oauth2-refresh';
 import logger from '../../logger';
 import { findOrCreateUser } from '../../database/queries/userQueries';
