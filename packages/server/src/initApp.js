@@ -20,16 +20,17 @@ const configurePassport = require('./auth/configurePassport');
 module.exports = function initApp() {
   const app = express();
 
+  // Trust reverse proxy (Caddy) so Express sees correct protocol/IP
+  app.set('trust proxy', 1);
+
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
   app.use(session({
     secret: process.env.SESSION_SECRET,
     cookie: {
-      // Persist cookies for a year. By default, cookies
-      // are not persistent and will be lost upon certain
-      // conditions like browsers exiting.
       maxAge: 1000 * 60 * 60 * 24 * 365,
+      secure: process.env.NODE_ENV === 'production',
     },
     resave: false,
     saveUninitialized: false,
