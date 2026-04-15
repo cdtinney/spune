@@ -117,7 +117,7 @@ export default function useAlbumGrid(
           albumCursor++;
 
           tiles.push({
-            id: `${album.id}_${rx}_${ry}_${slot.col}_${slot.row}`,
+            id: `tile_${rx}_${ry}_${slot.col}_${slot.row}`,
             title: album.name,
             imageUrl: (album.images[1] || album.images[0])?.url,
             col: offsetX + slot.col + 1,
