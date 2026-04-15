@@ -3,15 +3,15 @@ import { useSpotify } from '../contexts/SpotifyContext';
 
 const POLL_INTERVAL = 3000;
 
-export default function useNowPlayingPoller() {
+export default function useNowPlayingPoller(): void {
   const { fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums } = useSpotify();
 
-  const loadingRef = useRef(false);
-  const currentAlbumIdRef = useRef(null);
-  const currentSongIdRef = useRef(null);
+  const loadingRef = useRef<boolean>(false);
+  const currentAlbumIdRef = useRef<string | null>(null);
+  const currentSongIdRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const poll = async () => {
+    const poll = async (): Promise<void> => {
       const info = await fetchNowPlaying(loadingRef, currentSongIdRef.current);
       if (!info) return;
 

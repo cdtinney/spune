@@ -1,7 +1,12 @@
 import { useState } from 'react';
 
-export default function AlbumImage({ src, alt }) {
-  const [loaded, setLoaded] = useState(false);
+interface AlbumImageProps {
+  src: string | undefined;
+  alt: string;
+}
+
+export default function AlbumImage({ src, alt }: AlbumImageProps) {
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   return (
     <img

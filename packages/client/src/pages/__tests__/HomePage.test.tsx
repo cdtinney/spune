@@ -6,13 +6,16 @@ import * as UserContext from '../../contexts/UserContext';
 
 vi.mock('../../contexts/UserContext');
 
+const mockedUserContext = vi.mocked(UserContext, true);
+
 describe('HomePage', () => {
   it('shows loading screen while auth is pending', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: true,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -25,11 +28,12 @@ describe('HomePage', () => {
   });
 
   it('shows login button when not authenticated', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -42,11 +46,12 @@ describe('HomePage', () => {
   });
 
   it('shows error message when auth check fails', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: false,
       error: 'Unauthorized',
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -60,11 +65,12 @@ describe('HomePage', () => {
   });
 
   it('redirects to visualization when authenticated', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: { spotifyId: 'user1', displayName: 'Test' },
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     const { container } = render(

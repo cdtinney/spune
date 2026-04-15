@@ -1,7 +1,15 @@
 import AlbumImage from './AlbumImage';
+import type { Album } from '../types';
 import './AlbumGrid.css';
 
-export default function AlbumGrid({ tiles, gridCols, gridRows, base }) {
+interface AlbumGridProps {
+  tiles: Album[];
+  gridCols: number;
+  gridRows: number;
+  base: number;
+}
+
+export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGridProps) {
   if (!tiles || !tiles.length) {
     return null;
   }

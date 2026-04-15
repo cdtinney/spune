@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
+import type { WindowSize } from '../types';
 
-export default function useWindowSize() {
-  const [size, setSize] = useState({
+export default function useWindowSize(): WindowSize {
+  const [size, setSize] = useState<WindowSize>({
     width: window.innerWidth,
     height: window.innerHeight,
   });
 
   useEffect(() => {
-    let timeoutId;
-    const handleResize = () => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    const handleResize = (): void => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         setSize({ width: window.innerWidth, height: window.innerHeight });

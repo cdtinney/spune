@@ -3,13 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import './UserMenu.css';
 
-export default function UserMenu({ onLogout }) {
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef(null);
+interface UserMenuProps {
+  onLogout: () => void;
+}
+
+export default function UserMenu({ onLogout }: UserMenuProps) {
+  const [open, setOpen] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent): void => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     };

@@ -9,13 +9,16 @@ vi.mock('../pages/VisualizationPage', () => ({
   default: () => <div>VisualizationPage</div>,
 }));
 
+const mockedUserContext = vi.mocked(UserContext, true);
+
 describe('AppRoutes', () => {
   it('redirects / to /home', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -28,11 +31,12 @@ describe('AppRoutes', () => {
   });
 
   it('redirects /visualization to / when not authenticated', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -45,11 +49,12 @@ describe('AppRoutes', () => {
   });
 
   it('renders visualization page when authenticated', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: { spotifyId: 'user1', displayName: 'Test' },
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(
@@ -62,11 +67,12 @@ describe('AppRoutes', () => {
   });
 
   it('renders error page', () => {
-    UserContext.useUser.mockReturnValue({
+    mockedUserContext.useUser.mockReturnValue({
       user: null,
       loading: false,
       error: null,
       login: vi.fn(),
+      logout: vi.fn(),
     });
 
     render(

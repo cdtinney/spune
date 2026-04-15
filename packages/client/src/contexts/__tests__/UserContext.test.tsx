@@ -6,6 +6,8 @@ import * as api from '../../api/spotify';
 
 vi.mock('../../api/spotify');
 
+const mockedApi = vi.mocked(api, true);
+
 function TestConsumer() {
   const { user, loading, error, login, logout } = useUser();
   return (
@@ -22,12 +24,15 @@ function TestConsumer() {
 describe('UserContext', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    delete window.location;
-    window.location = { assign: vi.fn() };
+    Object.defineProperty(window, 'location', {
+      value: { assign: vi.fn() },
+      writable: true,
+      configurable: true,
+    });
   });
 
   it('fetches user on mount and provides profile', async () => {
-    api.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
+    mockedApi.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
 
     render(
       <UserProvider>
@@ -44,7 +49,7 @@ describe('UserContext', () => {
   });
 
   it('sets error when auth check fails', async () => {
-    api.getAuthUser.mockRejectedValue({ message: 'Network error' });
+    mockedApi.getAuthUser.mockRejectedValue({ message: 'Network error' });
 
     render(
       <UserProvider>
@@ -59,7 +64,7 @@ describe('UserContext', () => {
   });
 
   it('login navigates to auth endpoint', async () => {
-    api.getAuthUser.mockResolvedValue(null);
+    mockedApi.getAuthUser.mockResolvedValue(null);
 
     render(
       <UserProvider>
@@ -76,7 +81,7 @@ describe('UserContext', () => {
   });
 
   it('logout navigates to logout endpoint', async () => {
-    api.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
+    mockedApi.getAuthUser.mockResolvedValue({ spotifyId: 'user1' });
 
     render(
       <UserProvider>

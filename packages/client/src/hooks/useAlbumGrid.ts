@@ -1,12 +1,19 @@
 import { useMemo } from 'react';
+import type { RelatedAlbums, WindowSize, Album, AlbumGridResult } from '../types';
 
 const BASE = 120;
 
-// Fixed 6×6 tile template — guaranteed gap-free because every cell is
-// explicitly assigned. Mix of 2×2 large tiles and 1×1 small tiles.
+interface TemplateSlot {
+  col: number;
+  row: number;
+  span: number;
+}
+
+// Fixed 6x6 tile template -- guaranteed gap-free because every cell is
+// explicitly assigned. Mix of 2x2 large tiles and 1x1 small tiles.
 // This pattern tiles seamlessly when repeated horizontally and vertically.
-const TEMPLATE = [
-  // { col, row, span } — all tiles are square (span × span)
+const TEMPLATE: TemplateSlot[] = [
+  // { col, row, span } -- all tiles are square (span x span)
   { col: 0, row: 0, span: 2 },
   { col: 2, row: 0, span: 1 },
   { col: 3, row: 0, span: 2 },
@@ -29,13 +36,13 @@ const TEMPLATE = [
 const TEMPLATE_COLS = 6;
 const TEMPLATE_ROWS = 6;
 
-export default function useAlbumGrid(relatedAlbums, windowSize) {
+export default function useAlbumGrid(relatedAlbums: RelatedAlbums, windowSize: WindowSize): AlbumGridResult {
   return useMemo(() => {
     const { width, height } = windowSize;
     const { byAlbumId, allAlbumIds } = relatedAlbums;
 
     if (allAlbumIds.length === 0) {
-      return { tiles: [], gridWidth: 0, gridHeight: 0, base: BASE };
+      return { tiles: [], gridCols: 0, gridRows: 0, base: BASE };
     }
 
     // How many template repetitions to fill ~1.5x viewport in each direction
@@ -46,7 +53,7 @@ export default function useAlbumGrid(relatedAlbums, windowSize) {
     const repsY = Math.ceil((height * 1.5) / blockHeight) + 1;
 
     let albumCursor = 0;
-    const tiles = [];
+    const tiles: Album[] = [];
 
     for (let ry = 0; ry < repsY; ry++) {
       for (let rx = 0; rx < repsX; rx++) {

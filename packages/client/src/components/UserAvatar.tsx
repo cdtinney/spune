@@ -1,6 +1,11 @@
 import './UserAvatar.css';
 
-export default function UserAvatar({ displayName, thumbnailSrc }) {
+interface UserAvatarProps {
+  displayName: string;
+  thumbnailSrc: string | undefined;
+}
+
+export default function UserAvatar({ displayName, thumbnailSrc }: UserAvatarProps) {
   const initial = displayName?.charAt(0)?.toUpperCase() || '?';
 
   return (

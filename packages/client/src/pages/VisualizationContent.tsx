@@ -23,17 +23,17 @@ export default function VisualizationContent() {
   const { nowPlaying, relatedAlbums, initialized } = useSpotify();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
-  const [fullscreen, setFullscreen] = useState(false);
+  const [fullscreen, setFullscreen] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleChange = () => {
+    const handleChange = (): void => {
       setFullscreen(!!document.fullscreenElement);
     };
     document.addEventListener('fullscreenchange', handleChange);
     return () => document.removeEventListener('fullscreenchange', handleChange);
   }, []);
 
-  const handleFullscreenToggle = useCallback(() => {
+  const handleFullscreenToggle = useCallback((): void => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
     } else {

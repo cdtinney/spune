@@ -2,7 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import './FullscreenButton.css';
 
-export default function FullscreenButton({ onClick }) {
+interface FullscreenButtonProps {
+  onClick: () => void;
+}
+
+export default function FullscreenButton({ onClick }: FullscreenButtonProps) {
   return (
     <div className="fullscreen-button">
       <FontAwesomeIcon
