@@ -3,8 +3,8 @@ import type { CastMessage } from '../types';
 import { CAST_NAMESPACE } from '../types';
 
 // Set this to your registered Cast application ID.
-// During development, use the default media receiver for testing discovery.
-const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID || 'CC1AD845';
+// TODO: revert to env var once test device registration propagates
+const CAST_APP_ID = 'CC1AD845'; // Default Media Receiver — discovers all Chromecasts
 
 interface CastSessionState {
   available: boolean;
@@ -42,6 +42,10 @@ export default function useCastSession(): CastSessionState {
           setConnected(event.castState === cast.framework.CastState.CONNECTED);
         },
       );
+
+      // Check initial state (event may have fired before listener was added)
+      const initialState = context.getCastState();
+      setAvailable(initialState !== cast.framework.CastState.NO_DEVICES_AVAILABLE);
     };
 
     const script = document.createElement('script');

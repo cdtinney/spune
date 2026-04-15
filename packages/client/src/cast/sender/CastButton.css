@@ -1,7 +1,7 @@
 .cast-button {
   position: absolute;
-  right: 70px;
-  top: 35px;
+  right: 100px;
+  top: 33px;
   z-index: 100;
   background: none;
   border: none;
@@ -10,16 +10,20 @@
   color: rgba(255, 255, 255, 0.87);
 }
 
-.cast-button:hover {
-  color: rgba(255, 255, 255, 0.54);
+.cast-button svg {
+  fill: rgba(255, 255, 255, 0.87);
 }
 
-.cast-button--connected {
-  color: #1db954;
+.cast-button:hover svg {
+  fill: rgba(255, 255, 255, 0.54);
 }
 
-.cast-button--connected:hover {
-  color: #1ed760;
+.cast-button--connected svg {
+  fill: #1db954;
+}
+
+.cast-button--connected:hover svg {
+  fill: #1ed760;
 }
 
 .cast-button:focus-visible {
