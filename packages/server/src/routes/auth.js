@@ -26,7 +26,9 @@ router.get('/user', (req, res) => {
 
 router.get('/user/logout', (req, res, next) => {
   req.logout((err) => {
-    if (err) { return next(err); }
+    if (err) {
+      return next(err);
+    }
     // Setting to `null` will clear the session in the DB.
     req.session = null;
     res.redirect('/');
@@ -37,7 +39,8 @@ router.get(
   '/spotify',
   passport.authenticate('spotify', {
     scope: SPOTIFY_PERMISSION_SCOPES,
-  }), () => {
+  }),
+  () => {
     // This route will redirect to Spotify so nothing needs to be done other than
     // calling `passport.authenticate()`.
   },

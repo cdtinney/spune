@@ -10,8 +10,10 @@ describe('/#/home', () => {
   it('redirects the user to auth when the login button is clicked', async () => {
     page.click('#button-login');
     const response = await page.waitForNavigation();
-    const redirectUrls =
-      response.request().redirectChain().map(request => request.url());
+    const redirectUrls = response
+      .request()
+      .redirectChain()
+      .map((request) => request.url());
     // Routing uses Passport to auth with Spotify; this will immediately
     // redirect.
     expect(redirectUrls[0]).toEqual('http://localhost:5000/api/auth/spotify');

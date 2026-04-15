@@ -19,13 +19,12 @@ describe('uniqueAlbums()', () => {
     const originalAlbum = {
       name: 'foo',
     };
-    const duplicates = uniqueAlbums.typesWithSuffixes.map(entry => ({ name: `foo (${entry})` }));
+    const duplicates = uniqueAlbums.typesWithSuffixes.map((entry) => ({ name: `foo (${entry})` }));
 
-    expect(uniqueAlbums([
-      originalAlbum,
-      ...duplicates,
-    ])).toEqual([{
-      name: 'foo',
-    }]);
+    expect(uniqueAlbums([originalAlbum, ...duplicates])).toEqual([
+      {
+        name: 'foo',
+      },
+    ]);
   });
 });

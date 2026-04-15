@@ -135,11 +135,7 @@ export function SpotifyProvider({ children }) {
     [state, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
   );
 
-  return (
-    <SpotifyContext.Provider value={value}>
-      {children}
-    </SpotifyContext.Provider>
-  );
+  return <SpotifyContext.Provider value={value}>{children}</SpotifyContext.Provider>;
 }
 
 export function useSpotify() {

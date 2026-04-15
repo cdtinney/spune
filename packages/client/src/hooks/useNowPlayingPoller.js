@@ -4,11 +4,7 @@ import { useSpotify } from '../contexts/SpotifyContext';
 const POLL_INTERVAL = 3000;
 
 export default function useNowPlayingPoller() {
-  const {
-    fetchNowPlaying,
-    fetchRelatedAlbums,
-    clearRelatedAlbums,
-  } = useSpotify();
+  const { fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums } = useSpotify();
 
   const loadingRef = useRef(false);
   const currentAlbumIdRef = useRef(null);

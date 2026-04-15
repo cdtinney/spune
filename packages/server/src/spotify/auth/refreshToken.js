@@ -14,20 +14,18 @@ function findAndUpdateUser({ refreshToken, accessToken }) {
 
 module.exports = function refreshToken(currRefreshToken) {
   return new Promise((resolve, reject) => {
-    refresh.requestNewAccessToken(
-      'spotify',
-      currRefreshToken,
-      (err, accessToken) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+    refresh.requestNewAccessToken('spotify', currRefreshToken, (err, accessToken) => {
+      if (err) {
+        reject(err);
+        return;
+      }
 
-        findAndUpdateUser({
-          refreshToken: currRefreshToken,
-          accessToken,
-        }).then(resolve).catch(reject);
-      },
-    );
+      findAndUpdateUser({
+        refreshToken: currRefreshToken,
+        accessToken,
+      })
+        .then(resolve)
+        .catch(reject);
+    });
   });
 };

@@ -33,11 +33,7 @@ export function UserProvider({ children }) {
     [user, loading, error, login, logout],
   );
 
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {

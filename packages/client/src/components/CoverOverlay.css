@@ -5,18 +5,18 @@
   z-index: 1;
   background: linear-gradient(
     -45deg,
-    #EE7752,
-    #E73C7E,
-    #23A6D5,
-    #23D5AB,
+    #ee7752,
+    #e73c7e,
+    #23a6d5,
+    #23d5ab,
     #361fe2,
     #0eb71c,
     #0eb71c,
     #361fe2,
-    #23D5AB,
-    #23A6D5,
-    #E73C7E,
-    #EE7752
+    #23d5ab,
+    #23a6d5,
+    #e73c7e,
+    #ee7752
   );
   opacity: 0.75;
   background-size: 1200% 1200%;

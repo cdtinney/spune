@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: spune
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./packages/server/src/database/migrations/001_create_users.sql:/docker-entrypoint-initdb.d/001_create_users.sql
@@ -16,7 +16,7 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "${PORT:-5000}:5000"
+      - '${PORT:-5000}:5000'
     depends_on:
       - db
     environment:

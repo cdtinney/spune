@@ -1,10 +1,4 @@
-const types = [
-  'Deluxe',
-  'Extended',
-  'International',
-  'Special',
-  'Standard',
-];
+const types = ['Deluxe', 'Extended', 'International', 'Special', 'Standard'];
 
 const suffixes = [
   // No suffix. Some albums are only 'Deluxe', for example.
@@ -14,7 +8,10 @@ const suffixes = [
   ' Version',
 ];
 
-const typesWithSuffixes = types.reduce((acc, type) => acc.concat(suffixes.map(suffix => `${type}${suffix}`)), []);
+const typesWithSuffixes = types.reduce(
+  (acc, type) => acc.concat(suffixes.map((suffix) => `${type}${suffix}`)),
+  [],
+);
 
 const joinedTypesWithSuffixes = typesWithSuffixes.join('|');
 const openingBrace = '(\\[|\\()';

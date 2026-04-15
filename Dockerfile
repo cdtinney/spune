@@ -11,7 +11,7 @@ COPY packages/client/package.json packages/client/
 COPY packages/server/package.json packages/server/
 
 # Install all dependencies (client + server)
-RUN npm ci --install-strategy=hoisted
+RUN npm ci
 
 # Copy source code
 COPY packages/client/ packages/client/
@@ -30,7 +30,7 @@ COPY package.json package-lock.json .npmrc ./
 COPY packages/server/package.json packages/server/
 
 # Install production server dependencies only
-RUN npm ci --install-strategy=hoisted --workspace=packages/server --omit=dev
+RUN npm ci --workspace=spune-server --omit=dev
 
 # Copy server source
 COPY packages/server/ packages/server/

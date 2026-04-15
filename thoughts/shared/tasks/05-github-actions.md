@@ -11,6 +11,7 @@ Set up GitHub Actions CI to replace the dead Travis CI pipeline. Delete `.travis
 ## Context
 
 The existing `.travis.yml` does:
+
 1. Installs Node 11, caches npm
 2. Starts a MongoDB service
 3. Runs `npm install`, `lerna bootstrap`, `npm run client:build`
@@ -20,6 +21,7 @@ The existing `.travis.yml` does:
 7. Deploys to Heroku
 
 After previous tasks, the state is:
+
 - Node 22, npm workspaces (not Lerna)
 - PostgreSQL (not MongoDB)
 - No Heroku deployment

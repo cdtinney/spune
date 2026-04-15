@@ -1,5 +1,3 @@
-/* eslint-disable prefer-promise-reject-errors */
-
 const refreshToken = require('../../../auth/refreshToken');
 const apiRequestWithRefresh = require('../apiRequestWithRefresh');
 

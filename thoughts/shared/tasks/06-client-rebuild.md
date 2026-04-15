@@ -11,6 +11,7 @@ Replace the dead client stack (CRA + React 16 + MUI v3 + Enzyme) with a modern e
 ## Context
 
 The entire client stack is end-of-life:
+
 - **Create React App** (`react-scripts@2.1.5`): Archived, won't run on modern Node.
 - **React 16**: Current is 19. All components are class-based.
 - **Material UI v3** (`@material-ui/core`): Renamed to `@mui/material` in v5, completely different styling system. Every component uses `withStyles`.
@@ -19,6 +20,7 @@ The entire client stack is end-of-life:
 - **Dead packages**: `connected-react-router`, `redux-responsive`, `react-masonry-component`, `react-progressive-image`, `react-window-size`.
 
 The client's business logic is relatively small:
+
 - Spotify auth flow (login/logout, redirect handling)
 - Polling for currently playing track (3s interval)
 - Fetching and displaying related albums as a grid of artwork

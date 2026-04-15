@@ -31,26 +31,26 @@ const router = express.Router();
 // ////////////////////
 
 /**
-* `/currently-playing/related-albums` endpoint.
-*
-* Returns a list of albums related to the currently playing track.
-*/
+ * `/currently-playing/related-albums` endpoint.
+ *
+ * Returns a list of albums related to the currently playing track.
+ */
 router.get('/currently-playing/related-albums', async (req, res) => {
   const {
-    query: {
-      songId,
-    },
+    query: { songId },
     user,
   } = req;
 
   try {
-    res.send(await apiRequestWithRefresh({
-      user,
-      apiFn: (accessToken) => {
-        const spotifyApi = spotifyApiWithToken(accessToken);
-        return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
-      },
-    }));
+    res.send(
+      await apiRequestWithRefresh({
+        user,
+        apiFn: (accessToken) => {
+          const spotifyApi = spotifyApiWithToken(accessToken);
+          return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
+        },
+      }),
+    );
   } catch (error) {
     res.status(500).send(errorMessage(error));
   }
@@ -62,15 +62,12 @@ router.get('/currently-playing/related-albums', async (req, res) => {
  * Returns the current state of the player; this is a simple proxy.
  */
 router.get('/me/player', async (req, res) => {
-  const {
-    user,
-  } = req;
+  const { user } = req;
 
   try {
     const result = await apiRequestWithRefresh({
       user,
-      apiFn: accessToken => spotifyApiWithToken(accessToken)
-        .player.getPlaybackState(),
+      apiFn: (accessToken) => spotifyApiWithToken(accessToken).player.getPlaybackState(),
     });
     res.send(result);
   } catch (error) {

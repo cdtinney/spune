@@ -25,9 +25,6 @@ async function getValidAccessToken(user) {
   return updatedUser.spotifyAccessToken;
 }
 
-module.exports = async function apiRequestWithRefresh({
-  user,
-  apiFn,
-}) {
+module.exports = async function apiRequestWithRefresh({ user, apiFn }) {
   return apiFn(await getValidAccessToken(user));
 };
