@@ -24,12 +24,24 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
     [tiles],
   );
 
-  const flipRandomTile = useCallback(() => {
-    if (tiles.length === 0 || allImageUrls.length === 0) return;
+  // Indices of tiles that are roughly within the viewport
+  const visibleTileIndices = useMemo(() => {
+    const maxCol = Math.ceil(window.innerWidth / base) + 2;
+    const maxRow = Math.ceil(window.innerHeight / base) + 2;
+    return tiles
+      .map((tile, index) => ({ tile, index }))
+      .filter(({ tile }) => tile.col <= maxCol && tile.row <= maxRow)
+      .map(({ index }) => index);
+  }, [tiles, base]);
 
-    // Pick a random tile
-    const tileIndex = Math.floor(Math.random() * tiles.length);
-    // Pick the next image from the pool (cycling), skip if it's the same as the tile's current image
+  const flipRandomTile = useCallback(() => {
+    if (visibleTileIndices.length === 0 || allImageUrls.length === 0) return;
+
+    // Pick a random visible tile
+    const visIdx = Math.floor(Math.random() * visibleTileIndices.length);
+    const tileIndex = visibleTileIndices[visIdx];
+
+    // Pick the next image, skip if same as current
     let nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
     imagePoolRef.current++;
     if (nextImage === tiles[tileIndex].imageUrl) {
@@ -38,24 +50,23 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
     }
 
     setCurrentFlip({ tileIndex, imageUrl: nextImage });
-  }, [tiles, allImageUrls]);
+  }, [tiles, allImageUrls, visibleTileIndices]);
 
   useEffect(() => {
     if (tiles.length === 0) return;
 
-    // First flip after 10 seconds, then every 10-15 seconds
-    const firstTimeout = setTimeout(() => {
-      flipRandomTile();
+    // First flip after 7 seconds, then every 7-10 seconds
+    const firstTimeout = setTimeout(flipRandomTile, 7000);
 
-      const interval = setInterval(
-        () => flipRandomTile(),
-        10000 + Math.random() * 5000,
-      );
+    const interval = setInterval(
+      flipRandomTile,
+      7000 + Math.random() * 3000,
+    );
 
-      return () => clearInterval(interval);
-    }, 10000);
-
-    return () => clearTimeout(firstTimeout);
+    return () => {
+      clearTimeout(firstTimeout);
+      clearInterval(interval);
+    };
   }, [tiles.length, flipRandomTile]);
 
   if (!tiles || !tiles.length) {
