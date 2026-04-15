@@ -51,6 +51,7 @@ Edit `.env` and fill in your credentials:
 | `CLIENT_HOST`        | Yes      | Client origin for redirects. Dev: `http://127.0.0.1:3000`                  |
 | `PORT`               | No       | Server port (default: 5000)                                                |
 | `LAST_FM_API_KEY`    | No       | Last.fm API key for similar artist discovery                               |
+| `VITE_CAST_APP_ID`   | No       | Google Cast app ID for Chromecast (client `.env`)                          |
 
 **Important**: Spotify only supports `127.0.0.1` (not `localhost`) for local development redirect URIs. Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
 
@@ -78,6 +79,42 @@ pnpm server:lint          # Server lint (ESLint)
 ```bash
 pnpm client:build   # Builds to packages/client/build/
 ```
+
+### Chromecast
+
+Spune can cast the visualization to a Chromecast-enabled TV.
+
+#### Setup
+
+1. Register a Custom Receiver app in the [Google Cast Developer Console](https://cast.google.com/publish/) ($5 one-time fee).
+2. Set the receiver URL to `https://your-domain.com/cast-receiver.html`.
+3. Add your Cast app ID to the client environment:
+
+```bash
+# In packages/client/.env (create if needed)
+VITE_CAST_APP_ID=your-cast-app-id
+```
+
+4. Deploy. The receiver page is built automatically as part of the client build.
+
+#### Testing locally
+
+To test Chromecast discovery and the cast button locally:
+
+1. Your dev machine and Chromecast must be on the same Wi-Fi network.
+2. **Register your Chromecast as a test device** in the [Cast Developer Console](https://cast.google.com/publish/):
+   - Click **Add New Device**
+   - Enter the Chromecast's serial number (found in Google Home app → device settings, or on the back of the device)
+   - Wait ~15 minutes for registration to take effect
+3. Run `pnpm dev` in Chrome (Cast SDK only works in Chrome).
+4. The cast button appears in the top-right when the Chromecast is detected.
+
+**Note**: Unpublished Cast apps can only discover Chromecasts that are registered as test devices. Published apps (like YouTube) discover all devices. If the cast button doesn't appear, your device likely isn't registered yet.
+
+#### How it works
+
+- **Sender** (main app): Detects Chromecasts via the Google Cast SDK, shows a cast button, sends playback data and album image URLs to the receiver.
+- **Receiver** (`/cast-receiver.html`): A standalone React app that renders the mosaic visualization using data received from the sender. No auth needed — all data comes via Cast messaging.
 
 ## Docker
 

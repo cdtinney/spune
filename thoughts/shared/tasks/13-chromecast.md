@@ -1,36 +1,44 @@
 # Task 13: Chromecast Support
 
-## Goal
+## Status: Implemented
 
-Allow users to cast the Spune visualization to a TV via Chromecast, so it functions as a living room "now playing" display — the original Zune use case.
+Cast app ID: `CCD3A879`
+Receiver URL: `https://spune.tinney.dev/cast-receiver.html`
 
-## Context
+## Architecture
 
-Spune is designed to be displayed on a TV. Currently the only way to do that is to open the browser on the TV itself or mirror a tab. Chromecast support would let users cast the visualization directly from their phone or laptop to any Chromecast-enabled display.
+All Chromecast code is in `packages/client/src/cast/`:
 
-## What to do
+```
+cast/
+  types.ts              # Shared message types and namespace
+  cast-sender.d.ts      # Type declarations for Cast Sender SDK
+  cast-receiver.d.ts    # Type declarations for Cast Receiver SDK
+  sender/
+    useCastSession.ts   # Hook: SDK lifecycle, session management
+    CastButton.tsx      # UI: appears when Chromecast detected
+    CastButton.css
+    __tests__/          # Unit tests for CastButton
+  receiver/
+    ReceiverApp.tsx     # Standalone visualization app
+    main.tsx            # Entry point for cast-receiver.html
+```
 
-### Research
-- Investigate the Google Cast SDK (Web Sender + Web Receiver).
-- Determine whether a **Custom Receiver** (full HTML page on the Chromecast) or **Styled Media Receiver** is appropriate. Spune is a custom visualization, not standard media playback, so a Custom Receiver is likely needed.
-- Understand the Chromecast app registration process (requires a Google Cast Developer Console account, $5 one-time fee).
+- **Sender**: Loads Google Cast SDK, discovers devices, sends playback data + album URLs via custom namespace `urn:x-cast:com.spune.visualization`.
+- **Receiver**: Standalone React app at `/cast-receiver.html` (separate Vite entry point). Renders mosaic visualization from received data. No auth needed.
+- **Fallback**: Falls back to Default Media Receiver (`CC1AD845`) if `VITE_CAST_APP_ID` is not set, allowing device discovery testing without a registered custom receiver.
 
-### Implementation
-- **Cast button**: Add a Chromecast icon to the UI (top bar, near the user menu) that initializes a cast session.
-- **Custom Receiver**: Build a lightweight receiver app that loads the Spune visualization. The receiver could either:
-  - Load the same client app in a stripped-down mode (no login UI, just the visualization), with the sender passing the auth token, OR
-  - Receive now-playing data and album images from the sender via Cast messaging.
-- **Sender**: The existing client sends playback state and album data to the receiver over the Cast channel.
-- **Fallback**: If no Chromecast is available, the cast button should not appear.
+## Setup
 
-### Considerations
-- The Chromecast receiver runs in a constrained environment (limited memory, no user interaction). The mosaic grid with hundreds of tiles may need to be simplified for the receiver.
-- Spotify's terms of service may restrict proxying playback data to another device — verify this.
-- The receiver app needs to be hosted at a publicly accessible HTTPS URL and registered with Google.
+1. Register a Custom Receiver in the [Google Cast Developer Console](https://cast.google.com/publish/).
+2. Set receiver URL to `https://your-domain.com/cast-receiver.html`.
+3. Register your Chromecast as a test device (serial number) in the Cast Developer Console. Wait for "Ready For Testing" status, then reboot the Chromecast.
+4. Set `VITE_CAST_APP_ID=your-app-id` in `packages/client/.env`.
+5. The Dockerfile bakes the app ID at build time via a build arg.
 
-## Done when
+## Known limitations
 
-- A Chromecast button appears in the UI when a cast target is available.
-- Clicking it casts the visualization to the Chromecast.
-- The visualization updates on the TV as songs change.
-- Works with the existing Spotify auth flow.
+- Custom Cast app IDs only discover Chromecasts registered as test devices (until the app is published).
+- Test device registration can take 15 minutes to several hours to propagate.
+- The Default Media Receiver fallback allows testing device discovery and session flow, but custom messaging (and therefore the visualization) won't work with it.
+- True E2E testing requires a physical Chromecast — unit tests cover the sender UI logic.
