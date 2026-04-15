@@ -4,14 +4,25 @@
   position: relative;
 }
 
-.user-menu__icon {
+.user-menu__trigger {
+  background: none;
+  border: none;
   margin-left: 8px;
   padding: 8px;
-  color: rgba(255, 255, 255, 0.87);
   cursor: pointer;
 }
 
-.user-menu__icon:hover {
+.user-menu__trigger:focus-visible {
+  outline: 2px solid #1db954;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.user-menu__icon {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.user-menu__trigger:hover .user-menu__icon {
   color: rgba(255, 255, 255, 0.54);
 }
 

@@ -6,6 +6,7 @@ import { useSpotify } from '../contexts/SpotifyContext';
 import useNowPlayingPoller from '../hooks/useNowPlayingPoller';
 import useWindowSize from '../hooks/useWindowSize';
 import useAlbumGrid from '../hooks/useAlbumGrid';
+import useDominantColor from '../hooks/useDominantColor';
 import LoadingScreen from '../components/LoadingScreen';
 import CoverOverlay from '../components/CoverOverlay';
 import SongCard from '../components/SongCard';
@@ -13,16 +14,18 @@ import AlbumGrid from '../components/AlbumGrid';
 import UserAvatar from '../components/UserAvatar';
 import UserMenu from '../components/UserMenu';
 import FullscreenButton from '../components/FullscreenButton';
+import ProgressBar from '../components/ProgressBar';
 import './VisualizationContent.css';
 
 const REPO_URL = 'https://github.com/cdtinney/spune';
 
 export default function VisualizationContent() {
   useNowPlayingPoller();
-  const { user, logout } = useUser();
-  const { nowPlaying, relatedAlbums, initialized } = useSpotify();
+  const { user, logout, login } = useUser();
+  const { nowPlaying, relatedAlbums, initialized, error } = useSpotify();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
+  const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,12 +49,13 @@ export default function VisualizationContent() {
   const userImageUrl = typeof photo === 'string' ? photo : photo?.url || photo?.value;
   const isInitialLoad = !initialized;
   const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
+  const hasError = !!error;
 
   return (
     <div className="visualization">
       {!isInitialLoad && <FullscreenButton onClick={handleFullscreenToggle} />}
 
-      <CoverOverlay />
+      <CoverOverlay dominantColor={dominantColor} />
 
       {!isInitialLoad && (
         <>
@@ -72,17 +76,28 @@ export default function VisualizationContent() {
 
       {!isInitialLoad && songPlaying && (
         <SongCard
+          songId={nowPlaying.songId}
           artistName={nowPlaying.artistName}
           songTitle={nowPlaying.songTitle}
           albumName={nowPlaying.albumName}
           albumImageUrl={nowPlaying.albumImageUrl}
+          dominantColor={dominantColor}
         />
       )}
 
       <div className="visualization__content">
         {isInitialLoad && <LoadingScreen className="visualization__loading" />}
 
-        {!isInitialLoad && !songPlaying && (
+        {!isInitialLoad && hasError && !songPlaying && (
+          <div className="visualization__error">
+            <p>Session expired or connection failed.</p>
+            <button className="visualization__reconnect-btn" onClick={login}>
+              Reconnect with Spotify
+            </button>
+          </div>
+        )}
+
+        {!isInitialLoad && !hasError && !songPlaying && (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
           </div>
@@ -92,6 +107,14 @@ export default function VisualizationContent() {
           <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} base={base} />
         )}
       </div>
+
+      {!isInitialLoad && songPlaying && (
+        <ProgressBar
+          progressMs={nowPlaying.progressMs}
+          durationMs={nowPlaying.durationMs}
+          isPlaying={nowPlaying.isPlaying}
+        />
+      )}
 
       <div className="visualization__bottom-gradient" />
     </div>

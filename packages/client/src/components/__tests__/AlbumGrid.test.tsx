@@ -9,14 +9,15 @@ const mockTiles: Album[] = [
 ];
 
 describe('AlbumGrid', () => {
-  it('renders images for each tile', () => {
+  it('renders a tile for each album', () => {
     const { container } = render(
       <AlbumGrid tiles={mockTiles} gridCols={6} gridRows={6} base={120} />,
     );
-    const images = container.querySelectorAll('img');
-    expect(images).toHaveLength(2);
-    expect(images[0]).toHaveAttribute('alt', 'Album 1');
-    expect(images[1]).toHaveAttribute('alt', 'Album 2');
+    const tiles = container.querySelectorAll('.album-grid__tile');
+    expect(tiles).toHaveLength(2);
+    // Each FlippableTile has front and back faces with images
+    const images = container.querySelectorAll('img[alt="Album 1"]');
+    expect(images.length).toBeGreaterThanOrEqual(1);
   });
 
   it('returns null when tiles is empty', () => {

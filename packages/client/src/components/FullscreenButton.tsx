@@ -8,13 +8,13 @@ interface FullscreenButtonProps {
 
 export default function FullscreenButton({ onClick }: FullscreenButtonProps) {
   return (
-    <div className="fullscreen-button">
-      <FontAwesomeIcon
-        icon={faExpand}
-        size="1x"
-        className="fullscreen-button__icon"
-        onClick={onClick}
-      />
-    </div>
+    <button
+      className="fullscreen-button"
+      onClick={onClick}
+      aria-label="Toggle fullscreen"
+      title="Toggle fullscreen"
+    >
+      <FontAwesomeIcon icon={faExpand} size="1x" className="fullscreen-button__icon" />
+    </button>
   );
 }

@@ -27,6 +27,7 @@ export interface SpotifyTrack {
   name: string;
   artists: SpotifyArtist[];
   album: SpotifyAlbum;
+  duration_ms?: number;
   uri?: string;
   href?: string;
 }
@@ -47,6 +48,9 @@ export interface NowPlaying {
   albumImageUrl: string | undefined;
   albumArtists: SpotifyArtist[];
   albumImages: SpotifyImage[];
+  progressMs: number;
+  durationMs: number;
+  isPlaying: boolean;
 }
 
 export interface RelatedAlbums {

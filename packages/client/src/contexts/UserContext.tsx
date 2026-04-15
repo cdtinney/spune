@@ -35,8 +35,10 @@ export function UserProvider({ children }: UserProviderProps) {
         setUser(profile);
         setLoading(false);
       })
-      .catch((err: { response?: { data?: string }; message?: string }) => {
-        setError(err.response?.data || err.message || 'Unknown error');
+      .catch((err: { response?: { data?: unknown }; message?: string }) => {
+        const data = err.response?.data;
+        const message = typeof data === 'string' ? data : err.message || 'Unknown error';
+        setError(message);
         setLoading(false);
       });
   }, []);
