@@ -149,7 +149,9 @@
       "Bash(npx playwright:*)",
       "Bash(with Spotify\" button instead of the misleading \"No song playing\":*)",
       "Bash(find /Users/ctinney/Development/_Personal/spune -path */colorthief/package.json -not -path */node_modules/.pnpm/*)",
-      "Bash(find /Users/ctinney/Development/_Personal/spune -path *free-solid-svg-icons/index* -not -path */.pnpm/*)"
+      "Bash(find /Users/ctinney/Development/_Personal/spune -path *free-solid-svg-icons/index* -not -path */.pnpm/*)",
+      "Bash(git fetch:*)",
+      "Bash(git rebase:*)"
     ]
   }
 }
