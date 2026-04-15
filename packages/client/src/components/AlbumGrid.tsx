@@ -32,7 +32,7 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
       >
         {tiles.map((tile, index) => {
           // ~15% of tiles flip, with staggered intervals (8-20s)
-          const shouldFlip = (index * 7 + 3) % 7 === 0;
+          const shouldFlip = index % 7 === 0;
           const flipInterval = shouldFlip ? 8000 + ((index * 13) % 12) * 1000 : 0;
 
           return (
