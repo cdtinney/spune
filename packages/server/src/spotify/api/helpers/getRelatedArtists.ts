@@ -33,8 +33,7 @@ async function fromLastFm(artistName: string, limit = 30): Promise<string[]> {
     logger.info(`Last.fm: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
-    const message = errorMessage(error);
-    logger.warn(`Last.fm failed for "${artistName}": ${message}`);
+    logger.warn(`Last.fm failed for "${artistName}": ${errorMessage(error)}`);
     return [];
   }
 }
@@ -78,8 +77,7 @@ async function fromListenBrainz(artistName: string, limit = 20): Promise<string[
     logger.info(`ListenBrainz: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
-    const message = errorMessage(error);
-    logger.warn(`ListenBrainz failed for "${artistName}": ${message}`);
+    logger.warn(`ListenBrainz failed for "${artistName}": ${errorMessage(error)}`);
     return [];
   }
 }

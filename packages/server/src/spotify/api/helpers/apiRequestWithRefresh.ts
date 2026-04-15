@@ -11,8 +11,7 @@ async function getValidAccessToken(user: User | undefined): Promise<string> {
     throw new Error('Request has no user or access token');
   }
 
-  const requiresRefresh = tokenExpired(user.tokenUpdated, user.expiresIn);
-  if (!requiresRefresh) {
+  if (!tokenExpired(user.tokenUpdated, user.expiresIn)) {
     return user.spotifyAccessToken;
   }
 
