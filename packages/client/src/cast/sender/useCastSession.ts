@@ -3,8 +3,8 @@ import type { CastMessage } from '../types';
 import { CAST_NAMESPACE } from '../types';
 
 // Set this to your registered Cast application ID.
-// TODO: revert to env var once test device registration propagates
-const CAST_APP_ID = 'CC1AD845'; // Default Media Receiver — discovers all Chromecasts
+// Falls back to Default Media Receiver for testing device discovery only.
+const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID || 'CC1AD845';
 
 interface CastSessionState {
   available: boolean;
@@ -73,8 +73,8 @@ export default function useCastSession(): CastSessionState {
     if (!sdkLoadedRef.current) return;
     const session = cast.framework.CastContext.getInstance().getCurrentSession();
     if (session) {
-      session.sendMessage(CAST_NAMESPACE, JSON.stringify(message)).catch((err: unknown) => {
-        console.error('[Cast] Failed to send message:', err);
+      session.sendMessage(CAST_NAMESPACE, JSON.stringify(message)).catch(() => {
+        // Silently ignore — custom namespace fails on the default media receiver
       });
     }
   }, []);
