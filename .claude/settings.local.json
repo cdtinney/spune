@@ -132,7 +132,13 @@
       "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npm run test --workspace spune-server)",
       "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npx vitest run src/spotify/auth/__tests__/refreshToken.test.ts)",
       "Bash(git rm:*)",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "Bash(rm -rf packages/server/__tests__/integration/ packages/server/jest-puppeteer.config.js)",
+      "Bash(rm packages/server/src/database/schema/User.ts)",
+      "Bash(rm packages/server/src/utils/uniqueSet.ts packages/server/src/utils/__tests__/uniqueSet.test.ts)",
+      "Bash(rm packages/client/src/utils/calculateColumnSize.ts packages/client/src/utils/__tests__/calculateColumnSize.test.ts)",
+      "Bash(rm packages/client/src/utils/shuffle.ts packages/client/src/utils/__tests__/shuffle.test.ts)",
+      "Bash(grep:*)"
     ]
   }
 }
