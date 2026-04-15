@@ -1,31 +1,36 @@
-import rateLimit, { type RateLimitRequestHandler } from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
+import type { RequestHandler } from 'express';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// General API rate limit: 1000 requests per 15 minutes per IP.
-export const apiLimiter: RateLimitRequestHandler = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: isProduction ? 1000 : 0, // 0 = disabled in dev
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many requests, please try again later.',
-});
+const passthrough: RequestHandler = (_req, _res, next) => next();
 
-// Auth routes: 50 requests per 15 minutes per IP.
-export const authLimiter: RateLimitRequestHandler = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: isProduction ? 50 : 0,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many authentication requests, please try again later.',
-});
+export const apiLimiter: RequestHandler = isProduction
+  ? rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 1000,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: 'Too many requests, please try again later.',
+    })
+  : passthrough;
 
-// Spotify API proxy routes: 500 requests per 15 minutes per IP.
-// Higher limit since the client polls every 3 seconds (~300 requests/15min).
-export const spotifyLimiter: RateLimitRequestHandler = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: isProduction ? 500 : 0,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: 'Too many requests, please try again later.',
-});
+export const authLimiter: RequestHandler = isProduction
+  ? rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 50,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: 'Too many authentication requests, please try again later.',
+    })
+  : passthrough;
+
+export const spotifyLimiter: RequestHandler = isProduction
+  ? rateLimit({
+      windowMs: 15 * 60 * 1000,
+      max: 500,
+      standardHeaders: true,
+      legacyHeaders: false,
+      message: 'Too many requests, please try again later.',
+    })
+  : passthrough;
