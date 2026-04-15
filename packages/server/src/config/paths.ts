@@ -2,9 +2,11 @@ import path from 'path';
 
 const CLIENT_HOST: string = process.env.CLIENT_HOST || '';
 
-// Resolve relative to the server package root (2 levels up from src/config/)
-// This works for both dev (running from src/) and prod (running from dist/src/)
-const serverRoot = path.resolve(__dirname, '..', '..');
+// Resolve to the server package root from src/config/.
+// In dev:  __dirname = .../server/src/config       → up 2 = server root
+// In prod: __dirname = .../server/dist/src/config   → up 3 = server root
+const inDist = __dirname.includes(`${path.sep}dist${path.sep}`);
+const serverRoot = path.resolve(__dirname, ...Array(inDist ? 3 : 2).fill('..'));
 const monorepoRoot = path.resolve(serverRoot, '..', '..');
 
 export default {

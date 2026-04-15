@@ -90,19 +90,30 @@ The receiver page (`cast-receiver.html`) is built automatically as part of `pnpm
 
 ## Testing locally
 
+The Chromecast device loads the receiver page itself over the network, so `localhost` won't work — you need a publicly accessible HTTPS URL. Use a tunnel like [ngrok](https://ngrok.com) to expose your local dev server.
+
 ### Prerequisites
 
 - Google Chrome (Cast SDK only works in Chrome)
 - Chromecast on the same Wi-Fi network as your dev machine
 - Chromecast registered as a test device (see above)
+- [ngrok](https://ngrok.com) installed (or a similar tunnel tool)
 
 ### Steps
 
 1. Set `VITE_CAST_APP_ID` in `packages/client/.env`
 2. Run `pnpm dev`
-3. Open `http://127.0.0.1:3000` in Chrome
-4. The cast icon appears in the bottom-right when the Chromecast is detected
-5. Click it to start casting
+3. Start a tunnel to the Vite dev server:
+   ```bash
+   ngrok http 3000
+   ```
+4. Copy the HTTPS forwarding URL (e.g., `https://abc123.ngrok.io`)
+5. In the Cast Developer Console, update the Receiver Application URL to `https://abc123.ngrok.io/cast-receiver.html`
+6. Open `http://127.0.0.1:3000` in Chrome
+7. The cast icon appears in the bottom-right when the Chromecast is detected
+8. Click it to start casting
+
+> **Note**: The ngrok URL changes each time you restart it (unless you have a paid plan with a stable subdomain), so you'll need to update the Cast Developer Console each time.
 
 ### Testing device discovery without a registered app
 
