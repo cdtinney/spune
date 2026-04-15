@@ -37,9 +37,9 @@ export default function useNowPlayingPoller(): void {
     }
   }, [sse.connected, sse.nowPlaying, dispatch, fetchRelatedAlbums]);
 
-  // Polling fallback: only active when SSE is not connected
+  // Polling fallback: only active when SSE is not connected and hasn't given up
   useEffect(() => {
-    if (sse.connected) return; // SSE is handling updates
+    if (sse.connected || sse.gaveUp) return;
 
     const poll = async (): Promise<void> => {
       const nowPlayingResult = await fetchNowPlaying(loadingRef, currentSongIdRef.current);
@@ -56,5 +56,5 @@ export default function useNowPlayingPoller(): void {
     poll();
     const id = setInterval(poll, POLL_INTERVAL);
     return () => clearInterval(id);
-  }, [sse.connected, fetchNowPlaying, fetchRelatedAlbums]);
+  }, [sse.connected, sse.gaveUp, fetchNowPlaying, fetchRelatedAlbums]);
 }

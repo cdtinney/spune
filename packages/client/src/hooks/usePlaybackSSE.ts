@@ -19,8 +19,12 @@ interface SSEPlaybackEvent {
   song_changed: boolean;
 }
 
+const RECONNECT_DELAY = 5000;
+const GIVE_UP_THRESHOLD = 30000;
+
 interface UsePlaybackSSEResult {
   connected: boolean;
+  gaveUp: boolean;
   nowPlaying: NowPlaying | null;
   songChanged: boolean;
   progressMs: number;
@@ -29,12 +33,14 @@ interface UsePlaybackSSEResult {
 
 export default function usePlaybackSSE(): UsePlaybackSSEResult {
   const [connected, setConnected] = useState(false);
+  const [gaveUp, setGaveUp] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
   const [songChanged, setSongChanged] = useState(false);
   const [progressMs, setProgressMs] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const firstErrorAtRef = useRef<number | null>(null);
 
   const connect = useCallback(() => {
     if (eventSourceRef.current) {
@@ -46,6 +52,8 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
 
     es.onopen = () => {
       setConnected(true);
+      setGaveUp(false);
+      firstErrorAtRef.current = null;
     };
 
     es.addEventListener('playback', (event: MessageEvent) => {
@@ -96,8 +104,17 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
       es.close();
       eventSourceRef.current = null;
 
-      // Reconnect after 5 seconds
-      reconnectTimeoutRef.current = setTimeout(connect, 5000);
+      const now = Date.now();
+      if (firstErrorAtRef.current === null) {
+        firstErrorAtRef.current = now;
+      }
+
+      if (now - firstErrorAtRef.current >= GIVE_UP_THRESHOLD) {
+        setGaveUp(true);
+        return;
+      }
+
+      reconnectTimeoutRef.current = setTimeout(connect, RECONNECT_DELAY);
     };
   }, []);
 
@@ -114,5 +131,5 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
     };
   }, [connect]);
 
-  return { connected, nowPlaying, songChanged, progressMs, isPlaying };
+  return { connected, gaveUp, nowPlaying, songChanged, progressMs, isPlaying };
 }
