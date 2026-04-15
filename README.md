@@ -129,11 +129,11 @@ nano /opt/spune/.env
 
 #### 3. Point your domain to the droplet
 
-In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
+In your DNS provider, add an **A record** pointing your domain to the droplet's IP address, e.g.:
 
 | Type | Name | Value |
 |------|------|-------|
-| A | `@` (or subdomain) | `YOUR_DROPLET_IP` |
+| A | `@` (or subdomain, like `spune`) | `YOUR_DROPLET_IP` |
 
 Then update `/opt/spune/.env` to use your domain:
 
@@ -178,6 +178,42 @@ After it finishes, add `https://your-domain.com/api/auth/spotify/callback` to yo
 2. CI runs tests, builds, and pushes `ghcr.io/cdtinney/spune:latest`
 3. Watchtower (on your droplet) detects the new image within 60 seconds
 4. It pulls the image and restarts the app container automatically
+
+#### Debugging
+
+Open the **Droplet Console** in the DigitalOcean dashboard, then:
+
+```bash
+cd /opt/spune
+
+# View app logs (last 100 lines)
+docker compose logs --tail 100 app
+
+# Follow logs in real-time
+docker compose logs -f app
+
+# View all container logs
+docker compose logs --tail 100
+
+# Check container status
+docker compose ps
+```
+
+Other useful commands:
+
+```bash
+# Restart everything
+docker compose down && docker compose up -d
+
+# Restart just the app
+docker compose restart app
+
+# Check if the app responds
+curl -s http://localhost:5000/api/auth/user
+
+# Shell into the database
+docker compose exec db psql -U spune -d spune
+```
 
 ## Inspiration
 
