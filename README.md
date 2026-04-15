@@ -52,7 +52,7 @@ Edit `.env` and fill in your credentials:
 | `PORT` | No | Server port (default: 5000) |
 | `LAST_FM_API_KEY` | No | Last.fm API key for similar artist discovery |
 
-Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
+**Important**: Spotify only supports `127.0.0.1` (not `localhost`) for local development redirect URIs. Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
 
 ### Running (Development)
 
@@ -62,13 +62,15 @@ npm run dev
 
 This starts both the Express server (port 5000) and Vite dev server (port 3000) concurrently. Open `http://127.0.0.1:3000`.
 
+The Vite dev server proxies `/api` requests to the Express server, so the redirect URI must point to port 3000 (not 5000) for the session cookie to work correctly.
+
 ### Testing
 
 ```bash
-npm run client:test        # Client tests (Vitest)
-npm run client:lint         # Client lint (ESLint)
+npm run client:test         # Client tests (Vitest)
+npm run client:lint          # Client lint (ESLint)
 npm run server:test:coverage # Server tests (Jest)
-npm run server:lint         # Server lint (ESLint)
+npm run server:lint          # Server lint (ESLint)
 ```
 
 ### Building
@@ -96,11 +98,11 @@ SPOT_REDIRECT_URI=http://localhost:5000/api/auth/spotify/callback
 SESSION_SECRET=your-secret
 ```
 
-### Production Deployment (DigitalOcean Droplet)
+## Production Deployment (DigitalOcean Droplet)
 
 CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. Your droplet auto-updates via Watchtower.
 
-#### 1. Set up the droplet
+### 1. Set up the droplet
 
 Create an Ubuntu 24.04 droplet (1GB RAM is enough). Open the **Droplet Console** in the DigitalOcean dashboard and run the setup script:
 
@@ -110,7 +112,7 @@ curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup
 
 The script installs Docker, creates `/opt/spune` with a `docker-compose.yml` and `.env`, and generates random secrets.
 
-#### 2. Configure credentials
+### 2. Configure credentials
 
 Log in to GitHub Container Registry so the droplet can pull the Docker image:
 
@@ -127,75 +129,85 @@ Edit `/opt/spune/.env` and fill in your Spotify + Last.fm credentials:
 nano /opt/spune/.env
 ```
 
-#### 3. Point your domain to the droplet
+### 3. Point your domain to the droplet
 
 In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
 
 | Type | Name | Value |
 |------|------|-------|
-| A | `@` (or subdomain) | `YOUR_DROPLET_IP` |
+| A | `@` (or subdomain, like `spune`) | `YOUR_DROPLET_IP` |
 
-Then update `/opt/spune/.env` to use your domain:
+**If using Cloudflare**: set the proxy status to **DNS only** (grey cloud icon, not orange). Caddy handles SSL — Cloudflare's proxy will conflict with it.
 
-```
-SPOT_REDIRECT_URI=https://your-domain.com/api/auth/spotify/callback
-CLIENT_HOST=https://your-domain.com
-```
-
-Also add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
-
-#### 4. Start
+### 4. Start and run migrations
 
 ```bash
 cd /opt/spune
 docker compose up -d
 ```
 
-Wait ~10 seconds for PostgreSQL to initialize, then run the migration:
+Wait for PostgreSQL to be ready, then run migrations:
 
 ```bash
-docker compose exec db psql -U spune -d spune -c \
-  "CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, spotify_id TEXT UNIQUE NOT NULL, spotify_access_token TEXT, spotify_refresh_token TEXT, token_updated BIGINT, expires_in BIGINT, display_name TEXT, photos JSON);"
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/migrate.sh | bash
 ```
 
-The app is now running. If you're using a domain with the setup script's default config, it serves on port 80 (HTTP). For HTTPS, see below.
+### 5. Add HTTPS with a custom domain
 
-#### HTTPS with Caddy (optional)
-
-The setup script serves on port 80 (HTTP). To add automatic HTTPS, edit `/opt/spune/docker-compose.yml` and add a Caddy service:
-
-```yaml
-  caddy:
-    image: caddy:2-alpine
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-volumes:
-  caddy_data:
+```bash
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-caddy.sh | bash -s your-domain.com
 ```
 
-Change the `app` service ports from `"80:5000"` to `"5000:5000"` (internal only).
+This adds Caddy as a reverse proxy with automatic Let's Encrypt TLS certificates and updates `.env` with the correct redirect URIs.
 
-Create `/opt/spune/Caddyfile`:
+**Don't forget**: add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
 
-```
-your-domain.com {
-    reverse_proxy app:5000
-}
-```
-
-Restart: `docker compose down && docker compose up -d`. Caddy auto-provisions a Let's Encrypt TLS certificate.
-
-#### How auto-deploy works
+### How auto-deploy works
 
 1. You merge a PR to `master`
 2. CI runs tests, builds, and pushes `ghcr.io/cdtinney/spune:latest`
 3. Watchtower (on your droplet) detects the new image within 60 seconds
 4. It pulls the image and restarts the app container automatically
+
+### Debugging
+
+Open the **Droplet Console** in the DigitalOcean dashboard, then:
+
+```bash
+cd /opt/spune
+
+# View app logs
+docker compose logs --tail 100 app
+
+# Follow logs in real-time
+docker compose logs -f app
+
+# Check container status
+docker compose ps
+
+# Check if the app responds
+curl -s http://localhost:5000/api/auth/user
+```
+
+### Common issues
+
+**"Internal Server Error" after login**: The Spotify redirect URI in your `.env` doesn't match what's registered in the Spotify dashboard. They must be identical.
+
+**"DB_PASSWORD variable is not set"**: The `.env` file is missing `DB_PASSWORD`. Check with `cat /opt/spune/.env | grep DB_PASSWORD`.
+
+**Database connection errors after changing `DB_PASSWORD`**: Postgres stores the password on first start. If you change it later, you must reset the volume:
+
+```bash
+cd /opt/spune
+docker compose down -v
+docker compose up -d
+# Wait ~10 seconds, then re-run migrations:
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/migrate.sh | bash
+```
+
+**Browser security warning on bare IP**: Use a domain with HTTPS (step 5) instead of a bare IP address.
+
+**Login redirects back to home page**: The session cookie isn't being set. Check that `SPOT_REDIRECT_URI` and `CLIENT_HOST` use the same origin (same protocol, domain, and port).
 
 ## Inspiration
 
