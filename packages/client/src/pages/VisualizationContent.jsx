@@ -43,15 +43,13 @@ export default function VisualizationContent() {
 
   const userName = user?.displayName || user?.spotifyId;
   const photo = user?.photos?.[0];
-  const userImageUrl = typeof photo === 'string' ? photo : (photo?.url || photo?.value);
+  const userImageUrl = typeof photo === 'string' ? photo : photo?.url || photo?.value;
   const isInitialLoad = !initialized;
   const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
 
   return (
     <div className="visualization">
-      {!isInitialLoad && (
-        <FullscreenButton onClick={handleFullscreenToggle} />
-      )}
+      {!isInitialLoad && <FullscreenButton onClick={handleFullscreenToggle} />}
 
       <CoverOverlay />
 
@@ -82,9 +80,7 @@ export default function VisualizationContent() {
       )}
 
       <div className="visualization__content">
-        {isInitialLoad && (
-          <LoadingScreen className="visualization__loading" />
-        )}
+        {isInitialLoad && <LoadingScreen className="visualization__loading" />}
 
         {!isInitialLoad && !songPlaying && (
           <div className="visualization__empty">

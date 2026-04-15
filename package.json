@@ -13,23 +13,28 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules packages/client/node_modules packages/server/node_modules package-lock.json",
-    "client:build": "npm run build -w packages/client",
-    "client:lint": "npm run lint -w packages/client",
-    "client:test": "npm run test -w packages/client",
-    "client:test:coverage": "npm run test:coverage -w packages/client",
-    "client:watch": "npm run watch -w packages/client",
+    "client:build": "npm run build --workspace spune-client",
+    "client:lint": "npm run lint --workspace spune-client",
+    "client:test": "npm run test --workspace spune-client",
+    "client:test:coverage": "npm run test:coverage --workspace spune-client",
+    "client:watch": "npm run watch --workspace spune-client",
     "dev": "npm run watch",
-    "server:lint": "npm run lint -w packages/server",
-    "server:start": "npm run start -w packages/server",
-    "server:test": "npm run test -w packages/server",
-    "server:test:coverage": "npm run test:coverage -w packages/server",
-    "server:test:integration": "npm run test:integration -w packages/server",
-    "server:watch": "npm run watch -w packages/server",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run client:lint && npm run server:lint",
+    "server:lint": "npm run lint --workspace spune-server",
+    "server:start": "npm run start --workspace spune-server",
+    "server:test": "npm run test --workspace spune-server",
+    "server:test:coverage": "npm run test:coverage --workspace spune-server",
+    "server:test:integration": "npm run test:integration --workspace spune-server",
+    "server:watch": "npm run watch --workspace spune-server",
     "start": "npm run watch",
     "test": "npm run test:coverage --workspaces --if-present",
     "watch": "concurrently --kill-others \"npm run server:watch\" \"npm run client:watch\""
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.2"
   }
 }

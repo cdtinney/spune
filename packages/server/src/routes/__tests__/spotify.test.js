@@ -13,8 +13,7 @@ const app = initApp();
 
 describe('/spotify', () => {
   it('exports an instance of Router', () => {
-    expect(Object.getPrototypeOf(spotify))
-      .toEqual(Router);
+    expect(Object.getPrototypeOf(spotify)).toEqual(Router);
   });
 
   describe('/spotify/currently-playing/', () => {
@@ -25,8 +24,7 @@ describe('/spotify', () => {
         }));
 
         try {
-          const response = await request(app)
-            .get('/api/spotify/currently-playing/related-albums');
+          const response = await request(app).get('/api/spotify/currently-playing/related-albums');
 
           expect(response.statusCode).toEqual(200);
           expect(response.body).toEqual({
@@ -42,8 +40,7 @@ describe('/spotify', () => {
           throw new Error('foo');
         });
 
-        const response = await request(app)
-          .get('/api/spotify/currently-playing/related-albums');
+        const response = await request(app).get('/api/spotify/currently-playing/related-albums');
 
         expect(response.statusCode).toEqual(500);
         expect(response.text).toEqual('foo');

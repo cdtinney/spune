@@ -20,10 +20,7 @@ describe('getRelatedArtists()', () => {
         return Promise.resolve({
           data: {
             similarartists: {
-              artist: [
-                { name: 'Artist A' },
-                { name: 'Artist B' },
-              ],
+              artist: [{ name: 'Artist A' }, { name: 'Artist B' }],
             },
           },
         });
@@ -39,10 +36,7 @@ describe('getRelatedArtists()', () => {
             payload: {
               jspf: {
                 playlist: {
-                  track: [
-                    { creator: 'Artist B' },
-                    { creator: 'Artist C' },
-                  ],
+                  track: [{ creator: 'Artist B' }, { creator: 'Artist C' }],
                 },
               },
             },
@@ -57,7 +51,7 @@ describe('getRelatedArtists()', () => {
     expect(names).toContain('Artist B');
     expect(names).toContain('Artist C');
     // Deduplicated — Artist B appears in both but only once
-    expect(names.filter(n => n === 'Artist B')).toHaveLength(1);
+    expect(names.filter((n) => n === 'Artist B')).toHaveLength(1);
   });
 
   it('returns empty array when LAST_FM_API_KEY is not set and ListenBrainz fails', async () => {

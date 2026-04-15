@@ -26,7 +26,7 @@ async function fromLastFm(artistName, limit = 30) {
     });
 
     const artists = data?.similarartists?.artist || [];
-    const names = artists.map(a => a.name);
+    const names = artists.map((a) => a.name);
     logger.info(`Last.fm: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
@@ -57,20 +57,17 @@ async function fromListenBrainz(artistName, limit = 20) {
     logger.info(`MusicBrainz: resolved "${artistName}" to MBID ${mbid}`);
 
     // Step 2: Get similar artists from ListenBrainz
-    const lbRes = await axios.get(
-      `https://api.listenbrainz.org/1/lb-radio/artist/${mbid}`,
-      {
-        params: {
-          mode: 'easy',
-          max_similar_artists: limit,
-          max_recordings_per_artist: 1,
-        },
+    const lbRes = await axios.get(`https://api.listenbrainz.org/1/lb-radio/artist/${mbid}`, {
+      params: {
+        mode: 'easy',
+        max_similar_artists: limit,
+        max_recordings_per_artist: 1,
       },
-    );
+    });
 
     // ListenBrainz returns a playlist with artist info
     const tracks = lbRes.data?.payload?.jspf?.playlist?.track || [];
-    const names = [...new Set(tracks.map(t => t.creator).filter(Boolean))];
+    const names = [...new Set(tracks.map((t) => t.creator).filter(Boolean))];
     logger.info(`ListenBrainz: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
@@ -101,6 +98,8 @@ module.exports = async function getRelatedArtists(artistName) {
     }
   }
 
-  logger.info(`Related artists: ${combined.length} total (${lastfmNames.length} Last.fm + ${lbNames.length} ListenBrainz)`);
+  logger.info(
+    `Related artists: ${combined.length} total (${lastfmNames.length} Last.fm + ${lbNames.length} ListenBrainz)`,
+  );
   return combined;
 };

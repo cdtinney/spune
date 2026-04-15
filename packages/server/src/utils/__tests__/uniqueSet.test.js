@@ -8,14 +8,8 @@ describe('uniqueSet()', () => {
   });
 
   it('combines two arrays with duplicate entries into a set', () => {
-    const set = uniqueSet([
-      1, 2, 3,
-    ], [
-      1, 1, 3,
-    ]);
+    const set = uniqueSet([1, 2, 3], [1, 1, 3]);
 
-    expect(Array.from(set.values())).toEqual([
-      1, 2, 3,
-    ]);
+    expect(Array.from(set.values())).toEqual([1, 2, 3]);
   });
 });

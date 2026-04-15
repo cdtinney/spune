@@ -11,6 +11,7 @@ Polish the codebase: migrate to TypeScript, set up consistent linting/formatting
 ## What to do
 
 ### TypeScript Migration
+
 - Add TypeScript to both packages.
 - Migrate server code from JS to TS.
 - Migrate client code from JS to TS/TSX.
@@ -18,6 +19,7 @@ Polish the codebase: migrate to TypeScript, set up consistent linting/formatting
 - Ensure builds and tests still work after migration.
 
 ### Linting and Formatting
+
 - Set up ESLint with a modern config (flat config format) across both packages.
 - Add Prettier with consistent formatting rules.
 - Add a root `.prettierrc` and `.eslintrc` (or `eslint.config.js`).
@@ -26,22 +28,29 @@ Polish the codebase: migrate to TypeScript, set up consistent linting/formatting
 - Add lint checks to the GitHub Actions CI workflow.
 
 ### Performance Audit
+
 - Review the Spotify polling interval and API call patterns for unnecessary requests.
 - Check for unnecessary re-renders in the React client (e.g., missing memoization, over-fetching).
 - Review the album deduplication logic for efficiency.
 - Check Docker image size and optimize if bloated (e.g., multi-stage build, .dockerignore).
 
 ### Refactor for Simplicity
+
 - Remove any dead code, unused exports, or leftover files from the migration.
 - Simplify the folder structure if packages have unnecessary nesting.
 - Consolidate configuration files where possible.
-- Review whether Redux is still needed or if React context/hooks would be simpler.
 
 ### Documentation
+
 - Update the README with current project description, setup instructions, and architecture overview.
+- Add READMEs to client and server packages, move client or server specific info from top-level README.
 - Remove references to Travis CI, Heroku, MongoDB, or other replaced infrastructure.
 - Document environment variables and how to obtain Spotify API credentials.
 - Add a CONTRIBUTING.md if desired.
+
+### Package refactoring
+
+- Determine if any new packages should be created, e.g. a Spotify helper library to get related artists/albums, a UI library for the mosaic background.
 
 ## Done when
 

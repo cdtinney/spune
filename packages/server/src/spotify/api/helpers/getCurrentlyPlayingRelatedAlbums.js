@@ -18,12 +18,22 @@ async function resolveArtistId(spotifyApi, name) {
 
 module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, songId) {
   const response = await spotifyApi.player.getCurrentlyPlayingTrack();
-  const { item: { id, artists: songArtists, album: { artists: albumArtists } } } = response;
+  const {
+    item: {
+      id,
+      artists: songArtists,
+      album: { artists: albumArtists },
+    },
+  } = response;
 
-  logger.info(`Currently playing: "${response.item.name}" by ${songArtists.map(a => a.name).join(', ')} (songId=${id})`);
+  logger.info(
+    `Currently playing: "${response.item.name}" by ${songArtists.map((a) => a.name).join(', ')} (songId=${id})`,
+  );
 
   if (songId !== id) {
-    return Promise.reject(new Error(`Song ID mismatch (currently playing = ${id}, query = ${songId})`));
+    return Promise.reject(
+      new Error(`Song ID mismatch (currently playing = ${id}, query = ${songId})`),
+    );
   }
 
   const trackArtistIds = combineTrackArtists({ songArtists, albumArtists });
@@ -31,7 +41,7 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
 
   // 1. Fetch track artists' own albums (always included, first priority)
   const artistAlbumResults = await Promise.all(
-    trackArtistIds.map(artistId => getArtistAlbums(spotifyApi, artistId)),
+    trackArtistIds.map((artistId) => getArtistAlbums(spotifyApi, artistId)),
   );
   const artistAlbums = artistAlbumResults.reduce((arr, curr) => arr.concat(curr.albums), []);
   logger.info(`Artist albums: ${artistAlbums.length} from ${trackArtistIds.length} artist(s)`);
@@ -46,12 +56,10 @@ module.exports = async function getCurrentlyPlayingRelatedAlbums(spotifyApi, son
 
   for (let i = 0; i < relatedNames.length && relatedAlbums.length < 200; i += 5) {
     const batch = relatedNames.slice(i, i + 5);
-    const ids = await Promise.all(batch.map(name => resolveArtistId(spotifyApi, name)));
+    const ids = await Promise.all(batch.map((name) => resolveArtistId(spotifyApi, name)));
 
-    const validIds = ids.filter(id => id && !trackArtistIdSet.has(id));
-    const albumResults = await Promise.all(
-      validIds.map(id => getArtistAlbums(spotifyApi, id)),
-    );
+    const validIds = ids.filter((id) => id && !trackArtistIdSet.has(id));
+    const albumResults = await Promise.all(validIds.map((id) => getArtistAlbums(spotifyApi, id)));
 
     for (const result of albumResults) {
       relatedAlbums.push(...result.albums);

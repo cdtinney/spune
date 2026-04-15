@@ -1,8 +1,4 @@
-const {
-  createLogger,
-  format,
-  transports,
-} = require('winston');
+const { createLogger, format, transports } = require('winston');
 
 const logger = createLogger({
   level: 'info',
@@ -32,12 +28,11 @@ const logger = createLogger({
 
 // Logs to console in non-prod environments
 if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    format: format.combine(
-      format.colorize(),
-      format.simple(),
-    ),
-  }));
+  logger.add(
+    new transports.Console({
+      format: format.combine(format.colorize(), format.simple()),
+    }),
+  );
 }
 
 module.exports = logger;

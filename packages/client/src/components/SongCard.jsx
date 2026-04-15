@@ -9,15 +9,9 @@ export default function SongCard({ artistName, songTitle, albumName, albumImageU
         title={albumName}
       />
       <div className="song-card__details">
-        <div className="song-card__text song-card__artist">
-          {artistName.toUpperCase()}
-        </div>
-        <div className="song-card__text song-card__album">
-          {albumName.toUpperCase()}
-        </div>
-        <div className="song-card__text song-card__title">
-          {songTitle}
-        </div>
+        <div className="song-card__text song-card__artist">{artistName.toUpperCase()}</div>
+        <div className="song-card__text song-card__album">{albumName.toUpperCase()}</div>
+        <div className="song-card__text song-card__title">{songTitle}</div>
       </div>
     </div>
   );

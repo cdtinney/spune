@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV !== 'production') {
   // Load .env file for variables in dev environments only.
   // The file must be in the server package directory.
-  // eslint-disable-next-line global-require
+
   require('dotenv').config();
 }
 
@@ -26,23 +26,25 @@ module.exports = function initApp() {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(session({
-    secret: process.env.SESSION_SECRET,
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 365,
-      secure: process.env.NODE_ENV === 'production',
-    },
-    resave: false,
-    saveUninitialized: false,
-    // Automatically extends the session age on each request.
-    rolling: true,
-    store: new pgSession({
-      pool,
-      createTableIfMissing: true,
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        secure: process.env.NODE_ENV === 'production',
+      },
+      resave: false,
+      saveUninitialized: false,
+      // Automatically extends the session age on each request.
+      rolling: true,
+      store: new pgSession({
+        pool,
+        createTableIfMissing: true,
+      }),
+      // If `req.session` is unset, destroy the session in the DB.
+      unset: 'destroy',
     }),
-    // If `req.session` is unset, destroy the session in the DB.
-    unset: 'destroy',
-  }));
+  );
 
   // Initialize Passport.js for authentication of users.
   app.use(passport.initialize());

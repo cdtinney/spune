@@ -4,7 +4,7 @@ researcher: ctinney
 git_commit: e71f75d4e5ba77ec11bdf8b7288e039ae8cc9a04
 branch: master
 repository: cdtinney/spune
-topic: "Project Revival: Migration Guide"
+topic: 'Project Revival: Migration Guide'
 tags: [research, migration, github-actions, digitalocean, postgresql, spotify-api]
 status: complete
 last_updated: 2026-04-13
@@ -49,6 +49,7 @@ The Spotify Web API has had major breaking changes since 2019.
 **Related Artists endpoint — deprecated (CRITICAL)**: The `GET /artists/{id}/related-artists` endpoint — the app's core feature — was restricted in November 2024. Extended Quota Mode (required for access) is now only available to organizations with 250K+ MAU. Check whether the existing Spotify developer app is grandfathered in. If not, the feature needs redesigning.
 
 **Other breaking changes**:
+
 - `localhost` banned as OAuth redirect URI (Nov 2025) — must use `127.0.0.1`
 - Spotify Premium required for developer access; dev mode limited to 5 test users
 - Several response fields removed (Feb 2026): `popularity`, `available_markets`, `followers`, user profile fields

@@ -15,8 +15,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "lint": "eslint src; exit 0",
-    "lint:fix": "eslint --fix src; exit 0",
+    "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
     "test": "jest --watch",
     "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
     "test:integration": "NODE_ENV=integration jest --config jest.integration.config.js --detectOpenHandles --runInBand",
@@ -36,7 +36,9 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.5.0",
     "jest": "^30.3.0",
     "nodemon": "^3.1.14",
     "supertest": "^7.2.2"

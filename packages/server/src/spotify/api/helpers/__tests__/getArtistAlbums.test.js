@@ -2,13 +2,18 @@ const getArtistAlbums = require('../getArtistAlbums');
 
 const mockSpotifyApi = {
   artists: {
-    albums: jest.fn().mockImplementation(() => Promise.resolve({
-      items: [{
-        name: 'foo',
-      }, {
-        name: 'foo',
-      }],
-    })),
+    albums: jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        items: [
+          {
+            name: 'foo',
+          },
+          {
+            name: 'foo',
+          },
+        ],
+      }),
+    ),
   },
 };
 
@@ -17,9 +22,11 @@ describe('getArtistAlbums()', () => {
     const result = await getArtistAlbums(mockSpotifyApi, 'fooId');
     expect(result).toEqual({
       artistId: 'fooId',
-      albums: [{
-        name: 'foo',
-      }],
+      albums: [
+        {
+          name: 'foo',
+        },
+      ],
     });
   });
 });

@@ -1,9 +1,6 @@
 module.exports = {
   coverageDirectory: 'coverage',
-  collectCoverageFrom: [
-    '**/*.{js}',
-    '!coverage/**',
-  ],
+  collectCoverageFrom: ['**/*.{js}', '!coverage/**'],
   testEnvironment: 'node',
   testPathIgnorePatterns: [
     '/node_modules/',

@@ -11,6 +11,23 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npx prettier --check .
+
   server:
     runs-on: ubuntu-latest
 
@@ -45,7 +62,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci --install-strategy=hoisted
+        run: npm ci
 
       - name: Run migration
         run: psql "$DATABASE_URL" -f packages/server/src/database/migrations/001_create_users.sql
@@ -68,7 +85,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm ci --install-strategy=hoisted
+        run: npm ci
 
       - name: Lint
         run: npm run client:lint

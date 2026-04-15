@@ -8,15 +8,16 @@ The album grid is a full-viewport background mosaic of album artwork displayed b
 
 Albums are displayed at **5 different sizes**. Within each row, tiles vary in size to create visual variety — rows are NOT uniform height strips.
 
-| Size   | Approx Pixels |
-|--------|---------------|
-| XS     | 80x80         |
-| S      | 160x160       |
-| M      | 240x240       |
-| L      | 320x320       |
-| XL     | 400x400       |
+| Size | Approx Pixels |
+| ---- | ------------- |
+| XS   | 80x80         |
+| S    | 160x160       |
+| M    | 240x240       |
+| L    | 320x320       |
+| XL   | 400x400       |
 
 **Size distribution** (approximate):
+
 - XS: 35% of tiles
 - S: 30% of tiles
 - M: 20% of tiles

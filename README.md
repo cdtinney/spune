@@ -41,16 +41,16 @@ cp packages/server/.env.example packages/server/.env
 
 Edit `.env` and fill in your credentials:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `SESSION_SECRET` | Yes | Express session secret (any random string) |
-| `SPOT_CLIENT_ID` | Yes | Spotify app client ID |
-| `SPOT_CLIENT_SECRET` | Yes | Spotify app client secret |
-| `SPOT_REDIRECT_URI` | Yes | OAuth callback URL. Dev: `http://127.0.0.1:3000/api/auth/spotify/callback` |
-| `CLIENT_HOST` | Yes | Client origin for redirects. Dev: `http://127.0.0.1:3000` |
-| `PORT` | No | Server port (default: 5000) |
-| `LAST_FM_API_KEY` | No | Last.fm API key for similar artist discovery |
+| Variable             | Required | Description                                                                |
+| -------------------- | -------- | -------------------------------------------------------------------------- |
+| `DATABASE_URL`       | Yes      | PostgreSQL connection string                                               |
+| `SESSION_SECRET`     | Yes      | Express session secret (any random string)                                 |
+| `SPOT_CLIENT_ID`     | Yes      | Spotify app client ID                                                      |
+| `SPOT_CLIENT_SECRET` | Yes      | Spotify app client secret                                                  |
+| `SPOT_REDIRECT_URI`  | Yes      | OAuth callback URL. Dev: `http://127.0.0.1:3000/api/auth/spotify/callback` |
+| `CLIENT_HOST`        | Yes      | Client origin for redirects. Dev: `http://127.0.0.1:3000`                  |
+| `PORT`               | No       | Server port (default: 5000)                                                |
+| `LAST_FM_API_KEY`    | No       | Last.fm API key for similar artist discovery                               |
 
 **Important**: Spotify only supports `127.0.0.1` (not `localhost`) for local development redirect URIs. Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
 
@@ -133,9 +133,9 @@ nano /opt/spune/.env
 
 In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
 
-| Type | Name | Value |
-|------|------|-------|
-| A | `@` (or subdomain, like `spune`) | `YOUR_DROPLET_IP` |
+| Type | Name                             | Value             |
+| ---- | -------------------------------- | ----------------- |
+| A    | `@` (or subdomain, like `spune`) | `YOUR_DROPLET_IP` |
 
 **If using Cloudflare**: set the proxy status to **DNS only** (grey cloud icon, not orange). Caddy handles SSL — Cloudflare's proxy will conflict with it.
 

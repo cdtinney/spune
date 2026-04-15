@@ -18,13 +18,9 @@ export default function HomePage() {
       <div className="home-page__content">
         {loading && <LoadingScreen />}
         {!loading && error && (
-          <p className="home-page__error">
-            {`Failed to load (${error}). Try refreshing.`}
-          </p>
+          <p className="home-page__error">{`Failed to load (${error}). Try refreshing.`}</p>
         )}
-        {!loading && !error && !user && (
-          <SpotifyLoginButton onClick={login} />
-        )}
+        {!loading && !error && !user && <SpotifyLoginButton onClick={login} />}
       </div>
     </div>
   );

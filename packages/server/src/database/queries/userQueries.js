@@ -26,10 +26,7 @@ async function findOrCreateUser(spotifyId, data) {
 }
 
 async function findUserBySpotifyId(spotifyId) {
-  const result = await pool.query(
-    'SELECT * FROM users WHERE spotify_id = $1 LIMIT 1',
-    [spotifyId],
-  );
+  const result = await pool.query('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [spotifyId]);
   return result.rows[0] ? toUser(result.rows[0]) : null;
 }
 

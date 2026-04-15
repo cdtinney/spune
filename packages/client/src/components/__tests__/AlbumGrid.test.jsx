@@ -19,9 +19,7 @@ describe('AlbumGrid', () => {
   });
 
   it('returns null when tiles is empty', () => {
-    const { container } = render(
-      <AlbumGrid tiles={[]} gridCols={6} gridRows={6} base={120} />,
-    );
+    const { container } = render(<AlbumGrid tiles={[]} gridCols={6} gridRows={6} base={120} />);
     expect(container.innerHTML).toBe('');
   });
 });

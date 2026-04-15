@@ -14,8 +14,8 @@ const mockSpotifyApi = {
 
 describe('getCurrentlyPlayingRelatedAlbums()', () => {
   it('throws an error when the playing track is different than the request track', () => {
-    mockSpotifyApi.player.getCurrentlyPlayingTrack
-      .mockImplementation(() => (Promise.resolve({
+    mockSpotifyApi.player.getCurrentlyPlayingTrack.mockImplementation(() =>
+      Promise.resolve({
         item: {
           id: 'bar',
           artists: [],
@@ -23,49 +23,62 @@ describe('getCurrentlyPlayingRelatedAlbums()', () => {
             artists: [],
           },
         },
-      })));
+      }),
+    );
 
-    expect(getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo'))
-      .rejects.toBeInstanceOf(Error);
+    expect(getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo')).rejects.toBeInstanceOf(Error);
   });
 
   it('combines song artists, track artists, and related artists into a single object when successful', async () => {
-    mockSpotifyApi.player.getCurrentlyPlayingTrack
-      .mockImplementation(() => (Promise.resolve({
+    mockSpotifyApi.player.getCurrentlyPlayingTrack.mockImplementation(() =>
+      Promise.resolve({
         item: {
           id: 'foo',
-          artists: [{
-            id: 1,
-          }, {
-            id: 2,
-          }],
-          album: {
-            artists: [{
+          artists: [
+            {
               id: 1,
-            }, {
+            },
+            {
               id: 2,
-            }],
+            },
+          ],
+          album: {
+            artists: [
+              {
+                id: 1,
+              },
+              {
+                id: 2,
+              },
+            ],
           },
         },
-      })));
+      }),
+    );
 
-    getRelatedArtists.mockImplementation(() => Promise.resolve([
-      3, 4,
-    ]));
-    getArtistAlbums.mockImplementation((spotifyApi, artistId) => Promise.resolve({
-      artistId,
-      albums: [{
-        name: 'cat',
-      }, {
-        name: 'dog',
-      }],
-    }));
+    getRelatedArtists.mockImplementation(() => Promise.resolve([3, 4]));
+    getArtistAlbums.mockImplementation((spotifyApi, artistId) =>
+      Promise.resolve({
+        artistId,
+        albums: [
+          {
+            name: 'cat',
+          },
+          {
+            name: 'dog',
+          },
+        ],
+      }),
+    );
 
     const relatedAlbums = await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
-    expect(relatedAlbums).toEqual([{
-      name: 'cat',
-    }, {
-      name: 'dog',
-    }]);
+    expect(relatedAlbums).toEqual([
+      {
+        name: 'cat',
+      },
+      {
+        name: 'dog',
+      },
+    ]);
   });
 });
