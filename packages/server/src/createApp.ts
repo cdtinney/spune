@@ -1,10 +1,3 @@
-if (process.env.NODE_ENV !== 'production') {
-  // Load .env from the server package directory (one level up from src/).
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const path = require('path');
-  require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
-}
-
 import express from 'express';
 import session from 'express-session';
 import connectPgSimple from 'connect-pg-simple';
@@ -19,7 +12,7 @@ import configurePassport from './auth/configurePassport';
 
 const PgSession = connectPgSimple(session);
 
-export default function initApp(): express.Application {
+export default function createApp(): express.Application {
   const app = express();
 
   // Trust reverse proxy (Caddy) so Express sees correct protocol/IP

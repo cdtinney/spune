@@ -3,9 +3,9 @@ import request from 'supertest';
 import passport from 'passport';
 import logger from '../../logger';
 import paths from '../../config/paths';
-import initApp from '../../initApp';
+import createApp from '../../createApp';
 
-const app = initApp();
+const app = createApp();
 
 describe('/auth', () => {
   describe('/auth/user', () => {

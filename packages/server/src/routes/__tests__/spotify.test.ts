@@ -6,13 +6,13 @@ import logger from '../../logger';
 
 import apiRequestWithRefresh from '../../spotify/api/helpers/apiRequestWithRefresh';
 import spotify from '../spotify';
-import initApp from '../../initApp';
+import createApp from '../../createApp';
 
 vi.mock('../../spotify/api/helpers/apiRequestWithRefresh');
 
 const mockedApiRequestWithRefresh = vi.mocked(apiRequestWithRefresh);
 
-const app = initApp();
+const app = createApp();
 
 describe('/spotify', () => {
   it('exports an instance of Router', () => {

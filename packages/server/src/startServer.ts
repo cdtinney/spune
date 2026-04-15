@@ -2,7 +2,7 @@ import type { Application } from 'express';
 import logger from './logger';
 import { disconnect } from './database/db';
 
-export default function initServer(app: Application): void {
+export default function startServer(app: Application): void {
   const port: number = Number(process.env.PORT) || 5000;
   const server = app.listen(port, () => {
     logger.info(`Listening on port ${port}`);
