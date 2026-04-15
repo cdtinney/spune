@@ -11,7 +11,9 @@ AI agents work best when a repo has clear structure, explicit conventions, and g
 ## What to do
 
 ### AGENTS.md
+
 Create an `AGENTS.md` file in the repo root with:
+
 - **Project overview**: What Spune is, the monorepo structure, key packages.
 - **Architecture**: How the client and server communicate, the auth flow, the album discovery pipeline.
 - **Key conventions**: TypeScript strict mode, Vitest for tests, Prettier formatting, pnpm workspaces.
@@ -20,7 +22,9 @@ Create an `AGENTS.md` file in the repo root with:
 - **Pre-PR checklist**: What must pass before opening a PR (format, lint, tests, build, type check).
 
 ### CONTRIBUTING.md
+
 Create a `CONTRIBUTING.md` with:
+
 - Setup instructions (reference README).
 - Branch naming convention (`task/NN-description`).
 - Commit message format.
@@ -28,7 +32,9 @@ Create a `CONTRIBUTING.md` with:
 - How to run the full check suite locally before pushing.
 
 ### Pre-PR validation script
+
 Create a `scripts/check.sh` that runs the full CI suite locally:
+
 ```bash
 pnpm format:check
 pnpm lint
@@ -37,10 +43,13 @@ pnpm --filter spune-server test
 pnpm --filter spune-client build
 npx tsc --noEmit  # both packages
 ```
+
 Reference this in AGENTS.md and CONTRIBUTING.md.
 
 ### Project structure documentation
+
 Add a tree/diagram of the monorepo structure to AGENTS.md:
+
 ```
 packages/
   client/          # React 19 + Vite SPA
@@ -62,6 +71,7 @@ packages/
 ```
 
 ### CI guardrails
+
 - Ensure the CI workflow is comprehensive enough that if all checks pass, the PR is safe to merge.
 - Consider adding a type-check step to CI if not already present.
 - Consider adding a PR template (`.github/pull_request_template.md`) with a checklist.

@@ -12,6 +12,7 @@ A reusable, configurable mosaic/collage layout component for displaying images i
 package, but should be easy to migrate to one later if desired.
 
 **Features to extract:**
+
 - The tile template system (fixed gap-free patterns)
 - Multi-directional animation (drift, scroll)
 - As much configuration as reasonably possible
@@ -22,12 +23,13 @@ package, but should be easy to migrate to one later if desired.
 
 ### 2. Related artists/albums discovery, e.g. "music-map"
 
-A library that discovers related artists and their albums using different providers like Last.fm, ListenBrainz, and Spotify. It should be generic enough that it could be extended to different functionality. 
+A library that discovers related artists and their albums using different providers like Last.fm, ListenBrainz, and Spotify. It should be generic enough that it could be extended to different functionality.
 
-It doesn't need to be a separate package yet. "music-map" is a tentative name. If you can think of something better, use that, but it needs to be 
+It doesn't need to be a separate package yet. "music-map" is a tentative name. If you can think of something better, use that, but it needs to be
 relatively generic (e.g. "related-artists" is too specific).
 
 **Features to extract:**
+
 - Last.fm `artist.getSimilar` integration
 - ListenBrainz similar artists via MusicBrainz ID resolution
 - Spotify artist search and album fetching
