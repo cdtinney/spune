@@ -1,37 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Run all database migrations.
-# Usage (on droplet): bash migrate.sh
-# Usage (local):      bash scripts/migrate.sh
+# Run all database migrations via the app container.
+# Usage (on droplet): curl ... | bash
+# Usage (local):      DATABASE_URL=... bash scripts/migrate.sh
 
-MIGRATIONS_DIR=""
+CD="/opt/spune"
+DC="docker compose -f ${CD}/docker-compose.yml"
 
-# Detect if running inside the Docker setup or locally
-if [ -d "/opt/spune" ] && docker compose -f /opt/spune/docker-compose.yml ps db >/dev/null 2>&1; then
-  # Running on droplet — execute via docker compose
+if [ -d "$CD" ] && $DC ps db >/dev/null 2>&1; then
   echo "==> Waiting for database..."
-  until docker compose -f /opt/spune/docker-compose.yml exec db pg_isready -U spune >/dev/null 2>&1; do
+  until $DC exec -T db pg_isready -U spune >/dev/null 2>&1; do
     sleep 1
   done
 
-  echo "==> Running migrations..."
-  for f in /opt/spune/migrations/*.sql 2>/dev/null; do
-    echo "  Applying $(basename "$f")..."
-    docker compose -f /opt/spune/docker-compose.yml exec -T db psql -U spune -d spune < "$f"
-  done
-
-  # Also try from the container's bundled migrations
-  docker compose -f /opt/spune/docker-compose.yml exec -T app sh -c '
-    for f in /app/packages/server/src/database/migrations/*.sql; do
-      echo "  Applying $(basename "$f")..."
-      cat "$f"
-    done
-  ' | docker compose -f /opt/spune/docker-compose.yml exec -T db psql -U spune -d spune
+  echo "==> Running migrations from app container..."
+  $DC exec -T app sh -c 'cat /app/packages/server/src/database/migrations/*.sql' \
+    | $DC exec -T db psql -U spune -d spune
 
   echo "==> Migrations complete."
 else
-  # Running locally
   SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
   MIGRATIONS_DIR="$SCRIPT_DIR/../packages/server/src/database/migrations"
 
