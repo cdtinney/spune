@@ -14,6 +14,7 @@ import AlbumGrid from '../components/AlbumGrid';
 import UserAvatar from '../components/UserAvatar';
 import UserMenu from '../components/UserMenu';
 import FullscreenButton from '../components/FullscreenButton';
+import ProgressBar from '../components/ProgressBar';
 import './VisualizationContent.css';
 
 const REPO_URL = 'https://github.com/cdtinney/spune';
@@ -106,6 +107,13 @@ export default function VisualizationContent() {
           <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} base={base} />
         )}
       </div>
+
+      {!isInitialLoad && songPlaying && (
+        <ProgressBar
+          progressMs={nowPlaying.progressMs}
+          durationMs={nowPlaying.durationMs}
+        />
+      )}
 
       <div className="visualization__bottom-gradient" />
     </div>

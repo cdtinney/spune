@@ -1,0 +1,38 @@
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 8px;
+  pointer-events: none;
+}
+
+.progress-bar__time {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
+}
+
+.progress-bar__time:last-child {
+  text-align: right;
+}
+
+.progress-bar__track {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 1px;
+  transition: width 3s linear;
+}

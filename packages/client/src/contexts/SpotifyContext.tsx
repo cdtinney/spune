@@ -23,6 +23,7 @@ type SpotifyAction =
   | { type: 'FETCH_NOW_PLAYING_REQUEST' }
   | { type: 'FETCH_NOW_PLAYING_SUCCESS'; payload: NowPlaying }
   | { type: 'FETCH_NOW_PLAYING_DUPE' }
+  | { type: 'UPDATE_PROGRESS'; payload: { progressMs: number; isPlaying: boolean } }
   | { type: 'FETCH_NOW_PLAYING_FAILURE'; payload: unknown }
   | { type: 'CLEAR_RELATED_ALBUMS' }
   | { type: 'FETCH_RELATED_ALBUMS_REQUEST' }
@@ -73,6 +74,17 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
 
     case 'FETCH_NOW_PLAYING_DUPE':
       return { ...state, initialized: true, loading: false };
+
+    case 'UPDATE_PROGRESS':
+      if (!state.nowPlaying) return state;
+      return {
+        ...state,
+        nowPlaying: {
+          ...state.nowPlaying,
+          progressMs: action.payload.progressMs,
+          isPlaying: action.payload.isPlaying,
+        },
+      };
 
     case 'FETCH_NOW_PLAYING_FAILURE':
       return { ...state, initialized: true, loading: false, error: action.payload };
@@ -136,6 +148,13 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
 
         if (item.id === currentSongId) {
           dispatch({ type: 'FETCH_NOW_PLAYING_DUPE' });
+          dispatch({
+            type: 'UPDATE_PROGRESS',
+            payload: {
+              progressMs: data.progress_ms ?? 0,
+              isPlaying: data.is_playing ?? false,
+            },
+          });
           return { songId: item.id, albumId: item.album?.id };
         }
 
@@ -149,6 +168,9 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           albumImageUrl: item.album.images[0]?.url,
           albumArtists: item.album.artists,
           albumImages: item.album.images,
+          progressMs: data.progress_ms ?? 0,
+          durationMs: item.duration_ms ?? 0,
+          isPlaying: data.is_playing ?? false,
         };
 
         dispatch({ type: 'FETCH_NOW_PLAYING_SUCCESS', payload: info });

@@ -36,34 +36,29 @@
 .song-card__details {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  max-width: 350px;
 }
 
 .song-card__text {
   color: rgba(255, 255, 255, 0.87);
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-shadow: 2px 2px 7px rgba(94, 94, 94, 0.44);
   padding: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .song-card__artist {
-  font-size: 1.5em;
+  font-size: clamp(1em, 3vw, 1.5em);
   font-weight: bold;
-  animation: fadein 2s;
 }
 
 .song-card__album {
-  font-size: 1.2em;
-  animation: fadein 2s;
+  font-size: clamp(0.85em, 2.5vw, 1.2em);
 }
 
 .song-card__title {
-  font-size: 1.2em;
-  margin-top: 1.2em;
-  animation: fadein 2s;
+  font-size: clamp(0.85em, 2.5vw, 1.2em);
+  margin-top: 0.8em;
 }
 
 @media (max-width: 600px) {
