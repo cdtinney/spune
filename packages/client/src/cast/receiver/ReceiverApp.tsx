@@ -123,9 +123,20 @@ export default function ReceiverApp() {
             }}
           >
             {!connected && !songPlaying && (
-              <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '12px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexGrow: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  gap: '12px',
+                }}
+              >
                 <LoadingScreen />
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Waiting for cast connection...</p>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
+                  Waiting for cast connection...
+                </p>
               </div>
             )}
 
