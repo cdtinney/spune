@@ -22,7 +22,7 @@ const REPO_URL = 'https://github.com/cdtinney/spune';
 export default function VisualizationContent() {
   useNowPlayingPoller();
   const { user, logout, login } = useUser();
-  const { nowPlaying, relatedAlbums, initialized, error } = useSpotify();
+  const { nowPlaying, relatedAlbums, initialized, error, connectionLost } = useSpotify();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
   const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
@@ -88,16 +88,20 @@ export default function VisualizationContent() {
       <div className="visualization__content">
         {isInitialLoad && <LoadingScreen className="visualization__loading" />}
 
-        {!isInitialLoad && hasError && !songPlaying && (
-          <div className="visualization__error">
-            <p>Session expired or connection failed.</p>
+        {!isInitialLoad && (hasError || connectionLost) && (
+          <div
+            className={`visualization__error${songPlaying ? ' visualization__error--overlay' : ''}`}
+          >
+            <p>
+              {songPlaying ? 'Connection lost. Retrying…' : 'Session expired or connection failed.'}
+            </p>
             <button className="visualization__reconnect-btn" onClick={login}>
               Reconnect with Spotify
             </button>
           </div>
         )}
 
-        {!isInitialLoad && !hasError && !songPlaying && (
+        {!isInitialLoad && !hasError && !connectionLost && !songPlaying && (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
           </div>
