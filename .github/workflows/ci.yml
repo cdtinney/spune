@@ -82,7 +82,7 @@ jobs:
         run: pnpm server:test:coverage
 
       - name: Type check
-        run: pnpm --filter spune-server exec tsc --noEmit
+        run: pnpm --filter spune-server exec tsc -p tsconfig.build.json --noEmit
 
   client:
     runs-on: ubuntu-latest
