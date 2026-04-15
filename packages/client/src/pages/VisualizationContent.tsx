@@ -6,6 +6,7 @@ import { useSpotify } from '../contexts/SpotifyContext';
 import useNowPlayingPoller from '../hooks/useNowPlayingPoller';
 import useWindowSize from '../hooks/useWindowSize';
 import useAlbumGrid from '../hooks/useAlbumGrid';
+import useDominantColor from '../hooks/useDominantColor';
 import LoadingScreen from '../components/LoadingScreen';
 import CoverOverlay from '../components/CoverOverlay';
 import SongCard from '../components/SongCard';
@@ -23,6 +24,7 @@ export default function VisualizationContent() {
   const { nowPlaying, relatedAlbums, initialized, error } = useSpotify();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
+  const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function VisualizationContent() {
     <div className="visualization">
       {!isInitialLoad && <FullscreenButton onClick={handleFullscreenToggle} />}
 
-      <CoverOverlay />
+      <CoverOverlay dominantColor={dominantColor} />
 
       {!isInitialLoad && (
         <>
@@ -77,6 +79,7 @@ export default function VisualizationContent() {
           songTitle={nowPlaying.songTitle}
           albumName={nowPlaying.albumName}
           albumImageUrl={nowPlaying.albumImageUrl}
+          dominantColor={dominantColor}
         />
       )}
 

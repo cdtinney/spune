@@ -147,7 +147,8 @@
       "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test pnpm --filter spune-server test)",
       "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test pnpm --filter spune-server test:coverage)",
       "Bash(npx playwright:*)",
-      "Bash(with Spotify\" button instead of the misleading \"No song playing\":*)"
+      "Bash(with Spotify\" button instead of the misleading \"No song playing\":*)",
+      "Bash(find /Users/ctinney/Development/_Personal/spune -path */colorthief/package.json -not -path */node_modules/.pnpm/*)"
     ]
   }
 }

@@ -16,7 +16,9 @@
   border: 2px solid rgba(252, 252, 252, 0.95);
   background-size: cover;
   background-position: center;
-  transition: background-image 1s ease-in 1s;
+  transition:
+    background-image 1s ease-in 1s,
+    box-shadow 3s ease-in-out;
   box-shadow:
     0 3px 5px -1px rgba(0, 0, 0, 0.2),
     0 6px 10px 0 rgba(0, 0, 0, 0.14),
