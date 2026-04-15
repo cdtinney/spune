@@ -144,9 +144,7 @@ export default function VisualizationContent() {
           className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
         >
           <p>
-            {isSongPlaying
-              ? 'Connection lost. Retrying…'
-              : 'Session expired or connection failed.'}
+            {isSongPlaying ? 'Connection lost. Retrying…' : 'Session expired or connection failed.'}
           </p>
           <button className="btn-primary" onClick={login}>
             Reconnect with Spotify
