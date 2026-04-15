@@ -32,7 +32,9 @@
 .cover-overlay__color {
   position: absolute;
   inset: 0;
-  transition: background 3s ease-in-out, opacity 3s ease-in-out;
+  transition:
+    background 3s ease-in-out,
+    opacity 3s ease-in-out;
 }
 
 .cover-overlay__darken {

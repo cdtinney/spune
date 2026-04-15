@@ -37,8 +37,7 @@ export function UserProvider({ children }: UserProviderProps) {
       })
       .catch((err: { response?: { data?: unknown }; message?: string }) => {
         const data = err.response?.data;
-        const message =
-          typeof data === 'string' ? data : err.message || 'Unknown error';
+        const message = typeof data === 'string' ? data : err.message || 'Unknown error';
         setError(message);
         setLoading(false);
       });

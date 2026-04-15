@@ -21,16 +21,13 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        setOpen((o) => !o);
-      }
-    },
-    [],
-  );
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') setOpen(false);
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setOpen((o) => !o);
+    }
+  }, []);
 
   return (
     <div className="user-menu" ref={menuRef}>

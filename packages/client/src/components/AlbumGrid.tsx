@@ -74,9 +74,7 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
     const visIdx = Math.floor(Math.random() * visibleTileIndices.length);
     const tileIndex = visibleTileIndices[visIdx];
 
-    const visibleImages = new Set(
-      visibleTileIndices.map((i) => tiles[i].imageUrl).filter(Boolean),
-    );
+    const visibleImages = new Set(visibleTileIndices.map((i) => tiles[i].imageUrl).filter(Boolean));
 
     let nextImage: string | undefined;
     for (let attempt = 0; attempt < allImageUrls.length; attempt++) {
