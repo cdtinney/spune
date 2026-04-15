@@ -5,14 +5,14 @@ import {
   useCallback,
   useMemo,
   type ReactNode,
-  type MutableRefObject,
+  type RefObject,
 } from 'react';
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
 import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
 
 const CONNECTION_LOST_THRESHOLD = 3;
 
-const ActionType = {
+export const ActionType = {
   FETCH_NOW_PLAYING_REQUEST: 'FETCH_NOW_PLAYING_REQUEST',
   FETCH_NOW_PLAYING_SUCCESS: 'FETCH_NOW_PLAYING_SUCCESS',
   FETCH_NOW_PLAYING_DUPE: 'FETCH_NOW_PLAYING_DUPE',
@@ -34,7 +34,7 @@ interface SpotifyState {
   consecutiveErrors: number;
 }
 
-type SpotifyAction =
+export type SpotifyAction =
   | { type: typeof ActionType.FETCH_NOW_PLAYING_REQUEST }
   | { type: typeof ActionType.FETCH_NOW_PLAYING_SUCCESS; payload: NowPlaying }
   | { type: typeof ActionType.FETCH_NOW_PLAYING_DUPE }
@@ -52,8 +52,9 @@ interface FetchNowPlayingResult {
 
 interface SpotifyContextValue extends SpotifyState {
   connectionLost: boolean;
+  dispatch: React.Dispatch<SpotifyAction>;
   fetchNowPlaying: (
-    loadingRef: MutableRefObject<boolean>,
+    loadingRef: RefObject<boolean>,
     currentSongId: string | null,
   ) => Promise<FetchNowPlayingResult | NowPlaying | null>;
   fetchRelatedAlbums: (songId: string) => Promise<void>;
@@ -162,7 +163,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
 
   const fetchNowPlaying = useCallback(
     async (
-      loadingRef: MutableRefObject<boolean>,
+      loadingRef: RefObject<boolean>,
       currentSongId: string | null,
     ): Promise<FetchNowPlayingResult | NowPlaying | null> => {
       if (loadingRef.current) return null;
@@ -238,11 +239,12 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     () => ({
       ...state,
       connectionLost,
+      dispatch,
       fetchNowPlaying,
       fetchRelatedAlbums,
       clearRelatedAlbums,
     }),
-    [state, connectionLost, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
+    [state, connectionLost, dispatch, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
   );
 
   return <SpotifyContext.Provider value={value}>{children}</SpotifyContext.Provider>;

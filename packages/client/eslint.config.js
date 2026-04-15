@@ -20,6 +20,7 @@ export default [
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
         tsconfigRootDir: import.meta.dirname,
+        projectService: true,
       },
     },
     plugins: {
@@ -35,6 +36,7 @@ export default [
       'react/prop-types': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-deprecated': 'warn',
     },
     settings: {
       react: { version: 'detect' },
