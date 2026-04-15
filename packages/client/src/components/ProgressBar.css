@@ -37,5 +37,5 @@
   height: 100%;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 1px;
-  transition: width 3s linear;
+  transition: width 0.3s linear;
 }

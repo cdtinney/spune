@@ -112,6 +112,7 @@ export default function VisualizationContent() {
         <ProgressBar
           progressMs={nowPlaying.progressMs}
           durationMs={nowPlaying.durationMs}
+          isPlaying={nowPlaying.isPlaying}
         />
       )}
 
