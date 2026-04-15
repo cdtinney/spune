@@ -11,7 +11,7 @@ const mockTiles: Album[] = [
 describe('AlbumGrid', () => {
   it('renders a tile for each album', () => {
     const { container } = render(
-      <AlbumGrid tiles={mockTiles} gridCols={6} gridRows={6} base={120} />,
+      <AlbumGrid tiles={mockTiles} gridCols={6} gridRows={6} tileSize={120} />,
     );
     const tiles = container.querySelectorAll('.album-grid__tile');
     expect(tiles).toHaveLength(2);
@@ -21,7 +21,7 @@ describe('AlbumGrid', () => {
   });
 
   it('returns null when tiles is empty', () => {
-    const { container } = render(<AlbumGrid tiles={[]} gridCols={6} gridRows={6} base={120} />);
+    const { container } = render(<AlbumGrid tiles={[]} gridCols={6} gridRows={6} tileSize={120} />);
     expect(container.innerHTML).toBe('');
   });
 });

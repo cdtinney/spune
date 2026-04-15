@@ -12,6 +12,18 @@ import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
 
 const CONNECTION_LOST_THRESHOLD = 3;
 
+const ActionType = {
+  FETCH_NOW_PLAYING_REQUEST: 'FETCH_NOW_PLAYING_REQUEST',
+  FETCH_NOW_PLAYING_SUCCESS: 'FETCH_NOW_PLAYING_SUCCESS',
+  FETCH_NOW_PLAYING_DUPE: 'FETCH_NOW_PLAYING_DUPE',
+  UPDATE_PROGRESS: 'UPDATE_PROGRESS',
+  FETCH_NOW_PLAYING_FAILURE: 'FETCH_NOW_PLAYING_FAILURE',
+  CLEAR_RELATED_ALBUMS: 'CLEAR_RELATED_ALBUMS',
+  FETCH_RELATED_ALBUMS_REQUEST: 'FETCH_RELATED_ALBUMS_REQUEST',
+  FETCH_RELATED_ALBUMS_SUCCESS: 'FETCH_RELATED_ALBUMS_SUCCESS',
+  FETCH_RELATED_ALBUMS_FAILURE: 'FETCH_RELATED_ALBUMS_FAILURE',
+} as const;
+
 interface SpotifyState {
   nowPlaying: NowPlaying | null;
   relatedAlbums: RelatedAlbums;
@@ -23,15 +35,15 @@ interface SpotifyState {
 }
 
 type SpotifyAction =
-  | { type: 'FETCH_NOW_PLAYING_REQUEST' }
-  | { type: 'FETCH_NOW_PLAYING_SUCCESS'; payload: NowPlaying }
-  | { type: 'FETCH_NOW_PLAYING_DUPE' }
-  | { type: 'UPDATE_PROGRESS'; payload: { progressMs: number; isPlaying: boolean } }
-  | { type: 'FETCH_NOW_PLAYING_FAILURE'; payload: unknown }
-  | { type: 'CLEAR_RELATED_ALBUMS' }
-  | { type: 'FETCH_RELATED_ALBUMS_REQUEST' }
-  | { type: 'FETCH_RELATED_ALBUMS_SUCCESS'; payload: SpotifyAlbum[] }
-  | { type: 'FETCH_RELATED_ALBUMS_FAILURE' };
+  | { type: typeof ActionType.FETCH_NOW_PLAYING_REQUEST }
+  | { type: typeof ActionType.FETCH_NOW_PLAYING_SUCCESS; payload: NowPlaying }
+  | { type: typeof ActionType.FETCH_NOW_PLAYING_DUPE }
+  | { type: typeof ActionType.UPDATE_PROGRESS; payload: { progressMs: number; isPlaying: boolean } }
+  | { type: typeof ActionType.FETCH_NOW_PLAYING_FAILURE; payload: unknown }
+  | { type: typeof ActionType.CLEAR_RELATED_ALBUMS }
+  | { type: typeof ActionType.FETCH_RELATED_ALBUMS_REQUEST }
+  | { type: typeof ActionType.FETCH_RELATED_ALBUMS_SUCCESS; payload: SpotifyAlbum[] }
+  | { type: typeof ActionType.FETCH_RELATED_ALBUMS_FAILURE };
 
 interface FetchNowPlayingResult {
   songId: string;
@@ -65,10 +77,10 @@ const initialState: SpotifyState = {
 
 function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
   switch (action.type) {
-    case 'FETCH_NOW_PLAYING_REQUEST':
+    case ActionType.FETCH_NOW_PLAYING_REQUEST:
       return { ...state, loading: true };
 
-    case 'FETCH_NOW_PLAYING_SUCCESS':
+    case ActionType.FETCH_NOW_PLAYING_SUCCESS:
       return {
         ...state,
         initialized: true,
@@ -78,10 +90,10 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
         nowPlaying: action.payload,
       };
 
-    case 'FETCH_NOW_PLAYING_DUPE':
+    case ActionType.FETCH_NOW_PLAYING_DUPE:
       return { ...state, initialized: true, loading: false };
 
-    case 'UPDATE_PROGRESS':
+    case ActionType.UPDATE_PROGRESS:
       if (!state.nowPlaying) return state;
       return {
         ...state,
@@ -92,7 +104,7 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
         },
       };
 
-    case 'FETCH_NOW_PLAYING_FAILURE': {
+    case ActionType.FETCH_NOW_PLAYING_FAILURE: {
       const consecutiveErrors = Math.min(state.consecutiveErrors + 1, CONNECTION_LOST_THRESHOLD);
       if (
         state.consecutiveErrors === consecutiveErrors &&
@@ -110,16 +122,16 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
       };
     }
 
-    case 'CLEAR_RELATED_ALBUMS':
+    case ActionType.CLEAR_RELATED_ALBUMS:
       return {
         ...state,
         relatedAlbums: { byAlbumId: {}, allAlbumIds: [] },
       };
 
-    case 'FETCH_RELATED_ALBUMS_REQUEST':
+    case ActionType.FETCH_RELATED_ALBUMS_REQUEST:
       return { ...state, albumsLoading: true };
 
-    case 'FETCH_RELATED_ALBUMS_SUCCESS': {
+    case ActionType.FETCH_RELATED_ALBUMS_SUCCESS: {
       const byAlbumId: Record<string, SpotifyAlbum> = {};
       const allAlbumIds: string[] = [];
       for (const album of action.payload) {
@@ -133,7 +145,7 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
       };
     }
 
-    case 'FETCH_RELATED_ALBUMS_FAILURE':
+    case ActionType.FETCH_RELATED_ALBUMS_FAILURE:
       return { ...state, albumsLoading: false };
 
     default:
@@ -156,21 +168,21 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
       if (loadingRef.current) return null;
       loadingRef.current = true;
 
-      dispatch({ type: 'FETCH_NOW_PLAYING_REQUEST' });
+      dispatch({ type: ActionType.FETCH_NOW_PLAYING_REQUEST });
 
       try {
         const data = await getPlaybackState();
         const item = data?.item;
 
         if (!item) {
-          dispatch({ type: 'FETCH_NOW_PLAYING_DUPE' });
+          dispatch({ type: ActionType.FETCH_NOW_PLAYING_DUPE });
           return null;
         }
 
         if (item.id === currentSongId) {
-          dispatch({ type: 'FETCH_NOW_PLAYING_DUPE' });
+          dispatch({ type: ActionType.FETCH_NOW_PLAYING_DUPE });
           dispatch({
-            type: 'UPDATE_PROGRESS',
+            type: ActionType.UPDATE_PROGRESS,
             payload: {
               progressMs: data.progress_ms ?? 0,
               isPlaying: data.is_playing ?? false,
@@ -179,7 +191,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           return { songId: item.id, albumId: item.album?.id };
         }
 
-        const info: NowPlaying = {
+        const nowPlayingResult: NowPlaying = {
           songId: item.id,
           songTitle: item.name,
           songArtists: item.artists,
@@ -194,10 +206,10 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           isPlaying: data.is_playing ?? false,
         };
 
-        dispatch({ type: 'FETCH_NOW_PLAYING_SUCCESS', payload: info });
-        return info;
+        dispatch({ type: ActionType.FETCH_NOW_PLAYING_SUCCESS, payload: nowPlayingResult });
+        return nowPlayingResult;
       } catch (err) {
-        dispatch({ type: 'FETCH_NOW_PLAYING_FAILURE', payload: err });
+        dispatch({ type: ActionType.FETCH_NOW_PLAYING_FAILURE, payload: err });
         return null;
       } finally {
         loadingRef.current = false;
@@ -207,17 +219,17 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
   );
 
   const fetchRelatedAlbums = useCallback(async (songId: string): Promise<void> => {
-    dispatch({ type: 'FETCH_RELATED_ALBUMS_REQUEST' });
+    dispatch({ type: ActionType.FETCH_RELATED_ALBUMS_REQUEST });
     try {
       const data = await getRelatedAlbums(songId);
-      dispatch({ type: 'FETCH_RELATED_ALBUMS_SUCCESS', payload: data });
+      dispatch({ type: ActionType.FETCH_RELATED_ALBUMS_SUCCESS, payload: data });
     } catch {
-      dispatch({ type: 'FETCH_RELATED_ALBUMS_FAILURE' });
+      dispatch({ type: ActionType.FETCH_RELATED_ALBUMS_FAILURE });
     }
   }, []);
 
   const clearRelatedAlbums = useCallback((): void => {
-    dispatch({ type: 'CLEAR_RELATED_ALBUMS' });
+    dispatch({ type: ActionType.CLEAR_RELATED_ALBUMS });
   }, []);
 
   const connectionLost = state.consecutiveErrors >= CONNECTION_LOST_THRESHOLD;

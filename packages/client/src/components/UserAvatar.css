@@ -1,36 +1,32 @@
 .user-avatar {
+  --avatar-size: 32px;
+
   display: flex;
   align-items: center;
 }
 
 .user-avatar__image {
-  width: 32px;
-  height: 32px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border-radius: 50%;
-  box-shadow:
-    0 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0 6px 10px 0 rgba(0, 0, 0, 0.14),
-    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-elevation-3);
 }
 
 .user-avatar__placeholder {
-  width: 32px;
-  height: 32px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border-radius: 50%;
-  background-color: #1db954;
+  background-color: var(--color-spotify-green);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: 600;
-  box-shadow:
-    0 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0 6px 10px 0 rgba(0, 0, 0, 0.14),
-    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-elevation-3);
 }
 
 .user-avatar__name {
   margin-left: 10px;
-  color: rgba(255, 255, 255, 0.87);
+  color: var(--color-text-primary);
 }

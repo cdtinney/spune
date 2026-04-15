@@ -9,7 +9,7 @@ interface FullscreenButtonProps {
 export default function FullscreenButton({ onClick }: FullscreenButtonProps) {
   return (
     <button
-      className="fullscreen-button"
+      className="fullscreen-button icon-interactive focus-ring"
       onClick={onClick}
       aria-label="Toggle fullscreen"
       title="Toggle fullscreen"

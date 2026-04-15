@@ -16,7 +16,7 @@ export interface AlbumGridResult {
   tiles: Album[];
   gridCols: number;
   gridRows: number;
-  base: number;
+  tileSize: number;
 }
 
 export interface UserProfile {

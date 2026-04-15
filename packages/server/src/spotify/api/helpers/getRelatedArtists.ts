@@ -1,6 +1,7 @@
 import axios from 'axios';
 import logger from '../../../logger';
 import { relatedArtistsCache, normalizeKey } from '../../../cache';
+import errorMessage from '../../../utils/errorMessage';
 import type { LastFmResponse, ListenBrainzResponse, MusicBrainzResponse } from '../../../types';
 
 const LASTFM_BASE = 'https://ws.audioscrobbler.com/2.0/';
@@ -32,7 +33,7 @@ async function fromLastFm(artistName: string, limit = 30): Promise<string[]> {
     logger.info(`Last.fm: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    const message = errorMessage(error);
     logger.warn(`Last.fm failed for "${artistName}": ${message}`);
     return [];
   }
@@ -77,7 +78,7 @@ async function fromListenBrainz(artistName: string, limit = 20): Promise<string[
     logger.info(`ListenBrainz: ${names.length} similar artists for "${artistName}"`);
     return names;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    const message = errorMessage(error);
     logger.warn(`ListenBrainz failed for "${artistName}": ${message}`);
     return [];
   }

@@ -2,24 +2,16 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import AppRoutes from '../routes';
-import * as UserContext from '../contexts/UserContext';
+import { mockUseUser } from './helpers/mockUserContext';
 
 vi.mock('../contexts/UserContext');
 vi.mock('../pages/VisualizationPage', () => ({
   default: () => <div>VisualizationPage</div>,
 }));
 
-const mockedUserContext = vi.mocked(UserContext, true);
-
 describe('AppRoutes', () => {
   it('redirects / to /home', () => {
-    mockedUserContext.useUser.mockReturnValue({
-      user: null,
-      loading: false,
-      error: null,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
+    mockUseUser();
 
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -31,13 +23,7 @@ describe('AppRoutes', () => {
   });
 
   it('redirects /visualization to / when not authenticated', () => {
-    mockedUserContext.useUser.mockReturnValue({
-      user: null,
-      loading: false,
-      error: null,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
+    mockUseUser();
 
     render(
       <MemoryRouter initialEntries={['/visualization']}>
@@ -49,13 +35,7 @@ describe('AppRoutes', () => {
   });
 
   it('renders visualization page when authenticated', () => {
-    mockedUserContext.useUser.mockReturnValue({
-      user: { spotifyId: 'user1', displayName: 'Test' },
-      loading: false,
-      error: null,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
+    mockUseUser({ user: { spotifyId: 'user1', displayName: 'Test' } });
 
     render(
       <MemoryRouter initialEntries={['/visualization']}>
@@ -67,13 +47,7 @@ describe('AppRoutes', () => {
   });
 
   it('renders error page', () => {
-    mockedUserContext.useUser.mockReturnValue({
-      user: null,
-      loading: false,
-      error: null,
-      login: vi.fn(),
-      logout: vi.fn(),
-    });
+    mockUseUser();
 
     render(
       <MemoryRouter initialEntries={['/error/test%20error']}>

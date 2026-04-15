@@ -3,11 +3,18 @@ import FlippableTile from './FlippableTile';
 import type { Album } from '../types';
 import './AlbumGrid.css';
 
+const CASCADE_FLIP_STAGGER_MS = 50;
+const AMBIENT_FLIP_INITIAL_DELAY_MS = 7000;
+const AMBIENT_FLIP_JITTER_MS = 3000;
+const ENTRANCE_STAGGER_MS = 15;
+const CHANGE_DETECTION_SAMPLE_SIZE = 20;
+const VIEWPORT_OVERSCAN_TILES = 2;
+
 interface AlbumGridProps {
   tiles: Album[];
   gridCols: number;
   gridRows: number;
-  base: number;
+  tileSize: number;
 }
 
 interface FlipEntry {
@@ -17,9 +24,9 @@ interface FlipEntry {
 
 type FlipMap = Record<number, FlipEntry>;
 
-export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGridProps) {
+export default function AlbumGrid({ tiles, gridCols, gridRows, tileSize }: AlbumGridProps) {
   const [flipMap, setFlipMap] = useState<FlipMap>({});
-  const imagePoolRef = useRef(0);
+  const imageIndexRef = useRef(0);
   const flipCounterRef = useRef(1);
   const prevTileIdsRef = useRef('');
 
@@ -29,17 +36,17 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
   );
 
   const visibleTileIndices = useMemo(() => {
-    const maxCol = Math.ceil(window.innerWidth / base) + 2;
-    const maxRow = Math.ceil(window.innerHeight / base) + 2;
+    const maxCol = Math.ceil(window.innerWidth / tileSize) + VIEWPORT_OVERSCAN_TILES;
+    const maxRow = Math.ceil(window.innerHeight / tileSize) + VIEWPORT_OVERSCAN_TILES;
     return tiles
       .map((tile, index) => ({ tile, index }))
       .filter(({ tile }) => tile.col <= maxCol && tile.row <= maxRow)
       .map(({ index }) => index);
-  }, [tiles, base]);
+  }, [tiles, tileSize]);
 
   // Cascade flip on song change
   useEffect(() => {
-    const currentIds = allImageUrls.slice(0, 20).join(',');
+    const currentIds = allImageUrls.slice(0, CHANGE_DETECTION_SAMPLE_SIZE).join(',');
     if (currentIds === prevTileIdsRef.current || tiles.length === 0) {
       prevTileIdsRef.current = currentIds;
       return;
@@ -60,7 +67,7 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
           const key = flipCounterRef.current++;
           setFlipMap((prev) => ({ ...prev, [tileIndex]: { url: newImage, key } }));
         }
-      }, i * 50);
+      }, i * CASCADE_FLIP_STAGGER_MS);
       timers.push(timer);
     });
 
@@ -78,8 +85,8 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
 
     let nextImage: string | undefined;
     for (let attempt = 0; attempt < allImageUrls.length; attempt++) {
-      const candidate = allImageUrls[imagePoolRef.current % allImageUrls.length];
-      imagePoolRef.current++;
+      const candidate = allImageUrls[imageIndexRef.current % allImageUrls.length];
+      imageIndexRef.current++;
       if (!visibleImages.has(candidate)) {
         nextImage = candidate;
         break;
@@ -87,8 +94,8 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
     }
 
     if (!nextImage) {
-      nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
-      imagePoolRef.current++;
+      nextImage = allImageUrls[imageIndexRef.current % allImageUrls.length];
+      imageIndexRef.current++;
     }
 
     if (nextImage) {
@@ -100,8 +107,11 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
   useEffect(() => {
     if (tiles.length === 0) return;
 
-    const firstTimeout = setTimeout(flipRandomTile, 7000);
-    const interval = setInterval(flipRandomTile, 7000 + Math.random() * 3000);
+    const firstTimeout = setTimeout(flipRandomTile, AMBIENT_FLIP_INITIAL_DELAY_MS);
+    const interval = setInterval(
+      flipRandomTile,
+      AMBIENT_FLIP_INITIAL_DELAY_MS + Math.random() * AMBIENT_FLIP_JITTER_MS,
+    );
 
     return () => {
       clearTimeout(firstTimeout);
@@ -118,13 +128,13 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
       <div
         className="album-grid"
         style={{
-          gridTemplateColumns: `repeat(${gridCols}, ${base}px)`,
-          gridTemplateRows: `repeat(${gridRows}, ${base}px)`,
+          gridTemplateColumns: `repeat(${gridCols}, ${tileSize}px)`,
+          gridTemplateRows: `repeat(${gridRows}, ${tileSize}px)`,
         }}
       >
         {tiles.map((tile, index) => {
           const isVisible = visibleTileIndices.includes(index);
-          const entranceDelay = isVisible ? index * 15 : 0;
+          const entranceDelay = isVisible ? index * ENTRANCE_STAGGER_MS : 0;
           const flip = flipMap[index];
 
           return (
