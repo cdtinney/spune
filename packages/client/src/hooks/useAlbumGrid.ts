@@ -36,7 +36,10 @@ const TEMPLATE: TemplateSlot[] = [
 const TEMPLATE_COLS = 6;
 const TEMPLATE_ROWS = 6;
 
-export default function useAlbumGrid(relatedAlbums: RelatedAlbums, windowSize: WindowSize): AlbumGridResult {
+export default function useAlbumGrid(
+  relatedAlbums: RelatedAlbums,
+  windowSize: WindowSize,
+): AlbumGridResult {
   return useMemo(() => {
     const { width, height } = windowSize;
     const { byAlbumId, allAlbumIds } = relatedAlbums;

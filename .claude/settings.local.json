@@ -138,7 +138,9 @@
       "Bash(rm packages/server/src/utils/uniqueSet.ts packages/server/src/utils/__tests__/uniqueSet.test.ts)",
       "Bash(rm packages/client/src/utils/calculateColumnSize.ts packages/client/src/utils/__tests__/calculateColumnSize.test.ts)",
       "Bash(rm packages/client/src/utils/shuffle.ts packages/client/src/utils/__tests__/shuffle.test.ts)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(pnpm:*)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test pnpm server:test)"
     ]
   }
 }

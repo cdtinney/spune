@@ -8,29 +8,26 @@
   "engines": {
     "node": ">=22"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "clean": "rm -rf node_modules packages/client/node_modules packages/server/node_modules package-lock.json",
-    "client:build": "npm run build --workspace spune-client",
-    "client:lint": "npm run lint --workspace spune-client",
-    "client:test": "npm run test --workspace spune-client",
-    "client:test:coverage": "npm run test:coverage --workspace spune-client",
-    "client:watch": "npm run watch --workspace spune-client",
-    "dev": "npm run watch",
+    "clean": "rm -rf node_modules packages/client/node_modules packages/server/node_modules pnpm-lock.yaml",
+    "client:build": "pnpm --filter spune-client build",
+    "client:lint": "pnpm --filter spune-client lint",
+    "client:test": "pnpm --filter spune-client test",
+    "client:test:coverage": "pnpm --filter spune-client test:coverage",
+    "client:watch": "pnpm --filter spune-client watch",
+    "dev": "pnpm watch",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "npm run client:lint && npm run server:lint",
-    "server:lint": "npm run lint --workspace spune-server",
-    "server:start": "npm run start --workspace spune-server",
-    "server:test": "npm run test --workspace spune-server",
-    "server:test:coverage": "npm run test:coverage --workspace spune-server",
-    "server:test:integration": "npm run test:integration --workspace spune-server",
-    "server:watch": "npm run watch --workspace spune-server",
-    "start": "npm run watch",
-    "test": "npm run test:coverage --workspaces --if-present",
-    "watch": "concurrently --kill-others \"npm run server:watch\" \"npm run client:watch\""
+    "lint": "pnpm client:lint && pnpm server:lint",
+    "server:build": "pnpm --filter spune-server build",
+    "server:lint": "pnpm --filter spune-server lint",
+    "server:start": "pnpm --filter spune-server start",
+    "server:test": "pnpm --filter spune-server test",
+    "server:test:coverage": "pnpm --filter spune-server test:coverage",
+    "server:watch": "pnpm --filter spune-server watch",
+    "start": "pnpm watch",
+    "test": "pnpm -r test:coverage",
+    "watch": "concurrently --kill-others \"pnpm server:watch\" \"pnpm client:watch\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

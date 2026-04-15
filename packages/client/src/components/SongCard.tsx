@@ -7,7 +7,12 @@ interface SongCardProps {
   albumImageUrl: string | undefined;
 }
 
-export default function SongCard({ artistName, songTitle, albumName, albumImageUrl }: SongCardProps) {
+export default function SongCard({
+  artistName,
+  songTitle,
+  albumName,
+  albumImageUrl,
+}: SongCardProps) {
   return (
     <div className="song-card">
       <div

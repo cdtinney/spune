@@ -12,8 +12,11 @@ export async function getPlaybackState(): Promise<PlaybackState> {
 }
 
 export async function getRelatedAlbums(songId: string): Promise<SpotifyAlbum[]> {
-  const response = await axios.get<SpotifyAlbum[]>('/api/spotify/currently-playing/related-albums', {
-    params: { songId },
-  });
+  const response = await axios.get<SpotifyAlbum[]>(
+    '/api/spotify/currently-playing/related-albums',
+    {
+      params: { songId },
+    },
+  );
   return response.data;
 }

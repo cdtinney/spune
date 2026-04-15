@@ -41,9 +41,12 @@ describe('spotify API', () => {
       const mockData = [{ id: 'album1' }];
       mockedAxios.get.mockResolvedValue({ data: mockData });
       const result = await getRelatedAlbums('song123');
-      expect(mockedAxios.get).toHaveBeenCalledWith('/api/spotify/currently-playing/related-albums', {
-        params: { songId: 'song123' },
-      });
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        '/api/spotify/currently-playing/related-albums',
+        {
+          params: { songId: 'song123' },
+        },
+      );
       expect(result).toEqual(mockData);
     });
   });

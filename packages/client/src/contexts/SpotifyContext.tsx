@@ -1,4 +1,12 @@
-import { createContext, useContext, useReducer, useCallback, useMemo, type ReactNode, type MutableRefObject } from 'react';
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
+  useMemo,
+  type ReactNode,
+  type MutableRefObject,
+} from 'react';
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
 import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
 
