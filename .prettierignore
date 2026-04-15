@@ -4,4 +4,3 @@ packages/client/coverage
 packages/server/coverage
 package-lock.json
 pnpm-lock.yaml
-thoughts
