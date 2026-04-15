@@ -125,7 +125,12 @@ export default function ReceiverApp() {
             {!connected && !songPlaying && <LoadingScreen className="visualization__loading" />}
 
             {songPlaying && (
-              <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} tileSize={tileSize} />
+              <AlbumGrid
+                tiles={tiles}
+                gridCols={gridCols}
+                gridRows={gridRows}
+                tileSize={tileSize}
+              />
             )}
           </div>
 
