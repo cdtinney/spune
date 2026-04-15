@@ -2,7 +2,7 @@ import { Router, type IRouter, Request, Response } from 'express';
 import { spotifyApiWithToken } from '../spotify/api/SpotifyApi';
 import apiRequestWithRefresh from '../spotify/api/helpers/apiRequestWithRefresh';
 import getCurrentlyPlayingRelatedAlbums from '../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums';
-import type { User, SpotifyAlbum } from '../types';
+import type { SpotifyAlbum } from '../types';
 
 function errorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -13,16 +13,9 @@ function errorMessage(error: unknown): string {
 
 const router: IRouter = Router();
 
-/**
- * `/currently-playing/related-albums` endpoint.
- *
- * Returns a list of albums related to the currently playing track.
- */
 router.get('/currently-playing/related-albums', async (req: Request, res: Response) => {
-  const {
-    query: { songId },
-  } = req;
-  const user = req.user as User;
+  const songId = String(req.query.songId || '');
+  const { user } = req;
 
   try {
     res.send(
@@ -30,7 +23,7 @@ router.get('/currently-playing/related-albums', async (req: Request, res: Respon
         user,
         apiFn: (accessToken: string) => {
           const spotifyApi = spotifyApiWithToken(accessToken);
-          return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId as string);
+          return getCurrentlyPlayingRelatedAlbums(spotifyApi, songId);
         },
       }),
     );
@@ -39,13 +32,8 @@ router.get('/currently-playing/related-albums', async (req: Request, res: Respon
   }
 });
 
-/**
- * `/me/player` endpoint.
- *
- * Returns the current state of the player; this is a simple proxy.
- */
 router.get('/me/player', async (req: Request, res: Response) => {
-  const user = req.user as User;
+  const { user } = req;
 
   try {
     const result = await apiRequestWithRefresh({

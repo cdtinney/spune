@@ -13,7 +13,7 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent): void => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      if (menuRef.current && e.target instanceof Node && !menuRef.current.contains(e.target)) {
         setOpen(false);
       }
     };

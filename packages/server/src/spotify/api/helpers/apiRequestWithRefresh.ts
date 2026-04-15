@@ -6,7 +6,7 @@ function tokenExpired(tokenUpdated: number, expiresIn: number): boolean {
   return tokenUpdated + expiresIn <= Date.now();
 }
 
-async function getValidAccessToken(user: User): Promise<string> {
+async function getValidAccessToken(user: User | undefined): Promise<string> {
   if (!user || !user.spotifyAccessToken) {
     throw new Error('Request has no user or access token');
   }
@@ -23,7 +23,7 @@ async function getValidAccessToken(user: User): Promise<string> {
 }
 
 interface ApiRequestWithRefreshArgs<T> {
-  user: User;
+  user: User | undefined;
   apiFn: (accessToken: string) => Promise<T>;
 }
 

@@ -12,6 +12,9 @@ module.exports = [
       globals: {
         ...globals.node,
       },
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],

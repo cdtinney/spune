@@ -1,8 +1,6 @@
 import { Router, type IRouter, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import paths from '../config/paths';
-import type { User } from '../types';
-
 const SPOTIFY_PERMISSION_SCOPES: string[] = [
   'user-read-private',
   'user-read-email',
@@ -12,7 +10,7 @@ const SPOTIFY_PERMISSION_SCOPES: string[] = [
 const router: IRouter = Router();
 
 router.get('/user', (req: Request, res: Response) => {
-  const user = req.user as User | undefined;
+  const { user } = req;
   if (!user) {
     res.json({});
     return;

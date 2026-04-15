@@ -16,7 +16,7 @@ interface UpdateUserData {
 }
 
 async function findOrCreateUser(spotifyId: string, data: FindOrCreateUserData): Promise<User> {
-  const result = await pool.query(
+  const result = await pool.query<UserRow>(
     `INSERT INTO users (spotify_id, spotify_access_token, spotify_refresh_token, token_updated, expires_in, display_name, photos)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
      ON CONFLICT (spotify_id) DO UPDATE SET
@@ -37,25 +37,25 @@ async function findOrCreateUser(spotifyId: string, data: FindOrCreateUserData): 
       JSON.stringify(data.photos),
     ],
   );
-  return toUser(result.rows[0] as UserRow);
+  return toUser(result.rows[0]);
 }
 
 async function findUserBySpotifyId(spotifyId: string): Promise<User | null> {
-  const result = await pool.query('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [spotifyId]);
-  return result.rows[0] ? toUser(result.rows[0] as UserRow) : null;
+  const result = await pool.query<UserRow>('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [spotifyId]);
+  return result.rows[0] ? toUser(result.rows[0]) : null;
 }
 
 async function updateUserByRefreshToken(
   refreshToken: string,
   data: UpdateUserData,
 ): Promise<User | null> {
-  const result = await pool.query(
+  const result = await pool.query<UserRow>(
     `UPDATE users SET spotify_access_token = $1, token_updated = $2
      WHERE spotify_refresh_token = $3
      RETURNING *`,
     [data.spotifyAccessToken, data.tokenUpdated, refreshToken],
   );
-  return result.rows[0] ? toUser(result.rows[0] as UserRow) : null;
+  return result.rows[0] ? toUser(result.rows[0]) : null;
 }
 
 function toUser(row: UserRow): User {

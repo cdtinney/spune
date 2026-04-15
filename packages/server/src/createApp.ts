@@ -23,7 +23,7 @@ export default function createApp(): express.Application {
 
   app.use(
     session({
-      secret: process.env.SESSION_SECRET as string,
+      secret: process.env.SESSION_SECRET || 'fallback-dev-secret',
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365,
         secure: process.env.NODE_ENV === 'production',

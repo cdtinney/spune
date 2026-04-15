@@ -19,6 +19,7 @@ export default [
       parserOptions: {
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     plugins: {
