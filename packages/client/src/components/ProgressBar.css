@@ -1,13 +1,15 @@
 .progress-bar {
   position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 20px 8px;
+  gap: 8px;
+  padding: 0 0 8px;
+  max-width: 200px;
+  width: 100%;
   pointer-events: none;
 }
 
