@@ -4,21 +4,31 @@ import './FlippableTile.css';
 interface FlippableTileProps {
   src: string | undefined;
   alt: string;
-  flipToSrc: string | null; // when this changes to a new value, the tile flips
+  flipToSrc: string | null;
+  flipKey: number; // increment to trigger a flip
+  entranceDelay?: number;
 }
 
-export default function FlippableTile({ src, alt, flipToSrc }: FlippableTileProps) {
+export default function FlippableTile({
+  src,
+  alt,
+  flipToSrc,
+  flipKey,
+  entranceDelay = 0,
+}: FlippableTileProps) {
   const [flipped, setFlipped] = useState(false);
   const [frontSrc, setFrontSrc] = useState(src);
   const [backSrc, setBackSrc] = useState(src);
+  const [entered, setEntered] = useState(entranceDelay === 0);
 
   useEffect(() => {
-    setFrontSrc(src);
-    setFlipped(false);
-  }, [src]);
+    if (entered) return;
+    const timer = setTimeout(() => setEntered(true), entranceDelay);
+    return () => clearTimeout(timer);
+  }, [entranceDelay, entered]);
 
   useEffect(() => {
-    if (!flipToSrc) return;
+    if (flipKey === 0 || !flipToSrc) return;
 
     if (flipped) {
       setFrontSrc(flipToSrc);
@@ -29,10 +39,12 @@ export default function FlippableTile({ src, alt, flipToSrc }: FlippableTileProp
     requestAnimationFrame(() => {
       setFlipped((f) => !f);
     });
-  }, [flipToSrc]);
+  }, [flipKey]);
 
   return (
-    <div className={`flippable-tile ${flipped ? 'flippable-tile--flipped' : ''}`}>
+    <div
+      className={`flippable-tile${flipped ? ' flippable-tile--flipped' : ''}${entered ? ' flippable-tile--entered' : ''}`}
+    >
       <div className="flippable-tile__face flippable-tile__front">
         <img src={frontSrc} alt={alt} loading="lazy" />
       </div>
