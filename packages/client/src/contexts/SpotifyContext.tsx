@@ -93,10 +93,7 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
       };
 
     case 'FETCH_NOW_PLAYING_FAILURE': {
-      const consecutiveErrors = Math.min(
-        state.consecutiveErrors + 1,
-        CONNECTION_LOST_THRESHOLD,
-      );
+      const consecutiveErrors = Math.min(state.consecutiveErrors + 1, CONNECTION_LOST_THRESHOLD);
       if (
         state.consecutiveErrors === consecutiveErrors &&
         state.initialized &&
