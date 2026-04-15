@@ -1,9 +1,8 @@
 if (process.env.NODE_ENV !== 'production') {
-  // Load .env file for variables in dev environments only.
-  // The file must be in the server package directory.
-
+  // Load .env from the server package directory (one level up from src/).
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  require('dotenv').config();
+  const path = require('path');
+  require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 }
 
 import express from 'express';
