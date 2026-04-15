@@ -122,7 +122,12 @@ export default function ReceiverApp() {
               backgroundColor: '#424242',
             }}
           >
-            {!connected && !songPlaying && <LoadingScreen className="visualization__loading" />}
+            {!connected && !songPlaying && (
+              <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '12px' }}>
+                <LoadingScreen />
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Waiting for cast connection...</p>
+              </div>
+            )}
 
             {songPlaying && (
               <AlbumGrid
