@@ -1,7 +1,7 @@
 .cast-button {
   position: absolute;
-  right: 100px;
-  top: 33px;
+  right: 65px;
+  bottom: 30px;
   z-index: 100;
   background: none;
   border: none;
