@@ -1,60 +1,43 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import './FlippableTile.css';
 
 interface FlippableTileProps {
-  frontSrc: string | undefined;
-  frontAlt: string;
-  extraImages: string[];
-  flipInterval: number; // ms between flips, 0 = never flip
+  src: string | undefined;
+  alt: string;
+  flipToSrc: string | null; // when this changes to a new value, the tile flips
 }
 
-export default function FlippableTile({
-  frontSrc,
-  frontAlt,
-  extraImages,
-  flipInterval,
-}: FlippableTileProps) {
+export default function FlippableTile({ src, alt, flipToSrc }: FlippableTileProps) {
   const [flipped, setFlipped] = useState(false);
-  const [currentFrontSrc, setCurrentFrontSrc] = useState(frontSrc);
-  const [currentBackSrc, setCurrentBackSrc] = useState(frontSrc);
-  const imageIndexRef = useRef(0);
+  const [frontSrc, setFrontSrc] = useState(src);
+  const [backSrc, setBackSrc] = useState(src);
 
   useEffect(() => {
-    setCurrentFrontSrc(frontSrc);
-    setCurrentBackSrc(frontSrc);
-  }, [frontSrc]);
+    setFrontSrc(src);
+    setFlipped(false);
+  }, [src]);
 
   useEffect(() => {
-    if (flipInterval === 0 || extraImages.length === 0) return;
+    if (!flipToSrc) return;
 
-    const timer = setInterval(() => {
-      // Pick the next image from the pool
-      const nextSrc = extraImages[imageIndexRef.current % extraImages.length];
-      imageIndexRef.current++;
+    if (flipped) {
+      setFrontSrc(flipToSrc);
+    } else {
+      setBackSrc(flipToSrc);
+    }
 
-      // Set the next image on the hidden face, then flip
-      if (flipped) {
-        setCurrentFrontSrc(nextSrc);
-      } else {
-        setCurrentBackSrc(nextSrc);
-      }
-
-      // Small delay to let the src update before flipping
-      requestAnimationFrame(() => {
-        setFlipped((f) => !f);
-      });
-    }, flipInterval);
-
-    return () => clearInterval(timer);
-  }, [flipInterval, extraImages, flipped]);
+    requestAnimationFrame(() => {
+      setFlipped((f) => !f);
+    });
+  }, [flipToSrc]);
 
   return (
     <div className={`flippable-tile ${flipped ? 'flippable-tile--flipped' : ''}`}>
       <div className="flippable-tile__face flippable-tile__front">
-        <img src={currentFrontSrc} alt={frontAlt} loading="lazy" />
+        <img src={frontSrc} alt={alt} loading="lazy" />
       </div>
       <div className="flippable-tile__face flippable-tile__back">
-        <img src={currentBackSrc} alt={frontAlt} loading="lazy" />
+        <img src={backSrc} alt={alt} loading="lazy" />
       </div>
     </div>
   );
