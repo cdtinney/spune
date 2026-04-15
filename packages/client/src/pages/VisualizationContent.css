@@ -99,6 +99,17 @@
   animation: pulse-gradient 4s ease-in-out infinite alternate;
 }
 
+@media (max-width: 600px) {
+  .visualization__github-icon {
+    display: none;
+  }
+
+  .visualization__user-container {
+    top: 15px;
+    right: 15px;
+  }
+}
+
 @keyframes pulse-gradient {
   0% {
     height: 150px;

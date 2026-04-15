@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import './SongCard.css';
 
 interface SongCardProps {
@@ -6,6 +7,7 @@ interface SongCardProps {
   albumName: string;
   albumImageUrl: string | undefined;
   dominantColor?: string | null;
+  songId: string;
 }
 
 export default function SongCard({
@@ -14,21 +16,50 @@ export default function SongCard({
   albumName,
   albumImageUrl,
   dominantColor,
+  songId,
 }: SongCardProps) {
+  const [visible, setVisible] = useState(true);
+  const [displayedSong, setDisplayedSong] = useState({
+    artistName,
+    songTitle,
+    albumName,
+    albumImageUrl,
+    songId,
+  });
+
+  useEffect(() => {
+    if (songId === displayedSong.songId) return;
+
+    // Fade out
+    setVisible(false);
+
+    // After fade-out, update content and fade in
+    const timer = setTimeout(() => {
+      setDisplayedSong({ artistName, songTitle, albumName, albumImageUrl, songId });
+      setVisible(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [songId, artistName, songTitle, albumName, albumImageUrl, displayedSong.songId]);
+
   const coverStyle = {
-    backgroundImage: `url("${albumImageUrl}")`,
+    backgroundImage: `url("${displayedSong.albumImageUrl}")`,
     boxShadow: dominantColor
       ? `0 0 40px 10px ${dominantColor}, 0 6px 10px 0 rgba(0,0,0,.14)`
       : undefined,
   };
 
   return (
-    <div className="song-card">
-      <div className="song-card__cover" style={coverStyle} title={albumName} />
+    <div className={`song-card ${visible ? 'song-card--visible' : 'song-card--hidden'}`}>
+      <div className="song-card__cover" style={coverStyle} title={displayedSong.albumName} />
       <div className="song-card__details">
-        <div className="song-card__text song-card__artist">{artistName.toUpperCase()}</div>
-        <div className="song-card__text song-card__album">{albumName.toUpperCase()}</div>
-        <div className="song-card__text song-card__title">{songTitle}</div>
+        <div className="song-card__text song-card__artist">
+          {displayedSong.artistName.toUpperCase()}
+        </div>
+        <div className="song-card__text song-card__album">
+          {displayedSong.albumName.toUpperCase()}
+        </div>
+        <div className="song-card__text song-card__title">{displayedSong.songTitle}</div>
       </div>
     </div>
   );

@@ -6,7 +6,15 @@
   left: 30px;
   bottom: 30px;
   z-index: 100;
-  animation: fadein 1s;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.song-card--visible {
+  opacity: 1;
+}
+
+.song-card--hidden {
+  opacity: 0;
 }
 
 .song-card__cover {
@@ -56,4 +64,30 @@
   font-size: 1.2em;
   margin-top: 1.2em;
   animation: fadein 2s;
+}
+
+@media (max-width: 600px) {
+  .song-card {
+    left: 15px;
+    bottom: 15px;
+  }
+
+  .song-card__cover {
+    width: 80px;
+    height: 80px;
+    margin-right: 12px;
+  }
+
+  .song-card__details {
+    width: 200px;
+  }
+
+  .song-card__artist {
+    font-size: 1.1em;
+  }
+
+  .song-card__album,
+  .song-card__title {
+    font-size: 0.9em;
+  }
 }

@@ -75,6 +75,7 @@ export default function VisualizationContent() {
 
       {!isInitialLoad && songPlaying && (
         <SongCard
+          songId={nowPlaying.songId}
           artistName={nowPlaying.artistName}
           songTitle={nowPlaying.songTitle}
           albumName={nowPlaying.albumName}

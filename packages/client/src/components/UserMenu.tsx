@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import './UserMenu.css';
@@ -21,17 +21,32 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setOpen((o) => !o);
+      }
+    },
+    [],
+  );
+
   return (
     <div className="user-menu" ref={menuRef}>
-      <FontAwesomeIcon
-        icon={faCaretDown}
-        className="user-menu__icon"
-        title="Menu"
+      <button
+        className="user-menu__trigger"
         onClick={() => setOpen(!open)}
-      />
+        onKeyDown={handleKeyDown}
+        aria-label="User menu"
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        <FontAwesomeIcon icon={faCaretDown} className="user-menu__icon" />
+      </button>
       {open && (
-        <div className="user-menu__dropdown">
-          <button className="user-menu__item" onClick={onLogout}>
+        <div className="user-menu__dropdown" role="menu">
+          <button className="user-menu__item" role="menuitem" onClick={onLogout}>
             Log Out
           </button>
         </div>
