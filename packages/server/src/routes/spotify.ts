@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, type IRouter, Request, Response } from 'express';
 import { spotifyApiWithToken } from '../spotify/api/SpotifyApi';
 import apiRequestWithRefresh from '../spotify/api/helpers/apiRequestWithRefresh';
 import getCurrentlyPlayingRelatedAlbums from '../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums';
@@ -11,7 +11,7 @@ function errorMessage(error: unknown): string {
   return 'Unknown Error';
 }
 
-const router = Router();
+const router: IRouter = Router();
 
 /**
  * `/currently-playing/related-albums` endpoint.

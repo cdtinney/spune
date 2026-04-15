@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, type IRouter, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import paths from '../config/paths';
 import type { User } from '../types';
@@ -9,7 +9,7 @@ const SPOTIFY_PERMISSION_SCOPES: string[] = [
   'user-read-playback-state',
 ];
 
-const router = Router();
+const router: IRouter = Router();
 
 router.get('/user', (req: Request, res: Response) => {
   const user = req.user as User | undefined;
@@ -33,8 +33,7 @@ router.get('/user/logout', (req: Request, res: Response, next: NextFunction) => 
       return next(err);
     }
     // Setting to `null` will clear the session in the DB.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (req as any).session = null;
+    req.session.destroy(() => {});
     res.redirect('/');
   });
 });

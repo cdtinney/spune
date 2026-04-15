@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import uniqueAlbums, { baseAlbumName, typesWithSuffixes } from '../uniqueAlbums';
+import type { SpotifyAlbum } from '../../../types';
 
 describe('baseAlbumName()', () => {
   it('strips out suffixes in normal braces', () => {
@@ -17,13 +18,12 @@ describe('baseAlbumName()', () => {
 
 describe('uniqueAlbums()', () => {
   it('removes all duplicates with the same base album name', () => {
-    const originalAlbum = { name: 'foo' };
-    const duplicates = typesWithSuffixes.map((entry: string) => ({
-      name: `foo (${entry})`,
-    }));
+    const originalAlbum = { name: 'foo' } as SpotifyAlbum;
+    const duplicates = typesWithSuffixes.map(
+      (entry: string) => ({ name: `foo (${entry})` }) as SpotifyAlbum,
+    );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = uniqueAlbums([originalAlbum, ...duplicates] as any[]);
+    const result = uniqueAlbums([originalAlbum, ...duplicates]);
     expect(result).toHaveLength(1);
     expect(result[0].name).toEqual('foo');
   });

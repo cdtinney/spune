@@ -1,8 +1,6 @@
 /* Ambient module declarations for untyped packages */
 
 declare module 'passport-spotify' {
-  import type { Strategy as PassportStrategy } from 'passport';
-
   interface StrategyOptions {
     clientID: string;
     clientSecret: string;
@@ -25,19 +23,18 @@ declare module 'passport-spotify' {
     provider: string;
   }
 
-  class Strategy extends PassportStrategy {
+  class Strategy {
     constructor(options: StrategyOptions, verify: VerifyFunction);
     name: string;
+    authenticate(req: import('express').Request, options?: object): void;
   }
 
   export { Strategy, StrategyOptions, VerifyFunction, SpotifyProfile };
 }
 
 declare module 'passport-oauth2-refresh' {
-  import type { Strategy } from 'passport';
-
   interface PassportOAuth2Refresh {
-    use(strategy: Strategy): void;
+    use(strategy: { name: string }): void;
     requestNewAccessToken(
       strategyName: string,
       refreshToken: string,
