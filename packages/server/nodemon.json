@@ -1,8 +1,5 @@
 {
-  "events": {
-    "start": "kill-port 5000",
-    "restart": "kill-port 5000",
-    "crash": "kill-port 5000"
-  },
-  "delay": 2500
+  "delay": 2500,
+  "ext": "ts",
+  "watch": ["src", "app.ts"]
 }
