@@ -7,244 +7,65 @@
 
 ## Overview
 
-Spune displays album artwork from related artists in a Zune-style mosaic while you listen to Spotify. It polls your currently playing track, discovers related artists via Last.fm and ListenBrainz, and renders their album covers as an animated background.
+Spune displays album artwork from related artists in a Zune-style mosaic while you listen to Spotify. It discovers related artists via Last.fm and ListenBrainz, renders their album covers as an animated background, and can cast the visualization to a TV via Chromecast.
 
 ### Stack
 
-- **Client**: React 19, Vite, React Router v7, plain CSS
-- **Server**: Node.js 22, Express, Passport.js (Spotify OAuth), PostgreSQL
+- **Client**: React 19, Vite, TypeScript — [details](packages/client/README.md)
+- **Server**: Node.js, Express, TypeScript, PostgreSQL — [details](packages/server/README.md)
 - **APIs**: Spotify Web API, Last.fm, ListenBrainz/MusicBrainz
-- **CI/CD**: GitHub Actions, Docker
+- **CI/CD**: GitHub Actions, Docker, GHCR
 
-## Getting Started
+## Development Setup
 
 ### Prerequisites
 
-- [Node.js 22+](https://nodejs.org/)
-- [PostgreSQL 16+](https://www.postgresql.org/)
+- [Node.js 22+](https://nodejs.org/) (see `.nvmrc`)
+- [pnpm](https://pnpm.io/)
+- [Docker](https://www.docker.com/) (for local PostgreSQL)
 - [Spotify Developer Application](https://developer.spotify.com/dashboard)
-- (Optional) [Last.fm API key](https://www.last.fm/api/account/create) for better related artist discovery
 
-### Setup
+### Quick start
 
 ```bash
 git clone git@github.com:cdtinney/spune.git
 cd spune
 pnpm install
-```
-
-Create `packages/server/.env` from the example:
-
-```bash
 cp packages/server/.env.example packages/server/.env
-```
-
-Edit `.env` and fill in your credentials:
-
-| Variable             | Required | Description                                                                |
-| -------------------- | -------- | -------------------------------------------------------------------------- |
-| `DATABASE_URL`       | Yes      | PostgreSQL connection string                                               |
-| `SESSION_SECRET`     | Yes      | Express session secret (any random string)                                 |
-| `SPOT_CLIENT_ID`     | Yes      | Spotify app client ID                                                      |
-| `SPOT_CLIENT_SECRET` | Yes      | Spotify app client secret                                                  |
-| `SPOT_REDIRECT_URI`  | Yes      | OAuth callback URL. Dev: `http://127.0.0.1:3000/api/auth/spotify/callback` |
-| `CLIENT_HOST`        | Yes      | Client origin for redirects. Dev: `http://127.0.0.1:3000`                  |
-| `PORT`               | No       | Server port (default: 5000)                                                |
-| `LAST_FM_API_KEY`    | No       | Last.fm API key for similar artist discovery                               |
-| `VITE_CAST_APP_ID`   | No       | Google Cast app ID for Chromecast (client `.env`)                          |
-
-**Important**: Spotify only supports `127.0.0.1` (not `localhost`) for local development redirect URIs. Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
-
-### Running (Development)
-
-```bash
+# Edit packages/server/.env — see the file for descriptions of each variable
 pnpm dev
 ```
 
-This starts both the Express server (port 5000) and Vite dev server (port 3000) concurrently. Open `http://127.0.0.1:3000`.
+`pnpm dev` starts PostgreSQL (via Docker), the Express server, and the Vite dev server. Open `http://127.0.0.1:3000`.
 
-The Vite dev server proxies `/api` requests to the Express server, so the redirect URI must point to port 3000 (not 5000) for the session cookie to work correctly.
+**Important**: Add `http://127.0.0.1:3000/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard). Spotify requires `127.0.0.1` (not `localhost`).
 
-### Testing
+### Scripts
 
-```bash
-pnpm client:test         # Client tests (Vitest)
-pnpm client:lint          # Client lint (ESLint)
-pnpm server:test:coverage # Server tests (Jest)
-pnpm server:lint          # Server lint (ESLint)
-```
-
-### Building
-
-```bash
-pnpm client:build   # Builds to packages/client/build/
-```
+| Command             | Description                             |
+| ------------------- | --------------------------------------- |
+| `pnpm dev`          | Start everything (DB + server + client) |
+| `pnpm dev:stop`     | Stop the dev database                   |
+| `pnpm client:test`  | Run client tests                        |
+| `pnpm server:test`  | Run server tests                        |
+| `pnpm client:lint`  | Lint client                             |
+| `pnpm server:lint`  | Lint server                             |
+| `pnpm client:build` | Build client for production             |
 
 ### Chromecast
 
-Spune can cast the visualization to a Chromecast-enabled TV.
+Spune can cast the visualization to a Chromecast-enabled TV. See [docs/chromecast.md](docs/chromecast.md).
 
-#### Setup
+## Production Deployment
 
-1. Register a Custom Receiver app in the [Google Cast Developer Console](https://cast.google.com/publish/) ($5 one-time fee).
-2. Set the receiver URL to `https://your-domain.com/cast-receiver.html`.
-3. Add your Cast app ID to the client environment:
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. See [docs/deployment.md](docs/deployment.md).
 
-```bash
-# In packages/client/.env (create if needed)
-VITE_CAST_APP_ID=your-cast-app-id
-```
-
-4. Deploy. The receiver page is built automatically as part of the client build.
-
-#### Testing locally
-
-To test Chromecast discovery and the cast button locally:
-
-1. Your dev machine and Chromecast must be on the same Wi-Fi network.
-2. **Register your Chromecast as a test device** in the [Cast Developer Console](https://cast.google.com/publish/):
-   - Click **Add New Device**
-   - Enter the Chromecast's serial number (found in Google Home app → device settings, or on the back of the device)
-   - Wait ~15 minutes for registration to take effect
-3. Run `pnpm dev` in Chrome (Cast SDK only works in Chrome).
-4. The cast button appears in the top-right when the Chromecast is detected.
-
-**Note**: Unpublished Cast apps can only discover Chromecasts that are registered as test devices. Published apps (like YouTube) discover all devices. If the cast button doesn't appear, your device likely isn't registered yet.
-
-#### How it works
-
-- **Sender** (main app): Detects Chromecasts via the Google Cast SDK, shows a cast button, sends playback data and album image URLs to the receiver.
-- **Receiver** (`/cast-receiver.html`): A standalone React app that renders the mosaic visualization using data received from the sender. No auth needed — all data comes via Cast messaging.
-
-## Docker
-
-### Local Development with Docker
+**Quick version**:
 
 ```bash
-docker compose up
-```
-
-This starts the app + PostgreSQL. The database migration runs automatically. Open `http://localhost:5000`.
-
-You must set the Spotify env vars. Either export them or create a `.env` file in the project root:
-
-```bash
-SPOT_CLIENT_ID=your-client-id
-SPOT_CLIENT_SECRET=your-client-secret
-SPOT_REDIRECT_URI=http://localhost:5000/api/auth/spotify/callback
-SESSION_SECRET=your-secret
-```
-
-## Production Deployment (DigitalOcean Droplet)
-
-CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. Your droplet auto-updates via Watchtower.
-
-### 1. Set up the droplet
-
-Create an Ubuntu 24.04 droplet (1GB RAM is enough). Open the **Droplet Console** in the DigitalOcean dashboard and run the setup script:
-
-```bash
+# On a fresh Ubuntu droplet:
 curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
 ```
-
-The script installs Docker, creates `/opt/spune` with a `docker-compose.yml` and `.env`, and generates random secrets.
-
-### 2. Configure credentials
-
-Log in to GitHub Container Registry so the droplet can pull the Docker image:
-
-1. Go to https://github.com/settings/tokens and create a **classic** personal access token with the `read:packages` scope.
-2. Run this on the droplet, replacing the placeholders:
-
-```bash
-echo "ghp_yourTokenHere" | docker login ghcr.io -u your-github-username --password-stdin
-```
-
-Edit `/opt/spune/.env` and fill in your Spotify + Last.fm credentials:
-
-```bash
-nano /opt/spune/.env
-```
-
-### 3. Point your domain to the droplet
-
-In your DNS provider, add an **A record** pointing your domain to the droplet's IP address:
-
-| Type | Name                             | Value             |
-| ---- | -------------------------------- | ----------------- |
-| A    | `@` (or subdomain, like `spune`) | `YOUR_DROPLET_IP` |
-
-**If using Cloudflare**: set the proxy status to **DNS only** (grey cloud icon, not orange). Caddy handles SSL — Cloudflare's proxy will conflict with it.
-
-### 4. Start and run migrations
-
-```bash
-cd /opt/spune
-docker compose up -d
-```
-
-Wait for PostgreSQL to be ready, then run migrations:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/migrate.sh | bash
-```
-
-### 5. Add HTTPS with a custom domain
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-caddy.sh | bash -s your-domain.com
-```
-
-This adds Caddy as a reverse proxy with automatic Let's Encrypt TLS certificates and updates `.env` with the correct redirect URIs.
-
-**Don't forget**: add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the [developer dashboard](https://developer.spotify.com/dashboard).
-
-### How auto-deploy works
-
-1. You merge a PR to `master`
-2. CI runs tests, builds, and pushes `ghcr.io/cdtinney/spune:latest`
-3. Watchtower (on your droplet) detects the new image within 60 seconds
-4. It pulls the image and restarts the app container automatically
-
-### Debugging
-
-Open the **Droplet Console** in the DigitalOcean dashboard, then:
-
-```bash
-cd /opt/spune
-
-# View app logs
-docker compose logs --tail 100 app
-
-# Follow logs in real-time
-docker compose logs -f app
-
-# Check container status
-docker compose ps
-
-# Check if the app responds
-curl -s http://localhost:5000/api/auth/user
-```
-
-### Common issues
-
-**"Internal Server Error" after login**: The Spotify redirect URI in your `.env` doesn't match what's registered in the Spotify dashboard. They must be identical.
-
-**"DB_PASSWORD variable is not set"**: The `.env` file is missing `DB_PASSWORD`. Check with `cat /opt/spune/.env | grep DB_PASSWORD`.
-
-**Database connection errors after changing `DB_PASSWORD`**: Postgres stores the password on first start. If you change it later, you must reset the volume:
-
-```bash
-cd /opt/spune
-docker compose down -v
-docker compose up -d
-# Wait ~10 seconds, then re-run migrations:
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/migrate.sh | bash
-```
-
-**Browser security warning on bare IP**: Use a domain with HTTPS (step 5) instead of a bare IP address.
-
-**Login redirects back to home page**: The session cookie isn't being set. Check that `SPOT_REDIRECT_URI` and `CLIENT_HOST` use the same origin (same protocol, domain, and port).
 
 ## Inspiration
 
