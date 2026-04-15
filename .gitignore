@@ -65,6 +65,7 @@ typings/
 
 # Package build folders
 packages/**/build
+packages/**/dist
 
 # MacOS thumbnails
 .DS_Store

@@ -4,6 +4,7 @@ packages/server/node_modules
 packages/client/build
 packages/client/coverage
 packages/server/coverage
+packages/server/dist
 .git
 .github
 .claude
