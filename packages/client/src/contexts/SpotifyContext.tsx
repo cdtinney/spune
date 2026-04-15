@@ -10,6 +10,8 @@ import {
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
 import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
 
+const CONNECTION_LOST_THRESHOLD = 3;
+
 interface SpotifyState {
   nowPlaying: NowPlaying | null;
   relatedAlbums: RelatedAlbums;
@@ -17,6 +19,7 @@ interface SpotifyState {
   loading: boolean;
   albumsLoading: boolean;
   error: unknown;
+  consecutiveErrors: number;
 }
 
 type SpotifyAction =
@@ -36,6 +39,7 @@ interface FetchNowPlayingResult {
 }
 
 interface SpotifyContextValue extends SpotifyState {
+  connectionLost: boolean;
   fetchNowPlaying: (
     loadingRef: MutableRefObject<boolean>,
     currentSongId: string | null,
@@ -56,6 +60,7 @@ const initialState: SpotifyState = {
   loading: false,
   albumsLoading: false,
   error: null,
+  consecutiveErrors: 0,
 };
 
 function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
@@ -69,6 +74,7 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
         initialized: true,
         loading: false,
         error: null,
+        consecutiveErrors: 0,
         nowPlaying: action.payload,
       };
 
@@ -86,8 +92,23 @@ function reducer(state: SpotifyState, action: SpotifyAction): SpotifyState {
         },
       };
 
-    case 'FETCH_NOW_PLAYING_FAILURE':
-      return { ...state, initialized: true, loading: false, error: action.payload };
+    case 'FETCH_NOW_PLAYING_FAILURE': {
+      const consecutiveErrors = Math.min(state.consecutiveErrors + 1, CONNECTION_LOST_THRESHOLD);
+      if (
+        state.consecutiveErrors === consecutiveErrors &&
+        state.initialized &&
+        state.error != null
+      ) {
+        return state;
+      }
+      return {
+        ...state,
+        initialized: true,
+        loading: false,
+        error: action.payload,
+        consecutiveErrors,
+      };
+    }
 
     case 'CLEAR_RELATED_ALBUMS':
       return {
@@ -199,14 +220,17 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     dispatch({ type: 'CLEAR_RELATED_ALBUMS' });
   }, []);
 
+  const connectionLost = state.consecutiveErrors >= CONNECTION_LOST_THRESHOLD;
+
   const value = useMemo<SpotifyContextValue>(
     () => ({
       ...state,
+      connectionLost,
       fetchNowPlaying,
       fetchRelatedAlbums,
       clearRelatedAlbums,
     }),
-    [state, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
+    [state, connectionLost, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
   );
 
   return <SpotifyContext.Provider value={value}>{children}</SpotifyContext.Provider>;
