@@ -80,8 +80,7 @@ export class PlaybackBroadcaster {
     try {
       const data = (await apiRequestWithRefresh({
         user: client.user,
-        apiFn: (accessToken: string) =>
-          spotifyApiWithToken(accessToken).player.getPlaybackState(),
+        apiFn: (accessToken: string) => spotifyApiWithToken(accessToken).player.getPlaybackState(),
       })) as PlaybackState | null;
 
       if (!data) {

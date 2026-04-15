@@ -3,6 +3,7 @@ import { spotifyApiWithToken } from '../spotify/api/SpotifyApi';
 import apiRequestWithRefresh from '../spotify/api/helpers/apiRequestWithRefresh';
 import getCurrentlyPlayingRelatedAlbums from '../spotify/api/helpers/getCurrentlyPlayingRelatedAlbums';
 import errorMessage from '../utils/errorMessage';
+import logger from '../logger';
 import type { SpotifyAlbum } from '../types';
 
 const router: IRouter = Router();
@@ -22,6 +23,7 @@ router.get('/currently-playing/related-albums', async (req: Request, res: Respon
       }),
     );
   } catch (error) {
+    logger.error(`[related-albums] ${errorMessage(error)}`);
     res.status(500).send(errorMessage(error));
   }
 });
