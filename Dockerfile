@@ -18,6 +18,10 @@ RUN pnpm install --frozen-lockfile
 COPY packages/client/ packages/client/
 COPY packages/server/ packages/server/
 
+# Chromecast app ID (baked into client at build time)
+ARG VITE_CAST_APP_ID=CCD3A879
+ENV VITE_CAST_APP_ID=$VITE_CAST_APP_ID
+
 # Build the client and compile the server TypeScript
 RUN pnpm client:build && pnpm server:build
 
