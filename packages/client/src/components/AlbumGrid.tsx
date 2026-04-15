@@ -41,15 +41,35 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, base }: AlbumGrid
     const visIdx = Math.floor(Math.random() * visibleTileIndices.length);
     const tileIndex = visibleTileIndices[visIdx];
 
-    // Pick the next image, skip if same as current
-    let nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
-    imagePoolRef.current++;
-    if (nextImage === tiles[tileIndex].imageUrl) {
-      nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
+    // Build a set of images currently visible on screen
+    const visibleImages = new Set(
+      visibleTileIndices.map((i) => tiles[i].imageUrl).filter(Boolean),
+    );
+
+    // Find an image that's not already visible
+    let nextImage: string | undefined;
+    for (let attempt = 0; attempt < allImageUrls.length; attempt++) {
+      const candidate = allImageUrls[imagePoolRef.current % allImageUrls.length];
       imagePoolRef.current++;
+      if (!visibleImages.has(candidate)) {
+        nextImage = candidate;
+        break;
+      }
     }
 
-    setCurrentFlip({ tileIndex, imageUrl: nextImage });
+    // Fallback: if all images are visible, just pick the next one that's different from this tile
+    if (!nextImage) {
+      nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
+      imagePoolRef.current++;
+      if (nextImage === tiles[tileIndex].imageUrl) {
+        nextImage = allImageUrls[imagePoolRef.current % allImageUrls.length];
+        imagePoolRef.current++;
+      }
+    }
+
+    if (nextImage) {
+      setCurrentFlip({ tileIndex, imageUrl: nextImage });
+    }
   }, [tiles, allImageUrls, visibleTileIndices]);
 
   useEffect(() => {
