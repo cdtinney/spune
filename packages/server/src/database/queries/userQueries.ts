@@ -41,7 +41,9 @@ async function findOrCreateUser(spotifyId: string, data: FindOrCreateUserData): 
 }
 
 async function findUserBySpotifyId(spotifyId: string): Promise<User | null> {
-  const result = await pool.query<UserRow>('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [spotifyId]);
+  const result = await pool.query<UserRow>('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [
+    spotifyId,
+  ]);
   return result.rows[0] ? toUser(result.rows[0]) : null;
 }
 
