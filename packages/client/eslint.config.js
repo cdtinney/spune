@@ -20,6 +20,7 @@ export default [
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
         tsconfigRootDir: import.meta.dirname,
+        projectService: true,
       },
     },
     plugins: {
