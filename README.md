@@ -160,35 +160,17 @@ docker compose exec db psql -U spune -d spune -c \
 
 The app is now running. If you're using a domain with the setup script's default config, it serves on port 80 (HTTP). For HTTPS, see below.
 
-#### HTTPS with Caddy (optional)
+#### 5. Add HTTPS with a custom domain (optional)
 
-The setup script serves on port 80 (HTTP). To add automatic HTTPS, edit `/opt/spune/docker-compose.yml` and add a Caddy service:
+The setup script serves on port 80 (HTTP). To add automatic HTTPS with a custom domain, run the Caddy setup script:
 
-```yaml
-  caddy:
-    image: caddy:2-alpine
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-volumes:
-  caddy_data:
+```bash
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-caddy.sh | bash -s your-domain.com
 ```
 
-Change the `app` service ports from `"80:5000"` to `"5000:5000"` (internal only).
+This adds Caddy as a reverse proxy with automatic Let's Encrypt TLS certificates. It also updates `.env` with the correct redirect URIs.
 
-Create `/opt/spune/Caddyfile`:
-
-```
-your-domain.com {
-    reverse_proxy app:5000
-}
-```
-
-Restart: `docker compose down && docker compose up -d`. Caddy auto-provisions a Let's Encrypt TLS certificate.
+After it finishes, add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs in the dashboard.
 
 #### How auto-deploy works
 
