@@ -1,21 +1,32 @@
 const globals = require('globals');
+const tseslint = require('typescript-eslint');
 const prettier = require('eslint-config-prettier');
 
 module.exports = [
-  { ignores: ['coverage/**', 'node_modules/**'] },
+  { ignores: ['coverage/**', 'node_modules/**', 'dist/**'] },
+  ...tseslint.configs.recommended,
   {
-    files: ['**/*.js'],
+    files: ['**/*.{ts,js}'],
     languageOptions: {
       ecmaVersion: 2024,
-      sourceType: 'commonjs',
       globals: {
         ...globals.node,
-        ...globals.jest,
+      },
+      parserOptions: {
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'off',
       'no-console': 'off',
+    },
+  },
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/no-empty-object-type': 'off',
     },
   },
   prettier,

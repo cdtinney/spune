@@ -1,0 +1,30 @@
+import './SongCard.css';
+
+interface SongCardProps {
+  artistName: string;
+  songTitle: string;
+  albumName: string;
+  albumImageUrl: string | undefined;
+}
+
+export default function SongCard({
+  artistName,
+  songTitle,
+  albumName,
+  albumImageUrl,
+}: SongCardProps) {
+  return (
+    <div className="song-card">
+      <div
+        className="song-card__cover"
+        style={{ backgroundImage: `url("${albumImageUrl}")` }}
+        title={albumName}
+      />
+      <div className="song-card__details">
+        <div className="song-card__text song-card__artist">{artistName.toUpperCase()}</div>
+        <div className="song-card__text song-card__album">{albumName.toUpperCase()}</div>
+        <div className="song-card__text song-card__title">{songTitle}</div>
+      </div>
+    </div>
+  );
+}

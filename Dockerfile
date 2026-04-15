@@ -1,39 +1,42 @@
-# Stage 1: Build the client
+# Stage 1: Build client and server
 FROM node:22-alpine AS build
+
+RUN corepack enable pnpm
 
 WORKDIR /app
 
-# Copy workspace root files
-COPY package.json package-lock.json .npmrc ./
-
-# Copy package.json files for both workspaces (needed for npm ci)
+# Copy workspace config and lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY packages/client/package.json packages/client/
 COPY packages/server/package.json packages/server/
+COPY packages/server/tsconfig.json packages/server/
 
-# Install all dependencies (client + server)
-RUN npm ci
+# Install all dependencies
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY packages/client/ packages/client/
 COPY packages/server/ packages/server/
 
-# Build the client
-RUN npm run client:build
+# Build the client and compile the server TypeScript
+RUN pnpm client:build && pnpm server:build
 
-# Stage 2: Production image with only server + built client
+# Stage 2: Production image
 FROM node:22-alpine
+
+RUN corepack enable pnpm
 
 WORKDIR /app
 
-# Copy workspace root files
-COPY package.json package-lock.json .npmrc ./
+# Copy workspace config and lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY packages/server/package.json packages/server/
 
 # Install production server dependencies only
-RUN npm ci --workspace=spune-server --omit=dev
+RUN pnpm install --frozen-lockfile --filter spune-server --prod
 
-# Copy server source
-COPY packages/server/ packages/server/
+# Copy compiled server from build stage
+COPY --from=build /app/packages/server/dist packages/server/dist/
 
 # Copy built client from build stage
 COPY --from=build /app/packages/client/build packages/client/build/
@@ -46,4 +49,4 @@ ENV PORT=5000
 
 EXPOSE 5000
 
-CMD ["node", "packages/server/app.js"]
+CMD ["node", "packages/server/dist/app.js"]
