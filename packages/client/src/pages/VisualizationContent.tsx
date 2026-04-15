@@ -19,8 +19,8 @@ const REPO_URL = 'https://github.com/cdtinney/spune';
 
 export default function VisualizationContent() {
   useNowPlayingPoller();
-  const { user, logout } = useUser();
-  const { nowPlaying, relatedAlbums, initialized } = useSpotify();
+  const { user, logout, login } = useUser();
+  const { nowPlaying, relatedAlbums, initialized, error } = useSpotify();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -46,6 +46,7 @@ export default function VisualizationContent() {
   const userImageUrl = typeof photo === 'string' ? photo : photo?.url || photo?.value;
   const isInitialLoad = !initialized;
   const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
+  const hasError = !!error;
 
   return (
     <div className="visualization">
@@ -82,7 +83,16 @@ export default function VisualizationContent() {
       <div className="visualization__content">
         {isInitialLoad && <LoadingScreen className="visualization__loading" />}
 
-        {!isInitialLoad && !songPlaying && (
+        {!isInitialLoad && hasError && !songPlaying && (
+          <div className="visualization__error">
+            <p>Session expired or connection failed.</p>
+            <button className="visualization__reconnect-btn" onClick={login}>
+              Reconnect with Spotify
+            </button>
+          </div>
+        )}
+
+        {!isInitialLoad && !hasError && !songPlaying && (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
           </div>

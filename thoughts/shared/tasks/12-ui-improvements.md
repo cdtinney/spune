@@ -38,6 +38,9 @@ The original Zune periodically flipped individual tiles to reveal new album artw
 - Ensure keyboard navigation works (fullscreen toggle, user menu).
 - Ensure sufficient color contrast for text over the overlay.
 
+### Loading improvements
+- When the song/app first loads, there should be UX that indicates something is loading (vs a blank screen).
+
 ## Visual reference
 
 See `assets/player.png`, `assets/player2.png`, and `docs/album-grid-requirements.md`.

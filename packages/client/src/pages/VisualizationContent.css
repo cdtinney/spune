@@ -49,6 +49,38 @@
   z-index: 100;
 }
 
+.visualization__error {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  gap: 16px;
+}
+
+.visualization__error p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.visualization__reconnect-btn {
+  padding: 10px 24px;
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.visualization__reconnect-btn:hover {
+  background-color: #1ed760;
+}
+
 .visualization__bottom-gradient {
   position: absolute;
   bottom: 0;
