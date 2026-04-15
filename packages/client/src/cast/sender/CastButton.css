@@ -1,0 +1,29 @@
+.cast-button {
+  position: absolute;
+  right: 70px;
+  top: 35px;
+  z-index: 100;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.cast-button:hover {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.cast-button--connected {
+  color: #1db954;
+}
+
+.cast-button--connected:hover {
+  color: #1ed760;
+}
+
+.cast-button:focus-visible {
+  outline: 2px solid #1db954;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

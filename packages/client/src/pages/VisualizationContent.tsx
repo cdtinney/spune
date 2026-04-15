@@ -15,6 +15,9 @@ import UserAvatar from '../components/UserAvatar';
 import UserMenu from '../components/UserMenu';
 import FullscreenButton from '../components/FullscreenButton';
 import ProgressBar from '../components/ProgressBar';
+import CastButton from '../cast/sender/CastButton';
+import useCastSession from '../cast/sender/useCastSession';
+import type { CastMessage } from '../cast/types';
 import './VisualizationContent.css';
 
 const REPO_URL = 'https://github.com/cdtinney/spune';
@@ -23,6 +26,7 @@ export default function VisualizationContent() {
   useNowPlayingPoller();
   const { user, logout, login } = useUser();
   const { nowPlaying, relatedAlbums, initialized, error, connectionLost } = useSpotify();
+  const castSession = useCastSession();
   const windowSize = useWindowSize();
   const { tiles, gridCols, gridRows, base } = useAlbumGrid(relatedAlbums, windowSize);
   const dominantColor = useDominantColor(nowPlaying?.albumImageUrl);
@@ -35,6 +39,35 @@ export default function VisualizationContent() {
     document.addEventListener('fullscreenchange', handleChange);
     return () => document.removeEventListener('fullscreenchange', handleChange);
   }, []);
+
+  // Send playback data to Chromecast receiver when casting
+  useEffect(() => {
+    if (!castSession.connected || !nowPlaying) return;
+
+    const albumImageUrls = relatedAlbums.allAlbumIds
+      .map((id) => {
+        const album = relatedAlbums.byAlbumId[id];
+        return (album?.images[1] || album?.images[0])?.url;
+      })
+      .filter((url): url is string => !!url);
+
+    const message: CastMessage = {
+      type: 'UPDATE_PLAYBACK',
+      nowPlaying: {
+        songId: nowPlaying.songId,
+        songTitle: nowPlaying.songTitle,
+        artistName: nowPlaying.artistName,
+        albumName: nowPlaying.albumName,
+        albumImageUrl: nowPlaying.albumImageUrl,
+        progressMs: nowPlaying.progressMs,
+        durationMs: nowPlaying.durationMs,
+        isPlaying: nowPlaying.isPlaying,
+      },
+      albumImageUrls,
+    };
+
+    castSession.sendMessage(message);
+  }, [castSession, nowPlaying, relatedAlbums]);
 
   const handleFullscreenToggle = useCallback((): void => {
     if (!document.fullscreenElement) {
@@ -64,6 +97,13 @@ export default function VisualizationContent() {
               <FontAwesomeIcon icon={faGithub} size="1x" />
             </a>
           )}
+
+          <CastButton
+            available={castSession.available}
+            connected={castSession.connected}
+            onConnect={castSession.startCasting}
+            onDisconnect={castSession.stopCasting}
+          />
 
           {userName && (
             <div className="visualization__user-container">
