@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import type { CastMessage } from '../types';
 import { CAST_NAMESPACE } from '../types';
 
-const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID;
+// Custom app ID for the Spune receiver. Falls back to Default Media Receiver
+// for device discovery during development (custom messaging won't work with
+// the default receiver, but the cast button and session flow will).
+const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID || 'CC1AD845';
 
 interface CastSessionState {
   available: boolean;
@@ -18,8 +21,7 @@ export default function useCastSession(): CastSessionState {
   const sdkLoadedRef = useRef(false);
 
   useEffect(() => {
-    // Don't load Cast SDK if no app ID is configured
-    if (!CAST_APP_ID || document.querySelector('script[src*="cast_sender"]')) {
+    if (document.querySelector('script[src*="cast_sender"]')) {
       return;
     }
 
