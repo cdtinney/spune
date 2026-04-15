@@ -128,21 +128,6 @@ export default function VisualizationContent() {
       <div className="visualization__content">
         {isInitialLoad && <LoadingScreen className="visualization__loading" />}
 
-        {!isInitialLoad && (hasError || connectionLost) && (
-          <div
-            className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
-          >
-            <p>
-              {isSongPlaying
-                ? 'Connection lost. Retrying…'
-                : 'Session expired or connection failed.'}
-            </p>
-            <button className="btn-primary" onClick={login}>
-              Reconnect with Spotify
-            </button>
-          </div>
-        )}
-
         {!isInitialLoad && !hasError && !connectionLost && !isSongPlaying && (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
@@ -153,6 +138,21 @@ export default function VisualizationContent() {
           <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} tileSize={tileSize} />
         )}
       </div>
+
+      {!isInitialLoad && (hasError || connectionLost) && (
+        <div
+          className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
+        >
+          <p>
+            {isSongPlaying
+              ? 'Connection lost. Retrying…'
+              : 'Session expired or connection failed.'}
+          </p>
+          <button className="btn-primary" onClick={login}>
+            Reconnect with Spotify
+          </button>
+        </div>
+      )}
 
       {!isInitialLoad && isSongPlaying && (
         <ProgressBar
