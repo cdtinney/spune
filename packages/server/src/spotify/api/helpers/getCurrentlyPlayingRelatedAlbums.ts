@@ -4,6 +4,7 @@ import getRelatedArtists from './getRelatedArtists';
 import uniqueAlbums from '../../utils/uniqueAlbums';
 import combineTrackArtists from '../../utils/combineTrackArtists';
 import logger from '../../../logger';
+import { artistIdCache, normalizeKey, NOT_FOUND } from '../../../cache';
 import type { SpotifyAlbum, SpotifyArtist } from '../../../types';
 
 interface CurrentlyPlayingItem {
@@ -21,11 +22,20 @@ interface CurrentlyPlayingResponse {
 
 /**
  * Search Spotify for an artist by name and return their ID.
+ * Results are cached by normalized artist name.
  */
 async function resolveArtistId(spotifyApi: SpotifyApi, name: string): Promise<string | null> {
+  const cacheKey = normalizeKey(name);
+  const cached = artistIdCache.get(cacheKey);
+  if (cached !== undefined) {
+    return cached === NOT_FOUND ? null : cached;
+  }
+
   try {
     const results = await spotifyApi.search(name, ['artist'], undefined, 1);
-    return results.artists?.items?.[0]?.id || null;
+    const id = results.artists?.items?.[0]?.id || null;
+    artistIdCache.set(cacheKey, id ?? NOT_FOUND);
+    return id;
   } catch {
     return null;
   }

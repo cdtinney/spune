@@ -1,5 +1,6 @@
 import axios from 'axios';
 import logger from '../../../logger';
+import { relatedArtistsCache, normalizeKey } from '../../../cache';
 import type { LastFmResponse, ListenBrainzResponse, MusicBrainzResponse } from '../../../types';
 
 const LASTFM_BASE = 'https://ws.audioscrobbler.com/2.0/';
@@ -87,6 +88,13 @@ async function fromListenBrainz(artistName: string, limit = 20): Promise<string[
  * Returns deduplicated array of artist names.
  */
 export default async function getRelatedArtists(artistName: string): Promise<string[]> {
+  const cacheKey = normalizeKey(artistName);
+  const cached = relatedArtistsCache.get(cacheKey);
+  if (cached) {
+    logger.info(`Related artists cache hit for "${artistName}" (${cached.length} artists)`);
+    return cached;
+  }
+
   // Run both in parallel -- Last.fm is fast, ListenBrainz adds diversity
   const [lastfmNames, lbNames] = await Promise.all([
     fromLastFm(artistName),
@@ -107,5 +115,9 @@ export default async function getRelatedArtists(artistName: string): Promise<str
   logger.info(
     `Related artists: ${combined.length} total (${lastfmNames.length} Last.fm + ${lbNames.length} ListenBrainz)`,
   );
+
+  if (combined.length > 0) {
+    relatedArtistsCache.set(cacheKey, combined);
+  }
   return combined;
 }
