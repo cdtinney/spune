@@ -12,15 +12,17 @@
     "url": "https://github.com/cdtinney/spune/issues"
   },
   "homepage": "https://github.com/cdtinney/spune#readme",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "node app.js",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "ts-node app.ts",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "test": "jest --watch",
-    "test:coverage": "jest --coverage --detectOpenHandles --forceExit",
-    "test:integration": "NODE_ENV=integration jest --config jest.integration.config.js --detectOpenHandles --runInBand",
-    "watch": "nodemon app.js"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "watch": "nodemon --exec ts-node app.ts"
   },
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.2.0",
@@ -36,11 +38,19 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.18.2",
+    "@types/node": "^25.6.0",
+    "@types/passport": "^1.0.17",
+    "@types/pg": "^8.20.0",
+    "@types/supertest": "^7.2.0",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.5.0",
-    "jest": "^30.3.0",
     "nodemon": "^3.1.14",
-    "supertest": "^7.2.2"
+    "supertest": "^7.2.2",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "vitest": "^4.1.4"
   }
 }

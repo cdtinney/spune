@@ -121,7 +121,16 @@
       "Bash(npx prettier:*)",
       "Bash(npx eslint:*)",
       "Bash(grep -c \"ms$\")",
-      "Bash(npx -w spune-client eslint src/)"
+      "Bash(npx -w spune-client eslint src/)",
+      "Bash(cd:*)",
+      "Bash(ls:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find /Users/ctinney/Development/_Personal/spune/packages/server -name declarations* -o -name *.d.ts)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npm run test:coverage --workspace spune-server)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npx jest --no-coverage src/auth/__tests__/configurePassport.test.js)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npx jest --no-coverage src/auth/__tests__/configurePassport.test.ts)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npm run test --workspace spune-server)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://127.0.0.1:3000/auth/spotify/callback DATABASE_URL=postgresql://localhost:5432/spune_test SESSION_SECRET=test npx vitest run src/spotify/auth/__tests__/refreshToken.test.ts)"
     ]
   }
 }
