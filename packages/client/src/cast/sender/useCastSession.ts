@@ -2,9 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import type { CastMessage } from '../types';
 import { CAST_NAMESPACE } from '../types';
 
-// Set this to your registered Cast application ID.
-// Falls back to Default Media Receiver for testing device discovery only.
-const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID || 'CC1AD845';
+const CAST_APP_ID = import.meta.env.VITE_CAST_APP_ID;
 
 interface CastSessionState {
   available: boolean;
@@ -20,8 +18,8 @@ export default function useCastSession(): CastSessionState {
   const sdkLoadedRef = useRef(false);
 
   useEffect(() => {
-    // Load the Cast Sender SDK
-    if (document.querySelector('script[src*="cast_sender"]')) {
+    // Don't load Cast SDK if no app ID is configured
+    if (!CAST_APP_ID || document.querySelector('script[src*="cast_sender"]')) {
       return;
     }
 
