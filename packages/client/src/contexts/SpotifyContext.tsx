@@ -5,7 +5,7 @@ import {
   useCallback,
   useMemo,
   type ReactNode,
-  type MutableRefObject,
+  type RefObject,
 } from 'react';
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
 import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
@@ -54,7 +54,7 @@ interface SpotifyContextValue extends SpotifyState {
   connectionLost: boolean;
   dispatch: React.Dispatch<SpotifyAction>;
   fetchNowPlaying: (
-    loadingRef: MutableRefObject<boolean>,
+    loadingRef: RefObject<boolean>,
     currentSongId: string | null,
   ) => Promise<FetchNowPlayingResult | NowPlaying | null>;
   fetchRelatedAlbums: (songId: string) => Promise<void>;
@@ -163,7 +163,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
 
   const fetchNowPlaying = useCallback(
     async (
-      loadingRef: MutableRefObject<boolean>,
+      loadingRef: RefObject<boolean>,
       currentSongId: string | null,
     ): Promise<FetchNowPlayingResult | NowPlaying | null> => {
       if (loadingRef.current) return null;

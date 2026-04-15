@@ -19,6 +19,7 @@ module.exports = [
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-deprecated': 'warn',
       '@typescript-eslint/no-require-imports': 'off',
       'no-console': 'off',
     },
