@@ -45,7 +45,7 @@ export default function SongCard({
   const coverStyle = {
     backgroundImage: `url("${displayedSong.albumImageUrl}")`,
     boxShadow: dominantColor
-      ? `0 0 40px 10px ${dominantColor}, 0 6px 10px 0 rgba(0,0,0,.14)`
+      ? `0 0 4px 1px ${dominantColor}, 0 6px 10px 0 rgba(0,0,0,.14)`
       : undefined,
   };
 
