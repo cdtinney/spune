@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import type { RelatedAlbums, WindowSize, Album, AlbumGridResult } from '../types';
 
 const TILE_SIZE_PX = 100;
+const TILE_SIZE_MOBILE_PX = 70;
+const MOBILE_BREAKPOINT = 600;
 const OVERSCAN_MULTIPLIER = 1.6;
 const OVERSCAN_EXTRA_BLOCKS = 1;
 
@@ -93,12 +95,13 @@ export default function useAlbumGrid(
   return useMemo(() => {
     const { width, height } = windowSize;
     const { byAlbumId, allAlbumIds } = relatedAlbums;
+    const tileSize = width <= MOBILE_BREAKPOINT ? TILE_SIZE_MOBILE_PX : TILE_SIZE_PX;
 
     if (allAlbumIds.length === 0) {
-      return { tiles: [], gridCols: 0, gridRows: 0, tileSize: TILE_SIZE_PX };
+      return { tiles: [], gridCols: 0, gridRows: 0, tileSize };
     }
 
-    const blockSize = TEMPLATE_SIZE * TILE_SIZE_PX;
+    const blockSize = TEMPLATE_SIZE * tileSize;
     const repsX = Math.ceil((width * OVERSCAN_MULTIPLIER) / blockSize) + OVERSCAN_EXTRA_BLOCKS;
     const repsY = Math.ceil((height * OVERSCAN_MULTIPLIER) / blockSize) + OVERSCAN_EXTRA_BLOCKS;
 
@@ -134,7 +137,7 @@ export default function useAlbumGrid(
       tiles,
       gridCols: repsX * TEMPLATE_SIZE,
       gridRows: repsY * TEMPLATE_SIZE,
-      tileSize: TILE_SIZE_PX,
+      tileSize,
     };
   }, [relatedAlbums, windowSize]);
 }
