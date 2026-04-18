@@ -121,7 +121,20 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
   useEffect(() => {
     connect();
 
+    // Reconnect when the tab becomes visible again (e.g. after being backgrounded).
+    // Browsers kill long-lived connections in background tabs, so the SSE connection
+    // will be dead when the user returns.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        firstErrorAtRef.current = null;
+        setGaveUp(false);
+        connect();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (eventSourceRef.current) {
         eventSourceRef.current.close();
       }
