@@ -124,7 +124,7 @@ export default function AlbumGrid({ tiles, gridCols, gridRows, tileSize }: Album
   }
 
   return (
-    <div className="album-grid-viewport">
+    <div className="album-grid-viewport" data-testid="album-grid">
       <div
         className="album-grid"
         style={{

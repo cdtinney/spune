@@ -1,14 +1,13 @@
 import { test, expect } from '@playwright/test';
+import { mockUnauthenticated } from './fixtures';
 
 test.describe('Home page', () => {
-  test('loads and shows the Spune logo', async ({ page }) => {
+  test('shows logo, title, and login button', async ({ page }) => {
+    await mockUnauthenticated(page);
     await page.goto('/');
+
     await expect(page).toHaveTitle('Spune');
     await expect(page.locator('img[alt="Spune Logo"]')).toBeVisible();
-  });
-
-  test('shows the Spotify login button', async ({ page }) => {
-    await page.goto('/');
     await expect(page.locator('#button-login')).toBeVisible();
     await expect(page.locator('#button-login')).toContainText('LOG IN WITH SPOTIFY');
   });
@@ -24,6 +23,7 @@ test.describe('Error page', () => {
 
 test.describe('Protected routes', () => {
   test('redirects /visualization to /home when not logged in', async ({ page }) => {
+    await mockUnauthenticated(page);
     await page.goto('/#/visualization');
     await page.waitForURL('**/home');
     await expect(page.locator('#button-login')).toBeVisible();

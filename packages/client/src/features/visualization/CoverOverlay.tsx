@@ -13,7 +13,7 @@ export default function CoverOverlay({ dominantColor }: CoverOverlayProps) {
     : undefined;
 
   return (
-    <div className="cover-overlay">
+    <div className="cover-overlay" data-testid="cover-overlay">
       <div className="cover-overlay__gradient" />
       {dominantColor && <div className="cover-overlay__color" style={overlayStyle} />}
       <div className="cover-overlay__darken" />

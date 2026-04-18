@@ -95,7 +95,7 @@ export default function VisualizationContent() {
       }
       emptyContent={
         !isInitialLoad && !hasError && !connectionLost && !isSongPlaying ? (
-          <div className="visualization__empty">
+          <div className="visualization__empty" data-testid="empty-state">
             <p>No song playing. Play something.</p>
           </div>
         ) : undefined
@@ -104,6 +104,7 @@ export default function VisualizationContent() {
         !isInitialLoad && (hasError || connectionLost) ? (
           <div
             className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
+            data-testid="error-overlay"
           >
             <p>
               {isSongPlaying
@@ -122,7 +123,11 @@ export default function VisualizationContent() {
             <FullscreenButton onClick={handleFullscreenToggle} />
 
             {!fullscreen && (
-              <a href={REPO_URL} className="visualization__github-icon icon-interactive">
+              <a
+                href={REPO_URL}
+                className="visualization__github-icon icon-interactive"
+                data-testid="github-link"
+              >
                 <FontAwesomeIcon icon={faGithub} size="1x" />
               </a>
             )}
@@ -135,7 +140,7 @@ export default function VisualizationContent() {
             />
 
             {userName && (
-              <div className="visualization__user-container">
+              <div className="visualization__user-container" data-testid="user-controls">
                 <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
                 <UserMenu onLogout={logout} />
               </div>

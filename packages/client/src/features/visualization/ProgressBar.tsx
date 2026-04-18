@@ -38,7 +38,7 @@ export default function ProgressBar({ progressMs, durationMs, isPlaying }: Progr
   const percent = durationMs > 0 ? (localProgress / durationMs) * 100 : 0;
 
   return (
-    <div className="progress-bar">
+    <div className="progress-bar" data-testid="progress-bar">
       <span className="progress-bar__time">{formatTime(localProgress)}</span>
       <div className="progress-bar__track">
         <div className="progress-bar__fill" style={{ width: `${percent}%` }} />
