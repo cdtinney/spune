@@ -32,7 +32,7 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
   return (
     <div className="user-menu" ref={menuRef}>
       <button
-        className="user-menu__trigger icon-interactive focus-ring"
+        className="user-menu__trigger btn-unstyled icon-interactive focus-ring"
         onClick={() => setOpen(!open)}
         onKeyDown={handleKeyDown}
         aria-label="User menu"
@@ -42,7 +42,7 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
         <FontAwesomeIcon icon={faCaretDown} className="user-menu__icon" />
       </button>
       {open && (
-        <div className="user-menu__dropdown" role="menu">
+        <div className="user-menu__dropdown dropdown-panel" role="menu">
           <button className="user-menu__item" role="menuitem" onClick={onLogout}>
             Log Out
           </button>

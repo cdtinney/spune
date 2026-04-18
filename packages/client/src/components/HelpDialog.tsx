@@ -27,7 +27,7 @@ export default function HelpDialog() {
   return (
     <div className="help-dialog" ref={dialogRef} onKeyDown={handleKeyDown}>
       <button
-        className="help-dialog__trigger icon-interactive focus-ring"
+        className="btn-unstyled icon-interactive focus-ring"
         onClick={() => setOpen(!open)}
         aria-label="About Spune"
         aria-expanded={open}
@@ -36,7 +36,7 @@ export default function HelpDialog() {
       </button>
 
       {open && (
-        <div className="help-dialog__panel" role="dialog" aria-label="About Spune">
+        <div className="help-dialog__panel dropdown-panel" role="dialog" aria-label="About Spune">
           <h2 className="help-dialog__title">Spune</h2>
           <p className="help-dialog__text">
             A Spotify visualizer inspired by the{' '}
@@ -50,14 +50,14 @@ export default function HelpDialog() {
             full experience.
           </p>
           <div className="help-dialog__links">
-            <a href={REPO_URL} target="_blank" rel="noreferrer">
+            <a className="link-subtle" href={REPO_URL} target="_blank" rel="noreferrer">
               GitHub
             </a>
             <span className="help-dialog__separator" aria-hidden="true">
               &middot;
             </span>
             <span>Author: </span>
-            <a href={WEBSITE_URL} target="_blank" rel="noreferrer">
+            <a className="link-subtle" href={WEBSITE_URL} target="_blank" rel="noreferrer">
               tinney.dev
             </a>
           </div>

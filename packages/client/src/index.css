@@ -16,8 +16,12 @@
   --spacing-overlay-inset: 30px;
   --spacing-overlay-inset-mobile: 15px;
 
-  /* Border radius */
+  /* Typography */
+  --font-size-sm: 0.8rem;
+
+  /* Border */
   --radius-sm: 4px;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
 
   /* Z-index layers */
   --z-overlay-bg: 0;
@@ -84,6 +88,30 @@ body {
   outline: 2px solid var(--color-spotify-green);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+.btn-unstyled {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dropdown-panel {
+  position: absolute;
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-elevation-3);
+  z-index: var(--z-dropdown);
+}
+
+.link-subtle {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.link-subtle:hover {
+  color: var(--color-text-secondary);
 }
 
 @keyframes fadein {
