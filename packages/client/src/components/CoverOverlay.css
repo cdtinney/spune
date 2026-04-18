@@ -26,7 +26,20 @@
   );
   opacity: 0.6;
   background-size: 1200% 1200%;
-  animation: move-background 360s ease infinite alternate;
+  animation:
+    gradient-entrance 2s ease-out forwards,
+    move-background 360s ease infinite alternate;
+}
+
+@keyframes gradient-entrance {
+  from {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+  to {
+    opacity: 0.6;
+    transform: scale(1);
+  }
 }
 
 .cover-overlay__color {
@@ -46,4 +59,14 @@
     rgba(0, 0, 0, 0.75) 75%,
     rgba(0, 0, 0, 1) 100%
   );
+  animation: darken-entrance 2s ease-out forwards;
+}
+
+@keyframes darken-entrance {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

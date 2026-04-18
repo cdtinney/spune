@@ -12,6 +12,7 @@ import type { RelatedAlbums, SpotifyAlbum } from '../../types';
 import { CAST_NAMESPACE } from '../types';
 import '../../index.css';
 import '../../App.css';
+import '../../pages/VisualizationContent.css';
 
 function buildRelatedAlbums(imageUrls: string[]): RelatedAlbums {
   const byAlbumId: Record<string, SpotifyAlbum> = {};
@@ -47,7 +48,9 @@ export default function ReceiverApp() {
   const handleMessage = useCallback((event: cast.framework.system.Event) => {
     try {
       const messageEvent = event as cast.framework.system.MessageEvent;
-      const data = JSON.parse(messageEvent.data as string) as CastMessage;
+      // CAF v3 automatically deserializes JSON strings, so data is already an object
+      const raw = messageEvent.data;
+      const data = (typeof raw === 'string' ? JSON.parse(raw) : raw) as CastMessage;
 
       if (data.type === 'UPDATE_PLAYBACK') {
         setNowPlaying(data.nowPlaying);
@@ -90,15 +93,7 @@ export default function ReceiverApp() {
   return (
     <div className="app">
       <div className="app__content">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-        >
+        <div className="visualization">
           <CoverOverlay dominantColor={dominantColor} />
 
           {songPlaying && (
@@ -112,31 +107,12 @@ export default function ReceiverApp() {
             />
           )}
 
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-              backgroundColor: '#424242',
-            }}
-          >
-            {!connected && !songPlaying && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexGrow: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  gap: '12px',
-                }}
-              >
-                <LoadingScreen />
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>
-                  Waiting for cast connection...
-                </p>
+          <div className="visualization__content">
+            {!connected && !songPlaying && <LoadingScreen className="visualization__loading" />}
+
+            {connected && !songPlaying && (
+              <div className="visualization__empty">
+                <p>Waiting for playback data...</p>
               </div>
             )}
 
@@ -157,6 +133,8 @@ export default function ReceiverApp() {
               isPlaying={nowPlaying.isPlaying}
             />
           )}
+
+          <div className="visualization__bottom-gradient" />
         </div>
       </div>
     </div>
