@@ -8,6 +8,7 @@ import {
   type RefObject,
 } from 'react';
 import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
+import mapToNowPlaying from '../api/mapToNowPlaying';
 import type { NowPlaying } from '../types';
 import spotifyReducer, {
   initialState,
@@ -73,20 +74,11 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           return { songId: item.id, albumId: item.album?.id };
         }
 
-        const nowPlayingResult: NowPlaying = {
-          songId: item.id,
-          songTitle: item.name,
-          songArtists: item.artists,
-          artistName: item.artists.map((a) => a.name).join(', '),
-          albumId: item.album.id,
-          albumName: item.album.name,
-          albumImageUrl: item.album.images[0]?.url,
-          albumArtists: item.album.artists,
-          albumImages: item.album.images,
-          progressMs: data.progress_ms ?? 0,
-          durationMs: item.duration_ms ?? 0,
-          isPlaying: data.is_playing ?? false,
-        };
+        const nowPlayingResult = mapToNowPlaying(
+          item,
+          data.progress_ms ?? 0,
+          data.is_playing ?? false,
+        );
 
         dispatch({ type: ActionType.FETCH_NOW_PLAYING_SUCCESS, payload: nowPlayingResult });
         return nowPlayingResult;

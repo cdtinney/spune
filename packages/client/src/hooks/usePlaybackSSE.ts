@@ -1,19 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import type { NowPlaying } from '../types';
+import mapToNowPlaying from '../api/mapToNowPlaying';
+import type { NowPlaying, SpotifyTrack } from '../types';
 
 interface SSEPlaybackEvent {
-  item: {
-    id: string;
-    name: string;
-    duration_ms: number;
-    artists: Array<{ id: string; name: string }>;
-    album: {
-      id: string;
-      name: string;
-      images: Array<{ url: string }>;
-      artists: Array<{ id: string; name: string }>;
-    };
-  } | null;
+  item: SpotifyTrack | null;
   progress_ms: number;
   is_playing: boolean;
   song_changed: boolean;
@@ -69,22 +59,7 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
           return;
         }
 
-        const info: NowPlaying = {
-          songId: data.item.id,
-          songTitle: data.item.name,
-          songArtists: data.item.artists,
-          artistName: data.item.artists.map((a) => a.name).join(', '),
-          albumId: data.item.album.id,
-          albumName: data.item.album.name,
-          albumImageUrl: data.item.album.images[0]?.url,
-          albumArtists: data.item.album.artists,
-          albumImages: data.item.album.images,
-          progressMs: data.progress_ms ?? 0,
-          durationMs: data.item.duration_ms ?? 0,
-          isPlaying: data.is_playing ?? false,
-        };
-
-        setNowPlaying(info);
+        setNowPlaying(mapToNowPlaying(data.item, data.progress_ms ?? 0, data.is_playing ?? false));
       } catch {
         // Ignore parse errors
       }
