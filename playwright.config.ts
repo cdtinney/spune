@@ -13,4 +13,9 @@ export default defineConfig({
       use: { browserName: 'chromium' },
     },
   ],
+  webServer: {
+    command: 'pnpm --filter spune-client exec vite --port 3000',
+    url: 'http://127.0.0.1:3000',
+    reuseExistingServer: true,
+  },
 });
