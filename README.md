@@ -58,7 +58,7 @@ Spune can cast the visualization to a Chromecast-enabled TV. See [docs/chromecas
 
 ## Production Deployment
 
-CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. See [docs/deployment.md](docs/deployment.md).
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. After push, a deploy-check job polls `GET /api/status` until the droplet is running the new version. See [docs/deployment.md](docs/deployment.md).
 
 **Quick version**:
 
