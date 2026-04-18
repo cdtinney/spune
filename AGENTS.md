@@ -134,4 +134,4 @@ This runs:
 6. `pnpm --filter spune-client exec tsc --noEmit` — Client type check
 7. `pnpm --filter spune-server exec tsc --noEmit` — Server type check
 
-All checks must pass. CI runs these same checks on every push and PR to `master`.
+All checks must pass. CI runs these same checks on every push and PR to `main`.

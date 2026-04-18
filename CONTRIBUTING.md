@@ -37,13 +37,13 @@ chore: update dependencies
 
 ## PR Process
 
-1. Branch off `master`.
+1. Branch off `main`.
 2. Make your changes.
 3. Run the full check suite locally:
    ```bash
    ./scripts/pre-pr.sh
    ```
-4. Push your branch and open a PR against `master`.
+4. Push your branch and open a PR against `main`.
 5. CI must pass (format, lint, test, build).
 6. PRs are squash-merged.
 
