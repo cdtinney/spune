@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import VisualizationLayout from '../../components/VisualizationLayout';
+import VisualizationLayout from '../../features/visualization/VisualizationLayout';
 import LoadingScreen from '../../components/LoadingScreen';
-import useDominantColor from '../../hooks/useDominantColor';
+import useDominantColor from '../../features/visualization/useDominantColor';
 import useWindowSize from '../../hooks/useWindowSize';
-import useAlbumGrid from '../../hooks/useAlbumGrid';
+import useAlbumGrid from '../../features/visualization/useAlbumGrid';
 import type { CastMessage, CastNowPlaying } from '../types';
 import type { RelatedAlbums, SpotifyAlbum } from '../../types';
 import { CAST_NAMESPACE } from '../types';

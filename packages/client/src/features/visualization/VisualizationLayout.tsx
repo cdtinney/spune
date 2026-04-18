@@ -3,7 +3,7 @@ import CoverOverlay from './CoverOverlay';
 import SongCard from './SongCard';
 import AlbumGrid from './AlbumGrid';
 import ProgressBar from './ProgressBar';
-import type { Album } from '../types';
+import type { Album } from '../../types';
 
 interface NowPlayingData {
   songId: string;

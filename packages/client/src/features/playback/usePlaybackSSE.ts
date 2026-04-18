@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import mapToNowPlaying from '../api/mapToNowPlaying';
-import type { NowPlaying, SpotifyTrack } from '../types';
+import mapToNowPlaying from './mapToNowPlaying';
+import type { NowPlaying, SpotifyTrack } from '../../types';
 
 interface SSEPlaybackEvent {
   item: SpotifyTrack | null;

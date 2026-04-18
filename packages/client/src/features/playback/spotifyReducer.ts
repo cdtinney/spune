@@ -1,4 +1,4 @@
-import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../types';
+import type { NowPlaying, RelatedAlbums, SpotifyAlbum } from '../../types';
 
 export const CONNECTION_LOST_THRESHOLD = 3;
 

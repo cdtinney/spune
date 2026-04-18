@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../features/auth/UserContext';
 import LoadingScreen from '../components/LoadingScreen';
-import SpotifyLoginButton from '../components/SpotifyLoginButton';
+import SpotifyLoginButton from '../features/auth/SpotifyLoginButton';
 import spuneLogo from '../spune_logo.png';
 import './HomePage.css';
 

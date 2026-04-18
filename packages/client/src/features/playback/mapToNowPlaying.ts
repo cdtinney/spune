@@ -1,4 +1,4 @@
-import type { NowPlaying, SpotifyTrack } from '../types';
+import type { NowPlaying, SpotifyTrack } from '../../types';
 
 export default function mapToNowPlaying(
   item: SpotifyTrack,

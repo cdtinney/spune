@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { RelatedAlbums, WindowSize, Album, AlbumGridResult } from '../types';
+import type { RelatedAlbums, WindowSize, Album, AlbumGridResult } from '../../types';
 
 const TILE_SIZE_PX = 100;
 const TILE_SIZE_MOBILE_PX = 70;

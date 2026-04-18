@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import AlbumGrid from '../AlbumGrid';
-import type { Album } from '../../types';
+import type { Album } from '../../../types';
 
 const mockTiles: Album[] = [
   { id: 'a1_0_0', title: 'Album 1', imageUrl: 'http://img/1.jpg', col: 1, row: 1, span: 2 },

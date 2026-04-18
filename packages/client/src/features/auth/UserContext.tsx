@@ -7,8 +7,8 @@ import {
   useMemo,
   type ReactNode,
 } from 'react';
-import { getAuthUser } from '../api/spotify';
-import type { UserProfile } from '../types';
+import { getAuthUser } from '../playback/api';
+import type { UserProfile } from '../../types';
 
 interface UserContextValue {
   user: UserProfile | null;

@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import AppRoutes from '../routes';
 import { mockUseUser } from './helpers/mockUserContext';
 
-vi.mock('../contexts/UserContext');
+vi.mock('../features/auth/UserContext');
 vi.mock('../pages/VisualizationPage', () => ({
   default: () => <div>VisualizationPage</div>,
 }));

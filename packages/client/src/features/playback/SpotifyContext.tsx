@@ -7,9 +7,9 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { getPlaybackState, getRelatedAlbums } from '../api/spotify';
-import mapToNowPlaying from '../api/mapToNowPlaying';
-import type { NowPlaying } from '../types';
+import { getPlaybackState, getRelatedAlbums } from './api';
+import mapToNowPlaying from './mapToNowPlaying';
+import type { NowPlaying } from '../../types';
 import spotifyReducer, {
   initialState,
   ActionType,

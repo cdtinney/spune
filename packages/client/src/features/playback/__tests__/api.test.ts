@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
-import { getAuthUser, getPlaybackState, getRelatedAlbums } from '../spotify';
+import { getAuthUser, getPlaybackState, getRelatedAlbums } from '../api';
 
 vi.mock('axios');
 
