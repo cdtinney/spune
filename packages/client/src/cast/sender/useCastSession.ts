@@ -43,6 +43,20 @@ export default function useCastSession(): CastSessionState {
         },
       );
 
+      // SESSION_STATE_CHANGED is more reliable for detecting abrupt disconnections
+      // (e.g. TV powered off) than CAST_STATE_CHANGED alone.
+      context.addEventListener(
+        cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+        (event: cast.framework.SessionStateEventData) => {
+          if (
+            event.sessionState === cast.framework.SessionState.SESSION_ENDED ||
+            event.sessionState === cast.framework.SessionState.SESSION_START_FAILED
+          ) {
+            setConnected(false);
+          }
+        },
+      );
+
       // Check initial state (event may have fired before listener was added)
       const initialState = context.getCastState();
       setAvailable(initialState !== cast.framework.CastState.NO_DEVICES_AVAILABLE);
@@ -74,7 +88,8 @@ export default function useCastSession(): CastSessionState {
     const session = cast.framework.CastContext.getInstance().getCurrentSession();
     if (session) {
       session.sendMessage(CAST_NAMESPACE, JSON.stringify(message)).catch(() => {
-        // Silently ignore — custom namespace fails on the default media receiver
+        // Message failure likely means receiver is gone
+        setConnected(false);
       });
     }
   }, []);

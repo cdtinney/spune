@@ -25,6 +25,10 @@ declare namespace cast.framework {
     castState: string;
   }
 
+  interface SessionStateEventData {
+    sessionState: string;
+  }
+
   const CastContextEventType: {
     CAST_STATE_CHANGED: string;
     SESSION_STATE_CHANGED: string;
@@ -35,6 +39,14 @@ declare namespace cast.framework {
     NOT_CONNECTED: string;
     CONNECTING: string;
     CONNECTED: string;
+  };
+
+  const SessionState: {
+    SESSION_STARTED: string;
+    SESSION_START_FAILED: string;
+    SESSION_RESUMED: string;
+    SESSION_ENDING: string;
+    SESSION_ENDED: string;
   };
 }
 
