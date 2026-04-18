@@ -1,6 +1,6 @@
 # Spune
 
-> Web-based Spotify "Now Playing" visualizer, inspired by the Zune desktop software.
+> A Spotify screensaver inspired by the Zune desktop software. Cast it to your TV with Chromecast.
 
 ![Zune Player 1](./assets/player.png)
 ![Zune Player 2](./assets/player2.png)
@@ -8,6 +8,8 @@
 ## Overview
 
 Spune displays album artwork from related artists in a Zune-style mosaic while you listen to Spotify. It discovers related artists via Last.fm and ListenBrainz, renders their album covers as an animated background, and can cast the visualization to a TV via Chromecast.
+
+It's meant to be used as a screensaver-style display — open it in a browser tab, or cast it to your TV for the full living room experience.
 
 ### Stack
 

@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import HelpDialog from '../components/HelpDialog';
 import { useUser } from '../contexts/UserContext';
 import { useSpotify } from '../contexts/SpotifyContext';
 import useNowPlayingPoller from '../hooks/useNowPlayingPoller';
@@ -19,8 +18,6 @@ import CastButton from '../cast/sender/CastButton';
 import useCastSession from '../cast/sender/useCastSession';
 import type { CastMessage } from '../cast/types';
 import './VisualizationContent.css';
-
-const REPO_URL = 'https://github.com/cdtinney/spune';
 
 export default function VisualizationContent() {
   useNowPlayingPoller();
@@ -92,11 +89,7 @@ export default function VisualizationContent() {
 
       {!isInitialLoad && (
         <>
-          {!fullscreen && (
-            <a href={REPO_URL} className="visualization__github-icon icon-interactive">
-              <FontAwesomeIcon icon={faGithub} size="1x" />
-            </a>
-          )}
+          {!fullscreen && <HelpDialog />}
 
           <CastButton
             available={castSession.available}

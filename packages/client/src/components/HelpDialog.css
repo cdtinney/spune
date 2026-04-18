@@ -1,0 +1,78 @@
+.help-dialog {
+  position: absolute;
+  left: var(--spacing-overlay-inset);
+  top: calc(var(--spacing-overlay-inset) + 5px);
+  z-index: var(--z-overlay-chrome);
+}
+
+.help-dialog__trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.help-dialog__panel {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: 280px;
+  padding: 16px;
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-elevation-3);
+  z-index: var(--z-dropdown);
+}
+
+.help-dialog__title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.help-dialog__text {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+.help-dialog__text a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.help-dialog__text a:hover {
+  color: var(--color-text-secondary);
+}
+
+.help-dialog__links {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.8rem;
+}
+
+.help-dialog__links a {
+  color: var(--color-text-primary);
+  text-decoration: none;
+}
+
+.help-dialog__links a:hover {
+  color: var(--color-text-secondary);
+}
+
+.help-dialog__separator {
+  margin: 0 8px;
+  color: var(--color-text-secondary);
+}
+
+/* Breakpoint: 600px */
+@media (max-width: 600px) {
+  .help-dialog {
+    left: var(--spacing-overlay-inset-mobile);
+    top: calc(var(--spacing-overlay-inset-mobile) + 5px);
+  }
+}

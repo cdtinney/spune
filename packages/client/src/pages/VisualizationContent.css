@@ -15,13 +15,6 @@
   background-color: transparent;
 }
 
-.visualization__github-icon {
-  position: absolute;
-  left: var(--spacing-overlay-inset);
-  top: calc(var(--spacing-overlay-inset) + 5px);
-  z-index: var(--z-overlay-chrome);
-}
-
 .visualization__user-container {
   position: absolute;
   top: var(--spacing-overlay-inset);
@@ -83,10 +76,6 @@
 
 /* Breakpoint: 600px */
 @media (max-width: 600px) {
-  .visualization__github-icon {
-    display: none;
-  }
-
   .visualization__user-container {
     top: var(--spacing-overlay-inset-mobile);
     right: var(--spacing-overlay-inset-mobile);
