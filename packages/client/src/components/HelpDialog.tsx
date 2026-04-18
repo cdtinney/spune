@@ -1,34 +1,19 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import useDropdown from '../hooks/useDropdown';
 import './HelpDialog.css';
 
 const REPO_URL = 'https://github.com/cdtinney/spune';
 const WEBSITE_URL = 'https://tinney.dev';
 
 export default function HelpDialog() {
-  const [open, setOpen] = useState(false);
-  const dialogRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dialogRef.current && e.target instanceof Node && !dialogRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') setOpen(false);
-  }, []);
+  const { open, ref, toggle, handleKeyDown } = useDropdown();
 
   return (
-    <div className="help-dialog" ref={dialogRef} onKeyDown={handleKeyDown}>
+    <div className="help-dialog" ref={ref} onKeyDown={handleKeyDown}>
       <button
         className="btn-unstyled icon-interactive focus-ring"
-        onClick={() => setOpen(!open)}
+        onClick={toggle}
         aria-label="About Spune"
         aria-expanded={open}
       >
