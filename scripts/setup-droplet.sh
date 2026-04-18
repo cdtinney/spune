@@ -4,7 +4,7 @@ set -euo pipefail
 # Spune droplet setup script
 # Run on a fresh Ubuntu 24.04 DigitalOcean droplet:
 #   ssh root@your-droplet-ip
-#   curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-droplet.sh | bash
 
 echo "==> Installing Docker..."
 curl -fsSL https://get.docker.com | sh
@@ -84,5 +84,5 @@ echo "     docker compose exec db psql -U spune -d spune -c \\"
 echo "       \"CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, spotify_id TEXT UNIQUE NOT NULL, spotify_access_token TEXT, spotify_refresh_token TEXT, token_updated BIGINT, expires_in BIGINT, display_name TEXT, photos JSON);\""
 echo ""
 echo "  The app will be available on port 80."
-echo "  Watchtower will auto-update when you push to master."
+echo "  Watchtower will auto-update when you push to main."
 echo ""

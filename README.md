@@ -58,13 +58,13 @@ Spune can cast the visualization to a Chromecast-enabled TV. See [docs/chromecas
 
 ## Production Deployment
 
-CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. After push, a deploy-check job polls `GET /api/status` until the droplet is running the new version. See [docs/deployment.md](docs/deployment.md).
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `main`. After push, a deploy-check job polls `GET /api/status` until the droplet is running the new version. See [docs/deployment.md](docs/deployment.md).
 
 **Quick version**:
 
 ```bash
 # On a fresh Ubuntu droplet:
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-droplet.sh | bash
 ```
 
 ## Inspiration

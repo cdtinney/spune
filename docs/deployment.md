@@ -1,6 +1,6 @@
 # Production Deployment
 
-CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`. The droplet auto-updates via Watchtower.
+CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `main`. The droplet auto-updates via Watchtower.
 
 ## Setup
 
@@ -9,7 +9,7 @@ CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `master`
 Create an Ubuntu 24.04 DigitalOcean droplet (1GB RAM is enough). Open the **Droplet Console** and run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-droplet.sh | bash
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-droplet.sh | bash
 ```
 
 This installs Docker, creates `/opt/spune` with a `docker-compose.yml` and `.env`, and generates random secrets.
@@ -39,20 +39,20 @@ Add an **A record** in your DNS provider pointing to the droplet IP.
 cd /opt/spune
 docker compose up -d
 # Wait ~10s for Postgres, then:
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/migrate.sh -o /tmp/migrate.sh && bash /tmp/migrate.sh
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/migrate.sh -o /tmp/migrate.sh && bash /tmp/migrate.sh
 ```
 
 ### 5. Add HTTPS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/master/scripts/setup-caddy.sh -o /tmp/setup-caddy.sh && bash /tmp/setup-caddy.sh your-domain.com
+curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-caddy.sh -o /tmp/setup-caddy.sh && bash /tmp/setup-caddy.sh your-domain.com
 ```
 
 Add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's redirect URIs.
 
 ## Auto-deploy
 
-1. Merge a PR to `master`
+1. Merge a PR to `main`
 2. CI builds and pushes `ghcr.io/cdtinney/spune:latest`
 3. Watchtower detects the new image within 60 seconds
 4. It pulls and restarts the app container

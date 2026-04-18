@@ -28,7 +28,7 @@ Create a `CONTRIBUTING.md` with:
 - Setup instructions (reference README).
 - Branch naming convention (`task/NN-description`).
 - Commit message format.
-- PR process (branch off master, CI must pass, squash merge).
+- PR process (branch off main, CI must pass, squash merge).
 - How to run the full check suite locally before pushing.
 
 ### Pre-PR validation script
