@@ -31,3 +31,11 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* Breakpoint: 600px */
+@media (max-width: 600px) {
+  .cast-button {
+    right: var(--spacing-overlay-inset-mobile);
+    bottom: var(--spacing-overlay-inset-mobile);
+  }
+}

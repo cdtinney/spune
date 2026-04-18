@@ -57,6 +57,34 @@ Add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's re
 3. Watchtower detects the new image within 60 seconds
 4. It pulls and restarts the app container
 
+### Deploy verification
+
+CI includes a `deploy-check` job that polls `GET /api/status` after the Docker image is pushed, waiting for the running version to match the new commit SHA.
+
+You can also run the check manually:
+
+```bash
+./scripts/check-deploy.sh https://spune.tinney.dev/api/status <commit-sha>
+```
+
+### Status endpoint
+
+`GET /api/status` returns:
+
+```json
+{
+  "version": "abc1234...",
+  "uptime": 12345.67,
+  "startedAt": "2025-01-01T00:00:00.000Z"
+}
+```
+
+- **version**: The commit SHA baked into the Docker image at build time
+- **uptime**: Seconds since the Node.js process started
+- **startedAt**: ISO timestamp of when the process started
+
+Rate-limited to 30 requests per 15 minutes.
+
 ## Debugging
 
 ```bash

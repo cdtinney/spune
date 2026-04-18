@@ -62,7 +62,7 @@
 @media (max-width: 600px) {
   .song-card {
     left: var(--spacing-overlay-inset-mobile);
-    bottom: var(--spacing-overlay-inset-mobile);
+    bottom: 40px;
   }
 
   .song-card__cover {

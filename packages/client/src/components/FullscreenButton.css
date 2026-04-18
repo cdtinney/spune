@@ -8,3 +8,10 @@
   border: none;
   padding: 8px;
 }
+
+/* Breakpoint: 600px */
+@media (max-width: 600px) {
+  .fullscreen-button {
+    display: none;
+  }
+}

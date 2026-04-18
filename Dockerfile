@@ -22,6 +22,10 @@ COPY packages/server/ packages/server/
 ARG VITE_CAST_APP_ID=CCD3A879
 ENV VITE_CAST_APP_ID=$VITE_CAST_APP_ID
 
+# Commit SHA for /api/status endpoint
+ARG COMMIT_SHA=unknown
+RUN echo "$COMMIT_SHA" > packages/server/COMMIT_SHA
+
 # Build the client and compile the server TypeScript
 RUN pnpm client:build && pnpm server:build
 
@@ -39,8 +43,9 @@ COPY packages/server/package.json packages/server/
 # Install production server dependencies only
 RUN pnpm install --frozen-lockfile --filter spune-server --prod
 
-# Copy compiled server from build stage
+# Copy compiled server and version file from build stage
 COPY --from=build /app/packages/server/dist packages/server/dist/
+COPY --from=build /app/packages/server/COMMIT_SHA packages/server/COMMIT_SHA
 
 # Copy built client from build stage
 COPY --from=build /app/packages/client/build packages/client/build/

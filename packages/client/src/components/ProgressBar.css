@@ -39,3 +39,14 @@
   border-radius: 1px;
   transition: width 0.3s linear;
 }
+
+/* Breakpoint: 600px */
+@media (max-width: 600px) {
+  .progress-bar {
+    left: var(--spacing-overlay-inset-mobile);
+    transform: none;
+    bottom: var(--spacing-overlay-inset-mobile);
+    max-width: 200px;
+    padding: 0;
+  }
+}
