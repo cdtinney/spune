@@ -52,16 +52,21 @@ export default function SongCard({
   };
 
   return (
-    <div className={`song-card ${visible ? 'song-card--visible' : 'song-card--hidden'}`}>
+    <div
+      className={`song-card ${visible ? 'song-card--visible' : 'song-card--hidden'}`}
+      data-testid="song-card"
+    >
       <div className="song-card__cover" style={coverStyle} title={displayedSong.albumName} />
       <div className="song-card__details">
-        <div className="song-card__text song-card__artist">
+        <div className="song-card__text song-card__artist" data-testid="song-artist">
           {displayedSong.artistName.toUpperCase()}
         </div>
-        <div className="song-card__text song-card__album">
+        <div className="song-card__text song-card__album" data-testid="song-album">
           {displayedSong.albumName.toUpperCase()}
         </div>
-        <div className="song-card__text song-card__title">{displayedSong.songTitle}</div>
+        <div className="song-card__text song-card__title" data-testid="song-title">
+          {displayedSong.songTitle}
+        </div>
       </div>
     </div>
   );

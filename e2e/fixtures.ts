@@ -82,3 +82,11 @@ export async function mockFullVisualization(page: Page) {
   await mockRelatedAlbumsRoute(page);
   await mockSSE(page);
 }
+
+/** Set up all mocks for an authenticated user with no song playing. */
+export async function mockEmptyVisualization(page: Page) {
+  await mockAuthenticated(page);
+  await mockEmptyPlayback(page);
+  await mockRelatedAlbumsRoute(page);
+  await mockSSE(page);
+}
