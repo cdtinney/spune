@@ -1,20 +1,17 @@
 import { useState, useCallback, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { useUser } from '../contexts/UserContext';
-import { useSpotify } from '../contexts/SpotifyContext';
-import useNowPlayingPoller from '../hooks/useNowPlayingPoller';
+import { useUser } from '../features/auth/UserContext';
+import { useSpotify } from '../features/playback/SpotifyContext';
+import useNowPlayingPoller from '../features/playback/useNowPlayingPoller';
 import useWindowSize from '../hooks/useWindowSize';
-import useAlbumGrid from '../hooks/useAlbumGrid';
-import useDominantColor from '../hooks/useDominantColor';
+import useAlbumGrid from '../features/visualization/useAlbumGrid';
+import useDominantColor from '../features/visualization/useDominantColor';
 import LoadingScreen from '../components/LoadingScreen';
-import CoverOverlay from '../components/CoverOverlay';
-import SongCard from '../components/SongCard';
-import AlbumGrid from '../components/AlbumGrid';
-import UserAvatar from '../components/UserAvatar';
-import UserMenu from '../components/UserMenu';
+import VisualizationLayout from '../features/visualization/VisualizationLayout';
+import UserAvatar from '../features/auth/UserAvatar';
+import UserMenu from '../features/auth/UserMenu';
 import FullscreenButton from '../components/FullscreenButton';
-import ProgressBar from '../components/ProgressBar';
 import CastButton from '../cast/sender/CastButton';
 import useCastSession from '../cast/sender/useCastSession';
 import type { CastMessage } from '../cast/types';
@@ -81,86 +78,71 @@ export default function VisualizationContent() {
   const photo = user?.photos?.[0];
   const userImageUrl = typeof photo === 'string' ? photo : photo?.url || photo?.value;
   const isInitialLoad = !initialized;
-  const isSongPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
+  const isSongPlaying = !!(nowPlaying?.artistName && nowPlaying?.songTitle);
   const hasError = !!error;
 
   return (
-    <div className="visualization">
-      {!isInitialLoad && <FullscreenButton onClick={handleFullscreenToggle} />}
-
-      <CoverOverlay dominantColor={dominantColor} />
-
-      {!isInitialLoad && (
-        <>
-          {!fullscreen && (
-            <a href={REPO_URL} className="visualization__github-icon icon-interactive">
-              <FontAwesomeIcon icon={faGithub} size="1x" />
-            </a>
-          )}
-
-          <CastButton
-            available={castSession.available}
-            connected={castSession.connected}
-            onConnect={castSession.startCasting}
-            onDisconnect={castSession.stopCasting}
-          />
-
-          {userName && (
-            <div className="visualization__user-container">
-              <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
-              <UserMenu onLogout={logout} />
-            </div>
-          )}
-        </>
-      )}
-
-      {!isInitialLoad && isSongPlaying && (
-        <SongCard
-          songId={nowPlaying.songId}
-          artistName={nowPlaying.artistName}
-          songTitle={nowPlaying.songTitle}
-          albumName={nowPlaying.albumName}
-          albumImageUrl={nowPlaying.albumImageUrl}
-          dominantColor={dominantColor}
-        />
-      )}
-
-      <div className="visualization__content">
-        {isInitialLoad && <LoadingScreen className="visualization__loading" />}
-
-        {!isInitialLoad && !hasError && !connectionLost && !isSongPlaying && (
+    <VisualizationLayout
+      dominantColor={dominantColor}
+      nowPlaying={nowPlaying}
+      tiles={tiles}
+      gridCols={gridCols}
+      gridRows={gridRows}
+      tileSize={tileSize}
+      songPlaying={!isInitialLoad && isSongPlaying}
+      loadingContent={
+        isInitialLoad ? <LoadingScreen className="visualization__loading" /> : undefined
+      }
+      emptyContent={
+        !isInitialLoad && !hasError && !connectionLost && !isSongPlaying ? (
           <div className="visualization__empty">
             <p>No song playing. Play something.</p>
           </div>
-        )}
+        ) : undefined
+      }
+      errorContent={
+        !isInitialLoad && (hasError || connectionLost) ? (
+          <div
+            className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
+          >
+            <p>
+              {isSongPlaying
+                ? 'Connection lost. Retrying…'
+                : 'Session expired or connection failed.'}
+            </p>
+            <button className="btn-primary" onClick={login}>
+              Reconnect with Spotify
+            </button>
+          </div>
+        ) : undefined
+      }
+      controls={
+        !isInitialLoad ? (
+          <>
+            <FullscreenButton onClick={handleFullscreenToggle} />
 
-        {!isInitialLoad && isSongPlaying && (
-          <AlbumGrid tiles={tiles} gridCols={gridCols} gridRows={gridRows} tileSize={tileSize} />
-        )}
-      </div>
+            {!fullscreen && (
+              <a href={REPO_URL} className="visualization__github-icon icon-interactive">
+                <FontAwesomeIcon icon={faGithub} size="1x" />
+              </a>
+            )}
 
-      {!isInitialLoad && (hasError || connectionLost) && (
-        <div
-          className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
-        >
-          <p>
-            {isSongPlaying ? 'Connection lost. Retrying…' : 'Session expired or connection failed.'}
-          </p>
-          <button className="btn-primary" onClick={login}>
-            Reconnect with Spotify
-          </button>
-        </div>
-      )}
+            <CastButton
+              available={castSession.available}
+              connected={castSession.connected}
+              onConnect={castSession.startCasting}
+              onDisconnect={castSession.stopCasting}
+            />
 
-      {!isInitialLoad && isSongPlaying && (
-        <ProgressBar
-          progressMs={nowPlaying.progressMs}
-          durationMs={nowPlaying.durationMs}
-          isPlaying={nowPlaying.isPlaying}
-        />
-      )}
-
-      <div className="visualization__bottom-gradient" />
-    </div>
+            {userName && (
+              <div className="visualization__user-container">
+                <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
+                <UserMenu onLogout={logout} />
+              </div>
+            )}
+          </>
+        ) : undefined
+      }
+    />
   );
 }

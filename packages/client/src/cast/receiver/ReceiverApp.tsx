@@ -1,12 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import AlbumGrid from '../../components/AlbumGrid';
-import CoverOverlay from '../../components/CoverOverlay';
-import SongCard from '../../components/SongCard';
-import ProgressBar from '../../components/ProgressBar';
+import VisualizationLayout from '../../features/visualization/VisualizationLayout';
 import LoadingScreen from '../../components/LoadingScreen';
-import useDominantColor from '../../hooks/useDominantColor';
+import useDominantColor from '../../features/visualization/useDominantColor';
 import useWindowSize from '../../hooks/useWindowSize';
-import useAlbumGrid from '../../hooks/useAlbumGrid';
+import useAlbumGrid from '../../features/visualization/useAlbumGrid';
 import type { CastMessage, CastNowPlaying } from '../types';
 import type { RelatedAlbums, SpotifyAlbum } from '../../types';
 import { CAST_NAMESPACE } from '../types';
@@ -48,7 +45,6 @@ export default function ReceiverApp() {
   const handleMessage = useCallback((event: cast.framework.system.Event) => {
     try {
       const messageEvent = event as cast.framework.system.MessageEvent;
-      // CAF v3 automatically deserializes JSON strings, so data is already an object
       const raw = messageEvent.data;
       const data = (typeof raw === 'string' ? JSON.parse(raw) : raw) as CastMessage;
 
@@ -64,7 +60,6 @@ export default function ReceiverApp() {
   }, []);
 
   useEffect(() => {
-    // Initialize the Cast Receiver SDK
     const context = cast.framework.CastReceiverContext.getInstance();
     contextRef.current = context;
 
@@ -88,54 +83,32 @@ export default function ReceiverApp() {
     };
   }, [handleMessage]);
 
-  const songPlaying = nowPlaying?.artistName && nowPlaying?.songTitle;
+  const songPlaying = !!(nowPlaying?.artistName && nowPlaying?.songTitle);
 
   return (
     <div className="app">
       <div className="app__content">
-        <div className="visualization">
-          <CoverOverlay dominantColor={dominantColor} />
-
-          {songPlaying && (
-            <SongCard
-              songId={nowPlaying.songId}
-              artistName={nowPlaying.artistName}
-              songTitle={nowPlaying.songTitle}
-              albumName={nowPlaying.albumName}
-              albumImageUrl={nowPlaying.albumImageUrl}
-              dominantColor={dominantColor}
-            />
-          )}
-
-          <div className="visualization__content">
-            {!connected && !songPlaying && <LoadingScreen className="visualization__loading" />}
-
-            {connected && !songPlaying && (
+        <VisualizationLayout
+          dominantColor={dominantColor}
+          nowPlaying={nowPlaying}
+          tiles={tiles}
+          gridCols={gridCols}
+          gridRows={gridRows}
+          tileSize={tileSize}
+          songPlaying={songPlaying}
+          loadingContent={
+            !connected && !songPlaying ? (
+              <LoadingScreen className="visualization__loading" />
+            ) : undefined
+          }
+          emptyContent={
+            connected && !songPlaying ? (
               <div className="visualization__empty">
                 <p>Waiting for playback data...</p>
               </div>
-            )}
-
-            {songPlaying && (
-              <AlbumGrid
-                tiles={tiles}
-                gridCols={gridCols}
-                gridRows={gridRows}
-                tileSize={tileSize}
-              />
-            )}
-          </div>
-
-          {songPlaying && (
-            <ProgressBar
-              progressMs={nowPlaying.progressMs}
-              durationMs={nowPlaying.durationMs}
-              isPlaying={nowPlaying.isPlaying}
-            />
-          )}
-
-          <div className="visualization__bottom-gradient" />
-        </div>
+            ) : undefined
+          }
+        />
       </div>
     </div>
   );

@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserProvider, useUser } from '../UserContext';
-import * as api from '../../api/spotify';
+import * as api from '../api';
 
-vi.mock('../../api/spotify');
+vi.mock('../api');
 
 const mockedApi = vi.mocked(api, true);
 

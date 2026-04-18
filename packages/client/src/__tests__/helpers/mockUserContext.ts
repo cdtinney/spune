@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import type { UserProfile } from '../../types';
-import * as UserContext from '../../contexts/UserContext';
+import * as UserContext from '../../features/auth/UserContext';
 
 export function mockUseUser(
   overrides: Partial<{

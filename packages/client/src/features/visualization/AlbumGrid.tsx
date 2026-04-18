@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import FlippableTile from './FlippableTile';
-import type { Album } from '../types';
+import type { Album } from '../../types';
 import './AlbumGrid.css';
 
 const CASCADE_FLIP_STAGGER_MS = 50;

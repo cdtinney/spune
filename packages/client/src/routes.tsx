@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useUser } from './contexts/UserContext';
+import { useUser } from './features/auth/UserContext';
 import HomePage from './pages/HomePage';
 import VisualizationPage from './pages/VisualizationPage';
 import ErrorPage from './pages/ErrorPage';

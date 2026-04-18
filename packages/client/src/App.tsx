@@ -1,5 +1,5 @@
 import { HashRouter } from 'react-router-dom';
-import { UserProvider } from './contexts/UserContext';
+import { UserProvider } from './features/auth/UserContext';
 import AppRoutes from './routes';
 import './App.css';
 

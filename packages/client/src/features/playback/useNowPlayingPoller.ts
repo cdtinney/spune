@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useSpotify, ActionType } from '../contexts/SpotifyContext';
+import { useSpotify } from './SpotifyContext';
+import { ActionType } from './spotifyReducer';
 import usePlaybackSSE from './usePlaybackSSE';
 
 const POLL_INTERVAL = 3000;

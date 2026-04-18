@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import HomePage from '../HomePage';
 import { mockUseUser } from '../../__tests__/helpers/mockUserContext';
 
-vi.mock('../../contexts/UserContext');
+vi.mock('../../features/auth/UserContext');
 
 describe('HomePage', () => {
   it('shows loading screen while auth is pending', () => {

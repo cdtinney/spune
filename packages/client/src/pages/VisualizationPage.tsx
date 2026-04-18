@@ -1,4 +1,4 @@
-import { SpotifyProvider } from '../contexts/SpotifyContext';
+import { SpotifyProvider } from '../features/playback/SpotifyContext';
 import VisualizationContent from './VisualizationContent';
 
 export default function VisualizationPage() {
