@@ -3,22 +3,23 @@ import CoverOverlay from './CoverOverlay';
 import SongCard from './SongCard';
 import AlbumGrid from './AlbumGrid';
 import ProgressBar from './ProgressBar';
-import type { Album } from '../../types';
+import type { Album, NowPlaying } from '../../types';
 
-interface NowPlayingData {
-  songId: string;
-  songTitle: string;
-  artistName: string;
-  albumName: string;
-  albumImageUrl: string | undefined;
-  progressMs: number;
-  durationMs: number;
-  isPlaying: boolean;
-}
+type NowPlayingDisplay = Pick<
+  NowPlaying,
+  | 'songId'
+  | 'songTitle'
+  | 'artistName'
+  | 'albumName'
+  | 'albumImageUrl'
+  | 'progressMs'
+  | 'durationMs'
+  | 'isPlaying'
+>;
 
 interface VisualizationLayoutProps {
   dominantColor: string | null;
-  nowPlaying: NowPlayingData | null;
+  nowPlaying: NowPlayingDisplay | null;
   tiles: Album[];
   gridCols: number;
   gridRows: number;
@@ -26,6 +27,7 @@ interface VisualizationLayoutProps {
   songPlaying: boolean;
   loadingContent?: ReactNode;
   emptyContent?: ReactNode;
+  errorContent?: ReactNode;
   controls?: ReactNode;
 }
 
@@ -39,6 +41,7 @@ export default function VisualizationLayout({
   songPlaying,
   loadingContent,
   emptyContent,
+  errorContent,
   controls,
 }: VisualizationLayoutProps) {
   return (
@@ -75,6 +78,8 @@ export default function VisualizationLayout({
           isPlaying={nowPlaying.isPlaying}
         />
       )}
+
+      {errorContent}
 
       <div className="visualization__bottom-gradient" />
     </div>

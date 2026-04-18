@@ -82,66 +82,67 @@ export default function VisualizationContent() {
   const hasError = !!error;
 
   return (
-    <>
-      <VisualizationLayout
-        dominantColor={dominantColor}
-        nowPlaying={nowPlaying}
-        tiles={tiles}
-        gridCols={gridCols}
-        gridRows={gridRows}
-        tileSize={tileSize}
-        songPlaying={!isInitialLoad && isSongPlaying}
-        loadingContent={
-          isInitialLoad ? <LoadingScreen className="visualization__loading" /> : undefined
-        }
-        emptyContent={
-          !isInitialLoad && !hasError && !connectionLost && !isSongPlaying ? (
-            <div className="visualization__empty">
-              <p>No song playing. Play something.</p>
-            </div>
-          ) : undefined
-        }
-        controls={
-          !isInitialLoad ? (
-            <>
-              <FullscreenButton onClick={handleFullscreenToggle} />
+    <VisualizationLayout
+      dominantColor={dominantColor}
+      nowPlaying={nowPlaying}
+      tiles={tiles}
+      gridCols={gridCols}
+      gridRows={gridRows}
+      tileSize={tileSize}
+      songPlaying={!isInitialLoad && isSongPlaying}
+      loadingContent={
+        isInitialLoad ? <LoadingScreen className="visualization__loading" /> : undefined
+      }
+      emptyContent={
+        !isInitialLoad && !hasError && !connectionLost && !isSongPlaying ? (
+          <div className="visualization__empty">
+            <p>No song playing. Play something.</p>
+          </div>
+        ) : undefined
+      }
+      errorContent={
+        !isInitialLoad && (hasError || connectionLost) ? (
+          <div
+            className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
+          >
+            <p>
+              {isSongPlaying
+                ? 'Connection lost. Retrying…'
+                : 'Session expired or connection failed.'}
+            </p>
+            <button className="btn-primary" onClick={login}>
+              Reconnect with Spotify
+            </button>
+          </div>
+        ) : undefined
+      }
+      controls={
+        !isInitialLoad ? (
+          <>
+            <FullscreenButton onClick={handleFullscreenToggle} />
 
-              {!fullscreen && (
-                <a href={REPO_URL} className="visualization__github-icon icon-interactive">
-                  <FontAwesomeIcon icon={faGithub} size="1x" />
-                </a>
-              )}
+            {!fullscreen && (
+              <a href={REPO_URL} className="visualization__github-icon icon-interactive">
+                <FontAwesomeIcon icon={faGithub} size="1x" />
+              </a>
+            )}
 
-              <CastButton
-                available={castSession.available}
-                connected={castSession.connected}
-                onConnect={castSession.startCasting}
-                onDisconnect={castSession.stopCasting}
-              />
+            <CastButton
+              available={castSession.available}
+              connected={castSession.connected}
+              onConnect={castSession.startCasting}
+              onDisconnect={castSession.stopCasting}
+            />
 
-              {userName && (
-                <div className="visualization__user-container">
-                  <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
-                  <UserMenu onLogout={logout} />
-                </div>
-              )}
-            </>
-          ) : undefined
-        }
-      />
-
-      {!isInitialLoad && (hasError || connectionLost) && (
-        <div
-          className={`visualization__error${isSongPlaying ? ' visualization__error--overlay' : ''}`}
-        >
-          <p>
-            {isSongPlaying ? 'Connection lost. Retrying…' : 'Session expired or connection failed.'}
-          </p>
-          <button className="btn-primary" onClick={login}>
-            Reconnect with Spotify
-          </button>
-        </div>
-      )}
-    </>
+            {userName && (
+              <div className="visualization__user-container">
+                <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
+                <UserMenu onLogout={logout} />
+              </div>
+            )}
+          </>
+        ) : undefined
+      }
+    />
   );
 }
