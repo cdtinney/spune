@@ -116,6 +116,15 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 - **Client build output**: Goes to `packages/client/build/`, not the default `dist/`.
 - **Server tests need Spotify env vars**: Route tests that call `createApp()` require `SPOT_CLIENT_ID`, `SPOT_CLIENT_SECRET`, and `SPOT_REDIRECT_URI` to be set (any non-empty value works). The `scripts/pre-pr.sh` script sets test defaults automatically. CI also sets these in the `server` job.
 
+## Code Quality Guidelines
+
+- **Review and simplify**: After writing code, use `/review` and `/simplify` to catch issues and reduce complexity before opening a PR.
+- **Update documentation**: When changing behavior, update AGENTS.md, README.md, and any relevant docs/ files. If adding a new feature, add it to the roadmap in docs/TODO.md.
+- **Reusable over one-off**: Extract shared helpers, hooks, and CSS classes instead of duplicating code. Check if a pattern already exists before creating a new one.
+- **Verbose, descriptive naming**: Prefer `mockFullVisualization` over `mockVis`, `useNowPlayingPoller` over `usePoller`, `visualization__bottom-gradient` over `viz__grad`. Names should be self-documenting.
+- **data-testid for E2E tests**: Add `data-testid` attributes to components that E2E tests target. Prefer `page.getByTestId()` over CSS class selectors in Playwright tests.
+- **Visual regression coverage**: When changing UI layout or styling, run `pnpm test:e2e` to verify no visual regressions. Update baselines with `pnpm test:e2e:update-snapshots` if the change is intentional.
+
 ## Pre-PR Checklist
 
 Run the full validation suite locally before opening a PR:
