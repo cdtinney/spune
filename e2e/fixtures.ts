@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 
 // --- Mock data ---
 
@@ -80,6 +80,13 @@ export async function disableAnimations(page: Page) {
   await page.addStyleTag({
     content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
   });
+}
+
+/** Wait for an element, freeze animations, and take a named screenshot. */
+export async function takeScreenshot(page: Page, locator: string, name: string) {
+  await expect(page.getByTestId(locator)).toBeVisible({ timeout: 15000 });
+  await disableAnimations(page);
+  await expect(page).toHaveScreenshot(name);
 }
 
 /** Set up all mocks for a fully working visualization with a song playing. */
