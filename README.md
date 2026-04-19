@@ -42,15 +42,18 @@ pnpm dev
 
 ### Scripts
 
-| Command             | Description                             |
-| ------------------- | --------------------------------------- |
-| `pnpm dev`          | Start everything (DB + server + client) |
-| `pnpm dev:stop`     | Stop the dev database                   |
-| `pnpm client:test`  | Run client tests                        |
-| `pnpm server:test`  | Run server tests                        |
-| `pnpm client:lint`  | Lint client                             |
-| `pnpm server:lint`  | Lint server                             |
-| `pnpm client:build` | Build client for production             |
+| Command                          | Description                              |
+| -------------------------------- | ---------------------------------------- |
+| `pnpm dev`                       | Start everything (DB + server + client)  |
+| `pnpm dev:stop`                  | Stop the dev database                    |
+| `pnpm client:test`               | Run client tests                         |
+| `pnpm server:test`               | Run server tests                         |
+| `pnpm client:lint`               | Lint client                              |
+| `pnpm server:lint`               | Lint server                              |
+| `pnpm client:build`              | Build client for production              |
+| `pnpm test:e2e`                  | Run Playwright E2E + visual tests        |
+| `pnpm test:e2e:docker`           | Run E2E tests in Docker (matches CI)     |
+| `pnpm test:e2e:update-snapshots` | Regenerate visual baselines (via Docker) |
 
 ### Chromecast
 
