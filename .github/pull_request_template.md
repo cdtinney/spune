@@ -4,4 +4,6 @@
 
 ## Test plan
 
-<!-- How was this tested? -->
+<!-- How was this tested? Use bullet points, not checkboxes/checklist.-->
+
+<!-- Omit AI agent attribution. >
