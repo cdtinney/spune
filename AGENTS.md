@@ -123,7 +123,17 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 - **Reusable over one-off**: Extract shared helpers, hooks, and CSS classes instead of duplicating code. Check if a pattern already exists before creating a new one.
 - **Verbose, descriptive naming**: Prefer `mockFullVisualization` over `mockVis`, `useNowPlayingPoller` over `usePoller`, `visualization__bottom-gradient` over `viz__grad`. Names should be self-documenting.
 - **data-testid for E2E tests**: Add `data-testid` attributes to components that E2E tests target. Prefer `page.getByTestId()` over CSS class selectors in Playwright tests.
-- **Visual regression coverage**: When changing UI layout or styling, run `pnpm test:e2e` to verify no visual regressions. Update baselines with `pnpm test:e2e:update-snapshots` if the change is intentional.
+- **Visual regression coverage**: When changing UI layout or styling, run `pnpm test:e2e:docker` to verify no visual regressions. If a visual change is intentional, update baselines with `pnpm test:e2e:update-snapshots` and commit the new snapshots.
+
+### Updating visual baselines after a UI change
+
+1. Make your UI change.
+2. Run `pnpm test:e2e:docker` — this runs tests in Docker (matching CI). Visual tests will fail if screenshots changed.
+3. Review the diff to confirm the change is intentional.
+4. Run `pnpm test:e2e:update-snapshots` — regenerates baselines via Docker.
+5. Commit the updated snapshots in `e2e/visual.spec.ts-snapshots/`.
+
+Baselines are Linux-only (generated inside `mcr.microsoft.com/playwright:v1.59.1-noble`). Always use the Docker scripts to update them, not `pnpm test:e2e` directly, or the platform suffix will mismatch.
 
 ## Pre-PR Checklist
 
