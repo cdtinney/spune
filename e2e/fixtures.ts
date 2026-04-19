@@ -75,6 +75,13 @@ export async function mockSSE(page: Page) {
   await page.route('**/api/sse/playback', (route) => route.abort('connectionrefused'));
 }
 
+/** Disable all CSS animations and transitions for deterministic screenshots. */
+export async function disableAnimations(page: Page) {
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+}
+
 /** Set up all mocks for a fully working visualization with a song playing. */
 export async function mockFullVisualization(page: Page) {
   await mockAuthenticated(page);
