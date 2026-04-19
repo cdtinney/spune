@@ -67,6 +67,10 @@ CI auto-builds and pushes a Docker image to `ghcr.io` on every merge to `main`. 
 curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-droplet.sh | bash
 ```
 
+## Roadmap
+
+See [docs/TODO.md](docs/TODO.md) for planned features, including richer album discovery, ambient mode, song history, and multi-user party mode.
+
 ## Inspiration
 
 1. Desktop Zune software is awesome to look at on your TV
