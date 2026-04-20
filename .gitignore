@@ -75,3 +75,7 @@ packages/**/dist
 
 # Merged coverage
 coverage_merged.info
+
+# Playwright test artifacts
+test-results/
+playwright-report/

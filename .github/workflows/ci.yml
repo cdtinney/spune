@@ -114,6 +114,30 @@ jobs:
       - name: Type check
         run: pnpm --filter spune-client exec tsc --noEmit
 
+  e2e:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run E2E and visual regression tests
+        run: npx playwright test
+        env:
+          HOME: /root
+
   docker:
     runs-on: ubuntu-latest
     needs: [server, client]
