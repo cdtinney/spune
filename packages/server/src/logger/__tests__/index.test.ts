@@ -11,6 +11,6 @@ describe('logger', () => {
   });
 
   it('has an error() method', () => {
-    expect(logger.info).toBeInstanceOf(Function);
+    expect(logger.error).toBeInstanceOf(Function);
   });
 });

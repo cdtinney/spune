@@ -39,7 +39,7 @@ export default function UserMenu({ onLogout }: UserMenuProps) {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <FontAwesomeIcon icon={faCaretDown} className="user-menu__icon" />
+        <FontAwesomeIcon icon={faCaretDown} />
       </button>
       {open && (
         <div className="user-menu__dropdown" role="menu">

@@ -6,7 +6,6 @@ interface SSEPlaybackEvent {
   item: SpotifyTrack | null;
   progress_ms: number;
   is_playing: boolean;
-  song_changed: boolean;
 }
 
 const RECONNECT_DELAY = 5000;
@@ -16,18 +15,12 @@ interface UsePlaybackSSEResult {
   connected: boolean;
   gaveUp: boolean;
   nowPlaying: NowPlaying | null;
-  songChanged: boolean;
-  progressMs: number;
-  isPlaying: boolean;
 }
 
 export default function usePlaybackSSE(): UsePlaybackSSEResult {
   const [connected, setConnected] = useState(false);
   const [gaveUp, setGaveUp] = useState(false);
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
-  const [songChanged, setSongChanged] = useState(false);
-  const [progressMs, setProgressMs] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const firstErrorAtRef = useRef<number | null>(null);
@@ -49,10 +42,6 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
     es.addEventListener('playback', (event: MessageEvent) => {
       try {
         const data: SSEPlaybackEvent = JSON.parse(event.data);
-
-        setProgressMs(data.progress_ms ?? 0);
-        setIsPlaying(data.is_playing ?? false);
-        setSongChanged(data.song_changed ?? false);
 
         if (!data.item) {
           setNowPlaying(null);
@@ -106,5 +95,5 @@ export default function usePlaybackSSE(): UsePlaybackSSEResult {
     };
   }, [connect]);
 
-  return { connected, gaveUp, nowPlaying, songChanged, progressMs, isPlaying };
+  return { connected, gaveUp, nowPlaying };
 }
