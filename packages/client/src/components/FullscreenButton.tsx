@@ -14,7 +14,7 @@ export default function FullscreenButton({ onClick }: FullscreenButtonProps) {
       aria-label="Toggle fullscreen"
       title="Toggle fullscreen"
     >
-      <FontAwesomeIcon icon={faExpand} size="1x" className="fullscreen-button__icon" />
+      <FontAwesomeIcon icon={faExpand} size="1x" />
     </button>
   );
 }

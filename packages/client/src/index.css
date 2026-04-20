@@ -90,15 +90,6 @@ body {
   border-radius: var(--radius-sm);
 }
 
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes move-background {
   from {
     background-position: 0% 0%;

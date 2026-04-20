@@ -18,20 +18,14 @@ import spotifyReducer, {
   type SpotifyAction,
 } from './spotifyReducer';
 
-interface FetchNowPlayingResult {
-  songId: string;
-  albumId: string;
-}
-
 interface SpotifyContextValue extends SpotifyState {
   connectionLost: boolean;
   dispatch: React.Dispatch<SpotifyAction>;
   fetchNowPlaying: (
     loadingRef: RefObject<boolean>,
     currentSongId: string | null,
-  ) => Promise<FetchNowPlayingResult | NowPlaying | null>;
+  ) => Promise<NowPlaying | null>;
   fetchRelatedAlbums: (songId: string) => Promise<void>;
-  clearRelatedAlbums: () => void;
 }
 
 const SpotifyContext = createContext<SpotifyContextValue | null>(null);
@@ -47,7 +41,7 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     async (
       loadingRef: RefObject<boolean>,
       currentSongId: string | null,
-    ): Promise<FetchNowPlayingResult | NowPlaying | null> => {
+    ): Promise<NowPlaying | null> => {
       if (loadingRef.current) return null;
       loadingRef.current = true;
 
@@ -62,23 +56,19 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
           return null;
         }
 
+        const progressMs = data.progress_ms ?? 0;
+        const isPlaying = data.is_playing ?? false;
+
         if (item.id === currentSongId) {
           dispatch({ type: ActionType.FETCH_NOW_PLAYING_DUPE });
           dispatch({
             type: ActionType.UPDATE_PROGRESS,
-            payload: {
-              progressMs: data.progress_ms ?? 0,
-              isPlaying: data.is_playing ?? false,
-            },
+            payload: { progressMs, isPlaying },
           });
-          return { songId: item.id, albumId: item.album?.id };
+          return mapToNowPlaying(item, progressMs, isPlaying);
         }
 
-        const nowPlayingResult = mapToNowPlaying(
-          item,
-          data.progress_ms ?? 0,
-          data.is_playing ?? false,
-        );
+        const nowPlayingResult = mapToNowPlaying(item, progressMs, isPlaying);
 
         dispatch({ type: ActionType.FETCH_NOW_PLAYING_SUCCESS, payload: nowPlayingResult });
         return nowPlayingResult;
@@ -102,10 +92,6 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
     }
   }, []);
 
-  const clearRelatedAlbums = useCallback((): void => {
-    dispatch({ type: ActionType.CLEAR_RELATED_ALBUMS });
-  }, []);
-
   const connectionLost = state.consecutiveErrors >= CONNECTION_LOST_THRESHOLD;
 
   const value = useMemo<SpotifyContextValue>(
@@ -115,9 +101,8 @@ export function SpotifyProvider({ children }: SpotifyProviderProps) {
       dispatch,
       fetchNowPlaying,
       fetchRelatedAlbums,
-      clearRelatedAlbums,
     }),
-    [state, connectionLost, dispatch, fetchNowPlaying, fetchRelatedAlbums, clearRelatedAlbums],
+    [state, connectionLost, dispatch, fetchNowPlaying, fetchRelatedAlbums],
   );
 
   return <SpotifyContext.Provider value={value}>{children}</SpotifyContext.Provider>;

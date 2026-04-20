@@ -12,5 +12,5 @@ const monorepoRoot = path.resolve(serverRoot, '..', '..');
 export default {
   clientBuildFolder: path.join(monorepoRoot, 'packages', 'client', 'build'),
   clientHome: `${CLIENT_HOST}/#/visualization`,
-  clientLogin: `${CLIENT_HOST}/#/login`,
+  clientLogin: `${CLIENT_HOST}/#/home`,
 };

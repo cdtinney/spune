@@ -25,8 +25,3 @@
   font-weight: 600;
   box-shadow: var(--shadow-elevation-3);
 }
-
-.user-avatar__name {
-  margin-left: 10px;
-  color: var(--color-text-primary);
-}
