@@ -151,7 +151,20 @@
       "Bash(find /Users/ctinney/Development/_Personal/spune -path */colorthief/package.json -not -path */node_modules/.pnpm/*)",
       "Bash(find /Users/ctinney/Development/_Personal/spune -path *free-solid-svg-icons/index* -not -path */.pnpm/*)",
       "Bash(git fetch:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(find /Users/ctinney/Development/_Personal/spune -name *receiver* -type f)",
+      "Bash(find /Users/ctinney/Development/_Personal/spune -type f -name *deploy* -o -name *.dockerfile)",
+      "Bash(SPOT_CLIENT_ID=test SPOT_CLIENT_SECRET=test SPOT_REDIRECT_URI=http://localhost:3000/callback pnpm server:test -- --reporter=verbose)",
+      "Bash(git stash:*)",
+      "Bash(git mv:*)",
+      "Bash(sed -i '' \"s|from ''./contexts/UserContext''|from ''./features/auth/UserContext''|g\" App.tsx)",
+      "Bash(sed -i '' \"s|from ''./contexts/UserContext''|from ''./features/auth/UserContext''|g\" routes.tsx)",
+      "Bash(sed -i '' \"s|from ''../../components/VisualizationLayout''|from ''../../features/visualization/VisualizationLayout''|g\" cast/receiver/ReceiverApp.tsx)",
+      "Bash(sed -i '' \"s|from ''../../hooks/useDominantColor''|from ''../../features/visualization/useDominantColor''|g\" cast/receiver/ReceiverApp.tsx)",
+      "Bash(sed -i '' \"s|from ''../../hooks/useAlbumGrid''|from ''../../features/visualization/useAlbumGrid''|g\" cast/receiver/ReceiverApp.tsx)",
+      "Bash(git reset:*)",
+      "Bash(curl -sf http://127.0.0.1:3000)",
+      "Bash(git branch:*)"
     ]
   }
 }
