@@ -164,7 +164,9 @@
       "Bash(sed -i '' \"s|from ''../../hooks/useAlbumGrid''|from ''../../features/visualization/useAlbumGrid''|g\" cast/receiver/ReceiverApp.tsx)",
       "Bash(git reset:*)",
       "Bash(curl -sf http://127.0.0.1:3000)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(find /Users/ctinney/Development/_Personal/spune -type f \\\\\\(-name *supabase* -o -name *migration* \\\\\\))",
+      "Bash(find /Users/ctinney/Development/_Personal/spune -type f -path */scripts/*)"
     ]
   }
 }

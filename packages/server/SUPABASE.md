@@ -56,6 +56,18 @@ CREATE POLICY "Server full access" ON users
   WITH CHECK (true);
 ```
 
+## 6. Keep-alive (free tier)
+
+Supabase pauses free-tier projects after 7 days of inactivity. To prevent this, run the second migration:
+
+```
+packages/server/src/database/migrations/002_keepalive.sql
+```
+
+This enables the `pg_cron` extension and schedules a daily row insert into a `_keepalive` table, which counts as database activity. Old rows are automatically cleaned up after 7 days.
+
+**Note:** `pg_cron` jobs run in the `postgres` database. If your connection string targets a different database, run this migration against `postgres` directly.
+
 ## Notes
 
 - The `postgres` role has superuser privileges and bypasses RLS by default. RLS policies only matter if you later add restricted roles (e.g., `anon` or `authenticated` via Supabase client).
