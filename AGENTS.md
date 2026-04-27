@@ -135,6 +135,10 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 
 Baselines are Linux-only (generated inside `mcr.microsoft.com/playwright:v1.59.1-noble`). Always use the Docker scripts to update them, not `pnpm test:e2e` directly, or the platform suffix will mismatch.
 
+## Pull Requests
+
+Always follow the PR template at `.github/pull_request_template.md` when creating pull requests.
+
 ## Pre-PR Checklist
 
 Run the full validation suite locally before opening a PR:
