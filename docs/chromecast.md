@@ -121,6 +121,12 @@ If your test device registration hasn't propagated yet, you can temporarily remo
 
 ## Troubleshooting
 
+### Debugging with Chrome DevTools
+
+Open `chrome://inspect/#devices` in Chrome to see connected Cast devices. If your Chromecast is on the same network, it should appear here with the receiver URL and links to inspect, pause, or trace. This is useful for confirming device discovery is working independently of the app.
+
+![chrome://inspect/#devices showing a connected Chromecast](../assets/chromecast-inspect-devices.png)
+
 ### Cast button doesn't appear
 
 - **Not using Chrome**: The Cast SDK only works in Google Chrome.
