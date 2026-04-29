@@ -35,7 +35,6 @@
   text-align: left;
   cursor: pointer;
   text-decoration: none;
-  box-sizing: border-box;
 }
 
 .user-menu__item:hover {

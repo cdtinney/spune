@@ -3,7 +3,7 @@
   padding: 2em 2em 4em;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 13px;
-  color: #e0e0e0;
+  color: var(--color-text-primary);
   overflow-y: auto;
 }
 
@@ -17,28 +17,28 @@
 .admin-section {
   margin-bottom: 2em;
   padding: 1em 1.25em;
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  background: rgba(20, 20, 20, 0.6);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-surface);
 }
 
 .admin-section__heading {
   margin: 0 0 0.75em;
   font-size: 15px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--color-text-primary);
 }
 
 .admin-section__subheading {
   margin: 1em 0 0.5em;
   font-size: 13px;
   font-weight: 600;
-  color: #cccccc;
+  color: var(--color-text-primary);
 }
 
 .admin-section__status {
   margin: 0 0 0.5em;
-  color: #999;
+  color: var(--color-text-secondary);
 }
 
 .admin-section__error {
@@ -46,7 +46,7 @@
 }
 
 .admin-section__empty {
-  color: #777;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
@@ -59,13 +59,13 @@
 .admin-table th,
 .admin-table td {
   padding: 0.4em 0.6em;
-  border-bottom: 1px solid #2a2a2a;
+  border-bottom: 1px solid var(--color-border-subtle);
   text-align: left;
   vertical-align: top;
 }
 
 .admin-table th {
-  color: #999;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -77,26 +77,26 @@
 }
 
 .admin-pill--ok {
-  background: #1f3a23;
+  background-color: #1f3a23;
   color: #7ed18a;
 }
 
 .admin-pill--warn {
-  background: #3a341f;
+  background-color: #3a341f;
   color: #d6c97e;
 }
 
 .admin-pill--bad {
-  background: #3a1f1f;
+  background-color: #3a1f1f;
   color: #d18a8a;
 }
 
 .admin-logs {
   max-height: 400px;
   overflow-y: auto;
-  background: #0d0d0d;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  background-color: #0d0d0d;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
   padding: 0.5em;
 }
 
@@ -104,7 +104,7 @@
   font-size: 11px;
   margin: 0;
   padding: 0.2em 0;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid var(--color-border-subtle);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -119,6 +119,6 @@
 }
 
 .admin-log-line__timestamp {
-  color: #999;
+  color: var(--color-text-secondary);
   margin-right: 0.5em;
 }
