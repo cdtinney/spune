@@ -1,5 +1,7 @@
 import { pool } from '../db';
 import { encryptToken, decryptToken } from '../../auth/tokenCrypto';
+import errorMessage from '../../utils/errorMessage';
+import logger from '../../logger';
 import type { User, UserRow, SpotifyPhoto } from '../../types';
 
 interface FindOrCreateUserData {
@@ -45,7 +47,18 @@ async function findUserBySpotifyId(spotifyId: string): Promise<User | null> {
   const result = await pool.query<UserRow>('SELECT * FROM users WHERE spotify_id = $1 LIMIT 1', [
     spotifyId,
   ]);
-  return result.rows[0] ? toUser(result.rows[0]) : null;
+  const row = result.rows[0];
+  if (!row) return null;
+  // Treat an undecryptable row as not-found so the caller re-auths instead
+  // of every request bubbling a 500 out of passport.deserializeUser.
+  try {
+    return toUser(row);
+  } catch (err) {
+    logger.warn(
+      `[userQueries] dropping unreadable user row spotify_id=${spotifyId}: ${errorMessage(err)}`,
+    );
+    return null;
+  }
 }
 
 async function updateUserAccessTokenBySpotifyId(
