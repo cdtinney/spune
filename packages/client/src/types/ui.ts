@@ -23,4 +23,5 @@ export interface UserProfile {
   spotifyId: string;
   displayName?: string;
   photos?: Array<string | { url?: string; value?: string }>;
+  isAdmin?: boolean;
 }

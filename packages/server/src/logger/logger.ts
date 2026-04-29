@@ -1,5 +1,8 @@
 import { createLogger, format, transports } from 'winston';
 
+export const ERROR_LOG_FILE = 'spune-error.log';
+export const COMBINED_LOG_FILE = 'spune-combined.log';
+
 const logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -17,11 +20,11 @@ const logger = createLogger({
   },
   transports: [
     new transports.File({
-      filename: 'spune-error.log',
+      filename: ERROR_LOG_FILE,
       level: 'error',
     }),
     new transports.File({
-      filename: 'spune-combined.log',
+      filename: COMBINED_LOG_FILE,
     }),
   ],
 });
