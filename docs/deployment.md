@@ -127,12 +127,18 @@ There is exactly one staging slot — whoever force-pushes most recently owns it
 
 1. **DNS**: Cloudflare A record `staging.spune` pointing at the droplet IP, **DNS only** (grey cloud).
 2. **Spotify**: redirect URI `https://staging.spune.tinney.dev/api/auth/spotify/callback` added in the Spotify dashboard.
-3. **Droplet**:
+3. **Droplet**: SSH in and run
    ```bash
    curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-staging.sh | bash
    ```
-4. **Caddy**: append the staging block to `/opt/spune/Caddyfile` and reload (the setup script prints the exact commands).
-5. **First start**: `cd /opt/spune-staging && docker compose up -d`, then run the user-table migration printed by the setup script.
+   This scaffolds `/opt/spune-staging/`, reuses the prod `.env`'s Spotify credentials, generates fresh secrets for the staging stack, and appends a `staging.spune.tinney.dev` site block to `/opt/spune/Caddyfile` (Caddy is reloaded).
+4. **First start**: push to `staging` (`pnpm deploy:staging`) so the `:staging` image exists, then on the droplet:
+   ```bash
+   cd /opt/spune-staging && docker compose up -d
+   docker compose exec -T staging-app \
+     sh -c 'cat /app/packages/server/src/database/migrations/*.sql' \
+     | docker compose exec -T staging-db psql -U spune -d spune
+   ```
 
 ### Adding new env vars
 
