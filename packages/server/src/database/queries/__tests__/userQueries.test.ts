@@ -11,6 +11,7 @@ vi.mock('../../../auth/tokenCrypto', () => ({
 
 import { pool } from '../../db';
 import { decryptToken } from '../../../auth/tokenCrypto';
+import logger from '../../../logger';
 import { findUserBySpotifyId } from '../userQueries';
 
 const fakeRow = {
@@ -46,7 +47,7 @@ describe('findUserBySpotifyId()', () => {
     });
   });
 
-  it('returns null when a stored token cannot be decrypted', async () => {
+  it('returns null and warns when a stored token cannot be decrypted', async () => {
     // Legacy plaintext rows (from before encryption-at-rest) make decryptToken
     // throw. Without this branch, every authenticated request 500s in
     // passport's deserializeUser before the user can reach logout.
@@ -54,7 +55,11 @@ describe('findUserBySpotifyId()', () => {
     vi.mocked(decryptToken).mockImplementation(() => {
       throw new Error('Token is not in encrypted format (missing version prefix).');
     });
+    const warn = vi.spyOn(logger, 'warn').mockImplementation(() => undefined as never);
 
     expect(await findUserBySpotifyId('spot-1')).toBeNull();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('dropping unreadable user row'));
+
+    warn.mockRestore();
   });
 });
