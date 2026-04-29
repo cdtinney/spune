@@ -108,6 +108,49 @@ Every request gets an `X-Request-Id` header (preserved from inbound when valid, 
 
 The server emits one `http_request` log line per response with `{ method, url, status, durationMs, requestId }`. `/api/health` (noise) and SSE streams (would record stream lifetime, not request work) are skipped.
 
+## Staging environment
+
+A shared staging environment runs at https://staging.spune.tinney.dev on the same droplet as production. It has its own Postgres volume, its own session/encryption secrets, and its own image tag (`ghcr.io/cdtinney/spune:staging`).
+
+### Deploying a branch to staging
+
+```bash
+pnpm deploy:staging              # deploys the current branch
+pnpm deploy:staging my-branch    # deploys a named branch
+```
+
+This wraps `git push origin <branch>:staging --force` with a confirmation prompt. The push triggers CI to build and push `ghcr.io/cdtinney/spune:staging`. Watchtower (running in the prod stack) picks up the new image within ~60 seconds and restarts the staging app container.
+
+There is exactly one staging slot — whoever force-pushes most recently owns it. Coordinate via Slack/PR comments if multiple branches are in flight.
+
+### One-time setup (kept for reference)
+
+1. **DNS**: Cloudflare A record `staging.spune` pointing at the droplet IP, **DNS only** (grey cloud).
+2. **Spotify**: redirect URI `https://staging.spune.tinney.dev/api/auth/spotify/callback` added in the Spotify dashboard.
+3. **Droplet**: SSH in and run
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-staging.sh | bash
+   ```
+   This scaffolds `/opt/spune-staging/`, reuses the prod `.env`'s Spotify credentials, generates fresh secrets for the staging stack, and appends a `staging.spune.tinney.dev` site block to `/opt/spune/Caddyfile` (Caddy is reloaded).
+4. **First start**: push to `staging` (`pnpm deploy:staging`) so the `:staging` image exists, then on the droplet:
+   ```bash
+   cd /opt/spune-staging && docker compose up -d
+   docker compose exec -T staging-app \
+     sh -c 'cat /app/packages/server/src/database/migrations/*.sql' \
+     | docker compose exec -T staging-db psql -U spune -d spune
+   ```
+
+### Adding new env vars
+
+If you add a required env var, you must update **both** `/opt/spune/.env` and `/opt/spune-staging/.env` before merging to `main` / pushing to `staging`, otherwise the container will crash-loop after Watchtower picks up the new image.
+
+### Staging logs
+
+```bash
+cd /opt/spune-staging
+docker compose logs -f staging-app
+```
+
 ## Debugging
 
 ```bash
