@@ -1,4 +1,5 @@
 import { pool } from '../db';
+import { encryptToken, decryptToken } from '../../auth/tokenCrypto';
 import type { User, UserRow, SpotifyPhoto } from '../../types';
 
 interface FindOrCreateUserData {
@@ -10,7 +11,7 @@ interface FindOrCreateUserData {
   photos: SpotifyPhoto[];
 }
 
-interface UpdateUserData {
+interface UpdateAccessTokenData {
   spotifyAccessToken: string;
   tokenUpdated: number;
 }
@@ -29,8 +30,8 @@ async function findOrCreateUser(spotifyId: string, data: FindOrCreateUserData): 
      RETURNING *`,
     [
       spotifyId,
-      data.spotifyAccessToken,
-      data.spotifyRefreshToken,
+      encryptToken(data.spotifyAccessToken),
+      encryptToken(data.spotifyRefreshToken),
       data.tokenUpdated,
       data.expiresIn,
       data.displayName,
@@ -47,15 +48,15 @@ async function findUserBySpotifyId(spotifyId: string): Promise<User | null> {
   return result.rows[0] ? toUser(result.rows[0]) : null;
 }
 
-async function updateUserByRefreshToken(
-  refreshToken: string,
-  data: UpdateUserData,
+async function updateUserAccessTokenBySpotifyId(
+  spotifyId: string,
+  data: UpdateAccessTokenData,
 ): Promise<User | null> {
   const result = await pool.query<UserRow>(
     `UPDATE users SET spotify_access_token = $1, token_updated = $2
-     WHERE spotify_refresh_token = $3
+     WHERE spotify_id = $3
      RETURNING *`,
-    [data.spotifyAccessToken, data.tokenUpdated, refreshToken],
+    [encryptToken(data.spotifyAccessToken), data.tokenUpdated, spotifyId],
   );
   return result.rows[0] ? toUser(result.rows[0]) : null;
 }
@@ -64,8 +65,8 @@ function toUser(row: UserRow): User {
   return {
     id: row.id,
     spotifyId: row.spotify_id,
-    spotifyAccessToken: row.spotify_access_token,
-    spotifyRefreshToken: row.spotify_refresh_token,
+    spotifyAccessToken: decryptToken(row.spotify_access_token),
+    spotifyRefreshToken: decryptToken(row.spotify_refresh_token),
     tokenUpdated: row.token_updated,
     expiresIn: row.expires_in,
     displayName: row.display_name,
@@ -73,4 +74,4 @@ function toUser(row: UserRow): User {
   };
 }
 
-export { findOrCreateUser, findUserBySpotifyId, updateUserByRefreshToken };
+export { findOrCreateUser, findUserBySpotifyId, updateUserAccessTokenBySpotifyId };

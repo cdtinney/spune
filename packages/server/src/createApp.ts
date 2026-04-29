@@ -9,10 +9,28 @@ import { pool, connect } from './database/db';
 import routes from './routes/index';
 import paths from './config/paths';
 import configurePassport from './auth/configurePassport';
+import { assertEncryptionKeyConfigured } from './auth/tokenCrypto';
 
 const PgSession = connectPgSimple(session);
 
+function resolveSessionSecret(): string {
+  const secret = process.env.SESSION_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('SESSION_SECRET must be set in production.');
+  }
+  logger.warn('SESSION_SECRET is not set; using an insecure dev fallback.');
+  return 'fallback-dev-secret';
+}
+
 export default function createApp(): express.Application {
+  // Validate required secrets at boot rather than on first auth attempt.
+  if (process.env.NODE_ENV === 'production') {
+    assertEncryptionKeyConfigured();
+  } else if (!process.env.TOKEN_ENCRYPTION_KEY) {
+    logger.warn('TOKEN_ENCRYPTION_KEY is not set; OAuth token storage will fail until configured.');
+  }
+
   const app = express();
 
   // Trust reverse proxy (Caddy) so Express sees correct protocol/IP
@@ -21,12 +39,15 @@ export default function createApp(): express.Application {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
+  const isProd = process.env.NODE_ENV === 'production';
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || 'fallback-dev-secret',
+      secret: resolveSessionSecret(),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365,
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProd,
+        httpOnly: true,
+        sameSite: 'lax',
       },
       resave: false,
       saveUninitialized: false,

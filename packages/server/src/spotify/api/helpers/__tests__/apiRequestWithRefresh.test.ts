@@ -14,6 +14,7 @@ describe('apiRequestWithRefresh()', () => {
   it('returns succesfully the user has a valid token and the API function succeeds', async () => {
     const result = await apiRequestWithRefresh({
       user: {
+        spotifyId: 'someUserId',
         spotifyAccessToken: 'foo',
         tokenUpdated: 1234,
         expiresIn: 1000,
@@ -26,6 +27,7 @@ describe('apiRequestWithRefresh()', () => {
 
   it('refreshes the token when the user has an expired token', async () => {
     const user = {
+      spotifyId: 'someUserId',
       spotifyAccessToken: 'fooAccess',
       spotifyRefreshToken: 'barRefresh',
       tokenUpdated: 123,
@@ -39,12 +41,13 @@ describe('apiRequestWithRefresh()', () => {
       apiFn: () => Promise.resolve('barSuccess'),
     });
 
-    expect(mockedRefreshToken).toHaveBeenCalledWith(user.spotifyRefreshToken);
+    expect(mockedRefreshToken).toHaveBeenCalledWith(user.spotifyId, user.spotifyRefreshToken);
     expect(result).toEqual('barSuccess');
   });
 
   it('returns an error when the user has an expired token and the refresh request fails', async () => {
     const user = {
+      spotifyId: 'someUserId',
       spotifyAccessToken: 'fooAccess',
       spotifyRefreshToken: 'barRefresh',
       tokenUpdated: 123,
