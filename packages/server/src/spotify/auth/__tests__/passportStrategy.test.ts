@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { verify } from '../passportStrategy';
 import { findOrCreateUser } from '../../../database/queries/userQueries';
 import type { User } from '../../../types';
@@ -21,6 +21,17 @@ const mockUser = { spotifyId: 'foo' } as User;
 
 describe('passportStrategy', () => {
   describe('verify', () => {
+    const originalAllowed = process.env.ALLOWED_SPOTIFY_IDS;
+
+    afterEach(() => {
+      vi.clearAllMocks();
+      if (originalAllowed === undefined) {
+        delete process.env.ALLOWED_SPOTIFY_IDS;
+      } else {
+        process.env.ALLOWED_SPOTIFY_IDS = originalAllowed;
+      }
+    });
+
     it('calls findOrCreateUser with the spotifyId', () => {
       mockedFindOrCreateUser.mockResolvedValue(mockUser);
       verify('token', 'refresh', 3600, mockProfile, vi.fn());
@@ -28,6 +39,33 @@ describe('passportStrategy', () => {
     });
 
     it('calls done() when the user is found or created', async () => {
+      mockedFindOrCreateUser.mockResolvedValue(mockUser);
+
+      await new Promise<void>((resolve) => {
+        verify('token', 'refresh', 3600, mockProfile, (err: Error | null, user: unknown) => {
+          expect(err).toBeNull();
+          expect(user).toEqual({ spotifyId: 'foo' });
+          resolve();
+        });
+      });
+    });
+
+    it('rejects login without creating a user when the id is not in ALLOWED_SPOTIFY_IDS', async () => {
+      process.env.ALLOWED_SPOTIFY_IDS = 'alice,bob';
+
+      await new Promise<void>((resolve) => {
+        verify('token', 'refresh', 3600, mockProfile, (err: Error | null, user: unknown) => {
+          expect(err).toBeNull();
+          expect(user).toBe(false);
+          resolve();
+        });
+      });
+
+      expect(mockedFindOrCreateUser).not.toHaveBeenCalled();
+    });
+
+    it('allows login when the id is in ALLOWED_SPOTIFY_IDS', async () => {
+      process.env.ALLOWED_SPOTIFY_IDS = 'foo,other';
       mockedFindOrCreateUser.mockResolvedValue(mockUser);
 
       await new Promise<void>((resolve) => {

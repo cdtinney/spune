@@ -144,6 +144,19 @@ There is exactly one staging slot — whoever force-pushes most recently owns it
 
 If you add a required env var, you must update **both** `/opt/spune/.env` and `/opt/spune-staging/.env` before merging to `main` / pushing to `staging`, otherwise the container will crash-loop after Watchtower picks up the new image.
 
+### Restricting who can log in
+
+Set `ALLOWED_SPOTIFY_IDS` in `.env` to a comma-separated list of Spotify user IDs. When set, the OAuth callback rejects users not on the list and no user row is created for them. Leaving it unset (or empty) keeps login open to anyone with a Spotify account.
+
+For staging, set this on the droplet after running `setup-staging.sh`:
+
+```bash
+echo "ALLOWED_SPOTIFY_IDS=cdtinney" >> /opt/spune-staging/.env
+cd /opt/spune-staging && docker compose restart staging-app
+```
+
+Add additional comma-separated IDs to share staging with collaborators.
+
 ### Staging logs
 
 ```bash
