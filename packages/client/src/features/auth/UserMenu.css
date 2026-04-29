@@ -34,6 +34,7 @@
   font-size: 0.8rem;
   text-align: left;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .user-menu__item:hover {
