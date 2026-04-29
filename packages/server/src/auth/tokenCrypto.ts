@@ -5,7 +5,7 @@ const ALGORITHM = 'aes-256-gcm';
 const KEY_LENGTH_BYTES = 32;
 const IV_LENGTH_BYTES = 12;
 const AUTH_TAG_LENGTH_BYTES = 16;
-const VERSION_PREFIX = 'v1:';
+export const VERSION_PREFIX = 'v1:';
 const KEY_GEN_HINT = `node -e "console.log(require('crypto').randomBytes(${KEY_LENGTH_BYTES}).toString('hex'))"`;
 
 function loadKey(): Buffer {
@@ -22,8 +22,6 @@ function loadKey(): Buffer {
   return key;
 }
 
-// Boot-time validation: throws in production if missing/invalid; warns in dev.
-// Mirrors resolveSessionSecret() in createApp so the two secrets are handled symmetrically.
 export function verifyTokenEncryptionConfigured(): void {
   if (process.env.NODE_ENV === 'production') {
     loadKey();

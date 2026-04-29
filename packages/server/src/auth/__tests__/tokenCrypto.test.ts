@@ -1,6 +1,11 @@
 import crypto from 'crypto';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { encryptToken, decryptToken, verifyTokenEncryptionConfigured } from '../tokenCrypto';
+import {
+  encryptToken,
+  decryptToken,
+  verifyTokenEncryptionConfigured,
+  VERSION_PREFIX,
+} from '../tokenCrypto';
 import logger from '../../logger';
 
 const VALID_KEY_HEX = crypto.randomBytes(32).toString('hex');
@@ -21,7 +26,7 @@ describe('tokenCrypto', () => {
   it('round-trips a token through encrypt/decrypt', () => {
     const plaintext = 'BQDxyz-spotify-access-token-example';
     const encrypted = encryptToken(plaintext);
-    expect(encrypted).toMatch(/^v1:/);
+    expect(encrypted.startsWith(VERSION_PREFIX)).toBe(true);
     expect(encrypted).not.toContain(plaintext);
     expect(decryptToken(encrypted)).toBe(plaintext);
   });
@@ -40,11 +45,9 @@ describe('tokenCrypto', () => {
 
   it('fails to decrypt if the ciphertext was tampered with', () => {
     const encrypted = encryptToken('a longer plaintext to ensure ciphertext bytes exist');
-    // Flip a bit deep in the payload (past iv+authTag) to ensure GCM auth fails.
-    const prefix = 'v1:';
-    const payload = Buffer.from(encrypted.slice(prefix.length), 'base64');
+    const payload = Buffer.from(encrypted.slice(VERSION_PREFIX.length), 'base64');
     payload[payload.length - 1] ^= 0x01;
-    const tampered = prefix + payload.toString('base64');
+    const tampered = VERSION_PREFIX + payload.toString('base64');
     expect(() => decryptToken(tampered)).toThrow();
   });
 
