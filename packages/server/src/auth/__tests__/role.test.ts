@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Request, Response, NextFunction } from 'express';
-import { getUserType, requireUserType } from '../userType';
+import { getRole, requireRole } from '../role';
 
-describe('userType', () => {
+describe('role', () => {
   const originalAdminIds = process.env.ADMIN_SPOTIFY_IDS;
 
   afterEach(() => {
@@ -13,41 +13,41 @@ describe('userType', () => {
     }
   });
 
-  describe('getUserType', () => {
+  describe('getRole', () => {
     it("returns 'user' when no allowlist is set", () => {
       delete process.env.ADMIN_SPOTIFY_IDS;
-      expect(getUserType('anyone')).toBe('user');
+      expect(getRole('anyone')).toBe('user');
     });
 
     it("returns 'user' when the allowlist is empty", () => {
       process.env.ADMIN_SPOTIFY_IDS = '';
-      expect(getUserType('anyone')).toBe('user');
+      expect(getRole('anyone')).toBe('user');
     });
 
     it("returns 'admin' for a Spotify ID in the allowlist", () => {
       process.env.ADMIN_SPOTIFY_IDS = 'alice,bob';
-      expect(getUserType('alice')).toBe('admin');
-      expect(getUserType('bob')).toBe('admin');
+      expect(getRole('alice')).toBe('admin');
+      expect(getRole('bob')).toBe('admin');
     });
 
     it("returns 'user' for a Spotify ID not in the allowlist", () => {
       process.env.ADMIN_SPOTIFY_IDS = 'alice,bob';
-      expect(getUserType('eve')).toBe('user');
+      expect(getRole('eve')).toBe('user');
     });
 
     it('trims whitespace and ignores empty entries', () => {
       process.env.ADMIN_SPOTIFY_IDS = ' alice , , bob ,';
-      expect(getUserType('alice')).toBe('admin');
-      expect(getUserType('bob')).toBe('admin');
-      expect(getUserType('')).toBe('user');
+      expect(getRole('alice')).toBe('admin');
+      expect(getRole('bob')).toBe('admin');
+      expect(getRole('')).toBe('user');
     });
   });
 
-  describe("requireUserType('admin')", () => {
+  describe("requireRole('admin')", () => {
     let res: Partial<Response>;
     let next: NextFunction;
     let statusMock: ReturnType<typeof vi.fn>;
-    const middleware = requireUserType('admin');
+    const middleware = requireRole('admin');
 
     beforeEach(() => {
       process.env.ADMIN_SPOTIFY_IDS = 'alice';
@@ -63,7 +63,7 @@ describe('userType', () => {
     it.each([
       { name: 'no authenticated user', user: undefined, status: 401 },
       {
-        name: "an authenticated user whose userType is not 'admin'",
+        name: "an authenticated user whose role is not 'admin'",
         user: { spotifyId: 'eve' } as Express.User,
         status: 403,
       },
@@ -73,7 +73,7 @@ describe('userType', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    it("calls next() when the user's userType is 'admin'", () => {
+    it("calls next() when the user's role is 'admin'", () => {
       callMiddleware({ spotifyId: 'alice' } as Express.User);
       expect(statusMock).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);

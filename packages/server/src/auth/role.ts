@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
-export type UserType = 'admin' | 'user';
+export type Role = 'admin' | 'user';
 
 function parseAdminIds(raw: string | undefined): Set<string> {
   if (!raw) return new Set();
@@ -12,17 +12,17 @@ function parseAdminIds(raw: string | undefined): Set<string> {
   );
 }
 
-export function getUserType(spotifyId: string): UserType {
+export function getRole(spotifyId: string): Role {
   return parseAdminIds(process.env.ADMIN_SPOTIFY_IDS).has(spotifyId) ? 'admin' : 'user';
 }
 
-export function requireUserType(type: UserType): RequestHandler {
+export function requireRole(role: Role): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       res.status(401).json({ error: 'Unauthorized' });
       return;
     }
-    if (getUserType(req.user.spotifyId) !== type) {
+    if (getRole(req.user.spotifyId) !== role) {
       res.status(403).json({ error: 'Forbidden' });
       return;
     }

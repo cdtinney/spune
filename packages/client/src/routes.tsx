@@ -24,7 +24,7 @@ function AdminRoute({ children }: RouteWrapperProps) {
 
   if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/" replace />;
-  if (user.userType !== 'admin') return <Navigate to="/visualization" replace />;
+  if (user.role !== 'admin') return <Navigate to="/visualization" replace />;
   return <>{children}</>;
 }
 

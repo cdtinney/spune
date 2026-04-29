@@ -46,14 +46,14 @@ describe('AppRoutes', () => {
   });
 
   it('redirects /admin to /visualization when authenticated but not admin', () => {
-    mockUseUser({ user: { spotifyId: 'user1', displayName: 'Test', userType: 'user' } });
+    mockUseUser({ user: { spotifyId: 'user1', displayName: 'Test', role: 'user' } });
     renderAt('/admin');
     expect(screen.queryByText('AdminPage')).not.toBeInTheDocument();
     expect(screen.getByText('VisualizationPage')).toBeInTheDocument();
   });
 
   it('renders admin page when user is admin', () => {
-    mockUseUser({ user: { spotifyId: 'user1', displayName: 'Test', userType: 'admin' } });
+    mockUseUser({ user: { spotifyId: 'user1', displayName: 'Test', role: 'admin' } });
     renderAt('/admin');
     expect(screen.getByText('AdminPage')).toBeInTheDocument();
   });
