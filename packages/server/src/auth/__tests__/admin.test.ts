@@ -50,39 +50,36 @@ describe('admin', () => {
   });
 
   describe('requireAdmin', () => {
-    let req: Partial<Request>;
     let res: Partial<Response>;
     let next: NextFunction;
     let statusMock: ReturnType<typeof vi.fn>;
-    let jsonMock: ReturnType<typeof vi.fn>;
 
     beforeEach(() => {
-      jsonMock = vi.fn();
-      statusMock = vi.fn().mockReturnValue({ json: jsonMock });
+      process.env.ADMIN_SPOTIFY_IDS = 'alice';
+      statusMock = vi.fn().mockReturnValue({ json: vi.fn() });
       res = { status: statusMock as unknown as Response['status'] };
       next = vi.fn();
     });
 
-    it('responds 401 when there is no authenticated user', () => {
-      process.env.ADMIN_SPOTIFY_IDS = 'alice';
-      req = { user: undefined };
-      requireAdmin(req as Request, res as Response, next);
-      expect(statusMock).toHaveBeenCalledWith(401);
-      expect(next).not.toHaveBeenCalled();
-    });
+    function callRequireAdmin(user: Express.User | undefined): void {
+      requireAdmin({ user } as Request, res as Response, next);
+    }
 
-    it('responds 403 when the user is not in the allowlist', () => {
-      process.env.ADMIN_SPOTIFY_IDS = 'alice';
-      req = { user: { spotifyId: 'eve' } as Request['user'] };
-      requireAdmin(req as Request, res as Response, next);
-      expect(statusMock).toHaveBeenCalledWith(403);
+    it.each([
+      { name: 'no authenticated user', user: undefined, status: 401 },
+      {
+        name: 'user not in the allowlist',
+        user: { spotifyId: 'eve' } as Express.User,
+        status: 403,
+      },
+    ])('responds $status when there is $name', ({ user, status }) => {
+      callRequireAdmin(user);
+      expect(statusMock).toHaveBeenCalledWith(status);
       expect(next).not.toHaveBeenCalled();
     });
 
     it('calls next() when the user is in the allowlist', () => {
-      process.env.ADMIN_SPOTIFY_IDS = 'alice';
-      req = { user: { spotifyId: 'alice' } as Request['user'] };
-      requireAdmin(req as Request, res as Response, next);
+      callRequireAdmin({ spotifyId: 'alice' } as Express.User);
       expect(statusMock).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
     });
