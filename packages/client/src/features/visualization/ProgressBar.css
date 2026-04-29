@@ -2,23 +2,23 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
   z-index: var(--z-overlay-chrome);
   display: flex;
-  align-items: center;
   gap: 8px;
-  padding: 0 0 35px;
-  max-width: 250px;
+  align-items: center;
   width: 100%;
+  max-width: 250px;
+  padding: 0 0 35px;
   pointer-events: none;
+  transform: translateX(-50%);
 }
 
 .progress-bar__time {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-variant-numeric: tabular-nums;
-  width: 32px;
   flex-shrink: 0;
+  width: 32px;
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255, 255, 255, 0.5);
 }
 
 .progress-bar__time:first-child {
@@ -28,25 +28,25 @@
 .progress-bar__track {
   flex: 1;
   height: 2px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 1px;
   overflow: hidden;
+  background: rgb(255, 255, 255, 0.15);
+  border-radius: 1px;
 }
 
 .progress-bar__fill {
   height: 100%;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgb(255, 255, 255, 0.4);
   border-radius: 1px;
   transition: width 0.3s linear;
 }
 
 /* Breakpoint: 600px */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .progress-bar {
-    left: var(--spacing-overlay-inset-mobile);
-    transform: none;
     bottom: var(--spacing-overlay-inset-mobile);
+    left: var(--spacing-overlay-inset-mobile);
     max-width: 200px;
     padding: 0;
+    transform: none;
   }
 }

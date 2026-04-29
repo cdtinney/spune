@@ -3,15 +3,15 @@
   right: 70px;
   bottom: 30px;
   z-index: var(--z-overlay-chrome);
-  background: none;
-  border: none;
   padding: 8px;
   cursor: pointer;
+  background: none;
+  border: none;
 }
 
 .cast-button svg {
-  fill: var(--color-text-primary);
   display: block;
+  fill: var(--color-text-primary);
 }
 
 .cast-button:hover svg {
@@ -33,7 +33,7 @@
 }
 
 /* Breakpoint: 600px */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .cast-button {
     right: var(--spacing-overlay-inset-mobile);
     bottom: var(--spacing-overlay-inset-mobile);

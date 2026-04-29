@@ -1,42 +1,42 @@
 .user-menu {
+  position: relative;
   display: flex;
   align-items: center;
-  position: relative;
 }
 
 .user-menu__trigger {
+  padding: 8px;
+  margin-left: 8px;
+  cursor: pointer;
   background: none;
   border: none;
-  margin-left: 8px;
-  padding: 8px;
-  cursor: pointer;
 }
 
 .user-menu__dropdown {
   position: absolute;
   top: 100%;
   right: 0;
+  z-index: var(--z-dropdown);
+  min-width: 80px;
   margin-top: 10px;
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-elevation-3);
-  z-index: var(--z-dropdown);
-  min-width: 80px;
 }
 
 .user-menu__item {
   display: block;
   width: 100%;
   padding: 5px 10px;
-  border: none;
-  background: none;
-  color: var(--color-text-primary);
   font-size: 0.8rem;
+  color: var(--color-text-primary);
   text-align: left;
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
 
 .user-menu__item:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgb(255, 255, 255, 0.08);
 }

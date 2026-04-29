@@ -13,15 +13,15 @@
 }
 
 .user-avatar__placeholder {
-  width: var(--avatar-size);
-  height: var(--avatar-size);
-  border-radius: 50%;
-  background-color: var(--color-spotify-green);
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   font-size: 14px;
   font-weight: 600;
+  color: var(--color-text-on-accent);
+  background-color: var(--color-spotify-green);
+  border-radius: 50%;
   box-shadow: var(--shadow-elevation-3);
 }
