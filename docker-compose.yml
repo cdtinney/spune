@@ -24,6 +24,7 @@ services:
       PORT: 5000
       DATABASE_URL: postgresql://postgres:postgres@db:5432/spune
       SESSION_SECRET: ${SESSION_SECRET:-change-me-in-production}
+      TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:-}
       SPOT_CLIENT_ID: ${SPOT_CLIENT_ID}
       SPOT_CLIENT_SECRET: ${SPOT_CLIENT_SECRET}
       SPOT_REDIRECT_URI: ${SPOT_REDIRECT_URI}
