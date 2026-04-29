@@ -115,10 +115,11 @@ A shared staging environment runs at https://staging.spune.tinney.dev on the sam
 ### Deploying a branch to staging
 
 ```bash
-git push origin <your-branch>:staging --force
+pnpm deploy:staging              # deploys the current branch
+pnpm deploy:staging my-branch    # deploys a named branch
 ```
 
-This force-pushes your branch to the `staging` branch, which triggers CI to build and push `ghcr.io/cdtinney/spune:staging`. Watchtower (running in the prod stack) picks up the new image within ~60 seconds and restarts the staging app container.
+This wraps `git push origin <branch>:staging --force` with a confirmation prompt. The push triggers CI to build and push `ghcr.io/cdtinney/spune:staging`. Watchtower (running in the prod stack) picks up the new image within ~60 seconds and restarts the staging app container.
 
 There is exactly one staging slot — whoever force-pushes most recently owns it. Coordinate via Slack/PR comments if multiple branches are in flight.
 
