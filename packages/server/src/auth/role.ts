@@ -3,12 +3,11 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 export type Role = 'admin' | 'user';
 
 function parseAdminIds(raw: string | undefined): Set<string> {
-  if (!raw) return new Set();
   return new Set(
-    raw
+    (raw ?? '')
       .split(',')
       .map((id) => id.trim())
-      .filter((id) => id.length > 0),
+      .filter(Boolean),
   );
 }
 
