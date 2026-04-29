@@ -25,6 +25,8 @@ packages/server/src/database/migrations/001_create_users.sql
 
 This creates the `users` table. The `session` table is created automatically by `connect-pg-simple` on first run.
 
+The Spotify access and refresh tokens stored in `users` are encrypted at rest with AES-256-GCM before being written. The columns remain `TEXT` — the values are `v1:`-prefixed base64 ciphertext rather than raw tokens. The encryption key comes from the `TOKEN_ENCRYPTION_KEY` env var; rotating it invalidates all existing stored tokens and forces users to re-auth.
+
 ## 4. Configure the server
 
 Copy the example env file and fill in your connection string:

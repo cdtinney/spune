@@ -56,6 +56,7 @@ DB_PASSWORD=$(openssl rand -hex 16)
 cat > .env <<EOF
 DB_PASSWORD=${DB_PASSWORD}
 SESSION_SECRET=$(openssl rand -hex 32)
+TOKEN_ENCRYPTION_KEY=$(openssl rand -hex 32)
 SPOT_CLIENT_ID=REPLACE_ME
 SPOT_CLIENT_SECRET=REPLACE_ME
 SPOT_REDIRECT_URI=http://YOUR_DROPLET_IP/api/auth/spotify/callback
