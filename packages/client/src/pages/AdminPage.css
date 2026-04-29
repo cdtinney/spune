@@ -1,8 +1,6 @@
 .admin-page {
   flex-grow: 1;
   padding: 2em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: var(--color-text-primary);
   overflow-y: auto;
 }
 
@@ -25,10 +23,9 @@
 .admin-table td {
   padding: 0.4em 0.6em;
   border-bottom: 1px solid var(--color-border-subtle);
-  text-align: left;
 }
 
 .admin-table th {
+  text-align: left;
   color: var(--color-text-secondary);
-  font-weight: 600;
 }
