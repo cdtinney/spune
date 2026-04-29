@@ -1,95 +1,60 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import getCurrentlyPlayingRelatedAlbums from '../getCurrentlyPlayingRelatedAlbums';
-
-import getRelatedArtists from '../getRelatedArtists';
 import getArtistAlbums from '../getArtistAlbums';
-import { artistIdCache } from '../../../../cache';
+import runDiscovery from '../../discovery/runDiscovery';
+import { discoveryResultCache } from '../../../../cache';
 
-vi.mock('../getRelatedArtists');
 vi.mock('../getArtistAlbums');
+vi.mock('../../discovery/runDiscovery');
 
-const mockedGetRelatedArtists = vi.mocked(getRelatedArtists);
 const mockedGetArtistAlbums = vi.mocked(getArtistAlbums);
+const mockedRunDiscovery = vi.mocked(runDiscovery);
 
 const mockSpotifyApi = {
-  player: {
-    getCurrentlyPlayingTrack: vi.fn(),
-  },
-  search: vi.fn(),
+  player: { getCurrentlyPlayingTrack: vi.fn() },
 };
+
+function mockPlaying(id: string) {
+  mockSpotifyApi.player.getCurrentlyPlayingTrack.mockResolvedValue({
+    item: {
+      id,
+      name: 'Test Song',
+      artists: [{ id: '1', name: 'Artist 1' }],
+      album: { artists: [{ id: '1', name: 'Artist 1' }] },
+    },
+  });
+}
 
 describe('getCurrentlyPlayingRelatedAlbums()', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    artistIdCache.clear();
+    discoveryResultCache.clear();
   });
-  it('throws an error when the playing track is different than the request track', () => {
-    mockSpotifyApi.player.getCurrentlyPlayingTrack.mockImplementation(() =>
-      Promise.resolve({
-        item: {
-          id: 'bar',
-          artists: [],
-          album: {
-            artists: [],
-          },
-        },
-      }),
-    );
 
+  it('rejects when playing track differs from requested songId', () => {
+    mockPlaying('bar');
     expect(getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo')).rejects.toBeInstanceOf(Error);
   });
 
-  it('combines song artists, track artists, and related artists into a single object when successful', async () => {
-    mockSpotifyApi.player.getCurrentlyPlayingTrack.mockImplementation(() =>
-      Promise.resolve({
-        item: {
-          id: 'foo',
-          artists: [
-            {
-              id: 1,
-            },
-            {
-              id: 2,
-            },
-          ],
-          album: {
-            artists: [
-              {
-                id: 1,
-              },
-              {
-                id: 2,
-              },
-            ],
-          },
-        },
-      }),
-    );
+  it('combines artist albums with discovery source albums', async () => {
+    mockPlaying('foo');
+    mockedGetArtistAlbums.mockResolvedValue({ artistId: '1', albums: [{ name: 'A' }] } as any);
+    mockedRunDiscovery.mockResolvedValue([{ name: 'B' }] as any);
 
-    mockedGetRelatedArtists.mockImplementation(() => Promise.resolve([3, 4]) as any);
-    mockedGetArtistAlbums.mockImplementation(
-      (_spotifyApi: any, artistId: string) =>
-        Promise.resolve({
-          artistId,
-          albums: [
-            {
-              name: 'cat',
-            },
-            {
-              name: 'dog',
-            },
-          ],
-        }) as any,
-    );
+    const result = await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
 
-    const relatedAlbums = await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
-    expect(relatedAlbums).toEqual([
-      {
-        name: 'cat',
-      },
-      {
-        name: 'dog',
-      },
-    ]);
+    expect(result.map((a) => a.name)).toEqual(['A', 'B']);
+    expect(mockedRunDiscovery).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns cached result without calling Spotify API', async () => {
+    mockPlaying('foo');
+    mockedGetArtistAlbums.mockResolvedValue({ artistId: '1', albums: [{ name: 'A' }] } as any);
+    mockedRunDiscovery.mockResolvedValue([]);
+
+    await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
+    await getCurrentlyPlayingRelatedAlbums(mockSpotifyApi, 'foo');
+
+    expect(mockSpotifyApi.player.getCurrentlyPlayingTrack).toHaveBeenCalledTimes(1);
   });
 });
