@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# Run the full local validation suite — the same checks CI runs on every PR.
+# Run before pushing a branch or opening a PR. Stops on the first failure.
+# Steps: format check, lint, client tests, server tests, client build, type-check both packages.
 set -euo pipefail
 
 # Server route tests need Spotify env vars (any non-empty value works for tests).

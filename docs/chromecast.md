@@ -1,6 +1,6 @@
 # Chromecast Integration
 
-Spune can cast the album art visualization to a Chromecast-enabled TV — the original Zune living room experience.
+Spune can cast the album art visualization to a [Chromecast](https://store.google.com/product/chromecast_google_tv)-enabled TV — the original Zune living room experience.
 
 ## How it works
 
@@ -8,7 +8,7 @@ Spune can cast the album art visualization to a Chromecast-enabled TV — the or
 
 The sender runs in the browser (Chrome only). When a Chromecast is detected on the local network, a cast icon appears in the bottom-right corner of the visualization page.
 
-1. The Google Cast Sender SDK is loaded on page mount.
+1. The [Google Cast Sender SDK](https://developers.google.com/cast/docs/web_sender) is loaded on page mount.
 2. The SDK discovers Chromecast devices that support the configured app ID.
 3. Clicking the cast button opens Chrome's device picker.
 4. Once connected, the sender pushes playback data to the receiver on every poll update (every 3 seconds):
@@ -51,7 +51,7 @@ interface CastMessage {
 
 ## Setup
 
-### 1. Google Cast Developer Console
+### 1. [Google Cast Developer Console](https://cast.google.com/publish/)
 
 1. Go to [cast.google.com/publish](https://cast.google.com/publish/).
 2. Pay the $5 one-time developer fee (if not already done).

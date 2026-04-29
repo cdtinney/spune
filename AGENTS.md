@@ -4,14 +4,14 @@
 
 ## Project Overview
 
-**Spune** is a Zune-inspired Spotify "Now Playing" visualizer. A React SPA polls a custom Express back-end for the currently playing track, then renders a Zune-style animated mosaic of related artist album covers as the background.
+**Spune** is a Zune-inspired [Spotify](https://www.spotify.com/) "Now Playing" visualizer. A [React](https://react.dev/) SPA polls a custom [Express](https://expressjs.com/) back-end for the currently playing track, then renders a Zune-style animated mosaic of related artist album covers as the background.
 
-This is a **pnpm monorepo** with two packages:
+This is a [pnpm](https://pnpm.io/) monorepo with two packages:
 
-| Package           | Name           | Description              |
-| ----------------- | -------------- | ------------------------ |
-| `packages/client` | `spune-client` | React 19 + Vite SPA      |
-| `packages/server` | `spune-server` | Express + TypeScript API |
+| Package           | Name           | Description                                                 |
+| ----------------- | -------------- | ----------------------------------------------------------- |
+| `packages/client` | `spune-client` | React 19 + [Vite](https://vite.dev/) SPA                    |
+| `packages/server` | `spune-server` | Express + [TypeScript](https://www.typescriptlang.org/) API |
 
 ### Monorepo Structure
 
@@ -38,6 +38,8 @@ packages/
       types/             # TypeScript types (user, spotify, external APIs)
 ```
 
+Key server dependencies: [Passport.js](https://www.passportjs.org/) (OAuth), [`lru-cache`](https://github.com/isaacs/node-lru-cache) (in-memory caches), [Winston](https://github.com/winstonjs/winston) (logging), [PostgreSQL](https://www.postgresql.org/) via [`pg`](https://node-postgres.com/).
+
 ## Architecture
 
 ### Client-Server Communication
@@ -56,7 +58,7 @@ The client polls `/api/spotify/me/player` every 3 seconds. When the album change
 
 ### Observability
 
-- **Request IDs**: every request gets an `X-Request-Id`. Trusted inbound IDs (alphanumeric, `_`, `.`, `:`, `-`, ≤128 chars) are preserved; otherwise a UUID is generated. The same value is echoed back as a response header and is attached to every Winston log entry emitted on that request via `AsyncLocalStorage`. To pull the current ID inside a handler, import `getRequestId` from `middleware/requestContext`.
+- **Request IDs**: every request gets an `X-Request-Id`. Trusted inbound IDs (alphanumeric, `_`, `.`, `:`, `-`, ≤128 chars) are preserved; otherwise a UUID is generated. The same value is echoed back as a response header and is attached to every Winston log entry emitted on that request via [`AsyncLocalStorage`](https://nodejs.org/api/async_context.html#class-asynclocalstorage). To pull the current ID inside a handler, import `getRequestId` from `middleware/requestContext`.
 - **Access logs**: `httpLogger` middleware emits one `http_request` log line per response with `{ method, url, status, durationMs }`. `/api/health` and SSE streams (`/api/sse/*`) are skipped — the former is noise, the latter would record stream lifetime instead of request work.
 
 ### Auth Flow
@@ -67,7 +69,7 @@ The client polls `/api/spotify/me/player` every 3 seconds. When the album change
 4. Passport verify callback upserts the user in PostgreSQL with access/refresh tokens
 5. Success redirects to `CLIENT_HOST/#/visualization`
 6. On every subsequent request, `deserializeUser` loads the user from DB by `spotifyId` stored in the session
-7. Token refresh: `apiRequestWithRefresh` checks if `tokenUpdated + expiresIn <= Date.now()` and refreshes via `passport-oauth2-refresh` if expired
+7. Token refresh: `apiRequestWithRefresh` checks if `tokenUpdated + expiresIn <= Date.now()` and refreshes via [`passport-oauth2-refresh`](https://github.com/fiznool/passport-oauth2-refresh) if expired
 
 ### Album Discovery Pipeline
 
@@ -84,11 +86,11 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 ## Key Conventions
 
 - **TypeScript**: `strict: true` in both packages. Client uses `noEmit` (Vite transpiles). Server compiles to CommonJS in `dist/`.
-- **Testing**: Vitest for both packages. Client uses `jsdom` environment + `@testing-library/react`. Server uses `node` environment. Tests live in `src/__tests__/` or `src/**/__tests__/`.
-- **Formatting**: Prettier (single quotes, trailing commas, 100 char width, 2-space indent). Run `pnpm format:check` to verify.
-- **Linting**: ESLint v9 flat config with `typescript-eslint` recommended. `eslint-config-prettier` disables style rules. Unused vars prefixed `_` are allowed.
+- **Testing**: [Vitest](https://vitest.dev/) for both packages. Client uses [`jsdom`](https://github.com/jsdom/jsdom) environment + [`@testing-library/react`](https://testing-library.com/docs/react-testing-library/intro/). Server uses `node` environment. Tests live in `src/__tests__/` or `src/**/__tests__/`.
+- **Formatting**: [Prettier](https://prettier.io/) (single quotes, trailing commas, 100 char width, 2-space indent). Run `pnpm format:check` to verify.
+- **Linting**: [ESLint](https://eslint.org/) v9 flat config with [`typescript-eslint`](https://typescript-eslint.io/) recommended. `eslint-config-prettier` disables style rules. Unused vars prefixed `_` are allowed.
 - **Package manager**: pnpm 10 with workspaces. Always use `pnpm`, never `npm` or `yarn`.
-- **Routing**: Hash-based routing (`HashRouter`) so the server only needs to serve `index.html`.
+- **Routing**: Hash-based routing ([`HashRouter`](https://reactrouter.com/api/components/HashRouter)) so the server only needs to serve `index.html`.
 
 ## Common Tasks
 
@@ -118,7 +120,7 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 - **Session cookie port mismatch**: In dev, `SPOT_REDIRECT_URI` must point to port 3000 (Vite), not 5000 (Express). The Vite proxy forwards the callback to Express, and the session cookie must be set on the origin the browser visits.
 - **dotenv load order**: `packages/server/app.ts` uses dynamic `import()` to ensure `dotenv.config()` runs before any module-level code reads `process.env`. Do not add top-level imports of modules that read env vars.
 - **Rate limiting disabled in dev**: All rate limiters in `packages/server/src/middleware/rateLimiter.ts` are passthrough when `NODE_ENV !== 'production'`.
-- **`trust proxy: 1`** is set in `createApp.ts` for Caddy reverse proxy in production. Don't remove this.
+- **`trust proxy: 1`** is set in `createApp.ts` for [Caddy](https://caddyserver.com/) reverse proxy in production. Don't remove this.
 - **`LAST_FM_API_KEY`** is optional. If unset, only ListenBrainz is used for related artist discovery.
 - **Client build output**: Goes to `packages/client/build/`, not the default `dist/`.
 - **Server tests need Spotify env vars**: Route tests that call `createApp()` require `SPOT_CLIENT_ID`, `SPOT_CLIENT_SECRET`, and `SPOT_REDIRECT_URI` to be set (any non-empty value works). The `scripts/pre-pr.sh` script sets test defaults automatically. CI also sets these in the `server` job.
@@ -129,7 +131,7 @@ Entry: `getCurrentlyPlayingRelatedAlbums(spotifyApi, songId)` in `packages/serve
 - **Update documentation**: When changing behavior, update AGENTS.md, README.md, and any relevant docs/ files. If adding a new feature, add it to the roadmap in docs/TODO.md.
 - **Reusable over one-off**: Extract shared helpers, hooks, and CSS classes instead of duplicating code. Check if a pattern already exists before creating a new one.
 - **Verbose, descriptive naming**: Prefer `mockFullVisualization` over `mockVis`, `useNowPlayingPoller` over `usePoller`, `visualization__bottom-gradient` over `viz__grad`. Names should be self-documenting.
-- **data-testid for E2E tests**: Add `data-testid` attributes to components that E2E tests target. Prefer `page.getByTestId()` over CSS class selectors in Playwright tests.
+- **data-testid for E2E tests**: Add `data-testid` attributes to components that E2E tests target. Prefer `page.getByTestId()` over CSS class selectors in [Playwright](https://playwright.dev/) tests.
 - **Visual regression coverage**: When changing UI layout or styling, run `pnpm test:e2e:docker` to verify no visual regressions. If a visual change is intentional, update baselines with `pnpm test:e2e:update-snapshots` and commit the new snapshots.
 
 ### Updating visual baselines after a UI change
