@@ -16,6 +16,7 @@
     "client:test:coverage": "pnpm --filter spune-client test:coverage",
     "client:watch": "pnpm --filter spune-client watch",
     "deploy:staging": "./scripts/deploy-staging.sh",
+    "restrict:staging": "./scripts/restrict-staging.sh",
     "dev": "docker compose -f docker-compose.dev.yml up -d && pnpm watch",
     "dev:stop": "docker compose -f docker-compose.dev.yml down",
     "format": "prettier --write .",
