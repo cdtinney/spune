@@ -8,3 +8,20 @@
   display: flex;
   flex-grow: 1;
 }
+
+.app__staging-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 4px 8px;
+  background: #ff00aa;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-align: center;
+  pointer-events: none;
+}

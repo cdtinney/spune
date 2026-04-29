@@ -8,6 +8,7 @@ export default function App() {
     <HashRouter>
       <UserProvider>
         <div className="app">
+          <div className="app__staging-banner">STAGING</div>
           <div className="app__content">
             <AppRoutes />
           </div>
