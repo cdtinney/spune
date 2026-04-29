@@ -5,6 +5,8 @@ import { findOrCreateUser } from '../../database/queries/userQueries';
 import { isLoginAllowed } from '../../auth/loginAllowlist';
 
 const verify: VerifyFunction = (accessToken, refreshToken, expiresIn, profile, done): void => {
+  // ALLOWED_SPOTIFY_IDS is per-environment — each Compose stack loads its own
+  // .env, so locking down staging never affects prod (and vice versa).
   if (!isLoginAllowed(profile.id)) {
     logger.warn(`Rejected login for ${profile.id} — not in ALLOWED_SPOTIFY_IDS.`);
     done(null, false);
