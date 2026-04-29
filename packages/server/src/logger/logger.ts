@@ -7,9 +7,6 @@ const requestIdFormat = format((info) => {
   return info;
 });
 
-export const ERROR_LOG_FILE = 'spune-error.log';
-export const COMBINED_LOG_FILE = 'spune-combined.log';
-
 const logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -28,11 +25,11 @@ const logger = createLogger({
   },
   transports: [
     new transports.File({
-      filename: ERROR_LOG_FILE,
+      filename: 'spune-error.log',
       level: 'error',
     }),
     new transports.File({
-      filename: COMBINED_LOG_FILE,
+      filename: 'spune-combined.log',
     }),
   ],
 });

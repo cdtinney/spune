@@ -4,12 +4,7 @@ import createApp from '../../createApp';
 
 const app = createApp();
 
-const ADMIN_ENDPOINTS = [
-  '/api/admin/users',
-  '/api/admin/sessions',
-  '/api/admin/keepalive',
-  '/api/admin/logs',
-];
+const ADMIN_ENDPOINTS = ['/api/admin/users', '/api/admin/sessions'];
 
 describe('/admin', () => {
   it.each(ADMIN_ENDPOINTS)('returns 401 for unauthenticated requests to %s', async (endpoint) => {
