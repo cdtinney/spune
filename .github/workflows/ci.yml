@@ -106,6 +106,9 @@ jobs:
       - name: Lint
         run: pnpm client:lint
 
+      - name: Lint CSS
+        run: pnpm client:lint:css
+
       - name: Test
         run: pnpm client:test:coverage
 

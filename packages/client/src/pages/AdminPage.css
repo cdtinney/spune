@@ -10,13 +10,13 @@
 }
 
 .admin-page__error {
-  color: #f44336;
+  color: var(--color-error);
 }
 
 .admin-table {
   width: 100%;
-  border-collapse: collapse;
   font-size: 12px;
+  border-collapse: collapse;
 }
 
 .admin-table th,
@@ -26,6 +26,6 @@
 }
 
 .admin-table th {
-  text-align: left;
   color: var(--color-text-secondary);
+  text-align: left;
 }

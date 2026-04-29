@@ -1,0 +1,39 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
+  "plugins": ["stylelint-declaration-strict-value"],
+  "rules": {
+    "scale-unlimited/declaration-strict-value": [
+      ["/color$/", "background", "box-shadow", "z-index"],
+      {
+        "ignoreValues": [
+          "currentColor",
+          "transparent",
+          "inherit",
+          "initial",
+          "unset",
+          "none",
+          "/^var\\(--/",
+          "/^linear-gradient/",
+          "/^radial-gradient/"
+        ],
+        "disableFix": true
+      }
+    ],
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      {
+        "message": "Expected class selector to follow BEM naming convention"
+      }
+    ],
+    "custom-property-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      {
+        "message": "Expected custom property to be kebab-case"
+      }
+    ],
+    "alpha-value-notation": "number",
+    "color-function-notation": "legacy",
+    "declaration-block-no-redundant-longhand-properties": true,
+    "no-descending-specificity": null
+  }
+}

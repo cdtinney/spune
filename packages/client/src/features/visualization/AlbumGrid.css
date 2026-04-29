@@ -9,10 +9,10 @@
 
 .album-grid {
   display: grid;
-  animation: mosaic-drift 180s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
-  will-change: transform;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
+  animation: mosaic-drift 180s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
+  will-change: transform;
 }
 
 .album-grid__tile {
@@ -20,10 +20,10 @@
 }
 
 .album-grid__tile img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 /* Slow diagonal drift through multiple waypoints for organic movement */
@@ -31,18 +31,23 @@
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   20% {
     transform: translate3d(-6%, -4%, 0);
   }
+
   40% {
     transform: translate3d(-12%, -1%, 0);
   }
+
   60% {
     transform: translate3d(-4%, -9%, 0);
   }
+
   80% {
     transform: translate3d(-10%, -6%, 0);
   }
+
   100% {
     transform: translate3d(-8%, -10%, 0);
   }

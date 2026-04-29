@@ -3,14 +3,14 @@
   right: var(--spacing-overlay-inset);
   bottom: var(--spacing-overlay-inset);
   z-index: var(--z-overlay-chrome);
+  padding: 8px;
   cursor: pointer;
   background: none;
   border: none;
-  padding: 8px;
 }
 
 /* Breakpoint: 600px */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .fullscreen-button {
     display: none;
   }

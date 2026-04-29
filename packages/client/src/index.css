@@ -4,13 +4,15 @@
   --color-spotify-green-hover: #1ed760;
   --color-bg-primary: #212121;
   --color-bg-surface: #1a1a1a;
-  --color-text-primary: rgba(255, 255, 255, 0.87);
-  --color-text-secondary: rgba(255, 255, 255, 0.54);
+  --color-text-primary: rgb(255, 255, 255, 0.87);
+  --color-text-secondary: rgb(255, 255, 255, 0.54);
+  --color-text-on-accent: #fff;
+  --color-error: #f44336;
 
   /* Shadows */
   --shadow-elevation-3:
-    0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-    0 1px 18px 0 rgba(0, 0, 0, 0.12);
+    0 3px 5px -1px rgb(0, 0, 0, 0.2), 0 6px 10px 0 rgb(0, 0, 0, 0.14),
+    0 1px 18px 0 rgb(0, 0, 0, 0.12);
 
   /* Spacing */
   --spacing-overlay-inset: 30px;
@@ -21,10 +23,11 @@
 
   /* Border */
   --radius-sm: 4px;
-  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-border-subtle: rgb(255, 255, 255, 0.1);
 
   /* Z-index layers */
   --z-overlay-bg: 0;
+  --z-overlay-base: 1;
   --z-overlay-gradient: 50;
   --z-overlay-chrome: 100;
   --z-dropdown: 200;
@@ -43,31 +46,31 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
   font-family: 'Source Sans Pro', sans-serif;
+  color: var(--color-text-on-accent);
   background-color: var(--color-bg-primary);
-  color: #fff;
 }
 
 #root {
   display: flex;
-  flex-direction: column;
   flex-grow: 1;
+  flex-direction: column;
 }
 
 .btn-primary {
   display: inline-flex;
   align-items: center;
   padding: 10px 24px;
-  background-color: var(--color-spotify-green);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
   font-size: 0.875rem;
   font-weight: 600;
+  color: var(--color-text-on-accent);
   letter-spacing: 0.05em;
   cursor: pointer;
+  background-color: var(--color-spotify-green);
+  border: none;
+  border-radius: var(--radius-sm);
   transition: background-color 0.2s;
 }
 
@@ -94,6 +97,7 @@ body {
   from {
     background-position: 0% 0%;
   }
+
   to {
     background-position: 100% 100%;
   }
