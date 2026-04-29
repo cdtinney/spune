@@ -29,10 +29,10 @@ src/
 
 ## Operational endpoints
 
-| Endpoint          | Purpose                                                                                                                                                                           |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /api/status` | Returns `{ version, uptime, startedAt }`. Used by the deploy-check job to confirm the droplet is running the new image.                                                           |
-| `GET /api/health` | Returns `200 { status: 'ok', db: 'ok' }` when `SELECT 1` succeeds within ~2s, or `503 { status: 'error', db: 'down' }` otherwise. Not rate-limited; suitable for uptime monitors. |
+| Endpoint          | Purpose                                                                                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/status` | Returns `{ version, uptime, startedAt }`. Used by the deploy-check job to confirm the droplet is running the new image.                                     |
+| `GET /api/health` | Returns `200 { status: 'ok' }` when `SELECT 1` succeeds within ~2s, or `503 { status: 'error' }` otherwise. Not rate-limited; suitable for uptime monitors. |
 
 ## Configuration
 

@@ -1,10 +1,13 @@
 import type { RequestHandler } from 'express';
 import logger from '../logger';
 
-const SKIP_PATHS = new Set(['/api/health']);
+// Skip uptime polls (noise) and SSE streams (durationMs would measure stream lifetime, not request work).
+function shouldSkip(path: string): boolean {
+  return path === '/api/health' || path.startsWith('/api/sse/');
+}
 
 const httpLogger: RequestHandler = (req, res, next) => {
-  if (SKIP_PATHS.has(req.path)) {
+  if (shouldSkip(req.path)) {
     next();
     return;
   }

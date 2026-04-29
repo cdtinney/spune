@@ -8,10 +8,9 @@ import statusRoutes from './status';
 
 const router: IRouter = Router();
 
-// Mount uptime/health checks before any rate limiter so external monitors can poll freely.
+// Health check is mounted before the rate limiter so uptime monitors can poll freely.
 router.use('/health', healthRoutes);
 
-// Apply general rate limit to all remaining API routes.
 router.use(apiLimiter);
 
 // Apply stricter limits per route group.

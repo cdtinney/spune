@@ -24,10 +24,7 @@ async function checkDatabase(): Promise<boolean> {
 
 router.get('/', async (_req, res) => {
   const dbOk = await checkDatabase();
-  res.status(dbOk ? 200 : 503).json({
-    status: dbOk ? 'ok' : 'error',
-    db: dbOk ? 'ok' : 'down',
-  });
+  res.status(dbOk ? 200 : 503).json({ status: dbOk ? 'ok' : 'error' });
 });
 
 export default router;

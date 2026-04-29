@@ -34,8 +34,7 @@ export default function createApp(): express.Application {
   // Trust reverse proxy (Caddy) so Express sees correct protocol/IP
   app.set('trust proxy', 1);
 
-  // Per-request ID + access log. Must run before routes so every log entry on the
-  // request path picks up the ID from AsyncLocalStorage.
+  // Must run before routes so downstream log entries inherit the request ID via AsyncLocalStorage.
   app.use(requestContext);
   app.use(httpLogger);
 

@@ -12,9 +12,10 @@ const storage = new AsyncLocalStorage<RequestContext>();
 const MAX_INBOUND_ID_LENGTH = 128;
 const SAFE_ID_PATTERN = /^[A-Za-z0-9_.:-]+$/;
 
-function resolveRequestId(headerValue: unknown): string {
-  if (typeof headerValue === 'string') {
-    const trimmed = headerValue.trim();
+function resolveRequestId(headerValue: string | string[] | undefined): string {
+  const candidate = Array.isArray(headerValue) ? headerValue[0] : headerValue;
+  if (candidate) {
+    const trimmed = candidate.trim();
     if (
       trimmed.length > 0 &&
       trimmed.length <= MAX_INBOUND_ID_LENGTH &&

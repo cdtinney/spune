@@ -21,7 +21,7 @@ describe('/api/health', () => {
     const res = await request(buildApp()).get('/api/health');
 
     expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual({ status: 'ok', db: 'ok' });
+    expect(res.body).toEqual({ status: 'ok' });
   });
 
   it('returns 503 when the DB query fails', async () => {
@@ -30,6 +30,6 @@ describe('/api/health', () => {
     const res = await request(buildApp()).get('/api/health');
 
     expect(res.statusCode).toBe(503);
-    expect(res.body).toEqual({ status: 'error', db: 'down' });
+    expect(res.body).toEqual({ status: 'error' });
   });
 });
