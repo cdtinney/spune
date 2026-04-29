@@ -1,6 +1,7 @@
 import { Router, type IRouter, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import paths from '../config/paths';
+import { isAdmin } from '../auth/admin';
 const SPOTIFY_PERMISSION_SCOPES: string[] = [
   'user-read-private',
   'user-read-email',
@@ -21,6 +22,7 @@ router.get('/user', (req: Request, res: Response) => {
       spotifyId: user.spotifyId,
       displayName: user.displayName,
       photos: user.photos,
+      isAdmin: isAdmin(user.spotifyId),
     },
   });
 });

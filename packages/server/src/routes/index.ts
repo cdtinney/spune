@@ -1,5 +1,6 @@
 import { Router, type IRouter } from 'express';
 import { apiLimiter, authLimiter, spotifyLimiter, statusLimiter } from '../middleware/rateLimiter';
+import adminRoutes from './admin';
 import authRoutes from './auth';
 import healthRoutes from './health';
 import spotifyRoutes from './spotify';
@@ -18,5 +19,6 @@ router.use('/auth', authLimiter, authRoutes);
 router.use('/spotify', spotifyLimiter, spotifyRoutes);
 router.use('/sse', sseRoutes); // No rate limiting — long-lived connections
 router.use('/status', statusLimiter, statusRoutes);
+router.use('/admin', adminRoutes);
 
 export default router;

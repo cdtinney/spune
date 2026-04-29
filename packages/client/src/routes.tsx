@@ -1,20 +1,30 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useUser } from './features/auth/UserContext';
+import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import VisualizationPage from './pages/VisualizationPage';
 import ErrorPage from './pages/ErrorPage';
 import LoadingScreen from './components/LoadingScreen';
 import type { ReactNode } from 'react';
 
-interface PrivateRouteProps {
+interface RouteWrapperProps {
   children: ReactNode;
 }
 
-function PrivateRoute({ children }: PrivateRouteProps) {
+function PrivateRoute({ children }: RouteWrapperProps) {
   const { user, loading } = useUser();
 
   if (loading) return <LoadingScreen />;
   if (!user) return <Navigate to="/" replace />;
+  return <>{children}</>;
+}
+
+function AdminRoute({ children }: RouteWrapperProps) {
+  const { user, loading } = useUser();
+
+  if (loading) return <LoadingScreen />;
+  if (!user) return <Navigate to="/" replace />;
+  if (!user.isAdmin) return <Navigate to="/visualization" replace />;
   return <>{children}</>;
 }
 
@@ -29,6 +39,14 @@ export default function AppRoutes() {
           <PrivateRoute>
             <VisualizationPage />
           </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
         }
       />
       <Route path="/error/:errorMsg" element={<ErrorPage />} />
