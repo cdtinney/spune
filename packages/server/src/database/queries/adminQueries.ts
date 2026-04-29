@@ -30,11 +30,6 @@ interface SessionRow {
   display_name: string | null;
 }
 
-function toBigIntNumber(value: string | number | null): number | null {
-  if (value === null) return null;
-  return typeof value === 'string' ? Number(value) : value;
-}
-
 export async function listUsers(): Promise<AdminUser[]> {
   const result = await pool.query<UserRow>(
     `SELECT id, spotify_id, display_name, token_updated, expires_in
@@ -45,8 +40,8 @@ export async function listUsers(): Promise<AdminUser[]> {
     id: row.id,
     spotifyId: row.spotify_id,
     displayName: row.display_name,
-    tokenUpdated: toBigIntNumber(row.token_updated),
-    expiresIn: toBigIntNumber(row.expires_in),
+    tokenUpdated: row.token_updated == null ? null : Number(row.token_updated),
+    expiresIn: row.expires_in == null ? null : Number(row.expires_in),
   }));
 }
 

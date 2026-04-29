@@ -14,32 +14,21 @@ describe('role', () => {
   });
 
   describe('getRole', () => {
-    it("returns 'user' when no allowlist is set", () => {
-      delete process.env.ADMIN_SPOTIFY_IDS;
-      expect(getRole('anyone')).toBe('user');
-    });
-
-    it("returns 'user' when the allowlist is empty", () => {
-      process.env.ADMIN_SPOTIFY_IDS = '';
-      expect(getRole('anyone')).toBe('user');
-    });
-
-    it("returns 'admin' for a Spotify ID in the allowlist", () => {
-      process.env.ADMIN_SPOTIFY_IDS = 'alice,bob';
-      expect(getRole('alice')).toBe('admin');
-      expect(getRole('bob')).toBe('admin');
-    });
-
-    it("returns 'user' for a Spotify ID not in the allowlist", () => {
-      process.env.ADMIN_SPOTIFY_IDS = 'alice,bob';
-      expect(getRole('eve')).toBe('user');
-    });
-
-    it('trims whitespace and ignores empty entries', () => {
-      process.env.ADMIN_SPOTIFY_IDS = ' alice , , bob ,';
-      expect(getRole('alice')).toBe('admin');
-      expect(getRole('bob')).toBe('admin');
-      expect(getRole('')).toBe('user');
+    it.each([
+      { name: 'no allowlist set', allowlist: undefined, id: 'anyone', expected: 'user' },
+      { name: 'empty allowlist', allowlist: '', id: 'anyone', expected: 'user' },
+      { name: 'ID in allowlist', allowlist: 'alice,bob', id: 'alice', expected: 'admin' },
+      { name: 'ID not in allowlist', allowlist: 'alice,bob', id: 'eve', expected: 'user' },
+      {
+        name: 'allowlist with whitespace and empty entries',
+        allowlist: ' alice , , bob ,',
+        id: 'bob',
+        expected: 'admin',
+      },
+    ])("returns '$expected' for $name", ({ allowlist, id, expected }) => {
+      if (allowlist === undefined) delete process.env.ADMIN_SPOTIFY_IDS;
+      else process.env.ADMIN_SPOTIFY_IDS = allowlist;
+      expect(getRole(id)).toBe(expected);
     });
   });
 
