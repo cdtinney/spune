@@ -105,6 +105,9 @@ function UsersSection() {
   const now = Date.now();
   return (
     <Section title="Users">
+      <p className="admin-section__status">
+        Stale tokens auto-refresh on the next Spotify API call; the indicator is informational.
+      </p>
       <StatusLine state={state} emptyCheck={(d: AdminUser[]) => d.length === 0} />
       {state.data && state.data.length > 0 && (
         <table className="admin-table">
@@ -129,9 +132,9 @@ function UsersSection() {
                   <td>{formatTimestamp(user.tokenUpdated)}</td>
                   <td>
                     <span
-                      className={`admin-pill ${health.expired ? 'admin-pill--bad' : 'admin-pill--ok'}`}
+                      className={`admin-pill ${health.expired ? 'admin-pill--warn' : 'admin-pill--ok'}`}
                     >
-                      {health.expired ? 'expired' : 'valid'}
+                      {health.expired ? 'stale' : 'fresh'}
                     </span>
                   </td>
                   <td>{formatDuration(health.expiresInMs)}</td>

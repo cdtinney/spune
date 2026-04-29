@@ -76,10 +76,10 @@ router.get('/logs', async (req: Request, res: Response) => {
       .filter((line) => line.length > 0)
       .slice(-limit)
       .map(parseLogLine);
-    res.json({ file: filePath, limit, entries: lines });
+    res.json({ file: ERROR_LOG_FILE, limit, entries: lines });
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      res.json({ file: filePath, limit, entries: [], note: 'Log file not found' });
+      res.json({ file: ERROR_LOG_FILE, limit, entries: [], note: 'Log file not found' });
       return;
     }
     logger.error('[admin] Failed to read log file', error);
