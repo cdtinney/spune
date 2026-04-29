@@ -9,6 +9,7 @@ function buildApp() {
   app.use(httpLogger);
   app.get('/api/spotify/me/player', (_req, res) => res.json({ ok: true }));
   app.get('/api/health', (_req, res) => res.json({ ok: true }));
+  app.get('/api/sse/playback', (_req, res) => res.json({ ok: true }));
   app.get('/boom', (_req, _res, next) => next(new Error('boom')));
   return app;
 }
@@ -35,6 +36,11 @@ describe('httpLogger middleware', () => {
 
   it('skips /api/health', async () => {
     await request(buildApp()).get('/api/health');
+    expect(logger.info).not.toHaveBeenCalled();
+  });
+
+  it('skips SSE streams', async () => {
+    await request(buildApp()).get('/api/sse/playback');
     expect(logger.info).not.toHaveBeenCalled();
   });
 

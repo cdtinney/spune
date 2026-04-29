@@ -12,6 +12,8 @@ async function checkDatabase(): Promise<boolean> {
     timeoutId = setTimeout(() => reject(new Error('db check timed out')), DB_CHECK_TIMEOUT_MS);
   });
   try {
+    // Promise.race only bounds the HTTP response time. The underlying pg query is uncancellable,
+    // so a hung DB pins one pool client per stuck health check until pg's socket layer aborts.
     await Promise.race([pool.query('SELECT 1'), timeout]);
     return true;
   } catch (err) {
