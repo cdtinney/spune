@@ -1,6 +1,6 @@
 # Production Deployment
 
-CI builds a Docker image on every merge to `main` and pushes it to `ghcr.io`. Watchtower on the droplet pulls the new image within ~60s and restarts the app. CI's `deploy-check` job then polls `GET /api/status` until the running version matches the new commit SHA.
+CI builds a [Docker](https://docs.docker.com/get-started/) image on every merge to `main` and pushes it to [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry) (`ghcr.io`). [Watchtower](https://containrrr.dev/watchtower/) on the droplet pulls the new image within ~60s and restarts the app. CI's `deploy-check` job then polls `GET /api/status` until the running version matches the new commit SHA.
 
 To verify a deploy manually:
 
@@ -10,7 +10,7 @@ To verify a deploy manually:
 
 ## First-time droplet setup
 
-On a fresh Ubuntu 24.04 DigitalOcean droplet (1GB RAM is enough):
+On a fresh Ubuntu 24.04 [DigitalOcean](https://www.digitalocean.com/products/droplets) droplet (1GB RAM is enough). Step 5 installs [Caddy](https://caddyserver.com/) as a reverse proxy and obtains a Let's Encrypt certificate; if you use [Cloudflare](https://www.cloudflare.com/) for DNS, the A record must be "DNS only" (grey cloud), not proxied, so Caddy can complete the ACME challenge.
 
 ```bash
 # 1. Install Docker, scaffold /opt/spune, generate secrets
@@ -27,7 +27,7 @@ cd /opt/spune && docker compose up -d
 sleep 10
 curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/migrate.sh | bash
 
-# 5. Add HTTPS (point your domain's A record at the droplet IP first; Cloudflare proxy must be DNS-only)
+# 5. Add HTTPS via Caddy (point your A record first; see note above).
 curl -fsSL https://raw.githubusercontent.com/cdtinney/spune/main/scripts/setup-caddy.sh -o /tmp/setup-caddy.sh
 bash /tmp/setup-caddy.sh your-domain.com
 ```

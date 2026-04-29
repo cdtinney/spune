@@ -28,7 +28,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:
 3. Run `./scripts/pre-pr.sh` (formatting, lint, tests, build, type-check for both packages — same as CI).
 4. Push and open a PR against `main`. CI must pass; PRs are squash-merged.
 
-Install the pre-commit hook (`./scripts/install-hooks.sh`) to run Prettier and ESLint on staged files before each commit.
+Install the pre-commit hook (`./scripts/install-hooks.sh`) to run [Prettier](https://prettier.io/) and [ESLint](https://eslint.org/) on staged files before each commit.
 
 ## Code Quality
 

@@ -7,14 +7,14 @@
 
 ## Overview
 
-Spune displays album artwork from related artists in a Zune-style mosaic while you listen to Spotify. It discovers related artists via Last.fm and ListenBrainz, renders their album covers as an animated background, and can cast the visualization to a TV via Chromecast.
+Spune displays album artwork from related artists in a Zune-style mosaic while you listen to [Spotify](https://www.spotify.com/). It discovers related artists via [Last.fm](https://www.last.fm/api) and [ListenBrainz](https://listenbrainz.org/), renders their album covers as an animated background, and can cast the visualization to a TV via [Chromecast](https://store.google.com/product/chromecast_google_tv).
 
 ### Stack
 
-- **Client**: React 19, Vite, TypeScript — [details](packages/client/README.md)
-- **Server**: Node.js, Express, TypeScript, PostgreSQL — [details](packages/server/README.md)
-- **APIs**: Spotify Web API, Last.fm, ListenBrainz/MusicBrainz
-- **CI/CD**: GitHub Actions, Docker, GHCR
+- **Client**: [React 19](https://react.dev/), [Vite](https://vite.dev/), [TypeScript](https://www.typescriptlang.org/) — [details](packages/client/README.md)
+- **Server**: [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), TypeScript, [PostgreSQL](https://www.postgresql.org/) — [details](packages/server/README.md)
+- **APIs**: [Spotify Web API](https://developer.spotify.com/documentation/web-api), Last.fm, ListenBrainz / [MusicBrainz](https://musicbrainz.org/)
+- **CI/CD**: [GitHub Actions](https://docs.github.com/en/actions), Docker, [GHCR](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
 
 ## Development Setup
 
