@@ -19,11 +19,11 @@ export interface AlbumGridResult {
   tileSize: number;
 }
 
-export type UserType = 'admin' | 'user';
+export type Role = 'admin' | 'user';
 
 export interface UserProfile {
   spotifyId: string;
   displayName?: string;
   photos?: Array<string | { url?: string; value?: string }>;
-  userType?: UserType;
+  role?: Role;
 }

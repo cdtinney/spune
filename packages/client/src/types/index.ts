@@ -7,4 +7,4 @@ export type {
   NowPlaying,
   RelatedAlbums,
 } from './spotify';
-export type { WindowSize, Album, AlbumGridResult, UserProfile, UserType } from './ui';
+export type { WindowSize, Album, AlbumGridResult, UserProfile, Role } from './ui';
