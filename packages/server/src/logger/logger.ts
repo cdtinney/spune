@@ -1,4 +1,11 @@
 import { createLogger, format, transports } from 'winston';
+import { getRequestId } from '../middleware/requestContext';
+
+const requestIdFormat = format((info) => {
+  const requestId = getRequestId();
+  if (requestId) info.requestId = requestId;
+  return info;
+});
 
 const logger = createLogger({
   level: 'info',
@@ -10,6 +17,7 @@ const logger = createLogger({
       stack: true,
     }),
     format.splat(),
+    requestIdFormat(),
     format.json(),
   ),
   defaultMeta: {

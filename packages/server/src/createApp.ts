@@ -10,6 +10,8 @@ import routes from './routes/index';
 import paths from './config/paths';
 import configurePassport from './auth/configurePassport';
 import { verifyTokenEncryptionConfigured } from './auth/tokenCrypto';
+import requestContext from './middleware/requestContext';
+import httpLogger from './middleware/httpLogger';
 
 const PgSession = connectPgSimple(session);
 
@@ -31,6 +33,11 @@ export default function createApp(): express.Application {
 
   // Trust reverse proxy (Caddy) so Express sees correct protocol/IP
   app.set('trust proxy', 1);
+
+  // Per-request ID + access log. Must run before routes so every log entry on the
+  // request path picks up the ID from AsyncLocalStorage.
+  app.use(requestContext);
+  app.use(httpLogger);
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
