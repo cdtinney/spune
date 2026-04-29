@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 import logger, { ERROR_LOG_FILE } from '../logger/logger';
-import { requireAdmin } from '../auth/admin';
+import { requireUserType } from '../auth/userType';
 import {
   listUsers,
   listActiveSessions,
@@ -11,7 +11,7 @@ import {
 } from '../database/queries/adminQueries';
 
 const router: IRouter = Router();
-router.use(requireAdmin);
+router.use(requireUserType('admin'));
 
 const MAX_LOG_LINES = 200;
 const DEFAULT_LOG_LINES = 50;

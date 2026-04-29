@@ -142,7 +142,7 @@ export default function VisualizationContent() {
             {userName && (
               <div className="visualization__user-container" data-testid="user-controls">
                 <UserAvatar displayName={userName} thumbnailSrc={userImageUrl} />
-                <UserMenu onLogout={logout} isAdmin={user?.isAdmin} />
+                <UserMenu onLogout={logout} userType={user?.userType} />
               </div>
             )}
           </>

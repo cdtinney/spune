@@ -2,14 +2,15 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import type { UserType } from '../../types';
 import './UserMenu.css';
 
 interface UserMenuProps {
   onLogout: () => void;
-  isAdmin?: boolean;
+  userType?: UserType;
 }
 
-export default function UserMenu({ onLogout, isAdmin = false }: UserMenuProps) {
+export default function UserMenu({ onLogout, userType }: UserMenuProps) {
   const [open, setOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -45,7 +46,7 @@ export default function UserMenu({ onLogout, isAdmin = false }: UserMenuProps) {
       </button>
       {open && (
         <div className="user-menu__dropdown" role="menu">
-          {isAdmin && (
+          {userType === 'admin' && (
             <Link
               to="/admin"
               className="user-menu__item"
