@@ -29,10 +29,10 @@ Spune currently runs as a side project with minimal production hardening. Before
 
 ### Observability & monitoring
 
-- **Health check endpoint**: Add a `/health` endpoint that verifies the server is running and can reach the database.
-- **Structured logging**: Replace any `console.log` with a structured logger (e.g. pino) that outputs JSON in production. Include request IDs for tracing.
+- ~~**Health check endpoint**: Add a `/health` endpoint that verifies the server is running and can reach the database.~~ Done — `GET /api/health` runs `SELECT 1` with a ~2s timeout and returns 200/503.
+- ~~**Structured logging**: Replace any `console.log` with a structured logger that outputs JSON in production. Include request IDs for tracing.~~ Done — Winston already produces JSON; per-request IDs (via `AsyncLocalStorage`) are now attached to every log line, and an `http_request` access log is emitted per response.
 - **Error tracking**: Integrate an error tracking service (e.g. Sentry) for both client and server to capture unhandled exceptions.
-- **Uptime monitoring**: Set up external uptime monitoring that alerts on downtime or degraded performance.
+- **Uptime monitoring**: Set up external uptime monitoring (pointed at `/api/health`) that alerts on downtime or degraded performance.
 
 ### Operational hygiene
 

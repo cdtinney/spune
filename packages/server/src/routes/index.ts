@@ -1,13 +1,16 @@
 import { Router, type IRouter } from 'express';
 import { apiLimiter, authLimiter, spotifyLimiter, statusLimiter } from '../middleware/rateLimiter';
 import authRoutes from './auth';
+import healthRoutes from './health';
 import spotifyRoutes from './spotify';
 import sseRoutes from './sse';
 import statusRoutes from './status';
 
 const router: IRouter = Router();
 
-// Apply general rate limit to all API routes.
+// Health check is mounted before the rate limiter so uptime monitors can poll freely.
+router.use('/health', healthRoutes);
+
 router.use(apiLimiter);
 
 // Apply stricter limits per route group.

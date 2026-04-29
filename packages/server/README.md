@@ -10,8 +10,9 @@ src/
   cache/        # In-memory LRU caches for API responses
   config/       # App configuration (paths, env)
   database/     # PostgreSQL connection, queries, migrations
-  middleware/    # Rate limiting
-  routes/       # API routes (auth, spotify, SSE)
+  logger/       # Winston logger setup (auto-injects requestId from AsyncLocalStorage)
+  middleware/   # Rate limiting, request context (request IDs), HTTP access log
+  routes/       # API routes (auth, spotify, SSE, status, health)
   spotify/      # Spotify API integration (SDK wrapper, helpers)
   sse/          # Server-Sent Events broadcaster
   types/        # TypeScript type definitions
@@ -24,6 +25,14 @@ src/
 - **SSE push**: Server polls Spotify and pushes playback state to connected clients
 - **Token refresh**: Automatic Spotify token refresh via passport-oauth2-refresh
 - **Token encryption at rest**: Spotify access/refresh tokens are AES-256-GCM encrypted before being written to the `users` table; key comes from `TOKEN_ENCRYPTION_KEY`
+- **Request IDs + access logs**: every request gets an `X-Request-Id` (preserved from inbound when valid, otherwise generated) that is echoed back and attached to every log line via `AsyncLocalStorage`. One `http_request` log line is emitted per response.
+
+## Operational endpoints
+
+| Endpoint          | Purpose                                                                                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /api/status` | Returns `{ version, uptime, startedAt }`. Used by the deploy-check job to confirm the droplet is running the new image.                                     |
+| `GET /api/health` | Returns `200 { status: 'ok' }` when `SELECT 1` succeeds within ~2s, or `503 { status: 'error' }` otherwise. Not rate-limited; suitable for uptime monitors. |
 
 ## Configuration
 

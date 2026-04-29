@@ -98,6 +98,16 @@ You can also run the check manually:
 
 Rate-limited to 30 requests per 15 minutes.
 
+### Health endpoint
+
+`GET /api/health` returns `200 { "status": "ok" }` when the server can reach PostgreSQL via `SELECT 1` within ~2s, or `503 { "status": "error" }` otherwise. Not rate-limited; safe for an external uptime monitor to poll. When the check fails, the underlying error is logged at `warn` level under `[health] DB check failed`.
+
+### Request IDs and access logs
+
+Every request gets an `X-Request-Id` header (preserved from inbound when valid, otherwise generated). The same value is echoed back to the client and included in every server log entry on that request, so a single ID can correlate a client report with the matching log lines.
+
+The server emits one `http_request` log line per response with `{ method, url, status, durationMs, requestId }`. `/api/health` (noise) and SSE streams (would record stream lifetime, not request work) are skipped.
+
 ## Debugging
 
 ```bash

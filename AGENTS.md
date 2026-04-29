@@ -44,13 +44,20 @@ packages/
 
 The client is a Vite SPA served at `127.0.0.1:3000` in dev. All `/api/*` requests are proxied to the Express server at `127.0.0.1:5000` via Vite's dev proxy. In production, the Express server serves the built client as static files.
 
-Three API endpoints:
+API endpoints:
 
 - `GET /api/auth/user` — returns the authenticated user (or empty object)
 - `GET /api/spotify/me/player` — returns the current playback state
 - `GET /api/spotify/currently-playing/related-albums?songId=<id>` — returns related artist albums
+- `GET /api/status` — returns `{ version, uptime, startedAt }`. Used by the deploy-check job to verify the droplet is running the new image.
+- `GET /api/health` — returns `200 { status: 'ok' }` when the server can reach PostgreSQL via `SELECT 1`, or `503 { status: 'error' }` otherwise. Not rate-limited; safe for uptime monitors to poll.
 
 The client polls `/api/spotify/me/player` every 3 seconds. When the album changes, it fetches related albums.
+
+### Observability
+
+- **Request IDs**: every request gets an `X-Request-Id`. Trusted inbound IDs (alphanumeric, `_`, `.`, `:`, `-`, ≤128 chars) are preserved; otherwise a UUID is generated. The same value is echoed back as a response header and is attached to every Winston log entry emitted on that request via `AsyncLocalStorage`. To pull the current ID inside a handler, import `getRequestId` from `middleware/requestContext`.
+- **Access logs**: `httpLogger` middleware emits one `http_request` log line per response with `{ method, url, status, durationMs }`. `/api/health` and SSE streams (`/api/sse/*`) are skipped — the former is noise, the latter would record stream lifetime instead of request work.
 
 ### Auth Flow
 
