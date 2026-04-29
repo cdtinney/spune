@@ -1,6 +1,7 @@
 import { LRUCache } from 'lru-cache';
-import type { ArtistAlbumsResult } from '../types';
+import type { ArtistAlbumsResult, SpotifyAlbum } from '../types';
 
+const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
 const ONE_HOUR_MS = 60 * 60 * 1000;
 const THIRTY_MIN_MS = 30 * 60 * 1000;
 
@@ -9,10 +10,16 @@ export const NOT_FOUND = Symbol('NOT_FOUND');
 
 export type ArtistIdCacheValue = string | typeof NOT_FOUND;
 
+/** Final discovery result by Spotify track ID. */
+export const discoveryResultCache = new LRUCache<string, SpotifyAlbum[]>({
+  max: 100,
+  ttl: FOUR_HOURS_MS,
+});
+
 /** Related artist names by primary artist name (case-insensitive key). */
 export const relatedArtistsCache = new LRUCache<string, string[]>({
   max: 200,
-  ttl: ONE_HOUR_MS,
+  ttl: FOUR_HOURS_MS,
 });
 
 /** Spotify artist ID by artist name (case-insensitive key). Uses NOT_FOUND for null results. */
@@ -25,6 +32,12 @@ export const artistIdCache = new LRUCache<string, ArtistIdCacheValue>({
 export const artistAlbumsCache = new LRUCache<string, ArtistAlbumsResult>({
   max: 500,
   ttl: THIRTY_MIN_MS,
+});
+
+/** Genre-based artist IDs by Spotify artist ID. */
+export const genreArtistsCache = new LRUCache<string, string[]>({
+  max: 200,
+  ttl: FOUR_HOURS_MS,
 });
 
 export function normalizeKey(name: string): string {
