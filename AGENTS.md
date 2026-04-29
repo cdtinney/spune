@@ -8,10 +8,10 @@
 
 This is a [pnpm](https://pnpm.io/) monorepo with two packages:
 
-| Package           | Name           | Description                                                              |
-| ----------------- | -------------- | ------------------------------------------------------------------------ |
-| `packages/client` | `spune-client` | React 19 + [Vite](https://vite.dev/) SPA                                 |
-| `packages/server` | `spune-server` | Express + [TypeScript](https://www.typescriptlang.org/) API              |
+| Package           | Name           | Description                                                 |
+| ----------------- | -------------- | ----------------------------------------------------------- |
+| `packages/client` | `spune-client` | React 19 + [Vite](https://vite.dev/) SPA                    |
+| `packages/server` | `spune-server` | Express + [TypeScript](https://www.typescriptlang.org/) API |
 
 ### Monorepo Structure
 
