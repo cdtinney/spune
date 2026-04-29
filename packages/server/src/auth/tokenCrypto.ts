@@ -1,22 +1,17 @@
 import crypto from 'crypto';
+import logger from '../logger';
 
 const ALGORITHM = 'aes-256-gcm';
 const KEY_LENGTH_BYTES = 32;
 const IV_LENGTH_BYTES = 12;
 const AUTH_TAG_LENGTH_BYTES = 16;
 const VERSION_PREFIX = 'v1:';
-
-let cachedKey: Buffer | null = null;
+const KEY_GEN_HINT = `node -e "console.log(require('crypto').randomBytes(${KEY_LENGTH_BYTES}).toString('hex'))"`;
 
 function loadKey(): Buffer {
-  if (cachedKey) return cachedKey;
-
   const raw = process.env.TOKEN_ENCRYPTION_KEY;
   if (!raw) {
-    throw new Error(
-      'TOKEN_ENCRYPTION_KEY is not set. Generate one with: ' +
-        "node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"",
-    );
+    throw new Error(`TOKEN_ENCRYPTION_KEY is not set. Generate one with: ${KEY_GEN_HINT}`);
   }
   const key = Buffer.from(raw, 'hex');
   if (key.length !== KEY_LENGTH_BYTES) {
@@ -24,12 +19,19 @@ function loadKey(): Buffer {
       `TOKEN_ENCRYPTION_KEY must be ${KEY_LENGTH_BYTES} bytes (${KEY_LENGTH_BYTES * 2} hex chars).`,
     );
   }
-  cachedKey = key;
   return key;
 }
 
-export function assertEncryptionKeyConfigured(): void {
-  loadKey();
+// Boot-time validation: throws in production if missing/invalid; warns in dev.
+// Mirrors resolveSessionSecret() in createApp so the two secrets are handled symmetrically.
+export function verifyTokenEncryptionConfigured(): void {
+  if (process.env.NODE_ENV === 'production') {
+    loadKey();
+    return;
+  }
+  if (!process.env.TOKEN_ENCRYPTION_KEY) {
+    logger.warn('TOKEN_ENCRYPTION_KEY is not set; OAuth token storage will fail until configured.');
+  }
 }
 
 export function encryptToken(plaintext: string): string {
@@ -57,9 +59,4 @@ export function decryptToken(value: string): string {
   const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
   decipher.setAuthTag(authTag);
   return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
-}
-
-// Test-only: forces re-reading TOKEN_ENCRYPTION_KEY from env on next encrypt/decrypt call.
-export function _resetKeyCacheForTests(): void {
-  cachedKey = null;
 }

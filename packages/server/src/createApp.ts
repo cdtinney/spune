@@ -9,7 +9,7 @@ import { pool, connect } from './database/db';
 import routes from './routes/index';
 import paths from './config/paths';
 import configurePassport from './auth/configurePassport';
-import { assertEncryptionKeyConfigured } from './auth/tokenCrypto';
+import { verifyTokenEncryptionConfigured } from './auth/tokenCrypto';
 
 const PgSession = connectPgSimple(session);
 
@@ -24,12 +24,8 @@ function resolveSessionSecret(): string {
 }
 
 export default function createApp(): express.Application {
-  // Validate required secrets at boot rather than on first auth attempt.
-  if (process.env.NODE_ENV === 'production') {
-    assertEncryptionKeyConfigured();
-  } else if (!process.env.TOKEN_ENCRYPTION_KEY) {
-    logger.warn('TOKEN_ENCRYPTION_KEY is not set; OAuth token storage will fail until configured.');
-  }
+  // Fail fast at boot rather than on first auth attempt.
+  verifyTokenEncryptionConfigured();
 
   const app = express();
 
