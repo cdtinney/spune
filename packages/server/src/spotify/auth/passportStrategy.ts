@@ -2,8 +2,15 @@ import { Strategy as SpotifyStrategy, type VerifyFunction } from 'passport-spoti
 import refresh from 'passport-oauth2-refresh';
 import logger from '../../logger';
 import { findOrCreateUser } from '../../database/queries/userQueries';
+import { isLoginAllowed } from '../../auth/loginAllowlist';
 
 const verify: VerifyFunction = (accessToken, refreshToken, expiresIn, profile, done): void => {
+  if (!isLoginAllowed(profile.id)) {
+    logger.warn(`Rejected login for ${profile.id} — not in ALLOWED_SPOTIFY_IDS.`);
+    done(null, false);
+    return;
+  }
+
   findOrCreateUser(profile.id, {
     spotifyAccessToken: accessToken,
     spotifyRefreshToken: refreshToken,
