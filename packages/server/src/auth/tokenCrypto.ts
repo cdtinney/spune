@@ -6,12 +6,11 @@ const KEY_LENGTH_BYTES = 32;
 const IV_LENGTH_BYTES = 12;
 const AUTH_TAG_LENGTH_BYTES = 16;
 export const VERSION_PREFIX = 'v1:';
-const KEY_GEN_HINT = `node -e "console.log(require('crypto').randomBytes(${KEY_LENGTH_BYTES}).toString('hex'))"`;
 
 function loadKey(): Buffer {
   const raw = process.env.TOKEN_ENCRYPTION_KEY;
   if (!raw) {
-    throw new Error(`TOKEN_ENCRYPTION_KEY is not set. Generate one with: ${KEY_GEN_HINT}`);
+    throw new Error('TOKEN_ENCRYPTION_KEY is not set. Generate one with: openssl rand -hex 32');
   }
   const key = Buffer.from(raw, 'hex');
   if (key.length !== KEY_LENGTH_BYTES) {
