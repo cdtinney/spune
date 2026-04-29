@@ -119,47 +119,53 @@ export async function listActiveSessions(limit = 50): Promise<AdminSession[]> {
   }));
 }
 
+async function queryLastPing(): Promise<string | null> {
+  return safeQuery<string | null>(async () => {
+    const result = await pool.query<KeepaliveRow>(
+      `SELECT pinged_at FROM _keepalive ORDER BY pinged_at DESC LIMIT 1`,
+    );
+    return result.rows[0]?.pinged_at.toISOString() ?? null;
+  }, null);
+}
+
+async function queryCronJobs(): Promise<AdminCronJob[] | null> {
+  return safeQuery<AdminCronJob[] | null>(async () => {
+    const result = await pool.query<CronJobRow>(
+      `SELECT jobname, schedule, active FROM cron.job ORDER BY jobname`,
+    );
+    return result.rows.map((row) => ({
+      jobname: row.jobname,
+      schedule: row.schedule,
+      active: row.active,
+    }));
+  }, null);
+}
+
+async function queryRecentCronRuns(limit: number): Promise<AdminCronRun[]> {
+  return safeQuery<AdminCronRun[]>(async () => {
+    const result = await pool.query<CronRunRow>(
+      `SELECT j.jobname, r.status, r.return_message, r.start_time, r.end_time
+       FROM cron.job_run_details r
+       JOIN cron.job j ON j.jobid = r.jobid
+       ORDER BY r.start_time DESC
+       LIMIT $1`,
+      [limit],
+    );
+    return result.rows.map((row) => ({
+      jobname: row.jobname,
+      status: row.status,
+      returnMessage: row.return_message,
+      startTime: row.start_time?.toISOString() ?? null,
+      endTime: row.end_time?.toISOString() ?? null,
+    }));
+  }, []);
+}
+
 export async function getKeepaliveStatus(): Promise<AdminKeepaliveStatus> {
   const [lastPing, jobs, recentRuns] = await Promise.all([
-    safeQuery(
-      async () => {
-        const result = await pool.query<KeepaliveRow>(
-          `SELECT pinged_at FROM _keepalive ORDER BY pinged_at DESC LIMIT 1`,
-        );
-        return result.rows[0] ? result.rows[0].pinged_at.toISOString() : null;
-      },
-      null as string | null,
-    ),
-    safeQuery(
-      async () => {
-        const result = await pool.query<CronJobRow>(
-          `SELECT jobname, schedule, active FROM cron.job ORDER BY jobname`,
-        );
-        return result.rows.map((row) => ({
-          jobname: row.jobname,
-          schedule: row.schedule,
-          active: row.active,
-        }));
-      },
-      null as AdminCronJob[] | null,
-    ),
-    safeQuery<AdminCronRun[]>(async () => {
-      const result = await pool.query<CronRunRow>(
-        `SELECT j.jobname, r.status, r.return_message, r.start_time, r.end_time
-         FROM cron.job_run_details r
-         JOIN cron.job j ON j.jobid = r.jobid
-         ORDER BY r.start_time DESC
-         LIMIT $1`,
-        [10],
-      );
-      return result.rows.map((row) => ({
-        jobname: row.jobname,
-        status: row.status,
-        returnMessage: row.return_message,
-        startTime: row.start_time ? row.start_time.toISOString() : null,
-        endTime: row.end_time ? row.end_time.toISOString() : null,
-      }));
-    }, []),
+    queryLastPing(),
+    queryCronJobs(),
+    queryRecentCronRuns(10),
   ]);
   return {
     lastPing,

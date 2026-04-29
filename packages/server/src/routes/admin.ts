@@ -1,4 +1,4 @@
-import { Router, type IRouter, type Request, type Response } from 'express';
+import { Router, type IRouter, type Request, type Response, type RequestHandler } from 'express';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -16,35 +16,40 @@ router.use(requireAdmin);
 const MAX_LOG_LINES = 200;
 const DEFAULT_LOG_LINES = 50;
 
-router.get('/users', async (_req: Request, res: Response) => {
-  try {
-    const users = await listUsers();
-    res.json({ users });
-  } catch (error) {
-    logger.error('[admin] Failed to list users', error);
-    res.status(500).json({ error: 'Failed to list users' });
-  }
-});
+function safeAdminHandler(
+  name: string,
+  handler: (req: Request, res: Response) => Promise<void>,
+): RequestHandler {
+  return async (req, res) => {
+    try {
+      await handler(req, res);
+    } catch (error) {
+      logger.error(`[admin] ${name} failed`, error);
+      res.status(500).json({ error: `Failed to ${name}` });
+    }
+  };
+}
 
-router.get('/sessions', async (_req: Request, res: Response) => {
-  try {
-    const sessions = await listActiveSessions();
-    res.json({ sessions });
-  } catch (error) {
-    logger.error('[admin] Failed to list sessions', error);
-    res.status(500).json({ error: 'Failed to list sessions' });
-  }
-});
+router.get(
+  '/users',
+  safeAdminHandler('list users', async (_req, res) => {
+    res.json({ users: await listUsers() });
+  }),
+);
 
-router.get('/keepalive', async (_req: Request, res: Response) => {
-  try {
-    const status = await getKeepaliveStatus();
-    res.json(status);
-  } catch (error) {
-    logger.error('[admin] Failed to get keepalive status', error);
-    res.status(500).json({ error: 'Failed to get keepalive status' });
-  }
-});
+router.get(
+  '/sessions',
+  safeAdminHandler('list sessions', async (_req, res) => {
+    res.json({ sessions: await listActiveSessions() });
+  }),
+);
+
+router.get(
+  '/keepalive',
+  safeAdminHandler('get keepalive status', async (_req, res) => {
+    res.json(await getKeepaliveStatus());
+  }),
+);
 
 interface LogEntry {
   raw: string;
@@ -53,8 +58,7 @@ interface LogEntry {
 
 function parseLogLine(line: string): LogEntry {
   try {
-    const parsed = JSON.parse(line) as Record<string, unknown>;
-    return { raw: line, parsed };
+    return { raw: line, parsed: JSON.parse(line) as Record<string, unknown> };
   } catch {
     return { raw: line };
   }
@@ -66,25 +70,24 @@ function clampLimit(raw: unknown): number {
   return Math.min(n, MAX_LOG_LINES);
 }
 
-router.get('/logs', async (req: Request, res: Response) => {
-  const limit = clampLimit(req.query.limit);
-  const filePath = path.resolve(ERROR_LOG_FILE);
-  try {
-    const content = await fs.readFile(filePath, 'utf8');
-    const lines = content
-      .split('\n')
-      .filter((line) => line.length > 0)
-      .slice(-limit)
-      .map(parseLogLine);
-    res.json({ file: ERROR_LOG_FILE, limit, entries: lines });
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+router.get(
+  '/logs',
+  safeAdminHandler('read log file', async (req, res) => {
+    const limit = clampLimit(req.query.limit);
+    const filePath = path.resolve(ERROR_LOG_FILE);
+    try {
+      const content = await fs.readFile(filePath, 'utf8');
+      const entries = content
+        .split('\n')
+        .filter((line) => line.length > 0)
+        .slice(-limit)
+        .map(parseLogLine);
+      res.json({ file: ERROR_LOG_FILE, limit, entries });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       res.json({ file: ERROR_LOG_FILE, limit, entries: [], note: 'Log file not found' });
-      return;
     }
-    logger.error('[admin] Failed to read log file', error);
-    res.status(500).json({ error: 'Failed to read log file' });
-  }
-});
+  }),
+);
 
 export default router;
