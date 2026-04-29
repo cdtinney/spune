@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# Pre-commit hook: runs Prettier and ESLint on staged files only.
+# Installed into .git/hooks/pre-commit by scripts/install-hooks.sh — do not invoke directly.
+# Fast (touches only staged files); does not run tests or type checks.
 set -e
 
 STAGED=$(git diff --cached --name-only --diff-filter=ACMR)

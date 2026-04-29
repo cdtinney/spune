@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Apply SQL migrations to the staging database at /opt/spune-staging.
+# Run on the droplet once after `setup-staging.sh` (first-start migration), and
+# again after pulling a staging build that adds new migration files.
+# Same idempotency caveat as scripts/migrate.sh.
 set -euo pipefail
 
 cd /opt/spune-staging
