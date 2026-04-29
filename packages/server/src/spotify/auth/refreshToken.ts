@@ -1,28 +1,28 @@
 import refresh from 'passport-oauth2-refresh';
 import logger from '../../logger';
-import { updateUserByRefreshToken } from '../../database/queries/userQueries';
+import { updateUserAccessTokenBySpotifyId } from '../../database/queries/userQueries';
 import type { User } from '../../types';
 
 function findAndUpdateUser({
-  refreshToken,
+  spotifyId,
   accessToken,
 }: {
-  refreshToken: string;
+  spotifyId: string;
   accessToken: string;
 }): Promise<User> {
-  return updateUserByRefreshToken(refreshToken, {
+  return updateUserAccessTokenBySpotifyId(spotifyId, {
     spotifyAccessToken: accessToken,
     tokenUpdated: Date.now(),
   }).then((user) => {
     if (!user) {
-      throw new Error(`No user found for refresh token`);
+      throw new Error(`No user found for spotifyId '${spotifyId}'`);
     }
     logger.info(`Refreshed access token for user '${user.spotifyId}'`);
     return user;
   });
 }
 
-export default function refreshToken(currRefreshToken: string): Promise<User> {
+export default function refreshToken(spotifyId: string, currRefreshToken: string): Promise<User> {
   return new Promise((resolve, reject) => {
     refresh.requestNewAccessToken(
       'spotify',
@@ -34,7 +34,7 @@ export default function refreshToken(currRefreshToken: string): Promise<User> {
         }
 
         findAndUpdateUser({
-          refreshToken: currRefreshToken,
+          spotifyId,
           accessToken,
         })
           .then(resolve)

@@ -23,6 +23,7 @@ src/
 - **Related artist discovery**: Last.fm + ListenBrainz for similar artists, with in-memory caching
 - **SSE push**: Server polls Spotify and pushes playback state to connected clients
 - **Token refresh**: Automatic Spotify token refresh via passport-oauth2-refresh
+- **Token encryption at rest**: Spotify access/refresh tokens are AES-256-GCM encrypted before being written to the `users` table; key comes from `TOKEN_ENCRYPTION_KEY`
 
 ## Configuration
 

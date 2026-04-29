@@ -16,7 +16,7 @@ async function getValidAccessToken(user: User | undefined): Promise<string> {
   }
 
   logger.info('Refreshing user access token...');
-  const updatedUser = await refreshToken(user.spotifyRefreshToken);
+  const updatedUser = await refreshToken(user.spotifyId, user.spotifyRefreshToken);
   logger.info('Sucessfully updated user access token.');
   return updatedUser.spotifyAccessToken;
 }

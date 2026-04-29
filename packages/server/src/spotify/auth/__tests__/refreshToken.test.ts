@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import refresh from 'passport-oauth2-refresh';
-import { updateUserByRefreshToken } from '../../../database/queries/userQueries';
+import { updateUserAccessTokenBySpotifyId } from '../../../database/queries/userQueries';
 import refreshToken from '../refreshToken';
 
 vi.mock('passport-oauth2-refresh', () => ({
@@ -10,15 +10,15 @@ vi.mock('passport-oauth2-refresh', () => ({
 }));
 
 vi.mock('../../../database/queries/userQueries', () => ({
-  updateUserByRefreshToken: vi.fn(),
+  updateUserAccessTokenBySpotifyId: vi.fn(),
 }));
 
 const mockedRefresh = vi.mocked(refresh);
-const mockedUpdateUserByRefreshToken = vi.mocked(updateUserByRefreshToken);
+const mockedUpdate = vi.mocked(updateUserAccessTokenBySpotifyId);
 
 describe('refreshToken()', () => {
   it('returns a Promise', () => {
-    expect(refreshToken('foo')).toBeInstanceOf(Promise);
+    expect(refreshToken('someUserId', 'foo')).toBeInstanceOf(Promise);
   });
 
   it('rejects the promise if the refresh strategy fails', () => {
@@ -28,20 +28,21 @@ describe('refreshToken()', () => {
       },
     );
 
-    expect(refreshToken()).rejects.toEqual('fooError');
+    expect(refreshToken('someUserId', 'oldRefresh')).rejects.toEqual('fooError');
   });
 
-  it('finds and updates the users access token when the refresh strategy succeeds', () => {
+  it('updates the access token by spotifyId when the refresh strategy succeeds', () => {
     mockedRefresh.requestNewAccessToken.mockImplementation(
       (_name: string, _token: string, done: (...args: unknown[]) => void) => {
         done(null, 'newAccessToken');
       },
     );
 
-    mockedUpdateUserByRefreshToken.mockResolvedValue({ spotifyId: 'someUserId' } as any);
+    mockedUpdate.mockResolvedValue({ spotifyId: 'someUserId' } as any);
     Date.now = vi.fn().mockImplementation(() => 123);
-    refreshToken('oldAccessToken');
-    expect(mockedUpdateUserByRefreshToken.mock.calls[0][1]).toEqual({
+    refreshToken('someUserId', 'oldRefresh');
+    expect(mockedUpdate.mock.calls[0][0]).toEqual('someUserId');
+    expect(mockedUpdate.mock.calls[0][1]).toEqual({
       spotifyAccessToken: 'newAccessToken',
       tokenUpdated: 123,
     });
@@ -54,9 +55,9 @@ describe('refreshToken()', () => {
       },
     );
 
-    mockedUpdateUserByRefreshToken.mockRejectedValue('fooError');
+    mockedUpdate.mockRejectedValue('fooError');
 
-    expect(refreshToken('accessToken')).rejects.toEqual('fooError');
+    expect(refreshToken('someUserId', 'oldRefresh')).rejects.toEqual('fooError');
   });
 
   it('resolves the promise when the user update succeeds', () => {
@@ -66,8 +67,8 @@ describe('refreshToken()', () => {
       },
     );
 
-    mockedUpdateUserByRefreshToken.mockResolvedValue({ spotifyId: 'someUserId' } as any);
+    mockedUpdate.mockResolvedValue({ spotifyId: 'someUserId' } as any);
 
-    expect(refreshToken('accessToken')).resolves.toEqual({ spotifyId: 'someUserId' });
+    expect(refreshToken('someUserId', 'oldRefresh')).resolves.toEqual({ spotifyId: 'someUserId' });
   });
 });

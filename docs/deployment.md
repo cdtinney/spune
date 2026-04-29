@@ -57,6 +57,19 @@ Add `https://your-domain.com/api/auth/spotify/callback` to your Spotify app's re
 3. Watchtower detects the new image within 60 seconds
 4. It pulls and restarts the app container
 
+### Adding new required env vars
+
+The server validates required secrets at boot in production and refuses to start if any are missing. When a PR adds a new required env var, add it to `/opt/spune/.env` on the droplet **before merging** so the next auto-deploy doesn't crash-loop.
+
+For example, when token encryption was introduced, existing droplets needed:
+
+```bash
+echo "TOKEN_ENCRYPTION_KEY=$(openssl rand -hex 32)" >> /opt/spune/.env
+docker compose restart app
+```
+
+Existing user rows with plaintext tokens won't decrypt and the affected users will be forced to re-auth once.
+
 ### Deploy verification
 
 CI includes a `deploy-check` job that polls `GET /api/status` after the Docker image is pushed, waiting for the running version to match the new commit SHA.

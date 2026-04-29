@@ -12,8 +12,8 @@ Spune currently runs as a side project with minimal production hardening. Before
 
 ### Security audit
 
-- **Auth & session management**: Review Passport.js session configuration — ensure cookies are `Secure`, `HttpOnly`, `SameSite=Strict` in production. Verify session secrets are strong and rotated.
-- **Spotify tokens**: Confirm access tokens and refresh tokens are never exposed to the client beyond what's necessary. Ensure refresh token rotation is handled correctly.
+- **Auth & session management**: Review Passport.js session configuration — ensure cookies are `Secure`, `HttpOnly`, and `SameSite=Lax` in production (`Strict` breaks the OAuth redirect-back). Verify session secrets are strong and rotated.
+- **Spotify tokens**: Confirm access tokens and refresh tokens are never exposed to the client beyond what's necessary. Ensure refresh token rotation is handled correctly. Tokens are encrypted at rest with AES-256-GCM via `TOKEN_ENCRYPTION_KEY`; document a key-rotation procedure.
 - **CORS policy**: Lock down CORS to the production domain only. Remove any permissive `*` origins.
 - **Rate limiting**: Add rate limiting to all API endpoints (especially auth routes) to prevent abuse. Evaluate the existing dev rate-limit workarounds and ensure they don't leak into production.
 - **Input validation**: Audit all user-facing inputs and query parameters for injection risks. Validate and sanitize Spotify IDs and other external data before use.
